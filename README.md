@@ -9,6 +9,11 @@ Huntsville's consultants, moonlighters, service firms and business advisors.
 - [PostgreSQL](http://www.postgresql.org/)
 - `gem install pakyow`
 
+## Set up DB
+
+- Create Postgres DB
+- Copy .env.example to .env and edit to contain your Postgres username, password and database
+
 ## Running the application
 
 Start the app server in the command line:
