@@ -1,8 +1,17 @@
-This is a Pakyow v0.9 app demonstrating connecting to a Postgres database with Sequel. You can read more about it in the [original blog post](http://notmagic.org/2015/04/10/pakyow-sequel).
+Huntsville's consultants, moonlighters, service firms and business advisors.
 
 # Getting Started
 
-Start the app server:
+## Install Ruby, Ruby Gems, PostgreSQL and Pakyow
+
+- [Ruby 2.47](http://www.ruby-lang.org/en/downloads/)
+- [Ruby Gems](http://rubygems.org/pages/download)
+- [PostgreSQL](http://www.postgresql.org/)
+- `gem install pakyow`
+
+## Running the application
+
+Start the app server in the command line:
 
   `pakyow server`
 
@@ -20,9 +29,3 @@ The following resources might be handy:
 - [Warmup](http://pakyow.com/warmup)
 - [Docs](http://pakyow.com/docs)
 - [Code](http://github.com/metabahn/pakyow)
-
-Want to keep up with the latest development? Follow along:
-
-- [Blog](http://pakyow.com/blog)
-- [Mailing List](http://groups.google.com/group/pakyow)
-- [Twitter](http://twitter.com/pakyow)
