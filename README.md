@@ -13,16 +13,24 @@ Huntsville's consultants, moonlighters, service firms and business advisors.
 
 - Create Postgres DB
 - Copy .env.example to .env and edit to contain your Postgres username, password and database
+- From the hntsvll directory, run the rake reset `rake db:reset`
 
 ## Running the application
 
 Start the app server in the command line:
 
-  `pakyow server`
+  `bundle exec pakyow server`
 
 You'll find your app running at [http://localhost:3000](http://localhost:3000)!
 
-Need to interact with your app? Fire up a console:
+## Creating data
+
+- Go to [http://localhost:3000/users/new](http://localhost:3000/users/new)
+- Fill out the form and submit
+- Go to [http://localhost:3000/logout](http://localhost:3000/logout)
+- Repeat
+
+## Need to interact with your app? Fire up a console:
 
   `pakyow console`
 

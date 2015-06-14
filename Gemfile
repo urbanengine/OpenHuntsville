@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "pakyow", "0.9.1"
+gem "pakyow", git: "https://github.com/pakyow/pakyow.git"
 
 # application server
 gem "puma"
@@ -19,3 +19,5 @@ gem "pg"
 
 ## A make-like build utility for Ruby. - http://docs.seattlerb.org/rake
 gem "rake"
+
+gem "bcrypt"
