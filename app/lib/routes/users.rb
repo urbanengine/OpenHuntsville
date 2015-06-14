@@ -15,9 +15,6 @@ Pakyow::App.routes(:users) do
       user = User.new(params[:user])
       user.save
       redirect '/users/'+user.id.to_s+'/edit'
-    else
-      presenter.path = 'users/new'
-    end
   end
 
 # GET /users; same as Index
@@ -49,7 +46,7 @@ action :edit do
   user = User[cookies[:user]]
   if user.nil?
     puts "/app/lib/routes/users.rb :: edit :: user is nil"
-    
+
     redirect "/access-denied"
   elsif user.id.to_s != params[:user_id].to_s
     puts "/app/lib/routes/users.rb :: edit :: user.id != params[:user_id]"
@@ -94,5 +91,5 @@ end
   #     redirect "/users"
   #   end
   # end
-# end
+end
 end
