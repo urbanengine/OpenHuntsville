@@ -1,20 +1,4 @@
 Pakyow::App.bindings do
-	scope :header do
-		restful :header
-		binding(:title) do
-			{
-				:content => "content"
-			}
-		end
-	end
-	scope :note do
-		restful :note
-		binding(:title) do
-			{
-				:content => "content"
-			}
-		end
-	end
 	scope :user do
 		restful :user
 
