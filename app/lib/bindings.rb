@@ -21,20 +21,47 @@ Pakyow::App.bindings do
 		end
 
 		binding(:twitter_link) do
+			show = "hide"
+			link = "#"
+			if bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
+
+			else
+				show = "show"
+				link = "http://www.twitter.com/" + bindable.twitter
+			end
 			{
-				:href => bindable.twitter
+				:href => link,
+				:class => show
 			}
 		end
 
 		binding(:linkedin_link) do
+			show = "hide"
+			link = "#"
+			if bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
+				
+			else
+				show = "show"
+				link = bindable.linkedin
+			end
 			{
-				:href => bindable.linkedin
+				:href => link,
+				:class => show
 			}
 		end
 
 		binding(:url_link) do
+			show = "hide"
+			link = "#"
+			if bindable.nil? || bindable.url.nil? || bindable.url.length == 0
+				
+			else
+				show = "show"
+				link = bindable.url
+			end
 			{
-				:href => bindable.url
+				:href => link,
+				:class => show
 			}
 		end
 
