@@ -71,9 +71,23 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
+    end # override stylesheet  
+
+    binding(:canonical) do
+      location = "/css/dev.min.css"
+      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
+        if ENV['RACK_ENV']== "development"
+          location = "/css/dev.css"
+        end
+      end
+      {
+        :href => location
+      }
     end # override stylesheet   
 
     binding(:modernizr) do
+
+      puts ":modernizr"
       location = "http://www.hntsvll.com/assets/js/modernizr.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
@@ -83,7 +97,7 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end # override stylesheet      
+    end # modernizr
 
   end # scope :header
 end # header

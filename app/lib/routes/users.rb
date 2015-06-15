@@ -31,13 +31,26 @@ action :show do
   puts "/app/lib/routes/users.rb :: show :: session :: " + session.to_s
   puts "/app/lib/routes/users.rb :: show :: cookies[:user]" + cookies[:user]
   presenter.path = 'users/show'
-  puts params
-  user = User[params[:user_id]]
-  puts user
-  puts user.id
-  puts user.email
-  puts view.scope(:user)
-  view.scope(:user).apply(user)
+  id = params[:user_id]
+  users = Array.new
+  if id.include? "-"
+    splitname = id.split("-")
+    users = User.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).all
+  else
+    users[0] = User[params[:user_id]]
+  end
+
+  puts "/app/lib/routes/users.rb :: show :: users :: " + users.to_s
+
+  if users.length == 0
+   # handler 404 do
+    redirect '/errors/404'
+   # end
+  else
+    puts splitname[0]+splitname[1]
+  end
+
+  view.scope(:user).apply(users)
 end
 
 # GET /users/:id/edit
