@@ -71,6 +71,18 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
+    end # override stylesheet   
+
+    binding(:modernizr) do
+      location = "http://www.hntsvll.com/assets/js/modernizr.js"
+      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
+        if ENV['RACK_ENV']== "development"
+          location = "http://www.hntsvll.com/assets/js/modernizr.js"
+        end
+      end
+      {
+        :href => location
+      }
     end # override stylesheet      
 
   end # scope :header
