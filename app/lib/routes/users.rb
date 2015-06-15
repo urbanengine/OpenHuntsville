@@ -23,6 +23,7 @@ action :list do
   puts "/app/lib/routes/users.rb :: list :: cookies[:user]" + cookies[:user]
   puts User.all
   view.scope(:user).apply(User.all)
+  view.scope(:head).apply(Object.new)
 end
 
 # GET /users/:id
