@@ -5,6 +5,7 @@ gem "pakyow", git: "https://github.com/pakyow/pakyow.git"
 
 # application server
 gem "puma"
+gem "thin"
 
 # your gems here
 group :development do
