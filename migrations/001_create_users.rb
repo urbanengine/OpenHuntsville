@@ -10,11 +10,12 @@ Sequel.migration do
       String        :linkedin
       String        :url
       String        :other_info
-      json          :specialties
+      json          :categories
+      String        :categories_string
       String        :crypted_password
       Time          :created_at
       Time          :updated_at
-
+      String        :image_url
     end
   end
 

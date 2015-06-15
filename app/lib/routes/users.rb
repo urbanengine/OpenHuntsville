@@ -71,7 +71,17 @@ action :update do
   user.linkedin = params[:user][:linkedin]
   user.url = params[:user][:url]
   user.other_info = params[:user][:other_info]
-  user.password = user.password
+  user.image_url = params[:user][:image_url]
+  user.categories_string = params[:user][:categories_string]
+  # JSON
+  categories = {}
+  categories[0] = ''
+  categories[1] = ''
+  categories[2] = ''
+  puts params[:user]
+  # user[:categories] = Sequel::Postgres::JSONHash.new(data)
+  
+  # Save 
   user.save
 
   presenter.path = 'users/edit'

@@ -1,5 +1,7 @@
 require 'pakyow-rake'
 
+Dir.glob('rake/*.rake').each { |r| import r }
+
 namespace :db do
   desc "Create and migrate the database"
   task :setup do
@@ -21,6 +23,7 @@ namespace :db do
     %w(
     db:drop
     db:setup
+    seed:sample
     ).each do |t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke

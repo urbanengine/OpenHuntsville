@@ -24,4 +24,23 @@ module Pakyow::Helpers
       error.gsub('_', ' ').capitalize
     }
   end
+
+  def getVal(bindable,pos)
+    puts "/app/lib/helpers.rb :: getVal :: " + bindable.to_s
+    puts "/app/lib/helpers.rb :: getVal :: " + pos.to_s
+    retVal = Array.new(3)
+    
+    unless bindable.nil?
+      if bindable.include? ","
+        retVal = bindable.split(",")
+      elsif bindable.include? "/"
+        retVal = bindable.split("/")
+      else
+        retVal[0] = bindable
+        retVal[1] = " "
+        retVal[2] = " "
+      end
+    end
+    retVal[pos.to_int]
+  end
 end

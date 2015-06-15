@@ -80,6 +80,62 @@ Pakyow::App.bindings do
 				:content => bindable.email
 			}
 		end
+
+		binding(:categories_string) do
+			{
+				:content => bindable.categories_string
+			}
+		end
+
+		binding(:category_one) do
+			puts "/app/lib/bindings.rb :: category_one :: " + bindable.categories_string.to_s
+			cat = ""
+			unless bindable.categories_string.nil?
+				cat = getVal(bindable.categories_string,0)
+			end
+			{
+				:content => cat
+			}
+		end
+
+		binding(:category_two) do
+			puts "/app/lib/bindings.rb :: category_two :: " + bindable.categories_string.to_s
+			cat = ""
+			unless bindable.categories_string.nil?
+				cat = getVal(bindable.categories_string,1)
+			end
+			{
+				:content => cat
+			}
+		end
+
+		binding(:category_three) do
+			puts "/app/lib/bindings.rb :: category_three :: " + bindable.categories_string.to_s
+			cat = ""
+			unless bindable.categories_string.nil?
+				cat = getVal(bindable.categories_string,2)
+			end
+			{
+				:content => cat
+			}
+		end
+
+		binding(:image_url) do
+			bindable.image_url
+		end
+
+		binding(:image) do
+			name = ""
+			unless bindable.nil? || bindable.first_name.nil? || bindable.last_name.nil?
+				name = bindable.first_name + " " + bindable.last_name
+			end
+			{
+				:src => bindable.image_url,
+				:title =>  name,
+				:alt => name
+			}
+		end
+
     end
 
     scope :session do

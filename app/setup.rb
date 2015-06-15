@@ -2,6 +2,7 @@ require 'bundler/setup'
 
 require 'pakyow'
 require 'sequel'
+require 'sequel/extensions/pg_json'
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 Pakyow::App.define do
