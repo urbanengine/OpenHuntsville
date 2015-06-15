@@ -23,7 +23,7 @@ namespace :db do
     %w(
     db:drop
     db:setup
-    seed:sample
+    seed:experts
     ).each do |t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke

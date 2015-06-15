@@ -34,13 +34,13 @@ namespace :seed do
         unless row[EXPERT_SECOND_SPECIALTY].nil?
             if row[EXPERT_SECOND_SPECIALTY].length > 0
                 cat_string.concat(",")
-                cat_string.concat(row[SECOND_SPECIALTY])
+                cat_string.concat(row[EXPERT_SECOND_SPECIALTY])
             end
         end
         unless row[EXPERT_THIRD_SPECIALTY].nil?
             if row[EXPERT_THIRD_SPECIALTY].length > 0
                 cat_string.concat(",")
-                cat_string.concat(row[THIRD_SPECIALTY])
+                cat_string.concat(row[EXPERT_THIRD_SPECIALTY])
             end
         end
         user.categories_string = cat_string
