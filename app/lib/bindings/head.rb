@@ -11,7 +11,7 @@ Pakyow::App.bindings :head do
       {
         :src => location
       }
-    end
+    end # colorbox
 
     binding(:jquery) do
       location = "http://code.jquery.com/jquery-2.1.4.min.js"
@@ -23,7 +23,7 @@ Pakyow::App.bindings :head do
       {
         :src => location
       }
-    end
+    end # jquery
 
     binding(:font_awesome) do
       location = "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
@@ -35,7 +35,7 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end
+    end # font awesome
 
     binding(:normalize) do
       location = "http://code.jquery.com/jquery-2.1.4.min.js"
@@ -47,7 +47,7 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end
+    end # normalize
 
     binding(:style) do
       location = "http://www.hntsvll.com/assets/css/style.css"
@@ -59,7 +59,7 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end
+    end # main stylesheet
 
     binding(:override) do
       location = "/css/dev.min.css"
@@ -71,6 +71,7 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end      
+    end # override stylesheet      
+
   end # scope :header
 end # header
