@@ -100,13 +100,9 @@ Pakyow::App.bindings :head do
             else
               people = People[params[:people_id]]
             end
-<<<<<<< HEAD
-            slug = "people/" + people.first_name.to_s.downcase + "-" + people.last_name.to_s.downcase
-=======
             unless people.nil?
               slug = "people/" + people.first_name.to_s.downcase + "-" + people.last_name.to_s.downcase
             end
->>>>>>> master
           end
         end
       end

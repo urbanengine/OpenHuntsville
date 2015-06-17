@@ -26,8 +26,8 @@ module Pakyow::Helpers
   end
 
   def getVal(bindable,pos)
-    log_debug("/app/lib/helpers.rb :: getVal :: " + bindable.to_s)
-    log_debug("/app/lib/helpers.rb :: getVal :: " + pos.to_s)
+    log_debug("/app/lib/helpers.rb :: getVal :: ", bindable.to_s)
+    log_debug("/app/lib/helpers.rb :: getVal :: ", pos.to_s)
     retVal = Array.new(3)
     
     unless bindable.nil?
@@ -91,9 +91,15 @@ module Pakyow::Helpers
     end
   end
 
-  def log_debug(log)
+  def log_debug(*args)
     if log_level > 1
-      puts log
+      if args.size == 1
+        puts args[0]
+      elsif args.size == 2
+        unless args[1].nil?
+          puts args[0] + args[1]
+        end
+      end
     end
   end
 
