@@ -115,7 +115,7 @@ Pakyow::App.bindings do
 		end
 
 		binding(:category_one) do
-			puts "/app/lib/bindings.rb :: category_one :: " + bindable.categories_string.to_s
+			log_debug("/app/lib/bindings.rb :: category_one :: " + bindable.categories_string.to_s)
 			cat = ""
 			unless bindable.categories_string.nil?
 				cat = getVal(bindable.categories_string,0)
@@ -126,7 +126,7 @@ Pakyow::App.bindings do
 		end
 
 		binding(:category_two) do
-			puts "/app/lib/bindings.rb :: category_two :: " + bindable.categories_string.to_s
+			log_debug("/app/lib/bindings.rb :: category_two :: " + bindable.categories_string.to_s)
 			cat = ""
 			unless bindable.categories_string.nil?
 				cat = getVal(bindable.categories_string,1)
@@ -137,7 +137,7 @@ Pakyow::App.bindings do
 		end
 
 		binding(:category_three) do
-			puts "/app/lib/bindings.rb :: category_three :: " + bindable.categories_string.to_s
+			log_debug("/app/lib/bindings.rb :: category_three :: " + bindable.categories_string.to_s)
 			cat = ""
 			unless bindable.categories_string.nil?
 				cat = getVal(bindable.categories_string,2)

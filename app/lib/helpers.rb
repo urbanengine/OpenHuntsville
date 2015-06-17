@@ -26,8 +26,8 @@ module Pakyow::Helpers
   end
 
   def getVal(bindable,pos)
-    puts "/app/lib/helpers.rb :: getVal :: " + bindable.to_s
-    puts "/app/lib/helpers.rb :: getVal :: " + pos.to_s
+    log_debug("/app/lib/helpers.rb :: getVal :: " + bindable.to_s)
+    log_debug("/app/lib/helpers.rb :: getVal :: " + pos.to_s)
     retVal = Array.new(3)
     
     unless bindable.nil?
@@ -43,4 +43,64 @@ module Pakyow::Helpers
     end
     retVal[pos.to_int]
   end
+
+  def log_level()
+    level = 0
+    if ENV['LOG_LEVEL'] == "TRACE" 
+      level = 1
+    end
+    if ENV['LOG_LEVEL'] == "DEBUG"
+      level = 2 
+    end
+    if ENV['LOG_LEVEL'] == "INFO" 
+      level = 3
+    end 
+    if ENV['LOG_LEVEL'] == "WARN"
+      level = 4
+    end
+    if ENV['LOG_LEVEL'] == "ERROR"
+      level = 5
+    end
+    if ENV['LOG_LEVEL'] == "FATAL"
+      level = 6
+    end
+    level
+  end
+
+  def log_fatal(log)
+    if log_level > 5
+      puts log
+    end
+  end
+
+  def log_error(log)
+    if log_level > 4
+      puts log
+    end
+  end
+
+  def log_warn(log)
+    if log_level > 3
+      puts log
+    end
+  end
+
+  def log_info(log)
+    if log_level > 2
+      puts log
+    end
+  end
+
+  def log_debug(log)
+    if log_level > 1
+      puts log
+    end
+  end
+
+  def log_trace(log)
+    if log_level > 0
+      puts log
+    end
+  end
+  
 end
