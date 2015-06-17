@@ -90,17 +90,17 @@ Pakyow::App.bindings :head do
       link = "http://www.openhsv.com/"
       slug = ""
       if path.length > 1
-        if path[1] == "users"
+        if path[1] == "people"
           if path.length > 2
-            user = nil
-            id = params[:user_id]
+            people = nil
+            id = params[:people_id]
             if id.include? "-"
               splitname = id.split("-")
-              user = User.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).first
+              people = People.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).first
             else
-              user = User[params[:user_id]]
+              people = People[params[:people_id]]
             end
-            slug = "users/" + user.first_name.to_s.downcase + "-" + user.last_name.to_s.downcase
+            slug = "people/" + people.first_name.to_s.downcase + "-" + people.last_name.to_s.downcase
           end
         end
       end

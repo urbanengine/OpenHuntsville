@@ -26,10 +26,10 @@ namespace :seed do
   task :experts => ['pakyow:stage'] do
     #     Seed facilities and resources for HISL.
     CSV.foreach(CSV_PATH, { :headers => true, :skip_blanks => true }) do |row|
-        user = User.new
+        people = People.new
 
-        user.first_name = row[EXPERT_FIRST_NAME]
-        user.last_name = row[EXPERT_LAST_NAME]
+        people.first_name = row[EXPERT_FIRST_NAME]
+        people.last_name = row[EXPERT_LAST_NAME]
         cat_string = row[EXPERT_FIRST_SPECIALTY]
         unless row[EXPERT_SECOND_SPECIALTY].nil?
             if row[EXPERT_SECOND_SPECIALTY].length > 0
@@ -43,17 +43,17 @@ namespace :seed do
                 cat_string.concat(row[EXPERT_THIRD_SPECIALTY])
             end
         end
-        user.categories_string = cat_string
-        user.company = row[EXPERT_COMPANY]
-        user.twitter = row[EXPERT_TWITTER]
-        user.linkedin = row[EXPERT_LINKEDIN]
-        user.url = row[EXPERT_URL]
-        user.other_info = row[EXPERT_OTHER_INFO]
-        user.image_url = row[EXPERT_IMAGE_URL]
-        if user.email.nil? || user.email.length == 0
-            user.email = "openhsv+" + user.first_name + user.last_name + "@gmail.com"
+        people.categories_string = cat_string
+        people.company = row[EXPERT_COMPANY]
+        people.twitter = row[EXPERT_TWITTER]
+        people.linkedin = row[EXPERT_LINKEDIN]
+        people.url = row[EXPERT_URL]
+        people.other_info = row[EXPERT_OTHER_INFO]
+        people.image_url = row[EXPERT_IMAGE_URL]
+        if people.email.nil? || people.email.length == 0
+            people.email = "openhsv+" + people.first_name + people.last_name + "@gmail.com"
         end
-        user.save
+        people.save
     end
   end
 end

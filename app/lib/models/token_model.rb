@@ -1,7 +1,7 @@
 class Token < Sequel::Model
   plugin :validation_helpers
 
-  many_to_one :user
+  many_to_one :people
 
   def validate
     super
@@ -10,9 +10,9 @@ class Token < Sequel::Model
   end
 
   def after_create
-    # if creating a valid token, invalidate any other tokens of this type that belong to this user
+    # if creating a valid token, invalidate any other tokens of this type that belong to this people
     token = Token[self.id]
-    Token.where(:user => token.user, :type => token.type, :valid => true).exclude(:id => token.id).update(:valid => false) if token.valid
+    Token.where(:people => token.people, :type => token.type, :valid => true).exclude(:id => token.id).update(:valid => false) if token.valid
     super
   end
 

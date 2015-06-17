@@ -53,7 +53,7 @@ namespace :db do
   end
 
   # via http://stackoverflow.com/questions/5108876/kill-a-postgresql-session-connection
-  desc "Fix 'database is being accessed by other users'"
+  desc "Fix 'database is being accessed by other people'"
   task :terminate => [:'pakyow:prepare'] do
     unless $db.nil?
       $db.run <<-SQL

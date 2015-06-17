@@ -10,9 +10,9 @@ Pakyow::App.routes(:sessions) do
 
     create do
       @session = Session.new(params[:session])
-      if user = User.auth(@session)
-        session[:user] = user.id
-        cookies[:user] = user.id
+      if people = People.auth(@session)
+        session[:people] = people.id
+        cookies[:people] = people.id
         puts "authenticated in sessions.rb create with @session " + @session.to_s
         redirect router.path(:default)
       else
@@ -22,7 +22,7 @@ Pakyow::App.routes(:sessions) do
     end
 
     remove do
-      session[:user] = nil
+      session[:people] = nil
       redirect "/"
     end
   end

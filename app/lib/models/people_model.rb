@@ -1,6 +1,6 @@
 require 'bcrypt'
 
-class User < Sequel::Model(:users)
+class People < Sequel::Model(:people)
   attr_accessor :password, :password_confirmation
 
   def password=(password)
@@ -38,10 +38,10 @@ class User < Sequel::Model(:users)
   end
 
   def self.auth(session)
-    user = first(email: session[:email])
+    people = first(email: session[:email])
 
-    if user && user.auth?(session.password)
-      return user
+    if people && people.auth?(session.password)
+      return people
     else
       return nil
     end
@@ -52,7 +52,7 @@ class User < Sequel::Model(:users)
   end
   def self.authenticate(session)
     puts session
-    u = User.where(:email => session.login).first#<-- "session.login.downcase" ensures email part of login input is lowercase when submitted
+    u = People.where(:email => session.login).first#<-- "session.login.downcase" ensures email part of login input is lowercase when submitted
 
     if u && u.authenticated?(session.password)
       return u

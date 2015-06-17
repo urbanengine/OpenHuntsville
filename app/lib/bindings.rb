@@ -1,6 +1,6 @@
 Pakyow::App.bindings do
-	scope :user do
-		restful :user
+	scope :people do
+		restful :people
 
 		binding(:first_name) do
 			{
