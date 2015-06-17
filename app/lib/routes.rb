@@ -9,7 +9,12 @@ Pakyow::App.routes do
   default do
     puts "/app/lib/routes.rb :: default :: session :: " + session.to_s
     puts "/app/lib/routes.rb :: default :: cookies[:user] :: " + cookies[:user]
+    puts "/app/lib/routes.rb :: default :: cookies :: " + cookies.to_s
+    puts "/app/lib/routes.rb :: default :: params :: " + params.to_s
     view.scope(:user).apply(User.all)
+
+    view.scope(:head).apply(request)
+    # view.scope(:head).apply(Object.new)
   end
 
   get :login, '/login' do

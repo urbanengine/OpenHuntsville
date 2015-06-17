@@ -1,6 +1,7 @@
 Pakyow::App.routes(:users) do
+  include SharedRoutes
 
-  expand :restful, :user, '/users' do
+  expand :restful, :user, '/users', :before => :route_head do
 
     action :new do
       view.scope(:user).with do
@@ -15,22 +16,25 @@ Pakyow::App.routes(:users) do
       user = User.new(params[:user])
       user.save
       redirect '/users/'+user.id.to_s+'/edit'
-  end
+    end
 
 # GET /users; same as Index
 action :list do
-  puts "/app/lib/routes/users.rb :: list :: session: " + session.to_s
-  puts "/app/lib/routes/users.rb :: list :: cookies[:user]" + cookies[:user]
+  puts "/app/lib/routes/users.rb :: list :: session :: " + session.to_s
+  puts "/app/lib/routes/users.rb :: list :: cookies[:user] :: " + cookies[:user]
+  puts "/app/lib/routes/users.rb :: list :: cookies :: " + cookies.to_s
+  puts "/app/lib/routes/users.rb :: list :: params :: " + params.to_s
   puts User.all
   view.scope(:user).apply(User.all)
-  view.scope(:head).apply(Object.new)
+  # view.scope(:head).apply(Object.new)
 end
 
 # GET /users/:id
 action :show do
   puts "/app/lib/routes/users.rb :: show :: session :: " + session.to_s
   puts "/app/lib/routes/users.rb :: show :: cookies[:user]" + cookies[:user]
-  presenter.path = 'users/show'
+  puts "/app/lib/routes/users.rb :: show :: cookies :: " + cookies.to_s
+  puts "/app/lib/routes/users.rb :: show :: params :: " + params.to_s
   id = params[:user_id]
   users = Array.new
   if id.include? "-"
@@ -44,13 +48,10 @@ action :show do
 
   if users.length == 0
    # handler 404 do
-    redirect '/errors/404'
+   redirect '/errors/404'
    # end
-  else
-    puts splitname[0]+splitname[1]
-  end
-
-  view.scope(:user).apply(users)
+ end
+ view.scope(:user).apply(users)
 end
 
 # GET /users/:id/edit

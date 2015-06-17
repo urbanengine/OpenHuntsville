@@ -71,23 +71,9 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end # override stylesheet  
-
-    binding(:canonical) do
-      location = "/css/dev.min.css"
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          location = "/css/dev.css"
-        end
-      end
-      {
-        :href => location
-      }
     end # override stylesheet   
 
     binding(:modernizr) do
-
-      puts ":modernizr"
       location = "http://www.hntsvll.com/assets/js/modernizr.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
@@ -97,7 +83,32 @@ Pakyow::App.bindings :head do
       {
         :href => location
       }
-    end # modernizr
+    end # override stylesheet   
+
+    binding(:canonical) do
+      path = bindable.path.split("/")
+      link = "http://www.openhsv.com/"
+      slug = ""
+      if path.length > 1
+        if path[1] == "users"
+          if path.length > 2
+            user = nil
+            id = params[:user_id]
+            if id.include? "-"
+              splitname = id.split("-")
+              user = User.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).first
+            else
+              user = User[params[:user_id]]
+            end
+            slug = "users/" + user.first_name.to_s.downcase + "-" + user.last_name.to_s.downcase
+          end
+        end
+      end
+      href = link + slug
+      {
+        :href => href
+      }
+    end # canonical_url      
 
   end # scope :header
 end # header
