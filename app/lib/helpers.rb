@@ -26,8 +26,8 @@ module Pakyow::Helpers
   end
 
   def getVal(bindable,pos)
-    puts "/app/lib/helpers.rb :: getVal :: " + bindable.to_s
-    puts "/app/lib/helpers.rb :: getVal :: " + pos.to_s
+    log_debug("/app/lib/helpers.rb :: getVal :: " + bindable.to_s)
+    log_debug("/app/lib/helpers.rb :: getVal :: " + pos.to_s)
     retVal = Array.new(3)
     
     unless bindable.nil?

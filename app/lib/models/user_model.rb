@@ -51,7 +51,7 @@ class User < Sequel::Model(:users)
     BCrypt::Password.new(crypted_password) == password
   end
   def self.authenticate(session)
-    puts session
+    log_debug(session)
     u = User.where(:email => session.login).first#<-- "session.login.downcase" ensures email part of login input is lowercase when submitted
 
     if u && u.authenticated?(session.password)

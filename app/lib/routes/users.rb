@@ -20,21 +20,21 @@ Pakyow::App.routes(:users) do
 
 # GET /users; same as Index
 action :list do
-  puts "/app/lib/routes/users.rb :: list :: session :: " + session.to_s
-  puts "/app/lib/routes/users.rb :: list :: cookies[:user] :: " + cookies[:user]
-  puts "/app/lib/routes/users.rb :: list :: cookies :: " + cookies.to_s
-  puts "/app/lib/routes/users.rb :: list :: params :: " + params.to_s
-  puts User.all
+  log_debug("/app/lib/routes/users.rb :: list :: session :: " + session.to_s)
+  log_debug("/app/lib/routes/users.rb :: list :: cookies[:user] :: " + cookies[:user])
+  log_debug("/app/lib/routes/users.rb :: list :: cookies :: " + cookies.to_s)
+  log_debug("/app/lib/routes/users.rb :: list :: params :: " + params.to_s)
+  log_debug(User.all)
   view.scope(:user).apply(User.all)
   # view.scope(:head).apply(Object.new)
 end
 
 # GET /users/:id
 action :show do
-  puts "/app/lib/routes/users.rb :: show :: session :: " + session.to_s
-  puts "/app/lib/routes/users.rb :: show :: cookies[:user]" + cookies[:user]
-  puts "/app/lib/routes/users.rb :: show :: cookies :: " + cookies.to_s
-  puts "/app/lib/routes/users.rb :: show :: params :: " + params.to_s
+  log_debug("/app/lib/routes/users.rb :: show :: session :: " + session.to_s)
+  log_debug("/app/lib/routes/users.rb :: show :: cookies[:user]" + cookies[:user])
+  log_debug("/app/lib/routes/users.rb :: show :: cookies :: " + cookies.to_s)
+  log_debug("/app/lib/routes/users.rb :: show :: params :: " + params.to_s)
   id = params[:user_id]
   users = Array.new
   if id.include? "-"
@@ -44,40 +44,38 @@ action :show do
     users[0] = User[params[:user_id]]
   end
 
-  puts "/app/lib/routes/users.rb :: show :: users :: " + users.to_s
-
-  if users.length == 0
-   # handler 404 do
+  log_debug("/app/lib/routes/users.rb :: show :: users :: " + users.to_s)
+  
+  if users.nil? || users.length == 0 || users[0].nil? || users[0].length == 0
    redirect '/errors/404'
-   # end
- end
+  end
  view.scope(:user).apply(users)
 end
 
 # GET /users/:id/edit
 action :edit do
-  puts "/app/lib/routes/users.rb :: edit :: session :: " + session.to_s
-  puts "/app/lib/routes/users.rb :: edit :: cookies[:user] :: " + cookies[:user]
+  log_debug("/app/lib/routes/users.rb :: edit :: session :: " + session.to_s)
+  log_debug("/app/lib/routes/users.rb :: edit :: cookies[:user] :: " + cookies[:user])
   user = User[cookies[:user]]
   if user.nil?
-    puts "/app/lib/routes/users.rb :: edit :: user is nil"
+    log_debug("/app/lib/routes/users.rb :: edit :: user is nil")
 
     redirect "/access-denied"
   elsif user.id.to_s != params[:user_id].to_s
-    puts "/app/lib/routes/users.rb :: edit :: user.id != params[:user_id]"
-    puts user.id
-    puts params
+    log_debug("/app/lib/routes/users.rb :: edit :: user.id != params[:user_id]")
+    log_debug(user.id)
+    log_debug(params)
     redirect "/access-denied"
   end
 
   view.scope(:user).bind(User[params[:user_id]])
   user = User[session[:user]]
-  puts "/app/lib/routes/users.rb :: edit :: User :: " + user.id.to_s
+  log_debug("/app/lib/routes/users.rb :: edit :: User :: " + user.id.to_s)
 end
 
 action :update do
-  puts "/app/lib/routes/users.rb :: update :: session :: " + session.to_s
-  puts "/app/lib/routes/users.rb :: update :: cookies[:user] :: " + cookies[:user]
+  log_debug("/app/lib/routes/users.rb :: update :: session :: " + session.to_s)
+  log_debug("/app/lib/routes/users.rb :: update :: cookies[:user] :: " + cookies[:user])
   user = User[params[:user_id]]
   user.first_name = params[:user][:first_name]
   user.last_name = params[:user][:last_name]
@@ -93,7 +91,7 @@ action :update do
   categories[0] = ''
   categories[1] = ''
   categories[2] = ''
-  puts params[:user]
+  log_debug(params[:user])
   # user[:categories] = Sequel::Postgres::JSONHash.new(data)
   
   # Save 

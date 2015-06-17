@@ -13,7 +13,7 @@ Pakyow::App.routes(:sessions) do
       if user = User.auth(@session)
         session[:user] = user.id
         cookies[:user] = user.id
-        puts "authenticated in sessions.rb create with @session " + @session.to_s
+        log_debug("authenticated in sessions.rb create with @session " + @session.to_s)
         redirect router.path(:default)
       else
         @errors = ['Invalid email and/or password']
