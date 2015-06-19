@@ -1,6 +1,10 @@
 require 'bundler/setup'
 
-require 'pakyow'
+require 'pakyow-support'
+require 'pakyow-core'
+require 'pakyow-presenter'
+require 'pakyow-mailer'
+
 require 'sequel'
 require 'sequel/extensions/pg_json'
 Sequel::Model.plugin :timestamps, update_on_create: true
@@ -8,14 +12,14 @@ Sequel::Model.plugin :timestamps, update_on_create: true
 Pakyow::App.define do
   configure :global do
     # put global config here and they'll be available across environments
-    app.name = 'Pakyow'
+    app.name = 'OpenHSV'
+
+    $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 
   configure :development do
     require 'dotenv'
     Dotenv.load
-
-    $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 
   configure :prototype do
@@ -23,12 +27,7 @@ Pakyow::App.define do
     app.ignore_routes = true
   end
 
-  configure :staging do
-    # put your staging config here
-  end
-
   configure :production do
-    # put your production config here
   end
 
   middleware do |builder|
