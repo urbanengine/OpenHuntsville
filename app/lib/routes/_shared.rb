@@ -6,7 +6,7 @@ module SharedRoutes
   	puts view
   	puts :head
   	unless request.nil? || view.nil?
-	  # view.scope(:head).apply(request)
+	  view.scope(:head).apply(request)
     end
   end
 
