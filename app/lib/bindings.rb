@@ -120,6 +120,7 @@ Pakyow::App.bindings do
 			unless bindable.categories_string.nil?
 				cat = getVal(bindable.categories_string,0)
 			end
+			puts cat
 			{
 				:content => cat
 			}
@@ -152,12 +153,21 @@ Pakyow::App.bindings do
 		end
 
 		binding(:image) do
+			src = ""
 			name = ""
-			unless bindable.nil? || bindable.first_name.nil? || bindable.last_name.nil?
-				name = bindable.first_name + " " + bindable.last_name
+			unless bindable.nil?
+				unless bindable.first_name.nil? || bindable.last_name.nil?
+					name = bindable.first_name + " " + bindable.last_name
+
+					unless bindable.image_url.nil?
+						src = "#"
+					else
+						src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
+					end
+				end
 			end
 			{
-				:src => bindable.image_url,
+				:src => src,
 				:title =>  name,
 				:alt => name
 			}

@@ -97,7 +97,7 @@ Pakyow::App.bindings :head do
               unless people.length == 1 && people[0].custom_url.nil?
                 slug = "people/" + people[0].custom_url
               else
-                slug = "people/" + people.first_name.to_s.downcase + "-" + people.last_name.to_s.downcase
+                slug = "people/" + people[0].first_name.to_s.downcase + "-" + people[0].last_name.to_s.downcase
               end
             end
           end

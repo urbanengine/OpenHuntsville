@@ -51,7 +51,7 @@ namespace :seed do
         people.linkedin = row[EXPERT_LINKEDIN]
         people.url = row[EXPERT_URL]
         people.other_info = row[EXPERT_OTHER_INFO]
-        people.image_url = row[EXPERT_IMAGE_URL]
+        # people.image_url = row[EXPERT_IMAGE_URL]
         if people.email.nil? || people.email.length == 0
             people.email = "openhsv+" + people.first_name + people.last_name + "@gmail.com"
         end
