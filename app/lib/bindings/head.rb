@@ -41,7 +41,7 @@ Pakyow::App.bindings :head do
       location = "http://code.jquery.com/jquery-2.1.4.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "http://www.hntsvll.com/assets/css/normalize.css"
+          location = "/css/normalize.css"
         end
       end
       {
@@ -53,7 +53,7 @@ Pakyow::App.bindings :head do
       location = "http://www.hntsvll.com/assets/css/style.css"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "http://www.hntsvll.com/assets/css/style.css"
+          location = "/css/style.css"
         end
       end
       {
@@ -77,7 +77,7 @@ Pakyow::App.bindings :head do
       location = "http://www.hntsvll.com/assets/js/modernizr.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "http://www.hntsvll.com/assets/js/modernizr.js"
+          location = "/js/modernizr.js"
         end
       end
       {
