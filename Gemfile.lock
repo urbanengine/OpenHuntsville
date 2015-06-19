@@ -100,3 +100,6 @@ DEPENDENCIES
   rake
   sequel
   thin
+
+BUNDLED WITH
+   1.10.3
