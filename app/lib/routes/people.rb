@@ -52,12 +52,12 @@ action :edit do
   if people.nil?
     log_debug("/app/lib/routes/people.rb :: edit :: people is nil")
 
-    redirect "/access-denied"
+    redirect "/errors/403"
   elsif people.id.to_s != params[:people_id].to_s
     log_debug("/app/lib/routes/people.rb :: edit :: people.id != params[:people_id]")
     log_debug(people.id)
     log_debug(params)
-    redirect "/access-denied"
+    redirect "/errors/403"
   end
 
   view.scope(:people).bind(People[params[:people_id]])
