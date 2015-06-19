@@ -30,6 +30,8 @@ namespace :seed do
 
         people.first_name = row[EXPERT_FIRST_NAME]
         people.last_name = row[EXPERT_LAST_NAME]
+        people.password = "test"
+        people.password_confirmation = "test"
         cat_string = row[EXPERT_FIRST_SPECIALTY]
         unless row[EXPERT_SECOND_SPECIALTY].nil?
             if row[EXPERT_SECOND_SPECIALTY].length > 0

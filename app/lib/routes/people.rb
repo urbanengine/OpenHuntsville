@@ -35,15 +35,7 @@ action :show do
   log_debug("/app/lib/routes/people.rb :: show :: cookies[:people]", cookies[:people])
   log_debug("/app/lib/routes/people.rb :: show :: cookies :: ", cookies.to_s)
   log_debug("/app/lib/routes/people.rb :: show :: params :: ", params.to_s)
-  id = params[:people_id]
-  people = Array.new
-  if id.include? "-"
-    splitname = id.split("-")
-    people = People.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).all
-  else
-    people[0] = People[params[:people_id]]
-  end
-
+  people = get_people_from_people_id(params[:people_id])
   log_debug("/app/lib/routes/people.rb :: show :: people :: ", people.to_s)
   
   if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
@@ -86,6 +78,7 @@ action :update do
   people.other_info = params[:people][:other_info]
   people.image_url = params[:people][:image_url]
   people.categories_string = params[:people][:categories_string]
+  people.custom_url = params[:people][:custom_url]
   # JSON
   categories = {}
   categories[0] = ''

@@ -92,16 +92,13 @@ Pakyow::App.bindings :head do
       if path.length > 1
         if path[1] == "people"
           if path.length > 2
-            people = nil
-            id = params[:people_id]
-            if id.include? "-"
-              splitname = id.split("-")
-              people = People.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).first
-            else
-              people = People[params[:people_id]]
-            end
+            people = get_people_from_people_id(params[:people_id])
             unless people.nil?
-              slug = "people/" + people.first_name.to_s.downcase + "-" + people.last_name.to_s.downcase
+              unless people.custom_url.nil?
+                slug = "people/" + people.custom_url
+              else
+                slug = "people/" + people.first_name.to_s.downcase + "-" + people.last_name.to_s.downcase
+              end
             end
           end
         end

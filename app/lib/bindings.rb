@@ -163,6 +163,10 @@ Pakyow::App.bindings do
 			}
 		end
 
+		binding(:custom_url) do
+			bindable.custom_url
+		end
+
     end
 
     scope :session do

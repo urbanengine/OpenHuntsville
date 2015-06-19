@@ -1,4 +1,4 @@
-<form data-scope="people" data-prop="action">
+<form id="people-form" data-scope="people" data-prop="action">
   <ul data-scope="errors" class="margin-t">
 <!--     <li data-prop="message">
       Error message goes here.
@@ -116,11 +116,24 @@
         <textarea  data-prop="other_info"></textarea>
       </li>
       <li>
-        <input type="submit" value="Edit">
+        <label>Custom URL</label>
+        <input  data-prop="custom_url" id="custom_url" />
+      </li>
+      <li>
+        <input id="submit" type="submit" value="Edit">
       </li>
     </ul>
   </fieldset>
 </form>
 
-
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#submit").click(function(e){
+      if (($("#custom_url").val()).indexOf("-") != -1)
+      {
+        e.preventDefault();
+      }
+    });
+  });
+</script>
   <!-- <li data-prop="specialties">specialties</li> -->
