@@ -17,6 +17,7 @@ Sequel.migration do
       Time          :updated_at
       String        :image_url
       String        :custom_url
+      Boolean       :admin
     end
   end
 

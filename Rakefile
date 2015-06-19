@@ -24,6 +24,7 @@ namespace :db do
     db:drop
     db:setup
     seed:experts
+    seed:admins
     ).each do |t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke

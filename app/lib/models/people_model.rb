@@ -60,7 +60,10 @@ class People < Sequel::Model(:people)
       return false
     end
   end
-    def authenticated?(auth_password)
+  def authenticated?(auth_password)
     return password == auth_password
+  end
+  def is_admin?()
+    return :admin
   end
 end

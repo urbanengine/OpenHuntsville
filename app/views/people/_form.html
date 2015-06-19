@@ -6,6 +6,7 @@
   </ul>
 
   <fieldset class="margin-t">
+    <legend>Profile Information</legend>
     <ul>
       <li>
         <label>First Name</label>
@@ -120,10 +121,19 @@
         <input  data-prop="custom_url" id="custom_url" />
       </li>
       <li>
-        <input id="submit" type="submit" value="Edit">
       </li>
     </ul>
   </fieldset>
+  <fieldset>
+    <legend>Administrator rights</legend>
+    <ul>
+      <li>
+        <label>Is admin?</label>
+        <input data-prop="admin" type="checkbox" value="#" />
+      </li>
+    </ul>
+  </fieldset>
+  <input id="submit" type="submit" value="Save">
 </form>
 
 <script type="text/javascript">

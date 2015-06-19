@@ -177,6 +177,13 @@ Pakyow::App.bindings do
 			bindable.custom_url
 		end
 
+		binding(:admin) do
+			puts bindable[:admin]
+			{
+				# :value => bindable[:admin]
+			}
+		end
+
     end
 
     scope :session do

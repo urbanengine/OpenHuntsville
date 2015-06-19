@@ -14,7 +14,11 @@ Pakyow::App.routes(:sessions) do
         session[:people] = people.id
         cookies[:people] = people.id
         puts "authenticated in sessions.rb create with @session " + @session.to_s
-        redirect router.path(:default)
+        unless people.id.nil?
+          redirect "/people/" + people.id.to_s + "/edit"
+        else
+          redirect "/errors/401"
+        end
       else
         @errors = ['Invalid email and/or password']
         reroute router.group(:session).path(:new), :get

@@ -56,6 +56,28 @@ namespace :seed do
             people.email = "openhsv+" + people.first_name + people.last_name + "@gmail.com"
         end
         people.save
+        print "."
+        $stdout.flush
     end
+    puts "***"
+  end
+
+  task :admins => ['pakyow:stage'] do
+    people = People.new
+
+    people.first_name = "Kyle"
+    people.last_name = "Newman"
+    people.password = "test"
+    people.password_confirmation = "test"
+    people.categories_string = "Software"
+    # people.company = row[EXPERT_COMPANY]
+    people.twitter = "skylenewman"
+    people.linkedin = "skylenewman"
+    people.url = "http://www.skylenewman.com"
+    # people.other_info = row[EXPERT_OTHER_INFO]
+    # people.image_url = row[EXPERT_IMAGE_URL]
+    people.email = "kyle@skylenewman.com"
+    people.admin = true
+    people.save
   end
 end
