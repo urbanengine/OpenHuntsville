@@ -69,6 +69,7 @@ action :update, :before => :edit_profile_check do
   people.categories_string = params[:people][:categories_string]
   people.custom_url = params[:people][:custom_url]
   people.admin = params[:people][:admin]
+  people.bio = params[:people][:bio]
   # JSON
   categories = {}
   categories[0] = ''
