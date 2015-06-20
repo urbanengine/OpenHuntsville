@@ -1,6 +1,8 @@
 require 'pakyow-rake'
+require 'sequel'
 
 Dir.glob('rake/*.rake').each { |r| import r }
+Sequel.extension :migration
 
 namespace :db do
   desc "Create and migrate the database"
