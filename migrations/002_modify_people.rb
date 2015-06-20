@@ -1,8 +1,6 @@
 Sequel.migration do
 	up do
-  		modify_table :people do
-  			add_column :bio, String
-  		end
+  		add_column :people, :bio, String
 	end
 	down do
 	end
