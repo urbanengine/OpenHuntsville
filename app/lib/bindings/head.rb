@@ -38,7 +38,7 @@ Pakyow::App.bindings :head do
     end # font awesome
 
     binding(:normalize) do
-      location = "http://code.jquery.com/jquery-2.1.4.min.js"
+      location = "/css/normalize.css"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           location = "/css/normalize.css"
@@ -50,7 +50,7 @@ Pakyow::App.bindings :head do
     end # normalize
 
     binding(:style) do
-      location = "http://www.hntsvll.com/assets/css/style.css"
+      location = "/css/style.css"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           location = "/css/style.css"
@@ -74,7 +74,7 @@ Pakyow::App.bindings :head do
     end # override stylesheet   
 
     binding(:modernizr) do
-      location = "http://www.hntsvll.com/assets/js/modernizr.js"
+      location = "/js/modernizr.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           location = "/js/modernizr.js"
