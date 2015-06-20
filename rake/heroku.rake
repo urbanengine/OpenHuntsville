@@ -15,6 +15,7 @@ namespace :heroku do
     "heroku pg:reset PRODUCTION_URL --confirm #{args.app_name}"
       %w(
     seed:experts
+    seed:admins
     ).each do |t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke
