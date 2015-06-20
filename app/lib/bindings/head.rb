@@ -62,7 +62,7 @@ Pakyow::App.bindings :head do
     end # main stylesheet
 
     binding(:override) do
-      location = "/css/dev.min.css"
+      location = "/css/dev.css"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           location = "/css/dev.css"
