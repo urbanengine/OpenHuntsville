@@ -51,6 +51,8 @@ namespace :db do
   task :migrate => [:'pakyow:prepare'] do
     flags = "-M #{ENV['VERSION']}" if ENV['VERSION']
     `sequel -m migrations #{ENV['DATABASE_URL']} #{flags}`
+    $db = Sequel.connect(ENV['DATABASE_URL']) if $db.nil?
+    Sequel::Migrator.run($db, 'migrations', :use_transactions=>true)
   end
 
   # via http://stackoverflow.com/questions/5108876/kill-a-postgresql-session-connection
