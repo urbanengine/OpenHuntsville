@@ -30,4 +30,7 @@ Pakyow::App.routes do
     log_debug("/app/lib/routes.rb :: logout :: cookies[:people] :: ", uid)
     reroute router.group(:session).path(:remove), :delete
   end
+  get :about, '/about' do
+    view.scope(:head).apply(request)
+  end
 end
