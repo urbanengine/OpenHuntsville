@@ -2,41 +2,54 @@
 <!DOCTYPE html>
 <html>
 	<head data-scope="head">
-	    <meta charset="utf-8">
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <title>Huntsville Experts</title>
-	    <meta name="description" content="Huntsville's consultants, moonlighters, service firms, and business advisors">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-	    <link data-prop="font_awesome" rel="stylesheet" href="#">
-	    <link data-prop="normalize" rel="stylesheet" href="#">
-	    <link data-prop="style" rel="stylesheet" href="http://www.hntsvll.com/assets/css/style.css">
-	    <link data-prop="override" rel="stylesheet" href="/css/dev.css">
-	    
-	    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,800|Montserrat' rel='stylesheet' type='text/css'>
-	    <script data-prop="modernizr" src="http://www.hntsvll.com/assets/js/modernizr.js"></script>
-	    <script data-prop="jquery" src="#"></script>
-	    <script data-prop="colorbox" src="#"></script>
-	    <link data-prop="canonical" rel="canonical" href="#">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title data-prop="title">OpenHSV - Huntsville's Experts</title>
+  <meta name="description" content="Huntsville's consultants, moonlighters, service firms, and business advisors">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link data-prop="font_awesome" rel="stylesheet" href="#">
+  <link data-prop="normalize" rel="stylesheet" href="/css/normalize.css">
+  <link data-prop="style" rel="stylesheet" href="/css/style.css">
+  <link data-prop="override" rel="stylesheet" href="/css/dev.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,800|Montserrat' rel='stylesheet' type='text/css'>
+  <script  src="/js/modernizr.js"></script> 
+  <script data-prop="jquery" src="#"></script>
+  <script data-prop="colorbox" src="#"></script>
+  <link data-prop="canonical" rel="canonical" href="#">
 	    <style>
 	    	html
 	    	{
 	    		background-color:red;
 	    	}
+	    	.index
+	    	{
+	    		background-color:#fff;
+	    	}
+
+	    	h1, h2, h3, h4, h5, h6
+	    	{
+	    		color:#FFEB50;
+	    		text-shadow: 2px 2px 1px darkred;
+	    	}
 	    </style>
 	    <!--$('a#login').colorbox();-->
 	</head>
-	<body>
+	<body class="about">
 		<header data-scope="header">
 			<div class="overlay">
 				<div class="wrapper">
-					<h1>HNTSVLL</h1>
+					<h1>
+						<a href="/">
+							<img src="/img/openhsv-logo.png" alt="OpenHSV Logo" />
+						</a>
+					</h1>
 					<nav>
 						<ul>
 							<li>
-								<a href="about">About</a>
+								<a href="/about">About</a>
 							</li>
 							<li>
-								<a href="feedback" class="feedback">Feedback</a>
+								<a class="feedback" data-fancybox-type="iframe" href="/feedback-form.html">Feedback</a>
 							</li>						
 						</ul>
 					</nav>

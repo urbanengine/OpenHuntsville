@@ -178,9 +178,9 @@ Pakyow::App.bindings do
 		end
 
 		binding(:admin) do
-			puts bindable[:admin]
+			puts "is admin :: " + bindable[:admin].to_s
 			{
-				# :value => bindable[:admin]
+				:checked => bindable[:admin]
 			}
 		end
 

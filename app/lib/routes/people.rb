@@ -45,27 +45,16 @@ action :show do
 end
 
 # GET /people/:id/edit
-action :edit do
+action :edit, :before => :edit_profile_check do
   log_debug("/app/lib/routes/people.rb :: edit :: session :: ", session.to_s)
   log_debug("/app/lib/routes/people.rb :: edit :: cookies[:people] :: ", cookies[:people])
-  people = People[cookies[:people]]
-  if people.nil?
-    log_debug("/app/lib/routes/people.rb :: edit :: people is nil")
-
-    redirect "/errors/403"
-  elsif people.id.to_s != params[:people_id].to_s
-    log_debug("/app/lib/routes/people.rb :: edit :: people.id != params[:people_id]")
-    log_debug(people.id)
-    log_debug(params)
-    redirect "/errors/403"
-  end
 
   view.scope(:people).bind(People[params[:people_id]])
   people = People[session[:people]]
   log_debug("/app/lib/routes/people.rb :: edit :: People :: ", people.id.to_s)
 end
 
-action :update do
+action :update, :before => :edit_profile_check do
   log_debug("/app/lib/routes/people.rb :: update :: session :: ", session.to_s)
   log_debug("/app/lib/routes/people.rb :: update :: cookies[:people] :: ", cookies[:people])
   people = People[params[:people_id]]
@@ -79,6 +68,7 @@ action :update do
   people.image_url = params[:people][:image_url]
   people.categories_string = params[:people][:categories_string]
   people.custom_url = params[:people][:custom_url]
+  people.admin = params[:people][:admin]
   # JSON
   categories = {}
   categories[0] = ''
@@ -92,7 +82,7 @@ action :update do
 
   presenter.path = 'people/edit'
   view.scope(:people).apply(People[params[:people_id]])
-  redirect '/'
+  redirect '/people/' + people.id.to_s
 end
 
 # TODO
