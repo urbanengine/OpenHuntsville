@@ -35,21 +35,6 @@ Pakyow::App.bindings do
 			}
 		end
 
-		binding(:twitter_profile) do
-			show = "hide"
-			link = "#"
-			if bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
-
-			else
-				show = "show"
-				link = bindable.twitter.split("/")[-1]
-			end
-			{
-				:content => link,
-				:class => show
-			}
-		end
-
 		binding(:linkedin_link) do
 			show = "hide"
 			link = "#"
@@ -61,27 +46,6 @@ Pakyow::App.bindings do
 			end
 			{
 				:href => link,
-				:class => show
-			}
-		end
-
-		binding(:linkedin_profile) do
-			show = "hide"
-			link = "#"
-			if bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
-				
-			else
-				show = "show"
-				array = bindable.linkedin.split("/")
-				unless array.index("pub").nil?
-					link = array[array.index("pub")+1]
-				end
-				unless array.index("in").nil?
-					link = array[array.index("in")+1]
-				end
-			end
-			{
-				:content => link,
 				:class => show
 			}
 		end
