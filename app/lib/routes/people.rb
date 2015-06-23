@@ -69,7 +69,9 @@ action :update, :before => :edit_profile_check do
   people.categories_string = params[:people][:categories_string]
   people.custom_url = params[:people][:custom_url]
   people.admin = params[:people][:admin]
-  people.bio = params[:people][:bio]
+  if params[:people][:bio].length < 161
+    people.bio = params[:people][:bio]
+  end
   # JSON
   categories = {}
   categories[0] = ''

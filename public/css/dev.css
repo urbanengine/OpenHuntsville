@@ -2,3 +2,14 @@
 {
 	display:none !important;
 }
+.error
+{
+	background-color:lightpink;
+	padding:2px 6px;
+	border:2px solid indianred;
+}
+.error span
+{
+	font-weight: bold;
+	color:indianred;
+}

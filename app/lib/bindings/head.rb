@@ -1,4 +1,5 @@
 Pakyow::App.bindings :head do
+  require "pp"
   scope :head do
 
     binding(:colorbox) do
@@ -107,7 +108,20 @@ Pakyow::App.bindings :head do
       {
         :href => href
       }
-    end # canonical_url      
+    end # canonical_url
+
+    binding(:page_js) do
+      p = bindable.path.split("/")
+      src = "#"
+      if p[1] == "people"
+        if p[3] == "edit"
+          src = "/js/page/people-edit.js"
+        end
+      end
+      {
+        :src => src
+      }
+    end # page_js
 
   end # scope :header
 end # header
