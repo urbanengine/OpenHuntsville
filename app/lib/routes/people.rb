@@ -38,6 +38,7 @@ action :show do
   people = get_people_from_people_id(params[:people_id])
   log_debug("/app/lib/routes/people.rb :: show :: people :: ", people.to_s)
   
+  
   if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
    redirect '/errors/404'
   end

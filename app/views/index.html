@@ -1,8 +1,11 @@
-
+<script src="/js/jquery.unveil.js"></script>
 <ul class="entities">
 	<li class="entity" data-scope="people">
 		<div class="backdrop">
-			<img src="assets/img/brandon-kruse.jpg" alt="Brandon Kruse" title="Brandon Kruse" data-prop="image" />
+			<img src="#" data-src="#" alt="Brandon Kruse" title="Brandon Kruse" data-prop="image_unveil" />
+			<noscript>
+			  <img data-prop="image" src="img1.jpg" />
+			</noscript> 
 		</div>
 		<div class="details">
 			<h3><span data-prop="first_name">Brandon</span> <span data-prop="last_name">Kruse</span></h3>
@@ -40,7 +43,11 @@
 		</div>
 	</li>
 </ul>
-
+<script>
+$(document).ready(function() {
+  $("img").unveil();
+});
+</script>
 <!-- <ul data-scope="people">
 	<li><span data-prop="first_name">first_name</span> <span data-prop="last_name">last_name</span></li>
 	<li data-prop="company">company</li>
