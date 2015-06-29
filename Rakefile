@@ -1,4 +1,7 @@
 require 'pakyow-rake'
+require "sequel"
+
+Sequel.extension :migration
 
 Dir.glob('rake/*.rake').each { |r| import r }
 

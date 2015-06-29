@@ -1,0 +1,32 @@
+<form id="people-form" data-prop="action" action="/categories/save" method="post">
+	<fieldset>
+		<a href="#" class="add">add</a>
+		<div class="form-group" data-scope="categories" data-prop="id">
+			<input data-prop="category" type="text" name="1"/>
+			<select data-prop="parent" name="1-parent">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+			</select>
+		</div>
+	</fieldset>
+	<a href="#" class="add">add</a>
+	<input type="submit" value="submit" />
+</form>
+<script>
+$( document ).ready(function(){
+	var i = 1;
+	$('.add').click(function(e){
+		e.preventDefault();
+		var sel = $('fieldset').find("select").eq(0);
+		var newDiv = '<div class="form-group" data-scope="categories" data-prop="id" id="new-'+i+'"><input data-prop="category" type="text" name="new-'+i+'"/></div>';
+		$('fieldset').append(newDiv);
+		if (sel)
+		{
+			$('#new-'+i).append(sel);
+		}
+		i++;
+	});
+});
+</script>
