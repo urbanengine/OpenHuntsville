@@ -6,6 +6,7 @@
 =========================================*/
 a {
 	text-decoration: none;
+	outline: none;
 }
 ul {
 	list-style: none;
@@ -20,13 +21,27 @@ body {
 /*================ HEADER =================
 =========================================*/
 header {
-	background: url('../img/openhsvrocket.jpg') no-repeat;
+	background: url('../img/computerfilledtable.jpg') no-repeat;
 	background-size: 100%;
 }
 header .overlay {
 	background: rgba(10, 40, 40, 0.8);
-	padding: 30px 0;
-	height: 260px;
+	background: -moz-linear-gradient(left,  rgba(11,33,24,0.9) 0%, rgba(11,28,33,0.9) 40%, rgba(45,43,16,0.9) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(11,33,24,0.9)), color-stop(40%,rgba(11,28,33,0.9)), color-stop(100%,rgba(45,43,16,0.9))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(11,33,24,0.9) 0%,rgba(11,28,33,0.9) 40%,rgba(45,43,16,0.9) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(11,33,24,0.9) 0%,rgba(11,28,33,0.9) 40%,rgba(45,43,16,0.9) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(11,33,24,0.9) 0%,rgba(11,28,33,0.9) 40%,rgba(45,43,16,0.9) 100%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(11,33,24,0.9) 0%,rgba(11,28,33,0.9) 40%,rgba(45,43,16,0.9) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60b2118', endColorstr='#e62d2b10',GradientType=1 ); /* IE6-9 */
+}
+.header-top {
+	padding: 30px 0 20px;
+	overflow: hidden;
+	background-color: rgba(9, 27, 27, 0.7);
+}
+.header-bottom {
+	padding-bottom: 30px;
+	overflow: hidden;
 }
 .gradient {
 	background: rgba(0,225,255,1);
@@ -50,37 +65,34 @@ h1 {
 	float: left;
 }
 h1 img {
-	width: 420px;
+	width: 250px;
 }
 nav ul {
 	float: right;
-	padding-right: 20px;
 	margin: 0;
+	padding: 5px 0 0;
 }
 nav li {
-	float: left;
+	float: left; 
+	margin-right: 40px;
+}
+nav li:last-child {
+	margin-right: 0;
 }
 nav li a {
-	padding: 15px 0;
-	text-align: center;
+	font-size: 1.5em;
+	font-weight: 600;
+	color: #f6f6f6;
+	border-bottom: 1px dotted #888;
 	display: block;
-	color: #111;
-	background-color: #f6f6f6;
-	width: 140px;
-	font-size: 1.2em;
-	font-family: 'Open Sans', sans-serif;
-	box-shadow: 0 3px 0 #030F0D;
-	margin-right: 15px;
 }
 nav li a:hover {
-	box-shadow: 0 1px 0 #030F0D;
-	margin-top:-1px;
+	color: #ccc;
+	border-bottom-color: #888;
 }
-nav li .feedback {
-	background-color: #FFEB50;
-}
-nav li .feedback {
-	margin-right: 0;
+nav li a.selected, nav li a.selected:hover {
+	color: #00E1FF;
+	border-bottom-color: #007C8C;
 }
 h2 {
 	font-family: 'Montserrat', sans-serif;
@@ -94,6 +106,78 @@ h2 {
 	font-weight: normal;
 }
 
+/*=============== HOME PAGE ===============
+=========================================*/
+
+.home h2 {
+	font-weight: normal;
+	font-size: 1.9em;
+	line-height: 1.4em;
+	padding: 60px 0 50px;
+	font-family: 'Open Sans', sans-serif;
+}
+.home h3 {
+	color: #f6f6f6;
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: bold;
+	font-size: 2.4em;
+	line-height: 1.4em;
+	padding-bottom: 50px;
+}
+.home h4 {
+	color: #f6f6f6;
+	font-family: 'Open Sans', sans-serif;
+	text-align: center;
+	font-size: 1.4em;
+	font-weight: normal;
+	margin: 0 0 15px;
+}
+.home .chevron {
+	display: block;
+	clear: both;
+	width: 30px;
+	position: relative;
+	margin: 0 auto;
+	height: 40px;
+}
+.home .chevron:before, .home .chevron:after {
+    position: absolute;
+    display: block;
+    content: "";
+    border: 14px solid transparent;
+}
+.home .chevron:before {
+    top: 0;
+    border-top-color: #D8D8D8;
+}
+.home .chevron:after {
+    top: -3px;
+    border-top-color: #1E2E2F;
+}
+.home a {
+	outline: none;
+}
+.home .content {
+	background-color: #f6f6f6;
+}
+.home .content .wrapper {
+	background: none;
+}
+.home .content ul {
+	overflow: hidden;
+	padding: 0 100px;
+}
+.home .content li {
+	width: 400px;
+}
+.home li.join {
+	float: left;
+}
+.home li.find {
+	float: right;
+}
+
 /*============== ABOUT PAGE ===============
 =========================================*/
 
@@ -105,7 +189,7 @@ h2 {
 }
 .about h2 {
 	width: 90%;
-	font-size: 1.5em;
+	font-size: 1.3em;
 	padding-top: 0;
 	text-align: left;
 	margin: 0;
@@ -114,13 +198,15 @@ h2 {
 	height: auto;
 	padding-bottom: 30px;
 }
-.about nav ul {
-	width: 215px;
+.about nav li {
+	margin-right: 40px;
+}
+.about nav li:last-child {
+	margin-right: 0;
 }
 .about nav li a {
-	font-size: 1em;
-	width: 100px;
-	padding: 10px 0;
+	font-size: 1.5em;
+	display: block;
 }
 .about .index {
 	max-width: 1200px;
@@ -142,6 +228,9 @@ h2 {
 }
 .about .breadcrumbs li a:hover {
 	text-decoration: underline;
+}
+.about .about-text {
+	padding-bottom: 30px;
 }
 .about .about-text a {
 	color: #00A3B8;
@@ -336,6 +425,42 @@ h3 {
 	text-decoration: underline;
 }
 
+/*=============== ACCORDION ===============
+=========================================*/
+
+/* Overlays */
+.ui-widget-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.ui-accordion .ui-accordion-header {
+	display: block;
+	cursor: pointer;
+	position: relative;
+	margin: 2px 0 0 0;
+	padding: .5em .5em .5em .7em;
+	min-height: 0; /* support: IE7 */
+	font-size: 100%;
+}
+.ui-accordion .ui-accordion-icons {
+	padding-left: 2.2em;
+}
+.ui-accordion .ui-accordion-icons .ui-accordion-icons {
+	padding-left: 2.2em;
+}
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+	position: absolute;
+	left: .5em;
+	top: 50%;
+	margin-top: -8px;
+}
+.ui-corner-bottom.ui-accordion-content-active li {
+	margin: 7px 0 0 15px;
+}
+
 /*================ FOOTER =================
 =========================================*/
 
@@ -350,6 +475,13 @@ footer p {
 	margin: 0;
 	padding: 0;
 	font-size: 0.8em;
+}
+footer a {
+	color: #999;
+}
+footer a:hover {
+	color: #999;
+	text-decoration: underline;
 }
 
 /*============ MEDIA QUERIES ==============
@@ -382,43 +514,34 @@ footer p {
 		display: block;
 		margin: 0 auto;
 	}
-	h2 { 
+	h2, .about h2 { 
 		text-align: center;
 		padding: 15px 0 0;
-		font-size: 1.7em;
+		font-size: 1.2em;
 		width: 100%;
 		margin: 0;
 	}
-	.about h2 {
-		width: 100%;
-		margin-top: 0;
-		padding-top: 15px;
-		text-align: center;
-		margin: 0 auto;
+	nav {
+		clear: both;
 	}
 	nav ul {
-		width: 210px;
 		margin: 0 auto;
 		padding: 10px 0 0;
 		float: none;
 		overflow: hidden;
+		text-align: center;
 	}
-	nav li {
-		float: left;
-		margin-right: 10px;
+	nav li, .about nav li {
+		margin-right: 30px;
+		display: inline-block;
+		float: none;
 	}
 	nav li:last-child {
 		margin-right: 0;
 	}
-	nav li a {
-		width: 100px;
-		padding: 10px 0;
-		font-size: 1em;
-		margin-right: 0;
-	}
-	nav li a:first-child {
-		margin-right: 0;
-	}
+	nav li a, .about nav li a {
+		font-size: 1.4em;
+	} 
 	.tinynav { 
 		display: block;
 		height: 40px;
@@ -463,36 +586,12 @@ footer p {
 	}
 }
 
-@media only screen and (max-width: 700px) {
-	.about .google-map {
-		display: none;
-		margin: 0;
-		float: none;
-	}
-}
-
 @media only screen and (max-width: 400px) {
 	h1 img {
 		width: 300px;
 	}
-	h2 {
-		font-size: 1.4em;
-	}
-	.about h2 {
-		font-size: 1.4em;
-	}
-	nav ul {
-		width: 190px;
-		margin: 0 auto;
-		float: none;
-		padding: 15px 0 0;
-		overflow: hidden;
-	}
-	nav li a {
-		width: 90px;
-		padding: 10px 0;
+	h2, .about h2 {
 		font-size: 1em;
-		margin-right: 0;
 	}
 	.index-wrapper {
 		padding: 10px;
@@ -508,6 +607,13 @@ footer p {
 
 
 
+.hide
+{
+	height:0px;
+	overflow:hidden;
+	margin:0px;
+	padding:0px;
+}
 
 
-
+	

@@ -26,7 +26,7 @@ action :list do
   log_debug("/app/lib/routes/people.rb :: list :: params :: ", params.to_s)
   log_debug(People.all)
   view.scope(:people).apply(People.all)
-  # view.scope(:head).apply(Object.new)
+  view.scope(:head).apply(request)
 end
 
 # GET /people/:id

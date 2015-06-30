@@ -1,41 +1,33 @@
 <html>
 	<head data-scope="head">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title data-prop="title">OpenHSV - Huntsville's Experts</title>
-  <meta name="description" content="Huntsville's consultants, moonlighters, service firms, and business advisors">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link data-prop="font_awesome" rel="stylesheet" href="#">
-  <link data-prop="normalize" rel="stylesheet" href="#">
-  <link data-prop="style" rel="stylesheet" href="//www.hntsvll.com/assets/css/style.css">
-  <link data-prop="override" rel="stylesheet" href="/css/dev.css">
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,800|Montserrat' rel='stylesheet' type='text/css'>
-  <script  src="/js/modernizr.js"></script> 
-  <script data-prop="jquery" src="#"></script>
-  <script data-prop="colorbox" src="#"></script>
-  <link data-prop="canonical" rel="canonical" href="#">
-  <script data-prop="page_js" src="#"></script>
-  <!--$('a#login').colorbox();-->
+		<!-- @include head -->
 	</head>
-	<body class="home">
+	<body class="find">
 		<header data-scope="header">
 			<div class="overlay">
-				<div class="wrapper">
-					<h1>
-						<a href="/">
-							<img src="/img/openhsv-logo.png" alt="OpenHSV Logo" />
-						</a>
-					</h1>
-					<nav>
-						<ul>
-							<li>
-								<a href="/about">About</a>
-							</li>
-							<li>
-								<a class="feedback" data-fancybox-type="iframe" href="/feedback-form.html">Feedback</a>
-							</li>						
-						</ul>
-					</nav>
+				<div class="header-top">
+					<div class="wrapper">
+						<h1>
+							<a href="/">
+								<img src="/img/openhsv-logo.png" alt="OpenHSV Logo" />
+							</a>
+						</h1>
+						<nav>
+							<ul>
+								<li>
+									<a href="/find">Find</a>
+								</li>
+								<li>
+									<a href="/about">About</a>
+								</li>
+								<li>
+									<a class="fancybox" data-fancybox-type="iframe" href="/feedback-form.html">Feedback</a>
+								</li>						
+							</ul>
+						</nav>	
+					</div>
+				</div>
+				<div class="header-bottom">
 					<h2>Huntsville's consultants, moonlighters, service firms and business advisors</h2>
 				</div>
 			</div>
@@ -45,7 +37,7 @@
 				<div class="sidebar">
 					<ul id="nav">
 						<li>
-							<a href="#" class="here">
+							<a href="#" class="selected">
 								<span>All</span>
 								<span class="raquo">&raquo;</span>
 							</a>
@@ -58,6 +50,17 @@
 						</li>
 						<li>
 							<a href="#">Design</a>
+							<ul>
+								<li>
+									<a href="#">Graphic Design</a>
+								</li>
+								<li>
+									<a href="#">Print Design</a>
+								</li>
+								<li>
+									<a href="#">Graphic Design</a>
+								</li>
+							</ul>
 						</li>
 						<li>
 							<a href="#">Software</a>
@@ -88,7 +91,7 @@
     	</div>
 		<footer>
 			<div class="wrapper">
-				<p>Copyright &copy; 2015 OpenHSV</p>
+				<p>Copyright &copy; 2015 OpenHSV. <a href="/terms">Terms of Service</a>.</p>
 			</div>
 		</footer>
 	<script src="/js/jquery.fancybox.pack.js"></script>

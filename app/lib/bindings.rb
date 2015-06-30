@@ -136,12 +136,42 @@ Pakyow::App.bindings do
 				:content => cat
 			}
 		end
+		binding(:category_spacer_one) do
+			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
+			cat = ""
+			unless bindable.categories_string.nil? 
+				val = getVal(bindable.categories_string,1)
+				unless val.nil?
+					if val.length > 1
+						cat = "&nbsp;/&nbsp;"
+					end
+				end
+			end
+			{
+				:content => cat
+			}
+		end
 
 		binding(:category_three) do
 			log_debug("/app/lib/bindings.rb :: category_three :: " , bindable.categories_string.to_s)
 			cat = ""
 			unless bindable.categories_string.nil?
 				cat = getVal(bindable.categories_string,2)
+			end
+			{
+				:content => cat
+			}
+		end
+		binding(:category_spacer_two) do
+			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
+			cat = ""
+			unless bindable.categories_string.nil? 
+				val = getVal(bindable.categories_string,2)
+				unless val.nil?
+					if val.length > 1
+						cat = "&nbsp;/&nbsp;"
+					end
+				end
 			end
 			{
 				:content => cat

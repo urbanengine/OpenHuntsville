@@ -2,23 +2,23 @@ Pakyow::App.bindings :head do
   require "pp"
   scope :head do
 
-    binding(:colorbox) do
-      location = "/assets/colorbox-master"
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          location = "http://www.hntsvll.com/assets/colorbox-master"
-        end
-      end
-      {
-        :src => location
-      }
-    end # colorbox
-
     binding(:jquery) do
       location = "http://code.jquery.com/jquery-2.1.4.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           location = "http://code.jquery.com/jquery-2.1.4.js"
+        end
+      end
+      {
+        :src => location
+      }
+    end # jquery
+
+    binding(:jquery_ui) do
+      location = "//code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
+        if ENV['RACK_ENV']== "development"
+          location = "//code.jquery.com/ui/1.11.4/jquery-ui.js"
         end
       end
       {
@@ -117,11 +117,44 @@ Pakyow::App.bindings :head do
         if p[3] == "edit"
           src = "/js/page/people-edit.js"
         end
+      elsif p[1] == "find"
+        src = "/js/page/find.js"
       end
       {
         :src => src
       }
     end # page_js
+
+    binding(:title) do
+      ret = "OpenHSV - Huntsville's Experts"
+      path = bindable.path.split("/")
+      if path.length > 1
+        if path[1] == "find"
+          ret = "OpenHSV - Find an Expert"
+        elsif path[1] == "about"
+          ret = "OpenHSV - About"
+        end
+      end
+      {
+        :content => ret
+      }
+    end
+
+# TODO: Fix this
+    binding(:description) do
+      ret = "OpenHSV - Huntsville's Experts"
+      path = bindable.path.split("/")
+      if path.length > 1
+        if path[1] == "find"
+          ret = "OpenHSV - Find an Expert"
+        elsif path[1] == "about"
+          ret = "OpenHSV - About"
+        end
+      end
+      {
+        :'content' => ret
+      }
+    end
 
   end # scope :header
 end # header

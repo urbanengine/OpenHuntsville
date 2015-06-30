@@ -11,7 +11,6 @@ Pakyow::App.routes do
     log_debug("/app/lib/routes.rb :: default :: cookies[:people] :: ", cookies[:people])
     log_debug("/app/lib/routes.rb :: default :: cookies :: ", cookies.to_s)
     log_debug("/app/lib/routes.rb :: default :: params :: ", params.to_s)
-    view.scope(:people).apply(People.all)
     view.scope(:head).apply(request)
   end
 
@@ -31,6 +30,18 @@ Pakyow::App.routes do
     reroute router.group(:session).path(:remove), :delete
   end
   get :about, '/about' do
+    view.scope(:head).apply(request)
+  end
+  get :terms, '/terms' do
+    view.scope(:head).apply(request)
+  end
+
+  get :find, '/find' do
+    log_debug("/app/lib/routes.rb :: default :: session :: ", session.to_s)
+    log_debug("/app/lib/routes.rb :: default :: cookies[:people] :: ", cookies[:people])
+    log_debug("/app/lib/routes.rb :: default :: cookies :: ", cookies.to_s)
+    log_debug("/app/lib/routes.rb :: default :: params :: ", params.to_s)
+    view.scope(:people).apply(People.all)
     view.scope(:head).apply(request)
   end
 end
