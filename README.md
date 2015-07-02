@@ -37,7 +37,7 @@ You'll find your app running at [http://localhost:3000](http://localhost:3000)!
 
 # Contributing code
 
-1. Create a Github [issue](https://github.com/OpenHuntsville/hntsvll/issues)
+1. Create a Github [issue](https://github.com/OpenHuntsville/hntsvll/issues) that describes what you want to do.
 2. If you don't already have one, generate an SSH key and add it to your Github profile. [Documentation here.](https://help.github.com/articles/generating-ssh-keys/)
 3. On your local machine, clone the repository `git@github.com:OpenHuntsville/hntsvll.git` if you have not already. If you have, switch to the "master" branch and get the newest version of the code. There are Git GUIs that you can use or you can open up terminal, go to the repo directory, and `git checkout master && git pull`.
 4. Create and checkout a new branch with issue number and title as the branch name. The terminal command for creating and checking out a branch is `git checkout -b 01-this-is-the-title`. When you create a branch, it bases it off of the branch you were in when you created it, so be sure to `git checkout master && git pull` before creating a new branch to make life easer when you need to contribute the branch. [More on the feature branch workflow.](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
