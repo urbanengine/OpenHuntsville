@@ -19,6 +19,7 @@ Pakyow::App.routes(:categories) do
     action :list, :before => :route_head do
       pp "list"
       view.scope(:categories).apply(Category.all)
+      # view.scope(:categories).bind({ :type => :two})
     end
 
     # GET /people/:id
@@ -49,8 +50,10 @@ Pakyow::App.routes(:categories) do
           end
           unless category.nil?
             category.category = value
-            unless params[key+"-parent"].nil? || params[key+"-parent"].include? "none"
-              category.parent_id = params[key+"-parent"]
+            unless params[key+"-parent"].nil?
+              unless params[key+"-parent"].include? "none"
+                category.parent_id = params[key+"-parent"]
+              end
             end
             category.save
           end

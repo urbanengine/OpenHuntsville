@@ -1,14 +1,9 @@
 <form id="people-form" data-prop="action" action="/categories/save" method="post">
 	<fieldset>
 		<a href="#" class="add">add</a>
-		<div class="form-group" data-scope="categories" data-prop="id">
-			<input data-prop="category" type="text" name="1"/>
-			<select data-prop="parent" name="1-parent">
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
-			</select>
+		<div class="form-group" data-scope="categories" data-prop="form">
+			<input data-prop="category" type="text" name="2"/>
+			<select data-prop="abc" name="category[parent]"></select>
 		</div>
 	</fieldset>
 	<a href="#" class="add">add</a>
