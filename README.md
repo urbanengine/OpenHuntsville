@@ -54,8 +54,8 @@ You'll find your app running at [http://localhost:3000](http://localhost:3000)!
 
 The following resources might be handy:
 
-- [Website](http://pakyow.com)
-- [Warmup](http://pakyow.com/warmup)
-- [Docs](http://pakyow.com/docs)
-- [Code](http://github.com/metabahn/pakyow)
-- [Tech256](http://www.tech256.com)
+- [Pakyow Website](http://pakyow.com)
+- [Pakyow Warmup](http://pakyow.com/warmup)
+- [Pakyow Docs](http://pakyow.com/docs)
+- [Pakyow Code](http://github.com/pakyow/pakyow)
+- [Tech256 Slack (team chat)](http://www.tech256.com)
