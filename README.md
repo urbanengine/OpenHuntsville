@@ -13,7 +13,8 @@ Huntsville's consultants, moonlighters, service firms and business advisors.
 
 - Create Postgres DB
 - Copy .env.example to .env and edit to contain your Postgres peoplename, password and database
-- From the hntsvll directory, run the rake reset `rake db:reset`
+  - You can also us the url in the Slack channel
+- From the hntsvll directory, run the rake reset `bundle exec rake db:reset`
 
 ## Running the application
 
@@ -25,7 +26,7 @@ You'll find your app running at [http://localhost:3000](http://localhost:3000)!
 
 ## Creating data
 
-- Go to [http://localhost:3000/people/new](http://localhost:3000/people/new)
+- In the dev environment, go to [http://localhost:3000/people/new](http://localhost:3000/people/new)
 - Fill out the form and submit
 - Go to [http://localhost:3000/logout](http://localhost:3000/logout)
 - Repeat
