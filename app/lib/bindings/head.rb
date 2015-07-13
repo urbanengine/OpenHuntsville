@@ -26,18 +26,6 @@ Pakyow::App.bindings :head do
       }
     end # jquery
 
-    binding(:font_awesome) do
-      location = "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          location = "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css"
-        end
-      end
-      {
-        :href => location
-      }
-    end # font awesome
-
     binding(:normalize) do
       location = "/css/normalize.css"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
@@ -126,15 +114,18 @@ Pakyow::App.bindings :head do
     end # page_js
 
     binding(:title) do
-      ret = "OpenHSV - Huntsville's Experts"
+      ret = "#openHSV - Freelancers, Moonlighters, and Consultants in Huntsville, Alabama"
       path = bindable.path.split("/")
       if path.length > 1
-        if path[1] == "find"
-          ret = "OpenHSV - Find an Expert"
+        if path[1] == "people"
+          ret = "#openHSV - Index of freelancers, moonlighters, and consultants."
         elsif path[1] == "about"
-          ret = "OpenHSV - About"
+          ret = "#openHSV - About #openHSV"
+        elsif path[1] == "terms"
+          ret = "#openHSV - Terms of Service"
         end
       end
+      
       {
         :content => ret
       }
@@ -142,13 +133,15 @@ Pakyow::App.bindings :head do
 
 # TODO: Fix this
     binding(:description) do
-      ret = "OpenHSV - Huntsville's Experts"
+      ret = "A directory of Huntsville's freelancers, moonlighters, and consultants."
       path = bindable.path.split("/")
       if path.length > 1
-        if path[1] == "find"
-          ret = "OpenHSV - Find an Expert"
+        if path[1] == "people"
+          ret = "All of the professionals on #openHSV, sortable by industry."
         elsif path[1] == "about"
-          ret = "OpenHSV - About"
+          ret = "#openHSV was built to provide a freelancer, moonlighter, and consultant resources to Huntsville's small businesses and startups."
+        elsif path[1] == "terms"
+          ret = "Terms of Service governing the use of #openHSV"
         end
       end
       {
