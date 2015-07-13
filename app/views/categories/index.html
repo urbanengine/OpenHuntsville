@@ -1,9 +1,37 @@
-<form id="people-form" data-prop="action" action="/categories/save" method="post">
-	<fieldset>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+	fieldset
+	{
+		border:4px darkgray solid;
+		margin:4px 0px;
+		padding:2px;
+	}
+</style>
+<form id="people-form" data-prop="action" action="/categories/save" method="post" class="form-inline">
 		<a href="#" class="add">add</a>
-		<div class="form-group" data-scope="categories" data-prop="form">
-			<input data-prop="category" type="text" name="2"/>
-			<select data-prop="abc" name="category[parent]"></select>
+	<fieldset data-scope="categories">
+		<div class="form-group">
+			<label data-prop="category_id_label" for="#">Category ID</label>
+			<input data-prop="category_id" name="#" type="text" id="#" disabled size="5"/>
+		</div>
+		<div class="form-group">
+			<label data-prop="category_label" for="#">Category</label>
+			<input data-prop="category" type="text" name="#" id="#" /> 
+		</div>
+		<!-- <noscript> -->
+		<div class="form-group">
+			<label data-prop="parent_category_id_label" for="#">Parent Category ID</label>
+			<input data-prop="parent_category_id" type="text" name="#" id="#" size="5" /> 
+		</div>
+		<!-- </noscript> -->
+		<div class="form-group">
+			<label data-prop="parent_category_label" for="#">Parent Category</label>
+			<input data-prop="parent_category" name="#" type="text" id="#" disabled />
+		</div>
+		<div class="form-group">
+			<label data-prop="category_description_label" for="#">Category Description <em>(SEO)</em></label>
+			<textarea data-prop="category_description" name="#" id="#"></textarea>
 		</div>
 	</fieldset>
 	<a href="#" class="add">add</a>

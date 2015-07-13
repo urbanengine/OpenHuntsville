@@ -18,7 +18,9 @@ Pakyow::App.routes(:categories) do
     # GET /people; same as Index
     action :list, :before => :route_head do
       pp "list"
-      view.scope(:categories).apply(Category.all)
+      categories = Category.all
+      view.scope(:categories).apply(categories)
+      # categories.each_with_index { |x,i| view.scope(:categories)[i].bind({:abc=>x})}
       # view.scope(:categories).bind({ :type => :two})
     end
 
@@ -40,6 +42,7 @@ Pakyow::App.routes(:categories) do
     end
 
     post :save, 'save' do
+      pp params
       params.each do |key,value|
         unless key.include? "parent"
           category = nil

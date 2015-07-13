@@ -1,4 +1,39 @@
 Pakyow::App.bindings do
+	scope :lorem do
+		restful :lorem
+
+
+		options(:category_one) do
+			opts = [[]]
+
+			Category.all.each do |category|
+				opts << [category.id, category.category]
+				puts category
+			end
+			pp "KYLE NEWMAN IS THE MAN"
+			pp opts
+			opts
+		end
+		options(:category_two) do
+			opts = [[]]
+
+			Category.all.each do |category|
+				opts << [category.id, category.category]
+			end
+
+			opts
+		end
+		options(:category_three) do
+			opts = [[]]
+
+			Category.all.each do |category|
+				opts << [category.id, category.category]
+			end
+
+			opts
+		end
+	end
+
 	scope :people do
 		restful :people
 
