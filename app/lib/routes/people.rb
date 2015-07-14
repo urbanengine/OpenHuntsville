@@ -45,6 +45,7 @@ end
 action :edit, :before => :edit_profile_check do
   view.scope(:people).bind(People[params[:people_id]])
   people = People[session[:people]]
+  view.scope(:head).apply(request)
 end
 
 action :update, :before => :edit_profile_check do
