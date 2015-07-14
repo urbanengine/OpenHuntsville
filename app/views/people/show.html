@@ -1,11 +1,38 @@
-<ul data-scope="people">
-	<li><span data-prop="first_name">first_name</span> <span data-prop="last_name">last_name</span></li>
-	<li data-prop="company">company</li>
-	<li data-prop="specialties">specialties</li>
-	<li><a href="#" data-prop="twitter_link">Twitter</a></li>
-	<li><a href="#" data-prop="linkedin_link">LinkedIn</a></li>
-	<li><a href="#" data-prop="url_link">URL</a></li>
-	<li data-prop="other_info">other_info</li>
-	<li data-prop="bio">bio</li>
-	<li data-prop="email">email</li>
-</ul>
+---
+template: about
+---
+<div data-scope="people" >
+	<ul class="breadcrumbs">
+		<li>
+			<a href="/">Home</a>
+		</li>
+		<li>&nbsp;/&nbsp;</li>
+		<li>
+			<a href="/people">People</a>
+		</li>
+		<li>&nbsp;/&nbsp;</li>
+		<li>
+			<a href="#" data-prop="profile_link">#</a>
+		</li>
+		<li>&nbsp;/&nbsp;</li>
+		<li>
+			<a href="#" data-prop="edit_profile_link">Update</a>
+		</li>
+	</ul>
+	<div class="content-body">
+		<div class="form">
+			<h2><span data-prop="first_name">#</span> Newman</h2>
+			<p>The profile page for <span data-prop="first_name"></span> <span data-prop="last_name"></span>.</p>
+			<ul data-scope="people" data-id="42">
+				<li><span data-prop="first_name"></span> <span data-prop="last_name"></span></li>
+				<li data-prop="company"></li>
+				<li data-prop="specialties"></li>
+				<li><a href="#" data-prop="twitter_link" class="show"></a></li>
+				<li><a href="#" data-prop="linkedin_link" class="show"></a></li>
+				<li><a href="#" data-prop="url_link" class="show"></a></li>
+				<li data-prop="bio"></li>
+				<li data-prop="email"></li>
+			</ul>
+		</div>
+	</div>
+</div>

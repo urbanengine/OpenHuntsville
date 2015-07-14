@@ -1,140 +1,56 @@
-<form id="people-form" data-scope="people" data-prop="action">
-  <ul data-scope="errors" class="margin-t">
-<!--     <li data-prop="message">
-      Error message goes here.
-    </li> -->
-  </ul>
-
+<form id="people-form" data-prop="action" >
   <fieldset class="margin-t">
     <legend>Profile Information</legend>
     <ul>
       <li>
         <label>First Name</label>
-        <input type="text" data-prop="first_name">
+        <input type="text" data-prop="first_name" name="people[first_name]">
       </li>
       <li>
         <label>Last Name</label>
-        <input type="text" data-prop="last_name">
+        <input type="text" data-prop="last_name" name="people[last_name]">
       </li>
-<!--       <li>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Accounting" />Accounting
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Architecture" />Architecture
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="ArtAndDesign" />Art and Design
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="ComputerScience" />Computer Science
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Contracts" />Contracts
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Defense" />Defense
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Engineering" />Engineering
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Finance" />Finance
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Human Resources" />Human Resources
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Legal" />Legal
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Marketing" />Marketing
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Music" />Music
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Non-Profits" />Non-Profits
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Photo" />Photo
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="RealEstate" />Real Estate
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Recruiting" />Recruiting
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="SocialMedia" />Social Media
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Software" />Software
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Video" />Video
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="WebDevelopment" />Web Development
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="Writing" />Writing
-        </label>
-        <label>
-          <input data-prop="categories" type="checkbox" value="IT" />IT
-        </label>
-      </li> -->
       <li>
         <label>Categories</label>
-        <input type="text" data-prop="categories_string" />
+        <input type="text" data-prop="categories_string" name="people[categories_string]">
       </li>
       <li>
         <label>Email</label>
-        <input type="text" data-prop="email">
+        <input type="text" data-prop="email" name="people[email]">
       </li>
       <li>
         <label>Company</label>
-        <input type="text" data-prop="company">
+        <input type="text" data-prop="company" name="people[company]">
       </li>
       <li>
         <label>Twitter</label>
-        <input type="text" data-prop="twitter">
+        <input type="text" data-prop="twitter" name="people[twitter]">
       </li>
       <li>
         <label>LinkedIn</label>
-        <input type="text" data-prop="linkedin">
+        <input type="text" data-prop="linkedin" name="people[linkedin]">
       </li>
       <li>
         <label>Website</label>
-        <input type="text" data-prop="url">
+        <input type="text" data-prop="url" name="people[url]">
       </li>
       <li>
         <label>Image URL</label>
-        <input type="text" data-prop="image_url">
-      </li>
-      <li>
-        <label>Other Information</label>
-        <textarea  data-prop="other_info"></textarea>
-      </li>
-      <li>
-        <label>Custom URL</label>
-        <input data-prop="custom_url" id="custom_url" />
+        <input type="text" data-prop="image_url" name="people[image_url]">
       </li>
       <li>
         <label>Bio</label>
-        <textarea data-prop="bio" id="bio"></textarea>
-        <p>You have <span id="bio-character-count"></span> characters left.</p>
-      </li>
-      <li>
+        <textarea data-prop="bio" id="bio" name="people[bio]"></textarea>
+        <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
       </li>
     </ul>
   </fieldset>
-  <fieldset>
+  <fieldset data-prop="admin_fieldset">
     <legend>Administrator rights</legend>
     <ul>
       <li>
         <label>Is admin?</label>
-        <input data-prop="admin" type="checkbox" value="#" />
+        <input data-prop="admin" type="checkbox" value="#" name="people[admin]" checked="checked">
       </li>
     </ul>
   </fieldset>
@@ -142,13 +58,12 @@
 </form>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-    $("#submit").click(function(e){
-      if (($("#custom_url").val()).indexOf("-") != -1)
-      {
-        e.preventDefault();
-      }
-    });
+$(document).ready(function(){
+  $("#submit").click(function(e){
+    if (($("#custom_url").val()).indexOf("-") != -1)
+    {
+      e.preventDefault();
+    }
   });
+});
 </script>
-  <!-- <li data-prop="specialties">specialties</li> -->

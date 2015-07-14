@@ -236,6 +236,39 @@ Pakyow::App.bindings do
 			}
 		end
 
+		binding(:profile_link) do
+			first_name = ""
+			last_name = ""
+			unless bindable.first_name.nil?
+				first_name = bindable.first_name
+			end
+			unless bindable.last_name.nil?
+				last_name = bindable.last_name
+			end
+			{
+				:href => "/people/" + bindable.id.to_s,
+				:content => first_name + " " + last_name
+			}
+		end
+
+		binding(:edit_profile_link) do
+
+			{
+				:href => "/people/" + bindable.id.to_s + "/edit"
+			}
+		end
+
+		binding(:admin_fieldset) do
+			visible = "show"
+		  	people = People[cookies[:people]]
+			if people.nil? || people.admin.nil? || people.admin == false
+			 	visible = "hide"
+			end
+			{
+				:class => visible
+			}
+		end
+
     end
 
     scope :session do

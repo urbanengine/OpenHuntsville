@@ -3,6 +3,12 @@ Pakyow::App.routes(:people) do
 
   expand :restful, :people, '/people', :before => :route_head do
 
+    collection do
+      get 'create-profile', :before => :edit_profile_check do
+        view.scope(:people).bind(People[params[:people_id]])
+        people = People[session[:people]]
+      end
+    end
     action :new do
       view.scope(:people).with do
         bind(People.new)
@@ -20,10 +26,6 @@ Pakyow::App.routes(:people) do
 
 # GET /people; same as Index
 action :list do
-  log_debug("/app/lib/routes/people.rb :: list :: session :: ", session.to_s)
-  log_debug("/app/lib/routes/people.rb :: list :: cookies[:people] :: ", cookies[:people])
-  log_debug("/app/lib/routes/people.rb :: list :: cookies :: ", cookies.to_s)
-  log_debug("/app/lib/routes/people.rb :: list :: params :: ", params.to_s)
   log_debug(People.all)
   view.scope(:people).apply(People.all)
   view.scope(:head).apply(request)
@@ -31,13 +33,7 @@ end
 
 # GET /people/:id
 action :show do
-  log_debug("/app/lib/routes/people.rb :: show :: session :: ", session.to_s)
-  log_debug("/app/lib/routes/people.rb :: show :: cookies[:people]", cookies[:people])
-  log_debug("/app/lib/routes/people.rb :: show :: cookies :: ", cookies.to_s)
-  log_debug("/app/lib/routes/people.rb :: show :: params :: ", params.to_s)
   people = get_people_from_people_id(params[:people_id])
-  log_debug("/app/lib/routes/people.rb :: show :: people :: ", people.to_s)
-  
   
   if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
    redirect '/errors/404'
@@ -47,17 +43,11 @@ end
 
 # GET /people/:id/edit
 action :edit, :before => :edit_profile_check do
-  log_debug("/app/lib/routes/people.rb :: edit :: session :: ", session.to_s)
-  log_debug("/app/lib/routes/people.rb :: edit :: cookies[:people] :: ", cookies[:people])
-
   view.scope(:people).bind(People[params[:people_id]])
   people = People[session[:people]]
-  log_debug("/app/lib/routes/people.rb :: edit :: People :: ", people.id.to_s)
 end
 
 action :update, :before => :edit_profile_check do
-  log_debug("/app/lib/routes/people.rb :: update :: session :: ", session.to_s)
-  log_debug("/app/lib/routes/people.rb :: update :: cookies[:people] :: ", cookies[:people])
   people = People[params[:people_id]]
   people.first_name = params[:people][:first_name]
   people.last_name = params[:people][:last_name]
@@ -69,7 +59,10 @@ action :update, :before => :edit_profile_check do
   people.image_url = params[:people][:image_url]
   people.categories_string = params[:people][:categories_string]
   people.custom_url = params[:people][:custom_url]
-  people.admin = params[:people][:admin]
+  current_user = People[cookies[:people]]
+  unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
+    people.admin = params[:people][:admin]
+  end
   if params[:people][:bio].length < 161
     people.bio = params[:people][:bio]
   end
