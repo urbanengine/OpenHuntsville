@@ -12,6 +12,7 @@ namespace :db do
     %w(
     db:create
     db:migrate
+    seed:admins
     ).each {|t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke
@@ -25,8 +26,6 @@ namespace :db do
     %w(
     db:drop
     db:setup
-    seed:experts
-    seed:admins
     ).each do |t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke

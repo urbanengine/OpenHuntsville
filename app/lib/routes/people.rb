@@ -43,8 +43,12 @@ end
 
 # GET /people/:id/edit
 action :edit, :before => :edit_profile_check do
-  view.scope(:people).bind(People[params[:people_id]])
-  people = People[session[:people]]
+  people = get_people_from_people_id(params[:people_id])
+  
+  if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
+   redirect '/errors/404'
+  end
+ view.scope(:people).apply(people)
   view.scope(:head).apply(request)
 end
 
