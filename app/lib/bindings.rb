@@ -3,6 +3,7 @@ Pakyow::App.bindings do
 		restful :people
 
 		binding(:first_name) do
+			pp bindable
 			{
 				:content => bindable.first_name
 			}
