@@ -21,12 +21,8 @@ Pakyow::App.routes do
   end
 
   get :logout, '/logout' do
-    log_debug("/app/lib/routes.rb :: logout :: session :: ", session.to_s)
     uid = cookies[:people]
-    log_debug("/app/lib/routes.rb :: logout :: cookies[:people] :: ", uid)
     cookies[:people] = 0
-    log_debug("REMOVED COOKIE FOR USER ID " + uid)
-    log_debug("/app/lib/routes.rb :: logout :: cookies[:people] :: ", uid)
     reroute router.group(:session).path(:remove), :delete
   end
   get :about, '/about' do

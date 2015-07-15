@@ -18,6 +18,8 @@ Sequel.migration do
       String        :image_url
       String        :custom_url
       Boolean       :admin
+      String        :bio
+      Boolean       :approved
     end
   end
 

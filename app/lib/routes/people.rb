@@ -8,6 +8,10 @@ Pakyow::App.routes(:people) do
         view.scope(:people).bind(People[params[:people_id]])
         people = People[session[:people]]
       end
+      
+      get 'account-registered' do
+        view.scope(:head).apply(request)
+      end
     end
     action :new do
       view.scope(:people).with do
@@ -19,9 +23,11 @@ Pakyow::App.routes(:people) do
     end
 
     action :create do
+      pp params
       people = People.new(params[:people])
+      people.approved = false
       people.save
-      redirect '/people/'+people.id.to_s+'/edit'
+      redirect '/people/account-registered'
     end
 
 # GET /people; same as Index

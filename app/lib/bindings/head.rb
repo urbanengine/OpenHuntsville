@@ -83,10 +83,8 @@ Pakyow::App.bindings :head do
           if path.length > 2
             people = get_people_from_people_id(params[:people_id])
             unless people.nil?
-              unless people.length == 1 && people[0].custom_url.nil?
+              unless people.length < 1 || people[0].custom_url.nil?
                 slug = "people/" + people[0].custom_url
-              else
-                slug = "people/" + people[0].first_name.to_s.downcase + "-" + people[0].last_name.to_s.downcase
               end
             end
           end

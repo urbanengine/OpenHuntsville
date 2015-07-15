@@ -79,6 +79,7 @@ namespace :seed do
     people.bio = "Hybrid Developer. Building a better web with @pakyow. Founded @metabahn."
     people.custom_url = "bryan-powell"
     people.admin = true
+    people.approved = true
     people.save
     
     # Chris Beaman
@@ -96,6 +97,7 @@ namespace :seed do
     people.bio = "Product Manager for Union for Gamers MCN at Curse, co-founder of Grapevine Logic, UX/UI/CSS designer/developer living in Huntsville, AL."
     people.custom_url = "chris-beaman"
     people.admin = true
+    people.approved = true
     people.save
     
     # Tarra Anzalone
@@ -113,6 +115,7 @@ namespace :seed do
     people.bio = "Brand strategist | marketeur | designer | startup upstart | founder @modernandsmart | UX"
     people.custom_url = "tarra-anzalone"
     people.admin = true
+    people.approved = true
     people.save
     
     # Joe MacKenzie
@@ -130,6 +133,7 @@ namespace :seed do
     people.bio = "Problem solving through design, deep thoughts, and red bull"
     people.custom_url = "joe-mackenzie"
     people.admin = true
+    people.approved = true
     people.save
     
     # Kyle Newman
@@ -147,6 +151,7 @@ namespace :seed do
     people.bio = "Software and Website Designer and Developer"
     people.custom_url = "kyle-newman"
     people.admin = true
+    people.approved = true
     people.save
     
     # Andrew Hall
@@ -164,6 +169,7 @@ namespace :seed do
     people.bio = "#Strategist, #Marketer, #Photographer, #Gamer, #Kayaker. I've made, sold, trained, researched, designed, photographed, documented, traveled, and consulted."
     people.custom_url = "andrew-hall"
     people.admin = true
+    people.approved = true
     people.save
 
   end
