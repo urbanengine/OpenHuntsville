@@ -2,6 +2,12 @@ Pakyow::App.bindings do
 	scope :people do
 		restful :people
 
+		binding(:id) do
+			{
+				:value => bindable.id
+			}
+		end
+
 		binding(:first_name) do
 			pp bindable
 			{
@@ -234,6 +240,13 @@ Pakyow::App.bindings do
 			puts "is admin :: " + bindable[:admin].to_s
 			{
 				:checked => bindable[:admin]
+			}
+		end
+
+		binding(:approved) do
+			puts "is approved :: " + bindable[:approved].to_s
+			{
+				:checked => bindable[:approved]
 			}
 		end
 

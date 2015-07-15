@@ -2,6 +2,11 @@
   <fieldset class="margin-t">
     <legend>Profile Information</legend>
     <ul>
+    <input type="hidden" data-prop="id" />
+      <li>
+        <label>Custom URL</label>
+        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url">
+      </li>
       <li>
         <label>First Name</label>
         <input type="text" data-prop="first_name" name="people[first_name]">
@@ -46,11 +51,15 @@
     </ul>
   </fieldset>
   <fieldset data-prop="admin_fieldset">
-    <legend>Administrator rights</legend>
+    <legend>Administrator Section</legend>
     <ul>
       <li>
+        <label>Is approved?</label>
+        <input data-prop="approved" type="checkbox" value="#" name="people[admin]">
+      </li>
+      <li>
         <label>Is admin?</label>
-        <input data-prop="admin" type="checkbox" value="#" name="people[admin]" checked="checked">
+        <input data-prop="admin" type="checkbox" value="#" name="people[admin]" >
       </li>
     </ul>
   </fieldset>
@@ -64,6 +73,25 @@ $(document).ready(function(){
     {
       e.preventDefault();
     }
+  });
+  $('#custom_url').blur(function(){
+    $.ajax({
+    url: '/people/url-available',
+    type: 'get',
+    dataType: 'html',
+    data: $('#people-form').serialize(),
+    success: function(data) {
+      if (data == 'failure')
+      {
+        $('#custom_url').css('background-color','rgba(255,0,0,0.25)');
+      }
+      else
+      {
+        $('#custom_url').css('background-color','white');
+      }
+      return false;
+      }
+    });
   });
 });
 </script>

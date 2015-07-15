@@ -1,4 +1,5 @@
 Pakyow::App.routes(:people) do
+  
   include SharedRoutes
 
   expand :restful, :people, '/people', :before => :route_head do
@@ -11,6 +12,21 @@ Pakyow::App.routes(:people) do
       
       get 'account-registered' do
         view.scope(:head).apply(request)
+      end
+
+      get 'url-available' do
+        success = 'failure'
+        if request.xhr?
+          id = params[:people][:id]
+          url = params[:people][:custom_url].downcase
+          if unique_url(id,url)
+            success = 'success'
+          end
+        else
+          # Show 401 error if not Ajax request.
+          handle 401
+        end
+        send success
       end
     end
     action :new do
@@ -25,6 +41,8 @@ Pakyow::App.routes(:people) do
     action :create do
       pp params
       people = People.new(params[:people])
+      people.custom_url = params[:people][:email].gsub(/[^0-9a-z ]/i, '-')
+      puts people.custom_url.downcase
       people.approved = false
       people.save
       redirect '/people/account-registered'
@@ -43,6 +61,9 @@ action :show do
   
   if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
    redirect '/errors/404'
+  end
+  unless people[0].approved || People[session[:people]].admin
+    redirect '/errors/404'
   end
  view.scope(:people).apply(people)
 end
@@ -69,7 +90,9 @@ action :update, :before => :edit_profile_check do
   people.other_info = params[:people][:other_info]
   people.image_url = params[:people][:image_url]
   people.categories_string = params[:people][:categories_string]
-  people.custom_url = params[:people][:custom_url]
+  if unique_url(people.id,params[:people][:custom_url])
+    people.custom_url = params[:people][:custom_url]
+  end
   current_user = People[cookies[:people]]
   unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
     people.admin = params[:people][:admin]

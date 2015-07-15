@@ -6,12 +6,18 @@ module SharedRoutes
 
   fn :edit_profile_check do
   	people = People[cookies[:people]]
-	if people.nil?
-    redirect "/errors/401"
+  	if people.nil?
+      redirect "/errors/401"
+    	end
+    redirect_no_access = true
+    if people.admin
+      redirect_no_access = false
+    elsif people.id.to_s == params[:people_id] && people.approved
+      redirect_no_access = false
+    end
+    if redirect_no_access
+  	  redirect "/errors/403"
   	end
-	unless people.id.to_s == params[:people_id].to_s || people.admin == true
-	  redirect "/errors/403"
-	end
   end
 
 end

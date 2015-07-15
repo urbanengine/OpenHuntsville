@@ -6,7 +6,7 @@ Pakyow::App.bindings :head do
       location = "http://code.jquery.com/jquery-2.1.4.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "http://code.jquery.com/jquery-2.1.4.js"
+          location = "/js/jquery.min.js"
         end
       end
       {
@@ -18,7 +18,7 @@ Pakyow::App.bindings :head do
       location = "//code.jquery.com/ui/1.11.4/jquery-ui.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "//code.jquery.com/ui/1.11.4/jquery-ui.js"
+          location = "/js/jquery-ui.js"
         end
       end
       {
