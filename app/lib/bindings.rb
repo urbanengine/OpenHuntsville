@@ -37,7 +37,14 @@ Pakyow::App.bindings do
 	scope :people do
 		restful :people
 
+		binding(:id) do
+			{
+				:value => bindable.id
+			}
+		end
+
 		binding(:first_name) do
+			pp bindable
 			{
 				:content => bindable.first_name
 			}
@@ -171,12 +178,42 @@ Pakyow::App.bindings do
 				:content => cat
 			}
 		end
+		binding(:category_spacer_one) do
+			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
+			cat = ""
+			unless bindable.categories_string.nil? 
+				val = getVal(bindable.categories_string,1)
+				unless val.nil?
+					if val.length > 1
+						cat = "&nbsp;/&nbsp;"
+					end
+				end
+			end
+			{
+				:content => cat
+			}
+		end
 
 		binding(:category_three) do
 			log_debug("/app/lib/bindings.rb :: category_three :: " , bindable.categories_string.to_s)
 			cat = ""
 			unless bindable.categories_string.nil?
 				cat = getVal(bindable.categories_string,2)
+			end
+			{
+				:content => cat
+			}
+		end
+		binding(:category_spacer_two) do
+			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
+			cat = ""
+			unless bindable.categories_string.nil? 
+				val = getVal(bindable.categories_string,2)
+				unless val.nil?
+					if val.length > 1
+						cat = "&nbsp;/&nbsp;"
+					end
+				end
 			end
 			{
 				:content => cat
@@ -238,6 +275,46 @@ Pakyow::App.bindings do
 			puts "is admin :: " + bindable[:admin].to_s
 			{
 				:checked => bindable[:admin]
+			}
+		end
+
+		binding(:approved) do
+			puts "is approved :: " + bindable[:approved].to_s
+			{
+				:checked => bindable[:approved]
+			}
+		end
+
+		binding(:profile_link) do
+			first_name = ""
+			last_name = ""
+			unless bindable.first_name.nil?
+				first_name = bindable.first_name
+			end
+			unless bindable.last_name.nil?
+				last_name = bindable.last_name
+			end
+			{
+				:href => "/people/" + bindable.id.to_s,
+				:content => first_name + " " + last_name
+			}
+		end
+
+		binding(:edit_profile_link) do
+
+			{
+				:href => "/people/" + bindable.id.to_s + "/edit"
+			}
+		end
+
+		binding(:admin_fieldset) do
+			visible = "show"
+		  	people = People[cookies[:people]]
+			if people.nil? || people.admin.nil? || people.admin == false
+			 	visible = "hide"
+			end
+			{
+				:class => visible
 			}
 		end
 

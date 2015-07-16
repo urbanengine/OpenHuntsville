@@ -1,7 +1,7 @@
 Sequel.migration do
   up do
     create_table :people do
-      primary_key   :id
+      primary_key   :id #1
       String        :email
       String        :first_name
       String        :last_name
@@ -11,13 +11,15 @@ Sequel.migration do
       String        :url
       String        :other_info
       json          :categories
-      String        :categories_string
+      String        :categories_string  #
       String        :crypted_password
       Time          :created_at
       Time          :updated_at
       String        :image_url
       String        :custom_url
       Boolean       :admin
+      String        :bio
+      Boolean       :approved
     end
   end
 

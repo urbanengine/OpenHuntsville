@@ -3,7 +3,9 @@ require "sequel"
 
 Sequel.extension :migration
 
+
 Dir.glob('rake/*.rake').each { |r| import r }
+Sequel.extension :migration
 
 namespace :db do
   desc "Create and migrate the database"
@@ -13,6 +15,7 @@ namespace :db do
     %w(
     db:create
     db:migrate
+    seed:admins
     ).each {|t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke
@@ -26,8 +29,6 @@ namespace :db do
     %w(
     db:drop
     db:setup
-    seed:experts
-    seed:admins
     ).each do |t|
       puts "[Rake] #{t}"
       Rake::Task[t].invoke

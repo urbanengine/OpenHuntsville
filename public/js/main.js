@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	$(".fancybox").fancybox({
+		width	: 600,
 		helpers : {
 			title : {
 				type : 'over'
@@ -23,7 +24,17 @@ $(document).ready(function() {
 		}
 	});
 	$(function () {
-		$("#nav").tinyNav();
+		$('.parentcats').tinyNav({
+			active: 'selected'
+		});
 	});
 	$('html').addClass('js');
+	$(function() {
+		$( ".parentcats" ).accordion({
+			collapsible: true
+});
+	});
+	$( ".contactme" ).click(function() {
+		$(this).next( ".links" ).slideToggle( "300" );
+	});
 });

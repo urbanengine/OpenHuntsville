@@ -2,23 +2,11 @@ Pakyow::App.bindings :head do
   require "pp"
   scope :head do
 
-    binding(:colorbox) do
-      location = "/assets/colorbox-master"
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          location = "http://www.hntsvll.com/assets/colorbox-master"
-        end
-      end
-      {
-        :src => location
-      }
-    end # colorbox
-
     binding(:jquery) do
       location = "http://code.jquery.com/jquery-2.1.4.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "http://code.jquery.com/jquery-2.1.4.js"
+          location = "/js/jquery.min.js"
         end
       end
       {
@@ -26,17 +14,17 @@ Pakyow::App.bindings :head do
       }
     end # jquery
 
-    binding(:font_awesome) do
-      location = "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+    binding(:jquery_ui) do
+      location = "//code.jquery.com/ui/1.11.4/jquery-ui.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css"
+          location = "/js/jquery-ui.js"
         end
       end
       {
-        :href => location
+        :src => location
       }
-    end # font awesome
+    end # jquery
 
     binding(:normalize) do
       location = "/css/normalize.css"
@@ -95,10 +83,8 @@ Pakyow::App.bindings :head do
           if path.length > 2
             people = get_people_from_people_id(params[:people_id])
             unless people.nil?
-              unless people.length == 1 && people[0].custom_url.nil?
+              unless people.length < 1 || people[0].custom_url.nil?
                 slug = "people/" + people[0].custom_url
-              else
-                slug = "people/" + people[0].first_name.to_s.downcase + "-" + people[0].last_name.to_s.downcase
               end
             end
           end
@@ -117,11 +103,49 @@ Pakyow::App.bindings :head do
         if p[3] == "edit"
           src = "/js/page/people-edit.js"
         end
+      elsif p[1] == "find"
+        src = "/js/page/find.js"
       end
       {
         :src => src
       }
     end # page_js
+
+    binding(:title) do
+      ret = "#openHSV - Freelancers, Moonlighters, and Consultants in Huntsville, Alabama"
+      path = bindable.path.split("/")
+      if path.length > 1
+        if path[1] == "people"
+          ret = "#openHSV - Index of freelancers, moonlighters, and consultants."
+        elsif path[1] == "about"
+          ret = "#openHSV - About #openHSV"
+        elsif path[1] == "terms"
+          ret = "#openHSV - Terms of Service"
+        end
+      end
+      
+      {
+        :content => ret
+      }
+    end
+
+# TODO: Fix this
+    binding(:description) do
+      ret = "A directory of Huntsville's freelancers, moonlighters, and consultants."
+      path = bindable.path.split("/")
+      if path.length > 1
+        if path[1] == "people"
+          ret = "All of the professionals on #openHSV, sortable by industry."
+        elsif path[1] == "about"
+          ret = "#openHSV was built to provide a freelancer, moonlighter, and consultant resources to Huntsville's small businesses and startups."
+        elsif path[1] == "terms"
+          ret = "Terms of Service governing the use of #openHSV"
+        end
+      end
+      {
+        :'content' => ret
+      }
+    end
 
   end # scope :header
 end # header

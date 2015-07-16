@@ -2,55 +2,55 @@
 <!DOCTYPE html>
 <html>
 	<head data-scope="head">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title data-prop="title">OpenHSV - Huntsville's Experts</title>
-  <meta name="description" content="Huntsville's consultants, moonlighters, service firms, and business advisors">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link data-prop="font_awesome" rel="stylesheet" href="#">
-  <link data-prop="normalize" rel="stylesheet" href="/css/normalize.css">
-  <link data-prop="style" rel="stylesheet" href="/css/style.css">
-  <link data-prop="override" rel="stylesheet" href="/css/dev.css">
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,800|Montserrat' rel='stylesheet' type='text/css'>
-  <script  src="/js/modernizr.js"></script> 
-  <script data-prop="jquery" src="#"></script>
-  <script data-prop="colorbox" src="#"></script>
-  <link data-prop="canonical" rel="canonical" href="#">
-	    <style>
-	    	html
-	    	{
-	    		background-color:red;
-	    	}
-	    	.index
-	    	{
-	    		background-color:#fff;
-	    	}
-
-	    	h1, h2, h3, h4, h5, h6
-	    	{
-	    		color:#FFEB50;
-	    		text-shadow: 2px 2px 1px darkred;
-	    	}
-	    </style>
-	    <!--$('a#login').colorbox();-->
+		<!-- @include head -->
 	</head>
+	<style>
+		html
+		{
+			background-color:red;
+		}
+		.index
+		{
+			background-color:#fff;
+		}
+
+		h1, h2, h3, h4, h5, h6
+		{
+			color:#FFEB50;
+			text-shadow: 2px 2px 1px darkred;
+		}
+	</style>
 	<body class="about">
 		<header data-scope="header">
 			<div class="overlay">
 				<div class="wrapper">
-					<h1>
-						<a href="/">
-							<img src="/img/openhsv-logo.png" alt="OpenHSV Logo" />
-						</a>
-					</h1>
+					<div class="title">
+						<h1>
+							<a href="/">
+								<img src="/img/openhsv-logo.png" alt="OpenHSV Logo" />
+							</a>
+						</h1>
+						<p>A directory of Huntsville's freelancers, moonlighters, and consultants</p>
+					</div>
 					<nav>
-						<ul>
+						<ul class="pages">
+							<li>
+								<a href="/people">People</a>
+							</li>
 							<li>
 								<a href="/about">About</a>
 							</li>
 							<li>
-								<a class="feedback" data-fancybox-type="iframe" href="/feedback-form.html">Feedback</a>
+								<a class="feedback" data-fancybox-type="iframe" href="feedback-form.html">Feedback</a>
 							</li>						
+						</ul>
+						<ul class="create-login">
+							<li>
+								<a href="/people/new">Create Profile</a>
+							</li>
+							<li>
+								<a href="/people/login">Log In</a>
+							</li>	
 						</ul>
 					</nav>
 					<h2>Huntsville's consultants, moonlighters, service firms and business advisors</h2>

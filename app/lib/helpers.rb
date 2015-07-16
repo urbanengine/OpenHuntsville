@@ -111,15 +111,18 @@ module Pakyow::Helpers
 
   def get_people_from_people_id(id)
     people = Array.new
-    if id.include? "-"
-      splitname = id.split("-")
-      people = People.where("lower(first_name) = ? AND lower(last_name) = ?", splitname[0],splitname[1]).all
-    elsif id.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/)
-      people[0] = People[params[:people_id]]
-    else
-      people = People.where("lower(custom_url) = ?",id).all
+    people = People.where("lower(custom_url) = ?",id).all
+  end
+
+  def unique_url(id,url)
+    retval = false
+    id = id.to_s
+    url = url.to_s
+    people = People.where("lower(custom_url) = ?",url).all
+    unless people.size > 1 || people[0].id.to_s != id
+      retval = true
     end
-    people
+    retval
   end
   
 end

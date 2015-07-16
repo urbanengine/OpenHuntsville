@@ -1,34 +1,48 @@
-<h2>
-  Please Signup
-</h2>
-
-<form data-scope="people" data-prop="action">
-  <ul data-scope="errors" class="margin-t">
-    <li data-prop="message">
-      Error message goes here.
-    </li>
-  </ul>
-
-  <fieldset class="margin-t">
-    <ul>
-      <li>
-        <label>Email</label>
-        <input type="text" data-prop="email">
-      </li>
-
-      <li>
-        <label>Password</label>
-        <input type="password" data-prop="password">
-      </li>
-
-      <li>
-        <label>Confirm Password</label>
-        <input type="password" data-prop="password_confirmation">
-      </li>
-
-      <li>
-        <input type="submit" value="Sign me up!">
-      </li>
-    </ul>
-  </fieldset>
-</form>
+---
+template: about
+---
+<ul class="breadcrumbs">
+  <li>
+    <a href="/">Home</a>
+  </li>
+  <li>&nbsp;/&nbsp;</li>
+  <li>
+    <a href="/people">People</a>
+  </li>
+  <li>&nbsp;/&nbsp;</li>
+  <li>
+    <a href="/people/new">Create Profile</a>
+  </li>
+</ul>
+<div class="content-body">
+  <div class="form">
+    <h2>Create your #openHSV profile</h2>
+    <p>Sign up to create your #openHSV profile. All new profiles and edits to profiles are reviewed prior to posting.</p>
+    <p>Have a day job? Not sure if you qualify as a freelancer, moonlighter, or consultant? Ask yourself if you'd provide your expertise to a business during your off-time. If the answer is yes, then you qualify!</p>
+    <form data-scope="people" data-prop="action" action="/people" method="post">
+      <ul data-scope="errors" class="errors">
+        <li data-prop="message">Error message goes here.</li>
+      </ul>
+      <fieldset class="margin-t">
+        <ul>
+          <li>
+            <label>Email</label>
+            <input type="text" name="people[email]" value="" placeholder="Enter Your Email Address">
+          </li>
+          <li>
+            <label>Password</label>
+            <input type="password" data-prop="password" name="people[password]" value="" placeholder="Enter Your Password">
+          </li>
+          <li>
+            <label>Confirm Password</label>
+            <input type="password" data-prop="password_confirmation" name="people[password_confirmation]" value="" placeholder="Confirm Your Password">
+          </li>
+          <li>
+            <input type="submit" value="Get Started!">
+          </li>
+          <p class="smalltext">By clicking 'Get Started!' you agree to the <a href="/terms">Terms of Service</a>.</p>
+        </ul>
+      </fieldset>
+    </form>
+  </div>
+</div>

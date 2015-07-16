@@ -1,74 +1,72 @@
-<form id="people-form" role="form" data-scope="people_edit" data-prop="action">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <ul data-scope="errors" class="margin-t">
+<ul data-scope="errors" class="margin-t">
 <!--     <li data-prop="message">
       Error message goes here.
     </li> -->
   </ul>
-  <div data-scope="people">
-    <fieldset>
-    <legend>Administrator rights</legend>
+<form id="people-form" data-prop="action" >
+  <fieldset class="margin-t">
+    <legend>Profile Information</legend>
     <ul>
+    <input type="hidden" data-prop="id" />
       <li>
-        <label>Is admin?</label>
-        <input data-prop="admin" type="checkbox" value="#"  class="form-control" />
+        <label>Custom URL</label>
+        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url">
+      </li>
+      <li>
+        <label>First Name</label>
+        <input type="text" data-prop="first_name" name="people[first_name]">
+      </li>
+      <li>
+        <label>Last Name</label>
+        <input type="text" data-prop="last_name" name="people[last_name]">
+      </li>
+      <li>
+        <label>Categories</label>
+        <input type="text" data-prop="categories_string" name="people[categories_string]">
+      </li>
+      <li>
+        <label>Email</label>
+        <input type="text" data-prop="email" name="people[email]">
+      </li>
+      <li>
+        <label>Company</label>
+        <input type="text" data-prop="company" name="people[company]">
+      </li>
+      <li>
+        <label>Twitter</label>
+        <input type="text" data-prop="twitter" name="people[twitter]">
+      </li>
+      <li>
+        <label>LinkedIn</label>
+        <input type="text" data-prop="linkedin" name="people[linkedin]">
+      </li>
+      <li>
+        <label>Website</label>
+        <input type="text" data-prop="url" name="people[url]">
+      </li>
+      <li>
+        <label>Image URL</label>
+        <input type="text" data-prop="image_url" name="people[image_url]">
+      </li>
+      <li>
+        <label>Bio</label>
+        <textarea data-prop="bio" id="bio" name="people[bio]"></textarea>
+        <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
+      </li>
+      <li>
+        <label>First Category</label>
+        <select type="text" data-prop="category_one" class="form-control"></select>
+      </li>
+      <li>
+        <label>Second Category</label>
+        <select type="text" data-prop="category_two" class="form-control"></select>
+      </li>
+      <li>
+        <label>Third Category</label>
+        <select type="text" data-prop="category_three" class="form-control"></select>
       </li>
     </ul>
   </fieldset>
-    <legend>Contact Information</legend>
-    <div class="row">
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>First Name</label>
-          <input type="text" data-prop="first_name" class="form-control" />
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Last Name</label>
-          <input type="text" data-prop="last_name" class="form-control" />
-        </fieldset>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Email</label>
-          <input type="text" data-prop="email" class="form-control">
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Company</label>
-          <input type="text" data-prop="company" class="form-control">
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Twitter</label>
-          <input type="text" data-prop="twitter" class="form-control">
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>LinkedIn</label>
-          <input type="text" data-prop="linkedin" class="form-control">
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Website</label>
-          <input type="text" data-prop="url" class="form-control">
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Image URL</label>
-          <input type="text" data-prop="image_url" class="form-control">
-        </fieldset>
-      </div>
-    </div>
     <legend>Contact Information</legend>
     <div class="row">
       <div class="form-group col-xs-12 col-md-6">
@@ -79,63 +77,49 @@
       </div>
     </div>
     
-
-    <div class="row">
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Other Information</label>
-        <textarea  data-prop="other_info" class="form-control"></textarea>
-        </fieldset>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Custom URL</label>
-        <input data-prop="custom_url" id="custom_url" class="form-control" />
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-md-6">
-        <fieldset>
-          <label>Bio</label>
-          <textarea data-prop="bio" id="bio" class="form-control"></textarea>
-          <p>You have <span id="bio-character-count"></span> characters left.</p>
-        </fieldset>
-      </div>
-    </div>  
-    </div>
-    <div class="row" data-scope="lorem">
-      <div class="form-group col-xs-12 col-sm-4">
-        <fieldset>
-          <label>First Category</label>
-          <select type="text" data-prop="category_one" class="form-control"></select>
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-sm-4">
-        <fieldset>
-          <label>Second Category</label>
-          <select type="text" data-prop="category_two" class="form-control"></select>
-        </fieldset>
-      </div>
-      <div class="form-group col-xs-12 col-sm-4">
-        <fieldset>
-          <label>Third Category</label>
-          <select type="text" data-prop="category_three" class="form-control"></select>
-        </fieldset>
-      </div>
-    </div>
+  <fieldset data-prop="admin_fieldset">
+    <legend>Administrator Section</legend>
+    <ul>
+      <li>
+        <label>Is approved?</label>
+        <input data-prop="approved" type="checkbox" value="#" name="people[approved]">
+      </li>
+      <li>
+        <label>Is admin?</label>
+        <input data-prop="admin" type="checkbox" value="#" name="people[admin]" >
+      </li>
+    </ul>
+  </fieldset>
 
   <input id="submit" type="submit" value="Save">
 </form>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-    $("#submit").click(function(e){
-      if (($("#custom_url").val()).indexOf("-") != -1)
+$(document).ready(function(){
+  $("#submit").click(function(e){
+    if (($("#custom_url").val()).indexOf("-") != -1)
+    {
+      e.preventDefault();
+    }
+  });
+  $('#custom_url').blur(function(){
+    $.ajax({
+    url: '/people/url-available',
+    type: 'get',
+    dataType: 'html',
+    data: $('#people-form').serialize(),
+    success: function(data) {
+      if (data == 'failure')
       {
-        e.preventDefault();
+        $('#custom_url').css('background-color','rgba(255,0,0,0.25)');
+      }
+      else
+      {
+        $('#custom_url').css('background-color','white');
+      }
+      return false;
       }
     });
   });
+});
 </script>
-  <!-- <li data-prop="specialties">specialties</li> -->
