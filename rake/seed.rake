@@ -173,4 +173,31 @@ namespace :seed do
     people.save
 
   end
+
+
+  task :sillycats => ['pakyow:stage'] do
+    
+    cat = Category.new
+    cat.category = "Bacon"
+    cat.description = "Bacon ipsum dolor amet salami porchetta cupim andouille corned beef ball tip boudin."
+    cat.save
+
+    cat = Category.new
+    cat.category = "Turkey"
+    cat.description = "Turkey salami meatloaf, tri-tip landjaeger pork chop ball tip turducken bresaola leberkas brisket boudin sausage pork loin drumstick."
+    cat.parent_id = 1
+    cat.save
+
+    cat = Category.new
+    cat.category = "Biltong"
+    cat.description = "Biltong turducken ham hock spare ribs chuck t-bone. "
+    cat.parent_id = 1
+    cat.save
+
+    cat = Category.new
+    cat.category = "Strip steak"
+    cat.description = "Strip steak meatloaf boudin, shankle cow filet mignon landjaeger bacon shoulder frankfurter ground round ball tip beef pastrami."
+    cat.save
+   
+  end
 end

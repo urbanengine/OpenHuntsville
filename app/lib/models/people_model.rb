@@ -66,4 +66,27 @@ class People < Sequel::Model(:people)
   def is_admin?()
     return :admin
   end
+
+  def category_one
+    retval = "0"
+    unless categories.nil?
+      puts "ONE"
+      # puts JSON.parse(categories.to_json)[0].id.to_s
+      retval = JSON.parse(categories.to_json)[0].to_s
+      puts retval
+    end
+    retval
+  end
+
+  def category_two
+    unless categories.nil?
+      JSON.parse(categories.to_json)[1]
+    end
+  end
+
+  def category_three
+    unless categories.nil?
+      JSON.parse(categories.to_json)[2]
+    end
+  end
 end

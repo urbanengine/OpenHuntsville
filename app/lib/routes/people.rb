@@ -94,23 +94,26 @@ action :edit, :before => :edit_profile_check do
   view.scope(:people).bind(people)
   unless people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].categories.nil?
    
-   jsn = people.categories.to_s
+  view.scope(:people).apply(people[0])
+   # jsn = people[0].categories.to_s
     
-    array = JSON.parse(jsn)    
-    pp "IN JSON"
-    view.scope(:lorem).bind(json) 
-   else
-    # redirect '/errors/404'
-    view.scope(:lorem).bind(Object.new)
-    pp "OOPS"
-    pp people
+   #  array = JSON.parse(jsn)    
+   #  pp "IN JSON"
+   #  # view.scope(:lorem).bind(array) 
+   #  pp array
+   #  view.scope(:people).bind({ :category_one => array[0]})
+   # else
+   #  # redirect '/errors/404'
+   #  view.scope(:lorem).bind(Object.new)
+   #  pp "OOPS"
+   #  pp people
   end
  # view.scope(:people).apply(people)
  #  view.scope(:head).apply(request)
 end
 
 action :update, :before => :edit_profile_check do
-
+pp 'LOREM IPSUM ALL UP IN DIS PLACE'
   people = People[params[:people_id]]
   people.first_name = params[:people][:first_name]
   people.last_name = params[:people][:last_name]
@@ -122,7 +125,10 @@ action :update, :before => :edit_profile_check do
   people.image_url = params[:people][:image_url]
   people.categories_string = params[:people][:categories_string]
 
-  category_array = [params[:lorem][:category_one],params[:lorem][:category_two],params[:lorem][:category_three]]
+  category_array = [params[:people][:category_one],params[:people][:category_two],params[:people][:category_three]]
+  puts "+++"
+  puts category_array
+  puts "+++"
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
   if unique_url(people.id,params[:people][:custom_url])
     people.custom_url = params[:people][:custom_url]
@@ -145,9 +151,9 @@ action :update, :before => :edit_profile_check do
   # Save 
   people.save
 
-  presenter.path = 'people/edit'
-  view.scope(:people).apply(People[params[:people_id]])
-  redirect '/people/' + people.id.to_s
+  # presenter.path = 'people/edit'
+  # view.scope(:people).apply(People[params[:people_id]])
+  # redirect '/people/' + people.id.to_s
 end
 
 # TODO

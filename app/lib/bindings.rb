@@ -1,6 +1,6 @@
 Pakyow::App.bindings do
-	scope :lorem do
-		restful :lorem
+	scope :people do
+		restful :people
 
 
 		options(:category_one) do
@@ -9,9 +9,9 @@ Pakyow::App.bindings do
 			Category.all.each do |category|
 				opts << [category.id, category.category]
 				puts category
+			# edit_profile_link
+			
 			end
-			pp "KYLE NEWMAN IS THE MAN"
-			pp opts
 			opts
 		end
 		options(:category_two) do
@@ -20,7 +20,6 @@ Pakyow::App.bindings do
 			Category.all.each do |category|
 				opts << [category.id, category.category]
 			end
-
 			opts
 		end
 		options(:category_three) do
@@ -32,10 +31,8 @@ Pakyow::App.bindings do
 
 			opts
 		end
-	end
 
-	scope :people do
-		restful :people
+
 
 		binding(:id) do
 			{
