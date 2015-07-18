@@ -15,6 +15,7 @@ namespace :db do
     %w(
     db:create
     db:migrate
+    seed:categories
     seed:admins
     ).each {|t|
       puts "[Rake] #{t}"

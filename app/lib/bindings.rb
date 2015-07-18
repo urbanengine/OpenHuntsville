@@ -8,9 +8,6 @@ Pakyow::App.bindings do
 
 			Category.all.each do |category|
 				opts << [category.id, category.category]
-				puts category
-			# edit_profile_link
-			
 			end
 			opts
 		end
@@ -41,7 +38,6 @@ Pakyow::App.bindings do
 		end
 
 		binding(:first_name) do
-			pp bindable
 			{
 				:content => bindable.first_name
 			}
@@ -153,65 +149,92 @@ Pakyow::App.bindings do
 			}
 		end
 
-		binding(:category_one) do
-			log_debug("/app/lib/bindings.rb :: category_one :: ", bindable.categories_string.to_s)
-			cat = ""
-			unless bindable.categories_string.nil?
-				cat = getVal(bindable.categories_string,0)
+		binding (:category_one_link) do
+			href = ""
+			content = ""
+			unless bindable.categories.nil?
+				jsn = bindable.categories.to_s
+				array = JSON.parse(jsn)    
+			   category = Category[array[0]]
+				href = "#"
+				content = category.category
+				href = category.url
 			end
-			puts cat
 			{
-				:content => cat
+				:href => href,
+				:content => content
 			}
 		end
 
-		binding(:category_two) do
-			log_debug("/app/lib/bindings.rb :: category_two :: ", bindable.categories_string.to_s)
-			cat = ""
-			unless bindable.categories_string.nil?
-				cat = getVal(bindable.categories_string,1)
+		binding (:category_two_link) do
+			href = ""
+			content = ""
+			unless bindable.categories.nil?
+				jsn = bindable.categories.to_s
+				array = JSON.parse(jsn)    
+			   category = Category[array[1]]
+				href = "#"
+				content = category.category
+				href = category.url
 			end
 			{
-				:content => cat
+				:href => href,
+				:content => content
 			}
+		end
+
+		binding (:category_three_link) do
+			href = ""
+			content = ""
+			unless bindable.categories.nil?
+				jsn = bindable.categories.to_s
+				array = JSON.parse(jsn)    
+			   category = Category[array[2]]
+				href = "#"
+				content = category.category
+				href = category.url
+			end
+			{
+				:href => href,
+				:content => content
+			}
+		end
+
+		binding(:category_one) do
+			bindable.category_one_id
+		end
+
+		binding(:category_two) do
+			bindable.category_two_id
 		end
 		binding(:category_spacer_one) do
 			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
 			cat = ""
-			unless bindable.categories_string.nil? 
-				val = getVal(bindable.categories_string,1)
-				unless val.nil?
-					if val.length > 1
-						cat = "&nbsp;/&nbsp;"
-					end
-				end
-			end
+			unless bindable.categories.nil?
+				jsn = bindable.categories.to_s
+				array = JSON.parse(jsn)    
+			   if array.length > 1 && array[1].length > 1
+			   	cat =  "&nbsp;/&nbsp;"
+			   end
+			end 
 			{
 				:content => cat
 			}
 		end
 
 		binding(:category_three) do
-			log_debug("/app/lib/bindings.rb :: category_three :: " , bindable.categories_string.to_s)
-			cat = ""
-			unless bindable.categories_string.nil?
-				cat = getVal(bindable.categories_string,2)
-			end
-			{
-				:content => cat
-			}
+			bindable.category_three_id
 		end
 		binding(:category_spacer_two) do
 			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
 			cat = ""
-			unless bindable.categories_string.nil? 
-				val = getVal(bindable.categories_string,2)
-				unless val.nil?
-					if val.length > 1
-						cat = "&nbsp;/&nbsp;"
-					end
-				end
-			end
+			unless bindable.categories.nil?
+				jsn = bindable.categories.to_s
+				array = JSON.parse(jsn)    
+			   if array.length > 2 && array[2].length > 1
+			   	cat =  "&nbsp;/&nbsp;"
+			   end
+			end 
 			{
 				:content => cat
 			}
@@ -269,14 +292,12 @@ Pakyow::App.bindings do
 		end
 
 		binding(:admin) do
-			puts "is admin :: " + bindable[:admin].to_s
 			{
 				:checked => bindable[:admin]
 			}
 		end
 
 		binding(:approved) do
-			puts "is approved :: " + bindable[:approved].to_s
 			{
 				:checked => bindable[:approved]
 			}

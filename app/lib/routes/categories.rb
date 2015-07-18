@@ -4,20 +4,17 @@ Pakyow::App.routes(:categories) do
   expand :restful, :categories, '/categories' do
 
     action :new do
-      pp "new"
             redirect "/"
 
     end
 
     action :create do
-      pp "create"
             redirect "/"
     end
 
 
     # GET /people; same as Index
     action :list, :before => :route_head do
-      pp "list"
       categories = Category.all
       view.scope(:categories).apply(categories)
       # categories.each_with_index { |x,i| view.scope(:categories)[i].bind({:abc=>x})}
@@ -26,23 +23,19 @@ Pakyow::App.routes(:categories) do
 
     # GET /people/:id
     action :show do
-      pp "show"
             redirect "/"
     end
 
     # GET /people/:id/edit
     action :edit do
-      pp "edit"
             redirect "/"
     end
 
     action :update do
-      pp "update"
             redirect "/"
     end
 
     post :save, 'save' do
-      pp params
       params.each do |key,value|
         unless key.include? "parent"
           category = nil

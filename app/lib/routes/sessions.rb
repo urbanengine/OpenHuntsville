@@ -13,7 +13,6 @@ Pakyow::App.routes(:sessions) do
       if people = People.auth(@session)
         session[:people] = people.id
         cookies[:people] = people.id
-        puts "authenticated in sessions.rb create with @session " + @session.to_s
         unless people.id.nil?
           redirect "/people/" + people.id.to_s + "/edit"
         else

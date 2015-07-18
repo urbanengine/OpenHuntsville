@@ -19,6 +19,7 @@ EXPERT_OTHER_INFO          = 10
 EXPERT_IMAGE_URL           = 11
 
 CSV_PATH = File.dirname(__FILE__) + '/seed_experts.csv'
+CATS_PATH = File.dirname(__FILE__) + '/cats.csv'
 
 namespace :seed do
 
@@ -62,6 +63,44 @@ namespace :seed do
     puts "***"
   end
 
+
+  desc "seed the database with categories"
+  task :categories => ['pakyow:stage'] do
+    r = 1
+    total = 23
+    CSV.foreach(CATS_PATH, { :headers => false, :skip_blanks => true }) do |row|
+        if r == 1
+            row.each_with_index { |item,index|
+                category = Category.new
+                category.category = item
+                down = item.downcase
+                with_dashes = down.gsub(/[^0-9a-z ]/i, '-')
+                category.url = "/category/" + with_dashes
+                category.save
+                print "."
+                $stdout.flush
+            }
+        else
+            row.each_with_index { |item,index|
+                unless item.nil?
+                    category = Category.new
+                    category.category = item
+                    category.parent_id = index + 1
+                    down = item.downcase
+                    with_dashes = down.gsub(/[^0-9a-z ]/i, '-')
+                    category.url = Category[category.parent_id].url + "/" + with_dashes
+                    category.save
+                    print "."
+                    $stdout.flush
+                end
+            }
+        end
+
+        r += 1
+    end
+    puts "***"
+  end
+
   task :admins => ['pakyow:stage'] do
     
     # Bryan Powell
@@ -88,7 +127,6 @@ namespace :seed do
     people.last_name = "Beaman"
     people.password = "test"
     people.password_confirmation = "test"
-    people.categories_string = "Software,Design,Marketing"
     people.twitter = "chrisbeaman"
     people.linkedin = "chrisbeaman"
     people.url = "http://www.chrisbeaman.com/"
@@ -106,7 +144,6 @@ namespace :seed do
     people.last_name = "Anzalone"
     people.password = "test"
     people.password_confirmation = "test"
-    people.categories_string = "Design,Marketing"
     people.twitter = "moderntarra"
     people.linkedin = "moderntarra"
     people.url = "http://modernandsmart.com/"
@@ -124,7 +161,6 @@ namespace :seed do
     people.last_name = "MacKenzie"
     people.password = "test"
     people.password_confirmation = "test"
-    people.categories_string = "Design,Software,Marketing"
     people.twitter = "Mackcompany"
     people.linkedin = "joemackenzie"
     people.url = "http://www.letsfindouthow.com"
@@ -142,7 +178,6 @@ namespace :seed do
     people.last_name = "Newman"
     people.password = "test"
     people.password_confirmation = "test"
-    people.categories_string = "Software,Design"
     people.twitter = "skylenewman"
     people.linkedin = "skylenewman"
     people.url = "http://www.skylenewman.com"
@@ -160,7 +195,6 @@ namespace :seed do
     people.last_name = "Hall"
     people.password = "test"
     people.password_confirmation = "test"
-    people.categories_string = "Design,Photography"
     people.twitter = "refractingdrew"
     people.linkedin = "heywardandrewhall"
     people.url = "http://www.refractingideas.com"

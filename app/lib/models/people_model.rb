@@ -67,24 +67,19 @@ class People < Sequel::Model(:people)
     return :admin
   end
 
-  def category_one
-    retval = "0"
+  def category_one_id
     unless categories.nil?
-      puts "ONE"
-      # puts JSON.parse(categories.to_json)[0].id.to_s
-      retval = JSON.parse(categories.to_json)[0].to_s
-      puts retval
+      JSON.parse(categories.to_json)[0]
     end
-    retval
   end
 
-  def category_two
+  def category_two_id
     unless categories.nil?
       JSON.parse(categories.to_json)[1]
     end
   end
 
-  def category_three
+  def category_three_id
     unless categories.nil?
       JSON.parse(categories.to_json)[2]
     end

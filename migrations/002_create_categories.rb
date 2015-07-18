@@ -5,6 +5,7 @@ Sequel.migration do
       foreign_key :parent_id, :categories
       String      :category
       String      :description
+      String      :url
 	  end
 	end
 
