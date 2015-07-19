@@ -6,6 +6,7 @@ Sequel.migration do
       String      :category
       String      :description
       String      :url
+      String      :slug
 	  end
 	end
 

@@ -74,8 +74,9 @@ namespace :seed do
                 category = Category.new
                 category.category = item
                 down = item.downcase
-                with_dashes = down.gsub(/[^0-9a-z ]/i, '-')
-                category.url = "/category/" + with_dashes
+                with_dashes = down.gsub(/[^0-9a-z]/i, '-')
+                category.slug = with_dashes
+                category.url = "/categories/" + with_dashes
                 category.save
                 print "."
                 $stdout.flush
@@ -87,7 +88,8 @@ namespace :seed do
                     category.category = item
                     category.parent_id = index + 1
                     down = item.downcase
-                    with_dashes = down.gsub(/[^0-9a-z ]/i, '-')
+                    with_dashes = down.gsub(/[^0-9a-z]/i, '-')
+                    category.slug = with_dashes
                     category.url = Category[category.parent_id].url + "/" + with_dashes
                     category.save
                     print "."

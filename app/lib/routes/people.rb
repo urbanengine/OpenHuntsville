@@ -40,7 +40,7 @@ Pakyow::App.routes(:people) do
 
     action :create do
       people = People.new(params[:people])
-      people.custom_url = params[:people][:email].gsub(/[^0-9a-z ]/i, '-')
+      people.custom_url = params[:people][:email].gsub(/[^0-9a-z]/i, '-')
       people.approved = false
       people.save
       redirect '/people/account-registered'

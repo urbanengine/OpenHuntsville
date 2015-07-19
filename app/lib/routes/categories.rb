@@ -3,6 +3,30 @@ Pakyow::App.routes(:categories) do
 
   expand :restful, :categories, '/categories' do
 
+    collection do
+      get '/:parent/:categories_id' do
+        parent = Category.where("slug = ?",params[:parent]).first
+        category = Category.where(:slug => params[:categories_id], :parent_id => parent.id).first
+        subset = Array.new
+        all =  People.all
+        all.each { |person|
+          unless person.categories.nil?
+            jsn = person.categories.to_s
+            array = JSON.parse(jsn)    
+            array.each { |cat|
+              unless cat.nil? || category.nil?
+                if cat == category.id.to_s
+                  subset.push(person)
+                end
+              end
+            }
+          end
+        }
+        presenter.path = "categories/show"
+        view.scope(:people).apply(subset)
+        view.scope(:categories).apply(category)
+      end
+    end
     action :new do
             redirect "/"
 
@@ -17,13 +41,35 @@ Pakyow::App.routes(:categories) do
     action :list, :before => :route_head do
       categories = Category.all
       view.scope(:categories).apply(categories)
-      # categories.each_with_index { |x,i| view.scope(:categories)[i].bind({:abc=>x})}
-      # view.scope(:categories).bind({ :type => :two})
     end
 
     # GET /people/:id
     action :show do
-            redirect "/"
+      pp params[:categories_id]
+      category = Category.where("slug = ?",params[:categories_id]).first
+      subset = Array.new
+      all =  People.all
+      all.each { |person|
+        unless person.categories.nil?
+          jsn = person.categories.to_s
+          array = JSON.parse(jsn)    
+          array.each { |cat|
+            unless cat.nil? || category.nil?
+              if cat == category.id.to_s
+                subset.push(person)
+              else
+                child = Category[cat]
+                if child.parent_id.to_s == category.id.to_s
+                  subset.push(person)
+                end
+              end
+            end
+          }
+        end
+      }
+      view.scope(:people).apply(subset)
+      view.scope(:categories).apply(category)
+      pp category
     end
 
     # GET /people/:id/edit
