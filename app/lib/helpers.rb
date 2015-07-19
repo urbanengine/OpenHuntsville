@@ -1,3 +1,4 @@
+require 'digest/md5'
 module Pakyow::Helpers
   def handle_errors(view)
     if @errors
@@ -125,4 +126,48 @@ module Pakyow::Helpers
     retval
   end
   
+  def find_image_url(email)
+
+  # def get_gravatar(email)
+    nospace = email.gsub(/ /i, '')
+    down = nospace.downcase
+    puts down
+    digest = Digest::MD5.hexdigest(down)
+    puts digest
+    # &d=404 will return 404 if no image associated
+    gravatar = "http://www.gravatar.com/avatar/" + digest + "?s=160&d=404"
+    response = HTTParty.get(gravatar)
+    unless response.start_with?("404")
+      url = gravatar
+    else
+      api_key = "22796a61343ceaad"
+
+      #Building components of the API URL to Full Contact
+      base_url = "https://api.fullcontact.com/v2/person.json?email="
+      conj_url = "&apiKey="
+      # apiKey = ENV['FULL_CONTACT_API_KEY']
+      # You can get a trial Full Contact API key from:
+      # https://www.fullcontact.com/developer/try-fullcontact/
+
+      url = [base_url, email, conj_url, api_key].join
+  
+      #Calling API to get JSON response for parsing
+      response = HTTParty.get(url)
+      result = JSON.parse(response.body)
+
+      #If API response successful create record; else output error to view
+      if result['status'] == 200 then
+        fullcontact_url = result['photos'][0]['url']
+        photo = HTTParty.get(url)
+        unless photo.start_with?("404")
+          url = fullcontact_url
+        else
+          pp "Unable to find photo for " + email
+        end
+      else
+        pp "Unable to find photo for " + email\
+      end
+    end
+    url
+  end
 end

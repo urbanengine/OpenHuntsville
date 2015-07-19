@@ -7,6 +7,9 @@ require 'pakyow-mailer'
 
 require 'sequel'
 require 'sequel/extensions/pg_json'
+
+require 'httparty'
+
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 Pakyow::App.define do

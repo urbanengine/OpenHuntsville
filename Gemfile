@@ -16,6 +16,9 @@ end
 ## Sequel: The Database Toolkit for Ruby - http://sequel.jeremyevans.net
 gem "sequel"
 
+## ???
+gem "httparty"
+
 ## Pg is the Ruby interface to the PostgreSQL RDBMS
 gem "pg"
 

@@ -245,6 +245,8 @@ Pakyow::App.bindings do
 		end
 
 		binding(:image) do
+
+
 			src = ""
 			name = ""
 			unless bindable.nil?
@@ -259,7 +261,7 @@ Pakyow::App.bindings do
 				end
 			end
 			{
-				:src => src,
+				# :src => get_fullcontact(bindable.email),
 				:title =>  name,
 				:alt => name
 			}
