@@ -41,6 +41,7 @@ Pakyow::App.routes(:people) do
     action :create do
       people = People.new(params[:people])
       people.custom_url = params[:people][:email].gsub(/[^0-9a-z]/i, '-')
+      people.image_url = find_image_url(params[:people][:email])
       people.approved = false
       people.save
       redirect '/people/account-registered'
@@ -50,13 +51,11 @@ Pakyow::App.routes(:people) do
 action :list do
   log_debug(People.all)
   view.scope(:people).apply(People.all)
-  view.scope(:head).apply(request)
 end
 
 # GET /people/:id
 action :show do
   people = get_people_from_people_id(params[:people_id])
-  find_image_url("nofind@skylenewman.com")
   if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
    redirect '/errors/404'
   end
@@ -83,9 +82,12 @@ action :update, :before => :edit_profile_check do
   people.linkedin = params[:people][:linkedin]
   people.url = params[:people][:url]
   people.other_info = params[:people][:other_info]
-  people.image_url = params[:people][:image_url]
-  people.categories_string = params[:people][:categories_string]
-
+  unless params[:people][:image_url].nil? || params[:people][:image_url].length == 0 
+    people.image_url = params[:people][:image_url]
+  end
+  if people.image_url.nil? || people.image_url.length == 0 || params[:people][:image_url].length == 0
+    people.image_url = find_image_url(params[:people][:email])
+  end
   category_array = [params[:people][:category_one],params[:people][:category_two],params[:people][:category_three]]
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
   if unique_url(people.id,params[:people][:custom_url])
@@ -104,14 +106,11 @@ action :update, :before => :edit_profile_check do
   categories[1] = ''
   categories[2] = ''
   log_debug(params[:people])
-  # people[:categories] = Sequel::Postgres::JSONHash.new(data)
   
   # Save 
   people.save
 
-  # presenter.path = 'people/edit'
-  # view.scope(:people).apply(People[params[:people_id]])
-  # redirect '/people/' + people.id.to_s
+  redirect '/people/'
 end
 
 # TODO

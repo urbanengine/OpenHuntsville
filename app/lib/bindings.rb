@@ -155,7 +155,7 @@ Pakyow::App.bindings do
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
 				array = JSON.parse(jsn)    
-			   category = Category[array[0]]
+			    category = Category[array[0]]
 				href = "#"
 				content = category.category
 				href = category.url
@@ -261,7 +261,7 @@ Pakyow::App.bindings do
 				end
 			end
 			{
-				# :src => get_fullcontact(bindable.email),
+				:src => bindable.image_url,
 				:title =>  name,
 				:alt => name
 			}
