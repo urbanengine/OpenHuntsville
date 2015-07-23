@@ -155,10 +155,13 @@ Pakyow::App.bindings do
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
 				array = JSON.parse(jsn)    
-			    category = Category[array[0]]
-				href = "#"
-				content = category.category
-				href = category.url
+
+				unless array[0].nil? || array[0].length == 0
+				    category = Category[array[0]]
+					href = "#"
+					content = category.category
+					href = category.url
+				end
 			end
 			{
 				:href => href,
@@ -171,11 +174,14 @@ Pakyow::App.bindings do
 			content = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)    
-			   category = Category[array[1]]
-				href = "#"
-				content = category.category
-				href = category.url
+				array = JSON.parse(jsn)  
+				unless array[1].nil? || array[1].length == 0
+					
+				    category = Category[array[1]]
+					href = "#"
+					content = category.category
+					href = category.url
+				end
 			end
 			{
 				:href => href,
@@ -188,11 +194,14 @@ Pakyow::App.bindings do
 			content = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)    
-			   category = Category[array[2]]
-				href = "#"
-				content = category.category
-				href = category.url
+				array = JSON.parse(jsn) 
+
+				unless array[2].nil? || array[2].length == 0   
+				   category = Category[array[2]]
+					href = "#"
+					content = category.category
+					href = category.url
+				end
 			end
 			{
 				:href => href,
