@@ -154,13 +154,13 @@ module Pakyow::Helpers
       #Calling API to get JSON response for parsing
       response = HTTParty.get(url)
       result = JSON.parse(response.body)
-
+      return_url = "/img/profile-backup.png"
       #If API response successful create record; else output error to view
       if result['status'] == 200 then
         fullcontact_url = result['photos'][0]['url']
         photo = HTTParty.get(url)
-        unless photo.start_with?("404")
-          url = fullcontact_url
+        unless photo.to_s.start_with?("404")
+          return_url = fullcontact_url
         else
           pp "Unable to find photo for " + email
         end
@@ -168,6 +168,6 @@ module Pakyow::Helpers
         pp "Unable to find photo for " + email\
       end
     end
-    url
+    return_url
   end
 end

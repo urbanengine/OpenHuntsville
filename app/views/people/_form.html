@@ -83,12 +83,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  // $("#submit").click(function(e){
-  //   if (($("#custom_url").val()).indexOf("-") != -1)
-  //   {
-  //     e.preventDefault();
-  //   }
-  // });
   $('#custom_url').blur(function(){
     $.ajax({
     url: '/people/url-available',
