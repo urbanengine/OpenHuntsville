@@ -54,7 +54,7 @@ Pakyow::App.routes(:categories) do
           jsn = person.categories.to_s
           array = JSON.parse(jsn)    
           array.each { |cat|
-            unless cat.nil? || category.nil?
+            unless cat.nil? || cat.length == 0 || category.nil?
               if cat == category.id.to_s
                 subset.push(person)
               else
