@@ -42,7 +42,7 @@
       </li>
       <li>
         <label>Image URL</label>
-        <input type="text" data-prop="image_url" name="people[image_url]" readonly>
+        <input type="text" data-prop="image_url" name="people[image_url]">
       </li>
       <li>
         <label>Bio</label>
@@ -83,12 +83,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $("#submit").click(function(e){
-    if (($("#custom_url").val()).indexOf("-") != -1)
-    {
-      e.preventDefault();
-    }
-  });
   $('#custom_url').blur(function(){
     $.ajax({
     url: '/people/url-available',
