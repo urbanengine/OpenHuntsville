@@ -69,7 +69,6 @@ Pakyow::App.routes(:categories) do
       }
       view.scope(:people).apply(subset)
       view.scope(:categories).apply(category)
-      pp category
     end
 
     # GET /people/:id/edit
