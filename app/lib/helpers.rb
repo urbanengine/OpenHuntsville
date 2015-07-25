@@ -169,5 +169,34 @@ module Pakyow::Helpers
       end
     end
     return_url
-  end
-end
+  end # def find_image_url(email)
+
+  def get_css_classes_for_category(category_id)
+    category = Category[category_id]
+    paths = category.url.split("/")
+    pp paths
+    classes = ""
+    paths.each_with_index { |item,index|
+      classes = classes + " "
+      unless index < 2
+        if index == 2
+          classes = item
+        else
+          paths.each_with_index { |inner_item, inner_index|
+            unless inner_index < 2 || inner_index >= index
+              classes = classes + " " + inner_item
+              for i in 0..inner_index-1
+                 classes = classes + "-"
+              end
+            end
+            if index == inner_index
+              classes = classes + inner_item
+            end
+          }
+        end # if index == 2
+      end # unless index < 2
+    }
+    classes
+  end # def get_css_classes_for_category(category)
+
+end # module Pakyow::Helpers
