@@ -13,3 +13,7 @@
 	font-weight: bold;
 	color:indianred;
 }
+.sidebar .selected li a, .sidebar .selected li a:hover
+{
+	background-color: #eee;
+}

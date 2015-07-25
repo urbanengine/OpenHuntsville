@@ -64,10 +64,9 @@
 		</li>
 	</ul>
 </div>
-<!-- <ul data-scope="people">
-	<li><span data-prop="first_name">first_name</span> <span data-prop="last_name">last_name</span></li>
-	<li data-prop="company">company</li>
-	<li data-prop="specialties">specialties</li>
-	<li data-prop="other_info">other_info</li>
-	<li data-prop="email">email</li>
-</ul> -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		var submenu = $("ul#submenu");
+		$(".active a").after(submenu);
+	});
+</script>

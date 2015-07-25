@@ -174,7 +174,6 @@ module Pakyow::Helpers
   def get_css_classes_for_category(category_id)
     category = Category[category_id]
     paths = category.url.split("/")
-    pp paths
     classes = ""
     paths.each_with_index { |item,index|
       classes = classes + " "

@@ -51,6 +51,15 @@ Pakyow::App.routes(:people) do
 action :list do
   log_debug(People.all)
   view.scope(:people).apply(People.all)
+  all_cats = Category.all
+  parent_cats = []
+  all_cats.each { |item|
+    if item.parent_id.nil?
+      parent_cats.push(item)
+    end
+  }
+  parent_cats.unshift("everyone")
+  view.scope(:categories_menu).apply(parent_cats)
 end
 
 # GET /people/:id

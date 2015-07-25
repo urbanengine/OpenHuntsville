@@ -351,21 +351,17 @@ Pakyow::App.bindings do
 			classes = "profile"
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)    
-				# TODO Build helper to return list of nested categories: i.e. software--web-development
+				array = JSON.parse(jsn)
 				unless array[0].nil? || array[0].length == 0
-				    category = Category[array[0]]
-					classes = classes + " " + get_css_classes_for_category(category.id)
+					classes = classes + " " + get_css_classes_for_category(array[0])
 				end   
 
 				unless array[1].nil? || array[1].length == 0
-				    category = Category[array[1]]
-					classes = classes + " " + get_css_classes_for_category(category.id)
+					classes = classes + " " + get_css_classes_for_category(array[1])
 				end   
 
 				unless array[2].nil? || array[2].length == 0
-				    category = Category[array[2]]
-					classes = classes + " " + get_css_classes_for_category(category.id)
+					classes = classes + " " + get_css_classes_for_category(array[2])
 				end
 			end
 			{

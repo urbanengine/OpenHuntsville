@@ -25,6 +25,21 @@ Pakyow::App.routes(:categories) do
         presenter.path = "categories/show"
         view.scope(:people).apply(subset)
         view.scope(:categories).apply(category)
+
+        all_cats = Category.all
+        parent_cats = []
+        all_cats.each { |item|
+          if item.parent_id.nil?
+            parent_cats.push(item)
+          end
+        }
+        parent_cats.unshift("everyone")
+        view.scope(:categories_menu).apply(parent_cats)
+
+        current_cat = Category.where("url = ?",request.path).first
+        child_cats = Category.where("parent_id = ?",current_cat.parent_id).all
+        view.scope(:categories_submenu).apply(child_cats)
+        view.scope(:head).apply(request)
       end
     end
     action :new do
@@ -45,7 +60,6 @@ Pakyow::App.routes(:categories) do
 
     # GET /people/:id
     action :show do
-      pp params[:categories_id]
       category = Category.where("slug = ?",params[:categories_id]).first
       subset = Array.new
       all =  People.all
@@ -69,6 +83,25 @@ Pakyow::App.routes(:categories) do
       }
       view.scope(:people).apply(subset)
       view.scope(:categories).apply(category)
+      all_cats = Category.all
+      parent_cats = []
+      all_cats.each { |item|
+        if item.parent_id.nil?
+          parent_cats.push(item)
+        end
+      }
+      parent_cats.unshift("everyone")
+      view.scope(:categories_menu).apply(parent_cats)
+      pp request.path
+      Category.all.each { |item|
+        pp item.url
+      }
+      url = request.path
+      url = url.gsub(/\/$/, '')
+      current_cat = Category.where("url = ?",url).first
+      child_cats = Category.where("parent_id = ?",current_cat.id).all
+      view.scope(:categories_submenu).apply(child_cats)
+        view.scope(:head).apply(request)
     end
 
     # GET /people/:id/edit
