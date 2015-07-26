@@ -10,13 +10,28 @@ Pakyow::App.bindings :categories_menu do
       if bindable.is_a? Category
         content = bindable.category
         href = bindable.url
+        paths = bindable.url.split("/")
+        data_cat = paths[2]
+        url = request.path
+        url = url.gsub(/\/$/, '')
+        if url == bindable.url
+          css_class = "selected-link active-link"
+        else
+          child_categories = Category.where("parent_id = ?",bindable.id).all
+          child_categories.each {|item|
+            if item.url == url
+              css_class = "active-link"
+            end
+          }
+        end
       else
         content = "Everyone"
       end
       {
         :content => content,
         :href => href,
-        :class => css_class
+        :class => css_class,
+        :'data-cat' => data_cat
       }
   end # :cat
 
@@ -50,17 +65,21 @@ Pakyow::App.bindings :categories_menu do
     binding(:link) do
       content = ""
       href = "/people"
-      css_class = ""
+      data_cat = ""
       if bindable.is_a? Category
         content = bindable.category
         href = bindable.url
+        unless bindable.parent_id.nil?
+          paths = bindable.url.split("/")
+          data_cat = paths[3]
+        end
       else
         content = "Everyone"
       end
       {
         :content => content,
         :href => href,
-        :class => css_class
+        :'data-cat' => data_cat
       }
   end # :cat
 

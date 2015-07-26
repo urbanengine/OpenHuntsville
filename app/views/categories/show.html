@@ -68,5 +68,26 @@
 	$(document).ready(function(){
 		var submenu = $("ul#submenu");
 		$(".active a").after(submenu);
+		$("ul#submenu a").click(function(e){
+			e.preventDefault();
+			$('.selected').removeClass('selected');
+			var parent = $('.active a').data('cat');
+			var cat = $(this).data('cat');
+			var showme = parent + "--" + cat;
+			console.log(showme);
+			$("li.profile").not("."+showme).hide("fast");
+			$('.'+showme).show("fast");
+			history.pushState(null,cat,"/categories/" + parent + "/" + cat);
+			$(this).parent().addClass("selected");
+		});
+		$(".active a.active-link").click(function(e){
+			e.preventDefault();
+			$('.selected').removeClass('selected');
+			var cat = $(this).data('cat');
+			$("li.profile").not("."+cat).hide("fast");
+			$('.'+cat).show("fast");
+			history.pushState(null,cat,"/categories/" + cat );
+			$(this).parent().addClass("selected");
+		});
 	});
 </script>
