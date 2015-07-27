@@ -40,7 +40,18 @@ Pakyow::App.routes(:people) do
 
     action :create do
       people = People.new(params[:people])
-      people.custom_url = params[:people][:email].gsub(/[^0-9a-z]/i, '-')
+      custom_url = params[:people][:email].gsub(/[^0-9a-z]/i, '-')
+      stop_the_loop = false
+      i = 2
+      until stop_the_loop do
+        person = People.where("custom_url = ?",custom_url).first
+        if person.nil?
+          stop_the_loop = true
+        else
+          custom_url = custom_url + i.to_s
+        end
+      end
+      people.custom_url = custom_url
       people.image_url = find_image_url(params[:people][:email])
       people.approved = false
       people.save
