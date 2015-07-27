@@ -62,8 +62,15 @@ Pakyow::App.routes(:categories) do
     action :show do
       category = Category.where("slug = ?",params[:categories_id]).first
       subset = Array.new
-      all =  People.all
-      all.each { |person|
+      
+      if session[:random].nil?
+        session[:random] = (rand(0...100)).to_s
+      end
+      people = People.where("approved = true").all
+      ran = session[:random].to_i*100
+      shuffled = people.shuffle(random: Random.new(ran))
+
+      shuffled.each { |person|
         unless person.categories.nil?
           jsn = person.categories.to_s
           array = JSON.parse(jsn)    

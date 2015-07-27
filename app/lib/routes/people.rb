@@ -60,14 +60,13 @@ Pakyow::App.routes(:people) do
 
 # GET /people; same as Index
 action :list do
-  log_debug(People.all)
-  unless session[:random].nil?
-    r = rand(0.01...0.99)
-    session[:random] = r.to_s
+  if session[:random].nil?
+    session[:random] = (rand(0...100)).to_s
   end
-  puts session[:random]
-  random_seed = 'RANDOM(' + session[:random] + ')'
-  view.scope(:people).apply(People.order(Sequel.lit(random_seed)).all)
+  people = People.where("approved = true").all
+  ran = session[:random].to_i*100
+  shuffled = people.shuffle(random: Random.new(ran))
+  view.scope(:people).apply(shuffled)
   all_cats = Category.all
   parent_cats = []
   all_cats.each { |item|

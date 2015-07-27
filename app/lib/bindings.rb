@@ -349,7 +349,6 @@ Pakyow::App.bindings do
 
 		binding(:container) do
 			classes = "profile"
-			pp bindable
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
 				array = JSON.parse(jsn)
