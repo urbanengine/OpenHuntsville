@@ -16,6 +16,9 @@
 		<h2 data-prop="category">Everyone</h2>
 		<p data-prop="description">This page features all of the freelancers, moonlighters, and consultants on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search.</p>
 	</div>
+	<div id="empty" style="display:none;">
+		<p>This category is waiting on you to nominate someone.</p>
+	</div>
 	<ul class="profiles-ul">
 		<li class="profile" data-scope="people" data-prop="container">
 			<img data-prop="image" />
@@ -68,6 +71,10 @@
 	$(document).ready(function(){
 		var submenu = $("ul#submenu");
 		$(".active a").after(submenu);
+		if (0 == $('li.profile').length)
+		{
+			$('#empty').show();
+		}
 		$("ul#submenu a").click(function(e){
 			e.preventDefault();
 			$('.selected').removeClass('selected');
@@ -76,6 +83,15 @@
 			var showme = parent + "--" + cat;
 			$("li.profile").not("."+showme).hide("fast");
 			$('.'+showme).show("fast");
+			var numShown = $('.'+showme).length;
+			if (0 == numShown)
+			{
+				$('#empty').show("fast");
+			}
+			else
+			{
+				$('#empty').hide("fast");
+			}
 			history.pushState(null,cat,"/categories/" + parent + "/" + cat);
 			$(this).parent().addClass("selected");
 		});
@@ -86,6 +102,15 @@
 			var cat = $(this).data('cat');
 			$("li.profile").not("."+cat).hide("fast");
 			$('.'+cat).show("fast");
+			var numShown = $('.'+cat).length;
+			if (0 == numShown)
+			{
+				$('#empty').show("fast");
+			}
+			else
+			{
+				$('#empty').hide("fast");
+			}
 			history.pushState(null,cat,"/categories/" + cat );
 			$(this).parent().addClass("selected");
 		});
