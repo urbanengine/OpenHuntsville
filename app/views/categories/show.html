@@ -74,13 +74,13 @@
 			var parent = $('.active a').data('cat');
 			var cat = $(this).data('cat');
 			var showme = parent + "--" + cat;
-			console.log(showme);
 			$("li.profile").not("."+showme).hide("fast");
 			$('.'+showme).show("fast");
 			history.pushState(null,cat,"/categories/" + parent + "/" + cat);
 			$(this).parent().addClass("selected");
 		});
-		$(".active a.active-link").click(function(e){
+		$(".selected a.active-link").click(function(e){
+			// if $(this).hasClass('active')
 			e.preventDefault();
 			$('.selected').removeClass('selected');
 			var cat = $(this).data('cat');

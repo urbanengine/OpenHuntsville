@@ -131,16 +131,14 @@ module Pakyow::Helpers
   # def get_gravatar(email)
     nospace = email.gsub(/ /i, '')
     down = nospace.downcase
-    puts down
     digest = Digest::MD5.hexdigest(down)
-    puts digest
     # &d=404 will return 404 if no image associated
     gravatar = "http://www.gravatar.com/avatar/" + digest + "?s=160&d=404"
     response = HTTParty.get(gravatar)
     unless response.start_with?("404")
       url = gravatar
     else
-      api_key = "22796a61343ceaad"
+      api_key = ENV['FULLCONTACT_API_KEY']
 
       #Building components of the API URL to Full Contact
       base_url = "https://api.fullcontact.com/v2/person.json?email="
@@ -165,7 +163,7 @@ module Pakyow::Helpers
           pp "Unable to find photo for " + email
         end
       else
-        pp "Unable to find photo for " + email\
+        pp "Unable to find photo for " + email
       end
     end
     return_url

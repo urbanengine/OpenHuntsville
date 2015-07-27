@@ -92,10 +92,6 @@ Pakyow::App.routes(:categories) do
       }
       parent_cats.unshift("everyone")
       view.scope(:categories_menu).apply(parent_cats)
-      pp request.path
-      Category.all.each { |item|
-        pp item.url
-      }
       url = request.path
       url = url.gsub(/\/$/, '')
       current_cat = Category.where("url = ?",url).first

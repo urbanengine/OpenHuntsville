@@ -87,12 +87,9 @@ Pakyow::App.bindings :categories_menu do
     css_class = ""
     if bindable.is_a? Category
       if request.path == bindable.url
-        puts bindable.url
-        puts request.path
         css_class = "selected"
       end
     elsif request.path == "/people"
-      puts request.path
       css_class = "selected"
     end
     {
