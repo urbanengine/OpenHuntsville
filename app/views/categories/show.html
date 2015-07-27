@@ -68,6 +68,19 @@
 	</ul>
 </div>
 <script type="text/javascript">
+	function updateTitle(slug)
+	{
+	    $.ajax({
+		    url: '/categories/title_and_description_from_slug',
+		    type: 'get',
+		    dataType: 'html',
+		    data: slug,
+		    success: function(data) {
+		      console.log(data);
+		      return false;
+		    }
+		});
+	}
 	$(document).ready(function(){
 		var submenu = $("ul#submenu");
 		$(".active a").after(submenu);
