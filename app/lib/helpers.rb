@@ -160,10 +160,10 @@ module Pakyow::Helpers
         unless photo.to_s.start_with?("404")
           return_url = fullcontact_url
         else
-          pp "Unable to find photo for " + email
+          # pp "Unable to find photo for " + email
         end
       else
-        pp "Unable to find photo for " + email
+        # pp "Unable to find photo for " + email
       end
     end
     return_url

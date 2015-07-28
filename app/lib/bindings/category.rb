@@ -105,7 +105,6 @@ Pakyow::App.bindings :categories do
     end
 
     binding(:category_two_link) do
-      pp bindable
       href = ""
       content = ""
       title = ""
