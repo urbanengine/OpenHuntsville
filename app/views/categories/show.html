@@ -108,7 +108,7 @@
 		}
 		$("ul#submenu a").click(function(e){
 			e.preventDefault();
-			$('.selected').removeClass('selected');
+			$('.sidebar .selected').removeClass('selected');
 			var parent = $('.active a').data('cat');
 			var cat = $(this).data('cat');
 			var showme = parent + "--" + cat;
@@ -130,7 +130,7 @@
 		$(".selected a.active-link").click(function(e){
 			// if $(this).hasClass('active')
 			e.preventDefault();
-			$('.selected').removeClass('selected');
+			$('.sidebar .selected').removeClass('selected');
 			var cat = $(this).data('cat');
 			$("li.profile").not("."+cat).hide("fast");
 			$('.'+cat).show("fast");

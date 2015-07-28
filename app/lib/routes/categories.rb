@@ -40,6 +40,7 @@ Pakyow::App.routes(:categories) do
         child_cats = Category.where("parent_id = ?",current_cat.parent_id).all
         view.scope(:categories_submenu).apply(child_cats)
         view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
       end # '/:parent/:categories_id'
 
       get 'title_and_description_from_slug' do
@@ -120,7 +121,8 @@ Pakyow::App.routes(:categories) do
       current_cat = Category.where("url = ?",url).first
       child_cats = Category.where("parent_id = ?",current_cat.id).all
       view.scope(:categories_submenu).apply(child_cats)
-        view.scope(:head).apply(request)
+      view.scope(:head).apply(request)
+      view.scope(:main_menu).apply(request)
     end
 
     # GET /people/:id/edit

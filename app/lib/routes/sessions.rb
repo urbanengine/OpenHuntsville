@@ -2,6 +2,8 @@ Pakyow::App.routes(:sessions) do
   
   restful :session, '/sessions' do
     new do
+      view.scope(:head).apply(request)
+      view.scope(:main_menu).apply(request)
       view.scope(:session).with do |view|
         view.bind(@session || Session.new({}))
         handle_errors(view)

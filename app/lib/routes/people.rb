@@ -12,6 +12,7 @@ Pakyow::App.routes(:people) do
       
       get 'account-registered' do
         view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
       end
 
       get 'url-available' do

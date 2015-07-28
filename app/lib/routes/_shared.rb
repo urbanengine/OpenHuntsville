@@ -3,6 +3,7 @@ module SharedRoutes
 
   fn :route_head do
     view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
 
   fn :edit_profile_check do

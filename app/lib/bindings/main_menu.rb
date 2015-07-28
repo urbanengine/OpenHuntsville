@@ -11,10 +11,10 @@ Pakyow::App.bindings :main_menu do
 		css_class = ""
 		splat = request.path.split("/")
 		unless splat[1].nil? || splat[1].length == 0
-			if splat[1] == "people"
-				unless splat[2].nil? && splat[2] == "new"
-
-				else
+			if splat[1] == "categories"
+				css_class = "selected"
+			elsif splat[1] == "people"
+				if splat[2].nil? || splat[2] != "new"
 					css_class = "selected"
 				end
 			end
@@ -52,7 +52,11 @@ Pakyow::App.bindings :main_menu do
 		splat = request.path.split("/")
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "people"
-				css_class = "selected"
+				unless splat[2].nil? || splat[2].length == 0
+					if splat[2] == "new"
+						css_class = "selected"
+					end
+				end
 			end
 		end
   		{
@@ -62,7 +66,9 @@ Pakyow::App.bindings :main_menu do
 
 	binding(:login_link) do
   		css_class = ""
+
 		splat = request.path.split("/")
+		pp splat
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "sessions"
 				css_class = "selected"

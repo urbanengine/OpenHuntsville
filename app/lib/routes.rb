@@ -12,6 +12,7 @@ Pakyow::App.routes do
     log_debug("/app/lib/routes.rb :: default :: cookies :: ", cookies.to_s)
     log_debug("/app/lib/routes.rb :: default :: params :: ", params.to_s)
     view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
 
   get :login, '/login' do
@@ -31,6 +32,7 @@ Pakyow::App.routes do
   end
   get :terms, '/terms' do
     view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
 
   get :find, '/find' do
@@ -40,5 +42,6 @@ Pakyow::App.routes do
     log_debug("/app/lib/routes.rb :: default :: params :: ", params.to_s)
     view.scope(:people).apply(People.all)
     view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
 end
