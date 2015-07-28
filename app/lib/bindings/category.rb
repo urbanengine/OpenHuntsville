@@ -5,7 +5,7 @@ Pakyow::App.bindings :categories do
     binding(:category) do
       {
         :content => bindable.category,
-        :id => "category" + bindable.id.to_s,
+        # :id => "category" + bindable.id.to_s,
         :name => "category" + bindable.id.to_s
       }
     end # colorbox

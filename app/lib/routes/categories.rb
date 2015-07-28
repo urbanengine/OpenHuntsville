@@ -40,8 +40,24 @@ Pakyow::App.routes(:categories) do
         child_cats = Category.where("parent_id = ?",current_cat.parent_id).all
         view.scope(:categories_submenu).apply(child_cats)
         view.scope(:head).apply(request)
-      end
-    end
+      end # '/:parent/:categories_id'
+
+      get 'title_and_description_from_slug' do
+        cat_title = ""
+        cat_desc = ""
+        category = Category.where("slug = ?",params[:slug]).first
+        unless category.nil?
+          unless category.category.nil?
+            cat_title = category.category
+          end
+          unless category.description.nil?
+            cat_desc = category.description
+          end
+        end
+        send cat_title + "|" + cat_desc
+      end # 'title_and_description_from_slug' do
+
+    end # collection do
     action :new do
             redirect "/"
 

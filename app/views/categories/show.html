@@ -13,8 +13,8 @@
 				<a data-prop="category_two_link" href="#"></a>
 			</li>
 		</ul>
-		<h2 data-prop="category">Everyone</h2>
-		<p data-prop="description">This page features all of the freelancers, moonlighters, and consultants on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search.</p>
+		<h2 data-prop="category" id="category_title">Everyone</h2>
+		<p data-prop="description" id="category_description">This page features all of the freelancers, moonlighters, and consultants on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search.</p>
 	</div>
 	<div id="empty" style="display:none;">
 		<p>This category is waiting on you to nominate someone.</p>
@@ -70,13 +70,31 @@
 <script type="text/javascript">
 	function updateTitle(slug)
 	{
+		var p1 = "This page features ";
+		var p2 = " freelancers, moonlighters, and consultants on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search."
 	    $.ajax({
 		    url: '/categories/title_and_description_from_slug',
 		    type: 'get',
 		    dataType: 'html',
-		    data: slug,
+		    data: {slug},
 		    success: function(data) {
-		      console.log(data);
+		    	console.log(data);
+		      if (data)
+		      {
+		      	var arr = data.split("|");
+		      	if (arr[0] && arr[0].length > 0)
+		      	{
+		      		$('#category_title').html(arr[0]);
+		      	}
+		      	if (arr[1] && arr[1].length > 0)
+		      	{
+		      		$('#category_description').html(arr[1]);
+		      	}
+		      	else if (arr[0] && arr[0].length > 0) 
+		      	{
+		      		$('#category_description').html(p1 + arr[0] + p2);	
+		      	}
+		      }
 		      return false;
 		    }
 		});
@@ -105,6 +123,7 @@
 			{
 				$('#empty').hide("fast");
 			}
+			updateTitle(cat);
 			history.pushState(null,cat,"/categories/" + parent + "/" + cat);
 			$(this).parent().addClass("selected");
 		});
@@ -124,6 +143,7 @@
 			{
 				$('#empty').hide("fast");
 			}
+			updateTitle(cat);
 			history.pushState(null,cat,"/categories/" + cat );
 			$(this).parent().addClass("selected");
 		});
