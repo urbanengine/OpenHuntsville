@@ -49,6 +49,8 @@ Pakyow::App.bindings :main_menu do
 
 	binding(:create_profile_link) do
   		css_class = ""
+  		content = "Create Profile"
+  		href = "/people/new"
 		splat = request.path.split("/")
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "people"
@@ -59,23 +61,41 @@ Pakyow::App.bindings :main_menu do
 				end
 			end
 		end
+		unless cookies[:people].nil?
+			person = People[cookies[:people]]
+			unless person.nil?
+				content = "Edit Profile"
+				href = "/people/" + person.custom_url + "/edit"
+			end
+		end
   		{
-  			:class => css_class
+  			:class => css_class,
+  			:content => content,
+  			:href => href
   		}
   	end
 
 	binding(:login_link) do
   		css_class = ""
-
+  		content = "Log In"
+  		href = "/login"
 		splat = request.path.split("/")
-		pp splat
 		unless splat[1].nil? || splat[1].length == 0
-			if splat[1] == "sessions"
+			if splat[1] == "sessions" || splat[1] == "login"
 				css_class = "selected"
 			end
 		end
+		unless cookies[:people].nil?
+			person = People[cookies[:people]]
+			unless person.nil?
+				content = "Log Out"
+				href = "/logout"
+			end
+		end
   		{
-  			:class => css_class
+  			:class => css_class,
+  			:content => content,
+  			:href => href
   		}
   	end	
   end
