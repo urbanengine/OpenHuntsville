@@ -14,8 +14,13 @@ Pakyow::App.bindings :main_menu do
 			if splat[1] == "categories"
 				css_class = "selected"
 			elsif splat[1] == "people"
-				if splat[2].nil? || splat[2] != "new"
+				if splat[2].nil?
 					css_class = "selected"
+				end
+				if splat[2] != "new"
+					if splat[3].nil? || splat[3] != "edit"
+						css_class = "selected"
+					end
 				end
 			end
 		end
@@ -56,6 +61,11 @@ Pakyow::App.bindings :main_menu do
 			if splat[1] == "people"
 				unless splat[2].nil? || splat[2].length == 0
 					if splat[2] == "new"
+						css_class = "selected"
+					end
+				end
+				unless splat[3].nil? || splat[3].length == 0
+					if splat[3] == "edit"
 						css_class = "selected"
 					end
 				end
