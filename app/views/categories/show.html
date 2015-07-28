@@ -8,9 +8,9 @@
 			<li>
 				<a data-prop="category_one_link" href="#"></a>
 			</li>
-			<li  data-prop="category_spacer_two" class="slash"></li>
+			<li  data-prop="category_spacer_two" id="breadcrumb_spacer_two" class="slash"></li>
 			<li>
-				<a data-prop="category_two_link" href="#"></a>
+				<a data-prop="category_two_link" id="breadcrumb_two_link" href="#"></a>
 			</li>
 		</ul>
 		<h2 data-prop="category" id="category_title">Everyone</h2>
@@ -77,7 +77,7 @@
 		    type: 'get',
 		    dataType: 'html',
 		    data: {slug},
-		    success: function(data) {
+		    success: function(child,data) {
 		    	console.log(data);
 		      if (data)
 		      {
@@ -85,6 +85,11 @@
 		      	if (arr[0] && arr[0].length > 0)
 		      	{
 		      		$('#category_title').html(arr[0]);
+		      		if (child)
+		      		{
+		      			$('breadcrumb_spacer_two').html('/');
+						$('breadcrumb_two_link').html(arr[0]);
+		      		}
 		      	}
 		      	if (arr[1] && arr[1].length > 0)
 		      	{
@@ -146,6 +151,8 @@
 			updateTitle(cat);
 			history.pushState(null,cat,"/categories/" + cat );
 			$(this).parent().addClass("selected");
+			$('breadcrumb_spacer_two').html('');
+			$('breadcrumb_two_link').html('');
 		});
 	});
 </script>
