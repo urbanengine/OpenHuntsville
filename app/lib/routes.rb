@@ -27,6 +27,7 @@ Pakyow::App.routes do
   end
   get :about, '/about' do
     view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
   get :terms, '/terms' do
     view.scope(:head).apply(request)
