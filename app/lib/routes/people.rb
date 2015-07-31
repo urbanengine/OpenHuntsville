@@ -5,14 +5,35 @@ Pakyow::App.routes(:people) do
   expand :restful, :people, '/people', :before => :route_head do
 
     collection do
-      get 'create-profile', :before => :edit_profile_check do
-        view.scope(:people).bind(People[params[:people_id]])
-        people = People[session[:people]]
+
+      get 'profile-created' do
+        if cookies[:people].nil? 
+          redirect '/people/new'
+        else
+          view.scope(:people).bind(People[cookies[:people]])
+          view.scope(:head).apply(request)
+          view.scope(:main_menu).apply(request)
+        end
+      end
+
+      get 'create-profile' do
+        if cookies[:people].nil? 
+          redirect '/people/new'
+        else
+          view.scope(:people).bind(People[cookies[:people]])
+          view.scope(:head).apply(request)
+          view.scope(:main_menu).apply(request)
+        end
       end
       
       get 'account-registered' do
-        view.scope(:head).apply(request)
-        view.scope(:main_menu).apply(request)
+        if cookies[:people].nil? 
+          redirect '/people/new'
+        else
+          view.scope(:head).apply(request)
+          view.scope(:main_menu).apply(request)
+          view.scope(:people).bind(People[cookies[:people]])
+        end
       end
 
       get 'url-available' do
@@ -55,8 +76,25 @@ Pakyow::App.routes(:people) do
       people.custom_url = custom_url
       people.image_url = find_image_url(params[:people][:email])
       people.approved = false
-      people.save
-      redirect '/people/account-registered'
+      # TODO: If valid, save; if invalid, redirect
+      if people.valid?
+        people.save
+        # TODO 
+        if create_session(params[:people])
+          redirect '/people/account-registered'
+        else
+          redirect '/'
+        end
+      else
+        presenter.path = '/people/new'
+        view.scope(:people).with do |ctx|
+          ctx.bind(people)
+
+          ctx.scope(:error).repeat(people.errors.full_messages) do |view, msg|
+            view.text = msg
+          end
+        end
+      end
     end
 
 # GET /people; same as Index
@@ -85,7 +123,7 @@ action :show do
   if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
    redirect '/errors/404'
   end
-  unless people[0].approved || People[session[:people]].admin
+  unless people[0].approved || People[session[:people]].admin || people[0].id == session[:people].to_i
     redirect '/errors/404'
   end
  view.scope(:people).apply(people)
@@ -101,6 +139,50 @@ end
 
 action :update, :before => :edit_profile_check do
   people = People[params[:people_id]]
+
+  # 1. When an unapproved user edits
+  # 2. When admin turns off or on 
+  first_edit_mail = false
+  approve_mail = false
+  suspend_mail = false
+  current_user = nil
+  names_nil = false
+  unless session[:people].nil?
+    current_user = People[session[:people]]
+  end
+
+  if current_user.first_name.nil? || current_user.first_name.length == 0
+    if params[:people][:first_name].nil? || params[:people][:first_name].length == 0
+      names_nil = true
+    else
+      first_edit_mail = true
+    end
+  end
+
+  unless current_user.nil?
+    if current_user.admin.nil? || !(current_user.admin)
+      if people.approved.nil? || !(people.approved)
+        # Current user is NOT admin
+        # Person is not approved
+        first_edit_email = true
+      end
+    else
+      # Current user is ADMIN
+      pp '# Current user is ADMIN'
+      pp params[:people]
+      pp people
+      if params[:people][:approved] && !(people.approved)
+        # Admin is approving user
+        approve_mail = true
+      elsif people.approved
+        unless params[:people].has_key?("approved")
+          # Admin is suspending user
+          suspend_mail = true
+        end
+      end
+    end
+  end
+
   people.first_name = params[:people][:first_name]
   people.last_name = params[:people][:last_name]
   people.company = params[:people][:company]
@@ -116,6 +198,8 @@ action :update, :before => :edit_profile_check do
   end
   category_array = [params[:people][:category_one],params[:people][:category_two],params[:people][:category_three]]
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
+  puts people.id
+  puts params[:people][:custom_url]
   if unique_url(people.id,params[:people][:custom_url])
     people.custom_url = params[:people][:custom_url]
   end
@@ -123,33 +207,76 @@ action :update, :before => :edit_profile_check do
   unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
     people.admin = params[:people][:admin]
   end
+  unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
+    people.approved = params[:people][:approved]
+  end
   if params[:people][:bio].length < 161
     people.bio = params[:people][:bio]
   end
-  # JSON
-  categories = {}
-  categories[0] = ''
-  categories[1] = ''
-  categories[2] = ''
-  log_debug(params[:people])
-  
-  # Save 
-  people.save
+  if people.valid?
+    # Save 
+    people.save
+  elsif names_nil
+    redirect '/people/create-profile'
+  end
 
+  cat1 = ""
+  unless category_array[0].nil? || category_array[0].length == 0
+    c1 = Category[category_array[0]]
+    unless c1.nil? || c1.category.nil?
+      cat1 = c1.category
+    end
+  end
+  cat2 = ""
+  unless category_array[1].nil? || category_array[1].length == 0
+    c1 = Category[category_array[1]]
+    unless c1.nil? || c1.category.nil?
+      cat1 = c1.category
+    end
+  end
+  cat3 = ""
+  unless category_array[2].nil? || category_array[2].length == 0
+    c1 = Category[category_array[2]]
+    unless c1.nil? || c1.category.nil?
+      cat1 = c1.category
+    end
+  end
+
+  if first_edit_email
+    body = "<ul><li>:email => " + printme(people.email) + ",</li>
+    <li>:first_name => " + printme(people.first_name) + ",</li>
+    <li>:last_name => " + printme(people.last_name) + ",</li>
+    <li>:company => " + printme(people.company) + ",</li>
+    <li>:twitter => " + printme(people.twitter) + ",</li>
+    <li>:linkedin => " + printme(people.linkedin) + ",</li>
+    <li>:url => " + printme(people.url) + ",</li>
+    <li>:categories => " + printme(cat1) + ", " + printme(cat2) + ", " + printme(cat3) + ",</li>
+    <li>:created_at => " + printme(people.created_at) + ",</li>
+    <li>:updated_at => " + printme(people.updated_at) + ",</li>
+    <li>:image_url => " + printme(people.image_url) + ",</li>
+    <li>:custom_url => " + printme(people.custom_url) + ",</li>
+    <li>:admin => " + printme(people.admin) + ",</li>
+    <li>:bio => " + printme(people.bio) + ",</li>
+    <li>:approved => " + printme(people.approved) + "</li></ul>"    
+    
+    person = ""
+    unless people.first_name.nil?
+      person = people.first_name + " "
+      unless people.last_name.nil?
+        person = person + people.last_name + " - "
+      end
+    end
+    person = person + people.email
+
+    email_us("Profile created by " + person,body)
+    redirect '/people/profile-created'
+  elsif suspend_mail
+    send_email_template(people,:account_suspension)
+  elsif approve_mail
+    send_email_template(people,:account_approval)
+  end
   redirect '/people/'
 end
 
-# TODO
-  # action :remove do
-  #   people = People[params[:people_id]]
-  #   people.delete
-
-  #   if current_people == People[params[:people_id]]
-  #     session[:people] = nil
-  #     redirect :default
-  #   else
-  #     redirect "/people"
-  #   end
-  # end
 end
 end

@@ -332,7 +332,7 @@ Pakyow::App.bindings do
 		binding(:edit_profile_link) do
 
 			{
-				:href => "/people/" + bindable.id.to_s + "/edit"
+				:href => "/people/" + bindable.custom_url.to_s + "/edit"
 			}
 		end
 

@@ -26,3 +26,6 @@ gem "pg"
 gem "rake"
 
 gem "bcrypt"
+
+## Integrate with Mandrill to send transactional emails
+gem "mandrill-api"

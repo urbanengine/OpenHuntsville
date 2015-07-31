@@ -14,9 +14,13 @@ module SharedRoutes
     redirect_no_access = true
     if people.admin
       redirect_no_access = false
-    elsif people.id.to_s == params[:people_id] && people.approved
+    elsif people.custom_url == request.path.split('/')[2]
+      redirect_no_access = false
+    elsif people.id.to_i == request.path.split('/')[2].to_i
       redirect_no_access = false
     end
+    pp people
+    pp request.path.split('/')
     if redirect_no_access
   	  redirect "/errors/403"
   	end

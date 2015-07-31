@@ -116,12 +116,18 @@ module Pakyow::Helpers
   end
 
   def unique_url(id,url)
-    retval = false
+    retval = true
     id = id.to_s
     url = url.to_s
-    people = People.where("lower(custom_url) = ?",url).all
-    unless people.size > 1 || people[0].id.to_s != id
-      retval = true
+    people = People.where("custom_url = ?",url).all
+    if people.size > 1
+      retval = false
+    else
+      unless people.nil? || people[0].nil?
+        if people[0].id.to_s == id
+          retval = false
+        end
+      end
     end
     retval
   end
@@ -196,4 +202,132 @@ module Pakyow::Helpers
     classes
   end # def get_css_classes_for_category(category)
 
+
+  ### ----------------------------
+  ### EMAIL
+  ### ----------------------------
+
+  def send_email_template(person, email_partial, options = {})
+    body = ''
+    subject = ''
+
+    to_email = person.email
+
+    if options[:from_email].nil?
+      from_email = 'donotreply@openhsv.com'
+    else
+      from_email = options[:from_email]
+    end
+
+    case email_partial
+    when :account_suspension
+      presenter.view = store.view('mail/account_suspension')
+      view.scope(:people).bind(person)
+      subject = 'Your #openHSV account has been suspended'
+    when :account_approval
+      presenter.view = store.view('mail/account_approval')
+      view.scope(:people).bind(person)
+      subject = 'Congratulations! Your #openHSV account has been approved!'
+    end
+
+    send_email(person, from_email, view.to_html, subject)
+  end # send_email_template(person, email_partial, options = {})
+
+  def send_email(person, from_email, body, subject)
+    begin
+      mandrill = Mandrill::API.new ENV['MANDRILL_API_KEY']
+
+      message = {"merge"=>true,
+        "important"=>true,
+        # "text"=>body,
+        "metadata"=>{"website"=>"openhsv.com"},
+        "from_email"=>from_email,
+        "view_content_link"=>nil,
+        "html"=>body,
+        "tags"=>["error-report"],
+        "to"=> [{"email"=>person.email,
+          "name"=>"#{person.first_name} #{person.last_name}",
+          "type"=>"to"}],
+          "auto_html"=>nil,
+          "from_name"=>"#openHSV",
+          "subject"=>subject,
+          "signing_domain"=>nil,
+          "preserve_recipients"=>nil,
+          "auto_text"=>nil,
+          "headers"=>{"Reply-To"=>from_email},
+          "return_path_domain"=>nil,
+          "inline_css"=>nil,
+          "tracking_domain"=>nil,
+          "url_strip_qs"=>nil,
+          "track_opens"=>nil,
+          "track_clicks"=>nil}
+
+      async = false
+      ip_pool = "Main Pool"
+
+      result = mandrill.messages.send message, async, ip_pool
+    rescue Mandrill::Error => e
+      pp "A mandrill error occurred: #{e.class} - #{e.message}"
+      raise
+    end # begin
+  end # send_email(person, from_email, body, subject)
+
+  def email_us(subject, body)
+    begin
+      mandrill = Mandrill::API.new ENV['MANDRILL_API_KEY']
+
+      message = {"merge"=>true,
+        "important"=>true,
+        # "text"=>body,
+        "metadata"=>{"website"=>"openhsv.com"},
+        "from_email"=>"noreply@openhsv.com",
+        "view_content_link"=>nil,
+        "html"=>body,
+        "tags"=>["error-report"],
+        "to"=> [{"email"=>"openhsv@gmail.com",
+          "name"=>"#openHSV Webmasters",
+          "type"=>"to"}],
+          "auto_html"=>nil,
+          "from_name"=>"#openHSV",
+          "subject"=>subject,
+          "signing_domain"=>nil,
+          "preserve_recipients"=>nil,
+          "auto_text"=>nil,
+          "headers"=>{"Reply-To"=>"noreply@openhsv.com"},
+          "return_path_domain"=>nil,
+          "inline_css"=>nil,
+          "tracking_domain"=>nil,
+          "url_strip_qs"=>nil,
+          "track_opens"=>nil,
+          "track_clicks"=>nil}
+
+      async = false
+      ip_pool = "Main Pool"
+
+      result = mandrill.messages.send message, async, ip_pool
+    rescue Mandrill::Error => e
+      pp "A mandrill error occurred: #{e.class} - #{e.message}"
+      raise
+    end # begin
+  end # email_us(user, from_email, body, subject)
+
+  def create_session(parms)
+    @session = Session.new(parms)
+    returnValue = false
+    if people = People.auth(@session)
+      session[:people] = people.id
+      cookies[:people] = people.id
+      unless people.id.nil?
+        returnValue = true
+      end
+    end
+  end # create_session(parms)
+
+  def printme(val)
+    printval = ""
+    unless val.nil?
+      printval = val.to_s
+    end
+    printval
+  end #print_me(val)
 end # module Pakyow::Helpers

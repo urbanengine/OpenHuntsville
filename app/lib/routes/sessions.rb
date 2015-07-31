@@ -11,15 +11,8 @@ Pakyow::App.routes(:sessions) do
     end
 
     create do
-      @session = Session.new(params[:session])
-      if people = People.auth(@session)
-        session[:people] = people.id
-        cookies[:people] = people.id
-        unless people.id.nil?
-          redirect "/people/" + people.id.to_s + "/edit"
-        else
-          redirect "/errors/401"
-        end
+      if create_session(params[:session])
+        redirect "/people/" + People[session[:people]] + "/edit"
       else
         @errors = ['Invalid email and/or password']
         reroute router.group(:session).path(:new), :get

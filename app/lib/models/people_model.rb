@@ -25,7 +25,7 @@ class People < Sequel::Model(:people)
     validates_presence  :email
 
     # require a valid email address
-    # validates_format    EMAIL_REGEX, :email if email && !email.empty?
+    validates_format    EMAIL_REGEX, :email if email && !email.empty?
 
     # make sure the email address is unique
     validates_unique    :email

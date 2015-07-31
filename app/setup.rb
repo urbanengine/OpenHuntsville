@@ -10,6 +10,8 @@ require 'sequel/extensions/pg_json'
 
 require 'httparty'
 
+require 'mandrill'
+
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 Pakyow::App.define do
