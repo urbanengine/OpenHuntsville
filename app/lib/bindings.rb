@@ -4,29 +4,13 @@ Pakyow::App.bindings do
 
 
 		options(:category_one) do
-			opts = [[]]
-
-			Category.all.each do |category|
-				opts << [category.id, category.category]
-			end
-			opts
+			get_nested_category_id_and_category_name()
 		end
 		options(:category_two) do
-			opts = [[]]
-
-			Category.all.each do |category|
-				opts << [category.id, category.category]
-			end
-			opts
+			get_nested_category_id_and_category_name()
 		end
 		options(:category_three) do
-			opts = [[]]
-
-			Category.all.each do |category|
-				opts << [category.id, category.category]
-			end
-
-			opts
+			get_nested_category_id_and_category_name()
 		end
 
 

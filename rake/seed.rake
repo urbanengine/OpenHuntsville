@@ -67,7 +67,7 @@ namespace :seed do
   desc "seed the database with categories"
   task :categories => ['pakyow:stage'] do
     r = 1
-    total = 23
+    total = 16
     CSV.foreach(CATS_PATH, { :headers => false, :skip_blanks => true }) do |row|
         if r == 1
             row.each_with_index { |item,index|
@@ -78,7 +78,7 @@ namespace :seed do
                 category.slug = with_dashes
                 category.url = "/categories/" + with_dashes
                 category.save
-                print "."
+                print "< " + r.to_s + " :: " + (index+1).to_s + " > "
                 $stdout.flush
             }
         else
@@ -92,7 +92,7 @@ namespace :seed do
                     category.slug = with_dashes
                     category.url = Category[category.parent_id].url + "/" + with_dashes
                     category.save
-                    print "."
+                    print "< " + r.to_s + " :: " + (index+1).to_s + " > "
                     $stdout.flush
                 end
             }

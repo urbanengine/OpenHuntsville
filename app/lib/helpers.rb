@@ -330,4 +330,17 @@ module Pakyow::Helpers
     end
     printval
   end #print_me(val)
+
+  def get_nested_category_id_and_category_name()
+    opts = [[]]
+    Category.all.each do |category|
+      if category.parent_id.nil?
+        opts << [category.id, category.category]
+        Category.where("parent_id = ?",category.id).each { |item|
+          opts << [item.id, category.category + " :: " + item.category]
+        }
+      end
+    end
+    opts
+  end
 end # module Pakyow::Helpers
