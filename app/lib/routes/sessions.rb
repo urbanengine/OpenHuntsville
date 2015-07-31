@@ -12,7 +12,7 @@ Pakyow::App.routes(:sessions) do
 
     create do
       if create_session(params[:session])
-        redirect "/people/" + People[session[:people]] + "/edit"
+        redirect "/people/" + People[session[:people]].custom_url + "/edit"
       else
         @errors = ['Invalid email and/or password']
         reroute router.group(:session).path(:new), :get
