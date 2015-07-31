@@ -3,7 +3,7 @@ Pakyow::App.bindings :head do
   scope :head do
 
     binding(:jquery) do
-      location = "http://code.jquery.com/jquery-2.1.4.min.js"
+      location = "//code.jquery.com/jquery-2.1.4.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           location = "/js/jquery.min.js"
