@@ -15,10 +15,11 @@ Pakyow::App.bindings :head do
     end # jquery
 
     binding(:jquery_ui) do
-      location = "//code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+      location = ""
+      # location = "//code.jquery.com/ui/1.11.4/jquery-ui.min.js"
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          location = "/js/jquery-ui.js"
+          # location = "/js/jquery-ui.js"
         end
       end
       {
