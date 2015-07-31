@@ -78,7 +78,7 @@ namespace :seed do
                 category.slug = with_dashes
                 category.url = "/categories/" + with_dashes
                 category.save
-                print "< " + r.to_s + " :: " + (index+1).to_s + " > "
+                print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
                 $stdout.flush
             }
         else
@@ -92,7 +92,7 @@ namespace :seed do
                     category.slug = with_dashes
                     category.url = Category[category.parent_id].url + "/" + with_dashes
                     category.save
-                    print "< " + r.to_s + " :: " + (index+1).to_s + " > "
+                    print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
                     $stdout.flush
                 end
             }
