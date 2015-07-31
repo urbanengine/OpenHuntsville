@@ -133,6 +133,12 @@ Pakyow::App.bindings :categories do
       }
     end
 
+    binding(:category_spacer_two) do
+      {
+        :content => bindable.description
+      }
+    end
+
   end
 
 end
