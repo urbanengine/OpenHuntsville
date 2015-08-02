@@ -131,6 +131,13 @@ module Pakyow::Helpers
     end
     retval
   end
+
+  def is_good_url?(url)
+      response = HTTParty.get(url)
+      result = JSON.parse(response.body)
+      #If API response successful create record; else output error to view
+      return result['status'] == 200
+  end
   
   def find_image_url(email)
 
@@ -228,6 +235,10 @@ module Pakyow::Helpers
       presenter.view = store.view('mail/account_approval')
       view.scope(:people).bind(person)
       subject = 'Congratulations! Your #openHSV account has been approved!'
+    when :account_creation
+      presenter.view = store.view('mail/account_creation')
+      view.scope(:people).bind(person)
+      subject = "How's your Step #3 coming along?"
     end
 
     send_email(person, from_email, view.to_html, subject)

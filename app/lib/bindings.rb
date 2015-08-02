@@ -45,7 +45,11 @@ Pakyow::App.bindings do
 			title = ""
 			unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
 				show = "show"
-				link = "http://www.twitter.com/" + bindable.twitter
+			    if bindable.twitter.include? "http"
+			    	link = bindable.twitter
+			    else
+			    	link = "http://www.twitter.com/" + bindable.twitter
+			    end
 			end
 			unless bindable.first_name.nil? || bindable.last_name.nil?
 				title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
@@ -64,7 +68,11 @@ Pakyow::App.bindings do
 			title = "LinkedIn Profile"
 			unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
 				show = "show"
-				link = 'http://www.linkedin.com/in/' + bindable.linkedin
+				if bindable.linkedin.include? "http"
+					link = bindable.linkedin
+				else
+					link = 'http://www.linkedin.com/in/' + bindable.linkedin
+				end
 			end
 			unless bindable.first_name.nil? || bindable.last_name.nil?
 				title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"

@@ -81,7 +81,7 @@ Pakyow::App.routes(:people) do
         people.save
         # TODO 
         if create_session(params[:people])
-          redirect '/people/account-registered'
+          redirect '/people/create-profile'
         else
           redirect '/'
         end
@@ -187,8 +187,20 @@ action :update, :before => :edit_profile_check do
   people.first_name = params[:people][:first_name]
   people.last_name = params[:people][:last_name]
   people.company = params[:people][:company]
-  people.twitter = params[:people][:twitter]
-  people.linkedin = params[:people][:linkedin]
+  unless params[:people][:twitter].nil? || params[:people][:twitter].length == 0
+    twit_url = params[:people][:twitter]
+    unless twit_url.include? "http"
+      twit_url = "http://www.twitter.com/" + twit_url
+    end
+    people.twitter = twit_url
+  end
+  unless params[:people][:linkedin].nil? || params[:people][:linkedin].length == 0
+    link_url = params[:people][:linkedin]
+    unless link_url.include? "http"
+      link_url = "http://www.twitter.com/" + twit_url
+    end
+    people.linkedin = link_url
+  end
   people.url = params[:people][:url]
   people.other_info = params[:people][:other_info]
   unless params[:people][:image_url].nil? || params[:people][:image_url].length == 0 
@@ -199,8 +211,6 @@ action :update, :before => :edit_profile_check do
   end
   category_array = [params[:people][:category_one],params[:people][:category_two],params[:people][:category_three]]
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
-  puts people.id
-  puts params[:people][:custom_url]
   if unique_url(people.id,params[:people][:custom_url])
     people.custom_url = params[:people][:custom_url]
   end
@@ -270,6 +280,7 @@ action :update, :before => :edit_profile_check do
     person = person + people.email
 
     email_us("Profile created by " + person,body)
+    send_email_template(people,:account_creation)
     redirect '/people/profile-created'
   elsif suspend_mail
     send_email_template(people,:account_suspension)

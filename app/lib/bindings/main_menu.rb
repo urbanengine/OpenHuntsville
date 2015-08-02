@@ -17,7 +17,7 @@ Pakyow::App.bindings :main_menu do
 				if splat[2].nil?
 					css_class = "selected"
 				end
-				if splat[2] != "new"
+				unless splat[2] == "new" || splat[2] == "create-profile"
 					if splat[3].nil? || splat[3] != "edit"
 						css_class = "selected"
 					end
@@ -60,7 +60,7 @@ Pakyow::App.bindings :main_menu do
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "people"
 				unless splat[2].nil? || splat[2].length == 0
-					if splat[2] == "new"
+					if splat[2] == "new" || splat[2] == "create-profile"
 						css_class = "selected"
 					end
 				end
