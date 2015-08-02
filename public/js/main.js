@@ -37,4 +37,9 @@ $(document).ready(function() {
 	$( ".contactme" ).click(function() {
 		$(this).next( ".links" ).slideToggle( "300" );
 	});
+	$(".chosen").chosen({
+		create_option: true,
+		persistent_create_option: true,
+		create_option_text: 'add',
+	});
 });

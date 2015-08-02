@@ -6,15 +6,15 @@
     <input type="hidden" data-prop="id" />
       <li>
         <label>Custom URL</label>
-        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url">
+        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" >
       </li>
       <li>
         <label>First Name</label>
-        <input type="text" data-prop="first_name" name="people[first_name]">
+        <input type="text" data-prop="first_name" name="people[first_name]" placeholder="First Name">
       </li>
       <li>
         <label>Last Name</label>
-        <input type="text" data-prop="last_name" name="people[last_name]">
+        <input type="text" data-prop="last_name" name="people[last_name]" placeholder="Last Name">
       </li>
       <li>
         <label>Email</label>
@@ -26,15 +26,15 @@
       </li>
       <li>
         <label>Twitter</label>
-        <input type="text" data-prop="twitter" name="people[twitter]">
+        <input type="text" data-prop="twitter" name="people[twitter]" placeholder="Twitter URL (optional)">
       </li>
       <li>
         <label>LinkedIn</label>
-        <input type="text" data-prop="linkedin" name="people[linkedin]">
+        <input type="text" data-prop="linkedin" name="people[linkedin]" placeholder="LinkedIn URL (optional)">
       </li>
       <li>
         <label>Website</label>
-        <input type="text" data-prop="url" name="people[url]">
+        <input type="text" data-prop="url" name="people[url]" placeholder="Website URL (optional)">
       </li>
       <li>
         <label>Image URL</label>
@@ -42,12 +42,12 @@
       </li>
       <li>
         <label>Bio</label>
-        <textarea data-prop="bio" id="bio" name="people[bio]"></textarea>
+        <textarea data-prop="bio" id="bio" name="people[bio]" placeholder="Enter your bio (160 characters or less)"></textarea>
         <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
       </li>
       <li>
         <label>First Category</label>
-        <select type="text" data-prop="category_one"><option data-prop="category_one_id" selected></option></select>
+        <select type="text" data-prop="category_one" class="chosen"><option data-prop="category_one_id" selected></option></select>
       </li>
       <li>
         <label>Second Category</label>

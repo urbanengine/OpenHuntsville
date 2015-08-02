@@ -268,9 +268,6 @@ nav li a.selected, nav li a.selected:hover {
 	margin: 0 auto;
 	width: 70%;
 }
-.credo {
-	background: url('../img/greyzz.png') repeat 0 0;
-}
 .credo .wrapper {
 	padding: 50px 0;
 }
@@ -608,7 +605,6 @@ nav li a.selected, nav li a.selected:hover {
 =========================================*/
 
 .form {
-	width: 500px;
 	margin: 0 auto;
 }
 .form h2 {
@@ -620,7 +616,7 @@ nav li a.selected, nav li a.selected:hover {
 }
 fieldset {
 	margin: 5px 0 0;
-	padding: 20px;
+	padding: 30px;
 	border: none;
 	background-color: #fff;
 	box-shadow: 1px 1px 1px #ddd;
@@ -657,7 +653,8 @@ fieldset label {
 }
 .smalltext {
 	font-size: 0.8em;
-	margin: 10px 0 0;
+	margin: 7px 0 0;
+	color: #888;
 }
 .form input[type="submit"] {
 	display: block;
@@ -679,6 +676,21 @@ fieldset label {
 legend {
 	text-transform: uppercase;
 	color: #bbb;
+}
+.chzn-container {
+	width: 250px !important;
+}
+.form .chzn-search input[type="text"] {
+	height: 25px;
+}
+.category, .item, .chzn-container-single .chzn-single {
+    font-family: sans-serif;
+}
+.category {
+	font-weight: bold;
+}
+.chzn-results li.item {
+	padding-left: 25px;
 }
 
 /*================ FOOTER =================
