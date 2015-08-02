@@ -308,7 +308,7 @@ Pakyow::App.bindings do
 				last_name = bindable.last_name
 			end
 			{
-				:href => "/people/" + bindable.id.to_s,
+				:href => "/people/" + bindable.custom_url,
 				:content => first_name + " " + last_name
 			}
 		end
