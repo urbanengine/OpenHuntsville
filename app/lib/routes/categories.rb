@@ -13,9 +13,9 @@ Pakyow::App.routes(:categories) do
           unless person.categories.nil?
             jsn = person.categories.to_s
             array = JSON.parse(jsn)    
-            array.each { |cat|
-              unless cat.nil? || category.nil?
-                if cat == category.id.to_s
+            array.each { |item|
+              unless item.nil? || category.nil?
+                if item == category.id.to_s
                   subset.push(person)
                 end
               end
@@ -94,11 +94,15 @@ Pakyow::App.routes(:categories) do
           array.each { |cat|
             unless cat.nil? || cat.length == 0 || category.nil?
               if cat == category.id.to_s
-                subset.push(person)
+                unless subset.include?(person)
+                  subset.push(person)
+                end
               else
                 child = Category[cat]
                 if child.parent_id.to_s == category.id.to_s
-                  subset.push(person)
+                  unless subset.include?(person)
+                    subset.push(person)
+                  end
                 end
               end
             end
