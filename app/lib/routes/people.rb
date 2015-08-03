@@ -189,14 +189,14 @@ action :update, :before => :edit_profile_check do
   people.last_name = params[:people][:last_name]
   people.company = params[:people][:company]
   unless params[:people][:twitter].nil? || params[:people][:twitter].length == 0
-    twit_url = params[:people][:twitter]
+    twit_url = params[:people][:twitter].downcase
     unless twit_url.include? "http"
       twit_url = "http://www.twitter.com/" + twit_url
     end
     people.twitter = twit_url
   end
   unless params[:people][:linkedin].nil? || params[:people][:linkedin].length == 0
-    link_url = params[:people][:linkedin]
+    link_url = params[:people][:linkedin].downcase
     unless link_url.include? "http"
       link_url = "http://www.linkedin.com/in/" + link_url
     end

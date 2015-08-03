@@ -38,7 +38,7 @@
       </li>
       <li>
         <label>Image URL</label>
-        <input type="text" data-prop="image_url" name="people[image_url]">
+        <input id="image_url" type="text" data-prop="image_url" name="people[image_url]">
       </li>
       <li>
         <label>Bio</label>
@@ -112,5 +112,9 @@ $(document).ready(function(){
       }
     });
   });
+  if ($('#image_url').val().length == 0 || $('#image_url').val().indexOf("profile-backup") != -1)
+  {
+     $('#image_url').after("<p style='color:#00A3B8;'>We tried to find your picture automatically, but we did not find the JPGs we were looking for. Please try uploading your favorite profile image to gravatar.com and coming back to #openHSV and saving your profile. We promise that this will be a good move for your future on the Internetz.</p>");
+  }
 });
 </script>
