@@ -198,7 +198,7 @@ action :update, :before => :edit_profile_check do
   unless params[:people][:linkedin].nil? || params[:people][:linkedin].length == 0
     link_url = params[:people][:linkedin]
     unless link_url.include? "http"
-      link_url = "http://www.twitter.com/" + twit_url
+      link_url = "http://www.linkedin.com/in/" + link_url
     end
     people.linkedin = link_url
   end
