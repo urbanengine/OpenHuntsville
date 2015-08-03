@@ -326,6 +326,54 @@ nav li a.selected, nav li a.selected:hover {
 .content-body {
 	padding: 20px 0;
 }
+.about h2 {
+	text-align: center;
+	font-size: 4em;
+	padding-bottom: 30px;
+	font-family: 'Montserrat', sans-serif;
+}
+.about .content-body ul {
+	text-align: center;
+	overflow: hidden;
+	padding: 0 0 40px;
+}
+.about .content-body li {
+	display: inline-block;
+	width: 28%;
+	text-align: left;
+	margin-right: 4%;
+}
+.about .content-body li:last-child {
+	margin-right: 0;
+}
+.about .content-body li img {
+	display: block;
+	width: 100%;
+}
+.about .content-body li h3 {
+	font-size: 2em;
+	margin: 20px 0 0;
+}
+.about .content-body li p {
+	margin: 0;
+}
+.about .together {
+	background: url('../img/groupdiscussion.jpg') no-repeat left -280px;
+	background-size: 100%;
+}
+.about .together h3 {
+	color: #f6f6f6;
+	font-size: 4em;
+	font-family: 'Montserrat', sans-serif;
+	padding: 120px 0;
+}
+.theteam {
+	background-color: #f6f6f6;
+	padding: 40px 0;
+}
+.theteam p {
+	font-size: 1.3em;
+}
 
 /*=============== ORIGINALS ===============
 =========================================*/
@@ -802,15 +850,15 @@ footer a:hover {
 	nav li a {
 		font-size: 1.2em;
 	} 
+    .parentcats { 
+    	display: none; 
+    }
 	.tinynav { 
 		display: block;
 		height: 40px;
 		border: 1px solid #eee;
 		background-color: #fff;
 	}
-    .parentcats { 
-    	display: none; 
-    }
     .js .tinynav { 
     	display: block; 
     }
@@ -848,7 +896,7 @@ footer a:hover {
 	}
 	.blurbs {
 		margin: 0;
-}
+	}
 	.blurbs li {
 		display: block;
 		width: 70%;
@@ -895,6 +943,32 @@ footer a:hover {
 		padding-top: 10px;
 		line-height: 1.1em;
 	}
+	.about .content-body h2 {
+		font-size: 3em;
+	}
+	.about .content-body li h3 {
+		font-size: 1.4em;
+	}
+	.theteam p {
+		font-size: 1em;
+	}
+	.about .together h3 {
+		padding: 100px 0;
+		font-size: 3em;
+	}
+	.about .together {
+		background-position: left -160px;
+	}
+	.about .content-body li {
+		display: block;
+		width: 70%;
+		margin: 0 auto;
+		margin-bottom: 50px;
+	}
+	.about .content-body li:last-child {
+		margin: 0 auto;
+		margin-bottom: 0;
+	}
 }
 @media only screen and (max-width: 700px) {
 	.profile img {
@@ -905,6 +979,16 @@ footer a:hover {
 	}
 	.contact {
 		width: 120px;
+	}
+	.theteam {
+		padding: 20px 0;
+	}
+	.about .together h3 {
+		padding: 60px 0;
+		font-size: 2em;
+	}
+	.about .content-body h2 {
+		font-size: 2em;
 	}
 }
 @media only screen and (max-width: 500px) {
@@ -937,6 +1021,12 @@ footer a:hover {
 	}
 	.originals {
 		padding: 25px 0;
+	}
+	.about .together {
+		background-position: left -70px;
+	}
+	.about .together h3 {
+		padding: 40px;
 	}
 }
 @media only screen and (max-width: 400px) {

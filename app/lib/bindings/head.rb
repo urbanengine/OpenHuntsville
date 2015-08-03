@@ -138,7 +138,7 @@ Pakyow::App.bindings :head do
         if path[1] == "people"
           ret = "All of the professionals on #openHSV, sortable by industry."
         elsif path[1] == "about"
-          ret = "#openHSV was built to provide a freelancer, moonlighter, and consultant resources to Huntsville's small businesses and startups."
+          ret = "#openHSV was built to provide resources to Huntsville's small businesses and startup communities."
         elsif path[1] == "terms"
           ret = "Terms of Service governing the use of #openHSV"
         end
