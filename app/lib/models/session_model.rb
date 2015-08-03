@@ -2,7 +2,7 @@ class Session
   attr_accessor :email, :password
 
   def initialize(params)
-    @email, @password = params.values_at(:email, :password)
+    @email, @password = params.values_at("email", "password")
   end
 
   def [](key)

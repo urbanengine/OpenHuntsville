@@ -61,7 +61,8 @@ Pakyow::App.routes(:people) do
     end
 
     action :create do
-      people = People.new(params[:people])
+      c_params = { "email" => params[:people][:email].downcase, "password" => params[:people][:password], "password_confirmation" => params[:people][:password_confirmation]}
+      people = People.new(c_params)
       custom_url = params[:people][:email].gsub(/[^0-9a-z]/i, '-')
       stop_the_loop = false
       i = 2
@@ -80,7 +81,7 @@ Pakyow::App.routes(:people) do
       if people.valid?
         people.save
         # TODO 
-        if create_session(params[:people])
+        if create_session(c_params)
           redirect '/people/create-profile'
         else
           redirect '/'

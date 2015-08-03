@@ -324,6 +324,7 @@ module Pakyow::Helpers
 
   def create_session(parms)
     @session = Session.new(parms)
+    pp @session
     returnValue = false
     if people = People.auth(@session)
       session[:people] = people.id
@@ -332,6 +333,7 @@ module Pakyow::Helpers
         returnValue = true
       end
     end
+    returnValue
   end # create_session(parms)
 
   def printme(val)
