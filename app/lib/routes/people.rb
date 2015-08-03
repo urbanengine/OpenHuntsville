@@ -224,6 +224,15 @@ action :update, :before => :edit_profile_check do
   if params[:people][:bio].length < 161
     people.bio = params[:people][:bio]
   end
+  pass = params[:people][:password]
+  pass_conf = params[:people][:password_confirmation]
+  unless pass.nil? || pass_conf.nil? || pass.length == 0 || pass_conf.length == 0
+    if pass == pass_conf
+      people.password = pass
+      people.password_confirmation = pass_conf
+    end
+  end
+
   if people.valid?
     # Save 
     people.save
