@@ -6,6 +6,19 @@ Pakyow::App.routes(:people) do
 
     collection do
 
+      get 'unapproved' do
+        subset = Array.new
+        all =  People.all
+        all.each { |person|
+          if person.approved.nil? || person.approved == false
+            subset.push(person)
+          end
+        }
+        view.scope(:people).bind(subset)
+        view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
+      end
+
       get 'profile-created' do
         if cookies[:people].nil? 
           redirect '/people/new'
