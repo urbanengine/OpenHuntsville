@@ -22,7 +22,7 @@ Pakyow::App.routes(:people) do
             subset.push(person)
           end
         }
-        view.scope(:people).bind(subset)
+        view.scope(:people).apply(subset)
         view.scope(:head).apply(request)
         view.scope(:main_menu).apply(request)
       end
