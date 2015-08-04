@@ -112,7 +112,9 @@ module Pakyow::Helpers
 
   def get_people_from_people_id(id)
     people = Array.new
-    people = People.where("lower(custom_url) = ?",id.downcase).all
+    unless id.nil?
+      people = People.where("lower(custom_url) = ?",id.downcase).all
+    end
   end
 
   def unique_url(id,url)
