@@ -234,7 +234,7 @@ action :update, :before => :edit_profile_check do
   category_array = [params[:people][:category_one],params[:people][:category_two],params[:people][:category_three]]
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
   if unique_url(people.id,params[:people][:custom_url])
-    people.custom_url = params[:people][:custom_url]
+    people.custom_url = params[:people][:custom_url].downcase
   end
   current_user = People[cookies[:people]]
   unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
