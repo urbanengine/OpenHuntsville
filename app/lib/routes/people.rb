@@ -7,6 +7,14 @@ Pakyow::App.routes(:people) do
     collection do
 
       get 'unapproved' do
+        if cookies[:people].nil? 
+          redirect '/errors/401'
+        else
+          person = People[cookies[:people]]
+          unless person.admin
+            redirect '/errors/403'
+          end
+        end
         subset = Array.new
         all =  People.all
         all.each { |person|
