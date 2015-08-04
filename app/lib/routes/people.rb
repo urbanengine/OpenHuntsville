@@ -20,9 +20,9 @@ Pakyow::App.routes(:people) do
         all.each { |person|
           if person.approved.nil? || !(person.approved)
             subset.push(person)
-            pp "false  :: " + person.custom_url
+            puts "false  :: " + person.custom_url
           else
-            pp "true  :: " + person.custom_url
+            puts "true  :: " + person.custom_url
           end
         }
         view.scope(:people).bind(subset)
