@@ -18,7 +18,7 @@ Pakyow::App.routes(:people) do
         subset = Array.new
         all =  People.all
         all.each { |person|
-          if person.approved.nil? || person.approved == false
+          if person.approved.nil? || !(person.approved)
             subset.push(person)
           end
         }
