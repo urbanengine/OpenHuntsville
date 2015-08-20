@@ -216,6 +216,7 @@ action :update, :before => :edit_profile_check do
     end
     people.twitter = twit_url
   end
+
   unless params[:people][:linkedin].nil? || params[:people][:linkedin].length == 0
     link_url = params[:people][:linkedin].downcase
     unless link_url.include? "http"
@@ -223,7 +224,15 @@ action :update, :before => :edit_profile_check do
     end
     people.linkedin = link_url
   end
-  people.url = params[:people][:url]
+
+  unless params[:people][:url].nil? || params[:people][:url].length == 0
+    my_url = params[:people][:url].downcase
+    unless my_url.include? "http"
+      my_url = "http://" + my_url
+    end
+    people.linkedin = my_url
+  end
+
   people.other_info = params[:people][:other_info]
   unless params[:people][:image_url].nil? || params[:people][:image_url].length == 0 
     people.image_url = params[:people][:image_url]
