@@ -1,3 +1,8 @@
+<!-- Generic page styles -->
+<link rel="stylesheet" href="/js/jQuery-File-Upload/css/style.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="/js/jQuery-File-Upload/css/jquery.fileupload.css">
+
 <form data-scope="people" id="people-form" data-prop="action">
   <ul class="errors"><li data-scope="error"></li></ul>
   <fieldset class="margin-t">
@@ -53,6 +58,19 @@
         <label>Third Category</label>
         <select type="text" data-prop="category_three"></select>
       </li>
+      <li>
+        <label>Profile Image</label>
+          <input id="fileupload" type="file" name="files[]">
+          <br>
+          <br>
+          <!-- The global progress bar -->
+          <div id="progress" class="progress">
+              <div class="progress-bar progress-bar-success"></div>
+          </div>
+          <!-- The container for the uploaded files -->
+          <div id="files" class="files" data-prop="image_url"></div>
+          <input type="hidden" id="tempimage" name="tempimage"></input>
+      </li>
     </ul>
   </fieldset>
 
@@ -90,9 +108,16 @@
 
   <input id="submit" type="submit" value="Save">
 </form>
-
+<script src="/js/jquery.min.js"></script>
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="/js/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="/js/jQuery-File-Upload/js/jquery.fileupload.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+  console.log("document ready");
   $('#custom_url').blur(function(){
     $.ajax({
     url: '/people/url-available',
@@ -111,10 +136,37 @@ $(document).ready(function(){
       return false;
       }
     });
-  });
   if ($('#image_url').val().length == 0 || $('#image_url').val().indexOf("profile-backup") != -1)
   {
      $('#image_url').after("<p style='color:#00A3B8;'>We tried to find your picture automatically, but we did not find the JPGs we were looking for. Please try uploading your favorite profile image to gravatar.com and coming back to #openHSV and saving your profile. We promise that this will be a good move for your future on the Internetz.</p>");
   }
+  });
+        'use strict';
+    // Change this to the location of your server-side upload handler:
+    // var url = window.location.hostname === 'blueimp.github.io' ?
+    //             '//jquery-file-upload.appspot.com/' : 'server/php/';
+    var url = '/people/upload/';
+    console.log(url);
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('#fileupload').toggle();
+                $('#files').html("<strong>" + file.name + "</strong> queued for upload. Save profile to upload.");
+                $('#tempimage').val(file.temp);
+                $('#progress .progress-bar').css('width', 0);
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
 });
 </script>

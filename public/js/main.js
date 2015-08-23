@@ -24,15 +24,21 @@ $(document).ready(function() {
 		}
 	});
 	$(function () {
-		$('.parentcats').tinyNav({
-			active: 'selected'
-		});
+		if ($('.parentcats').length)
+		{
+			$('.parentcats').tinyNav({
+				active: 'selected'
+			});
+		}
 	});
 	$('html').addClass('js');
 	$(function() {
-		$( ".parentcats" ).accordion({
-			collapsible: true
-});
+		if ($('.parentcats').length)
+		{
+			$( ".parentcats" ).accordion({
+				collapsible: true
+			});
+		}
 	});
 	$( ".contactme" ).click(function() {
 		$(this).next( ".links" ).slideToggle( "300" );

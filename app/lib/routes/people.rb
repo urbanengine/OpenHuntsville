@@ -5,6 +5,33 @@ Pakyow::App.routes(:people) do
   expand :restful, :people, '/people', :before => :route_head do
 
     collection do
+      patch 'upload' do
+        if request.xhr?
+          filename = params['files'].first[:filename]
+          uploaded_file = params['files'].first[:tempfile].path
+          temp_image_file = "/tmp/#{SecureRandom.uuid}#{File.extname(uploaded_file)}"
+
+          # Copy the uploaded file to /tmp.
+          FileUtils.cp(uploaded_file, temp_image_file)
+          pp uploaded_file
+          pp temp_image_file
+
+          # Resize the image.
+          image = MiniMagick::Image.new(temp_image_file)
+          image.resize '400'
+
+          # Generate the JSON response.
+          response_data = {}
+          response_data['files'] = []
+          response_data['files'] << {name: filename, temp: File.basename(temp_image_file), size: 256}
+
+          send response_data.to_json, 'application/json'
+        else
+          puts "fail"
+          pp request
+        end
+      end
+
 
       get 'unapproved' do
         if cookies[:people].nil? 
@@ -267,6 +294,28 @@ action :update, :before => :edit_profile_check do
       people.password_confirmation = pass_conf
     end
   end
+
+  unless params['tempimage'].nil?
+  image_basename = params['tempimage']
+  image_filename = "/tmp/#{params['tempimage']}"
+
+  if File.exists? image_filename
+    # Get the image size.
+    image = MiniMagick::Image.open(image_filename)
+
+    # Upload to S3.
+    s3 = Aws::S3::Resource.new(region: 'us-east-1')
+    s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
+
+    # Remove the image from /tmp after uploading it.
+    FileUtils.rm(image_filename)
+
+    pp image_basename
+ 
+    people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
+  end
+end
+
 
   if people.valid?
     # Save 

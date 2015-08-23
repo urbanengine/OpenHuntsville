@@ -29,3 +29,7 @@ gem "bcrypt"
 
 ## Integrate with Mandrill to send transactional emails
 gem "mandrill-api"
+
+
+gem 'aws-sdk', '~> 2'
+gem "mini_magick"

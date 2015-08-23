@@ -12,6 +12,9 @@ require 'httparty'
 
 require 'mandrill'
 
+require 'aws-sdk'
+require "mini_magick"
+
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 Pakyow::App.define do
