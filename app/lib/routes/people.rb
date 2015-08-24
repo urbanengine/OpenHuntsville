@@ -291,32 +291,33 @@ action :update, :before => :edit_profile_check do
     end
   end
 
-  unless params['tempimage'].nil?
-    image_basename = params['tempimage']
-    image_filename = "/tmp/#{params['tempimage']}"
+  if params.has_key?('tempimage')
+    unless params['tempimage'].nil?
+      image_basename = params['tempimage']
+      image_filename = "/tmp/#{params['tempimage']}"
 
-    if File.exists? image_filename
-      # Get the image size.
-      image = MiniMagick::Image.open(image_filename)
+      if File.exists? image_filename
+        # Get the image size.
+        image = MiniMagick::Image.open(image_filename)
 
-      # Upload to S3.
-      s3 = Aws::S3::Resource.new(region: 'us-east-1')
-      s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
-      # Remove the image from /tmp after uploading it.
-      FileUtils.rm(image_filename)
-      pp "file deleted"
-      people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
+        # Upload to S3.
+        s3 = Aws::S3::Resource.new(region: 'us-east-1')
+        s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
+        # Remove the image from /tmp after uploading it.
+        FileUtils.rm(image_filename)
+        people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
+      else
+        pp "File does not exist"
+      end
     else
-      pp "File does not exist"
+      puts "TEMPIMAGE NIL"
+      pp params
     end
-  else
-    pp "TEMPIMAGE NIL"
-    pp params
   end
 
-pp "ABOUT TO SAVE"
+puts "ABOUT TO SAVE"
     people.save
-    pp "SAVED"
+    puts "SAVED"
   if people.valid?
     # Save 
   elsif names_nil
