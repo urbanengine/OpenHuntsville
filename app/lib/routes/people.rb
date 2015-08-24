@@ -18,7 +18,7 @@ Pakyow::App.routes(:people) do
 
           # Resize the image.
           image = MiniMagick::Image.new(temp_image_file)
-          image.resize '160x160'
+          image = resize_and_crop(image,160)
 
           # Generate the JSON response.
           response_data = {}
