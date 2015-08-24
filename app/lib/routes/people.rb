@@ -296,8 +296,8 @@ action :update, :before => :edit_profile_check do
   end
 
   unless params['tempimage'].nil?
-  image_basename = params['tempimage']
-  image_filename = "/tmp/#{params['tempimage']}"
+    image_basename = params['tempimage']
+    image_filename = "/tmp/#{params['tempimage']}"
 
     if File.exists? image_filename
       # Get the image size.
@@ -319,6 +319,9 @@ action :update, :before => :edit_profile_check do
     else
       pp "File does not exist"
     end
+  else
+    pp "tempimage nil"
+    pp params
   end
 
 
