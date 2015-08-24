@@ -220,7 +220,6 @@ action :update, :before => :edit_profile_check do
       # Current user is ADMIN
       pp '# Current user is ADMIN'
       pp params[:people]
-      pp people
       if params[:people][:approved] && !(people.approved)
         # Admin is approving user
         approve_mail = true
@@ -300,32 +299,28 @@ action :update, :before => :edit_profile_check do
       # Get the image size.
       image = MiniMagick::Image.open(image_filename)
 
-      pp image
-
       # Upload to S3.
       s3 = Aws::S3::Resource.new(region: 'us-east-1')
-      pp s3
       s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
-      pp "file uploaded"
       # Remove the image from /tmp after uploading it.
       FileUtils.rm(image_filename)
       pp "file deleted"
-      pp image_basename
       people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
-      pp people.image_url   
     else
       pp "File does not exist"
     end
   else
-    pp "tempimage nil"
+    pp "TEMPIMAGE NIL"
     pp params
   end
 
-
+pp "ABOUT TO SAVE"
     people.save
+    pp "SAVED"
   if people.valid?
     # Save 
   elsif names_nil
+    pp "PEOPLE ERRORS"
     pp people.errors
     redirect '/people/create-profile'
   end
