@@ -309,7 +309,7 @@ action :update, :before => :edit_profile_check do
 
 
   if params.has_key?('tempimage')
-    unless params['tempimage'].nil?
+    unless params['tempimage'].nil? || params['tempimage'].length == 0
       image_basename = params['tempimage']
       image_filename = "/tmp/#{params['tempimage']}"
 
