@@ -233,8 +233,11 @@ action :update, :before => :edit_profile_check do
   end
 
   people.first_name = params[:people][:first_name]
+  pp people.first_name
   people.last_name = params[:people][:last_name]
+  pp people.last_name
   people.company = params[:people][:company]
+  pp people.company
   unless params[:people][:twitter].nil? || params[:people][:twitter].length == 0
     twit_url = params[:people][:twitter].downcase
     unless twit_url.include? "http"
@@ -242,6 +245,7 @@ action :update, :before => :edit_profile_check do
     end
     people.twitter = twit_url
   end
+  pp people.twitter
 
   unless params[:people][:linkedin].nil? || params[:people][:linkedin].length == 0
     link_url = params[:people][:linkedin].downcase
@@ -250,46 +254,59 @@ action :update, :before => :edit_profile_check do
     end
     people.linkedin = link_url
   end
+  pp people.linkedin
 
   unless params[:people][:url].nil? || params[:people][:url].length == 0
     my_url = params[:people][:url].downcase
     unless my_url.include? "http"
       my_url = "http://" + my_url
     end
-    people.linkedin = my_url
+    people.url = my_url
   end
+  pp people.url
 
   people.other_info = params[:people][:other_info]
+  pp people.other_info
   unless params[:people][:image_url].nil? || params[:people][:image_url].length == 0 
     people.image_url = params[:people][:image_url]
   end
+  pp people.image_url
   if people.image_url.nil? || people.image_url.length == 0 || params[:people][:image_url].length == 0
     people.image_url = find_image_url(params[:people][:email])
   end
+  pp people.image_url
   category_array = [params[:people][:category_one],params[:people][:category_two],params[:people][:category_three]]
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
+  pp people.categories
   if unique_url(people.id,params[:people][:custom_url])
     people.custom_url = params[:people][:custom_url].downcase
     # people.custom_url = params[:people][:custom_url].downcase.gsub(/[^0-9a-z]/i, '-')
   end
+  pp people.custom_url
   unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
     people.admin = params[:people][:admin]
     people.approved = params[:people][:approved]
   end
+  pp people.admin
+  pp people.approved
   if params[:people][:bio].length < 161
     people.bio = params[:people][:bio]
   end
+  pp people.bio
   unless params[:people][:email].nil? || params[:people][:email].length == 0
     people.email = params[:people][:email].downcase
   end
+  pp people.email
   pass = params[:people][:password]
   pass_conf = params[:people][:password_confirmation]
   unless pass.nil? || pass_conf.nil? || pass.length == 0 || pass_conf.length == 0
     if pass == pass_conf
       people.password = pass
       people.password_confirmation = pass_conf
+      pp people.password
     end
   end
+
 
   if params.has_key?('tempimage')
     unless params['tempimage'].nil?
@@ -314,7 +331,7 @@ action :update, :before => :edit_profile_check do
       pp params
     end
   end
-
+pp people.image_url
 puts "ABOUT TO SAVE"
     people.save
     puts "SAVED"
@@ -323,7 +340,7 @@ puts "ABOUT TO SAVE"
   elsif names_nil
     pp "PEOPLE ERRORS"
     pp people.errors
-    redirect '/people/create-profile'
+    # redirect '/people/create-profile'
   end
 
   cat1 = ""
