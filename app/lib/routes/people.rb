@@ -322,9 +322,9 @@ action :update, :before => :edit_profile_check do
   end
 
 
+    people.save
   if people.valid?
     # Save 
-    people.save
   elsif names_nil
     pp people.errors
     redirect '/people/create-profile'
