@@ -469,8 +469,8 @@ nav li a.selected, nav li a.selected:hover {
 #submenu {
 	display: none;
 }
-.selected.active #submenu {
-	display: visible;
+.selected #submenu, .active #submenu {
+	display: block;
 }
 
 /*================ INDEX ==================
