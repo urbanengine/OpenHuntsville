@@ -273,11 +273,8 @@ action :update, :before => :edit_profile_check do
     people.custom_url = params[:people][:custom_url].downcase
     # people.custom_url = params[:people][:custom_url].downcase.gsub(/[^0-9a-z]/i, '-')
   end
-  current_user = People[cookies[:people]]
   unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
     people.admin = params[:people][:admin]
-  end
-  unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
     people.approved = params[:people][:approved]
   end
   if params[:people][:bio].length < 161
@@ -329,6 +326,7 @@ action :update, :before => :edit_profile_check do
     # Save 
     people.save
   elsif names_nil
+    pp people.errors
     redirect '/people/create-profile'
   end
 
@@ -341,16 +339,16 @@ action :update, :before => :edit_profile_check do
   end
   cat2 = ""
   unless category_array[1].nil? || category_array[1].length == 0
-    c1 = Category[category_array[1]]
-    unless c1.nil? || c1.category.nil?
-      cat1 = c1.category
+    c2 = Category[category_array[1]]
+    unless c2.nil? || c2.category.nil?
+      cat2 = c2.category
     end
   end
   cat3 = ""
   unless category_array[2].nil? || category_array[2].length == 0
-    c1 = Category[category_array[2]]
-    unless c1.nil? || c1.category.nil?
-      cat1 = c1.category
+    c3 = Category[category_array[2]]
+    unless c3.nil? || c3.category.nil?
+      cat3 = c3.category
     end
   end
 
