@@ -26,7 +26,7 @@ Pakyow::App.routes(:categories) do
         view.scope(:people).apply(subset)
         view.scope(:categories).apply(category)
 
-        all_cats = Category.all
+        all_cats = Category.order(:category)
         parent_cats = []
         all_cats.each { |item|
           if item.parent_id.nil?
