@@ -299,25 +299,26 @@ action :update, :before => :edit_profile_check do
   image_basename = params['tempimage']
   image_filename = "/tmp/#{params['tempimage']}"
 
-  if File.exists? image_filename
-    # Get the image size.
-    image = MiniMagick::Image.open(image_filename)
+    if File.exists? image_filename
+      # Get the image size.
+      image = MiniMagick::Image.open(image_filename)
 
-    pp image
+      pp image
 
-    # Upload to S3.
-    s3 = Aws::S3::Resource.new(region: 'us-east-1')
-    pp s3
-    s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
-    pp "file uploaded"
-    # Remove the image from /tmp after uploading it.
-    FileUtils.rm(image_filename)
-    pp "file deleted"
-    pp image_basename
-    people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
-    pp people.image_url   
-  else
-    pp "File does not exist"
+      # Upload to S3.
+      s3 = Aws::S3::Resource.new(region: 'us-east-1')
+      pp s3
+      s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
+      pp "file uploaded"
+      # Remove the image from /tmp after uploading it.
+      FileUtils.rm(image_filename)
+      pp "file deleted"
+      pp image_basename
+      people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
+      pp people.image_url   
+    else
+      pp "File does not exist"
+    end
   end
 
 
