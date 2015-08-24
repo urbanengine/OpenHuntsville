@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>http://www.openhsv.com/</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/people</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/about</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/feedback-form.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/people/new</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/login</loc>
+  <changefreq>never</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/terms</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/accounting</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/business</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/legal</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/music</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/defense</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/architecture</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/art-and-design</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/contract-management</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/it-and-software</loc>
+  <changefreq>daily</changefreq>
+</url>
+
+<url>
+  <loc>http://www.openhsv.com/categories/engineering</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/finance</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/human-resources</loc>
+  <changefreq>daily</changefreq>
+</url>
+
+<url>
+  <loc>http://www.openhsv.com/categories/marketing</loc>
+  <changefreq>daily</changefreq>
+</url>
+
+<url>
+  <loc>http://www.openhsv.com/categories/real-estate</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.openhsv.com/categories/photography-and-video</loc>
+  <changefreq>daily</changefreq>
+</url>
+</urlset>

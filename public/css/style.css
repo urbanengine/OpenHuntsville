@@ -342,6 +342,7 @@ nav li a.selected, nav li a.selected:hover {
 	width: 28%;
 	text-align: left;
 	margin-right: 4%;
+	vertical-align: text-top;
 }
 .about .content-body li:last-child {
 	margin-right: 0;
@@ -464,6 +465,12 @@ nav li a.selected, nav li a.selected:hover {
 }
 .tinynav { 
 	display: none 
+}
+#submenu {
+	display: none;
+}
+.selected.active #submenu {
+	display: visible;
 }
 
 /*================ INDEX ==================
