@@ -155,7 +155,7 @@ action :list do
   ran = session[:random].to_i*100
   shuffled = people.shuffle(random: Random.new(ran))
   view.scope(:people).apply(shuffled)
-  all_cats = Category.all
+  all_cats = Category.order(:slug).all
   parent_cats = []
   all_cats.each { |item|
     if item.parent_id.nil?
