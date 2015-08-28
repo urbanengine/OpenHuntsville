@@ -32,6 +32,18 @@ Pakyow::App.routes(:people) do
         end
       end
 
+      get 'slideshow' do
+        people = People.where("approved = true").all
+        ran = session[:random].to_i*100
+        subset = Array.new
+        people.each { |person|
+          unless person.image_url.nil? || person.image_url.length == 0 || person.image_url == "/img/profile-backup.png"
+            subset.push(person)
+          end
+        }
+        shuffled = subset.shuffle(random: Random.new(ran))
+        view.scope(:people).apply(shuffled)
+      end
 
       get 'unapproved' do
         if cookies[:people].nil? 
