@@ -1,30 +1,32 @@
 ---
 template: slideshow
 ---
-<div class="profiles">
-	<ul class="profiles-ul slideshow">
-		<li class="profile" data-scope="people" data-prop="container">
-			<img data-prop="image" />
-			<div class="details">
-				<div class="details-wrapper">
-					<h3><span data-prop="first_name"></span> <span data-prop="last_name"></span></h3>
-					<ul class="categories">
-						<li>
-							<a data-prop="category_one_link" href="#"></a>
-						</li>
-						<li data-prop="category_spacer_one" class="slash"></li>
-						<li>
-							<a data-prop="category_two_link" href="#"></a>
-						</li>
-						<li  data-prop="category_spacer_two" class="slash"></li>
-						<li>
-							<a data-prop="category_three_link" href="#"></a>
-						</li>
-					</ul>
-					<p class="bio" data-prop="bio"></p>
-				</div>
+<section data-scope="people" >
+	<div class="profiles">
+		<ul class="profiles-ul slideshow">
+			<li class="profile" data-prop="container">
+				<img data-prop="image" />
+				<div class="details">
+					<div class="details-wrapper" style="text-align:left;">
+						<h3 style='font-weight:bold;'><span data-prop="first_name"></span> <span data-prop="last_name"></span></h3>
+						<ul class="categories">
+							<li>
+								<a data-prop="category_one_link" href="#"></a>
+							</li>
+							<li data-prop="category_spacer_one" class="slash"></li>
+							<li>
+								<a data-prop="category_two_link" href="#"></a>
+							</li>
+							<li  data-prop="category_spacer_two" class="slash"></li>
+							<li>
+								<a data-prop="category_three_link" href="#"></a>
+							</li>
+						</ul>
+						<p class="bio" data-prop="bio"></p>
+					</div>
 
-			</div>
-		</li>
-	</ul>
-</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</section>
