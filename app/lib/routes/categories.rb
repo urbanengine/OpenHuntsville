@@ -8,7 +8,7 @@ Pakyow::App.routes(:categories) do
         parent = Category.where("slug = ?",params[:parent]).first
         category = Category.where(:slug => params[:categories_id], :parent_id => parent.id).first
         subset = Array.new
-        all =  People.all
+        all =  People.where("approved = true").all
         all.each { |person|
           unless person.categories.nil?
             jsn = person.categories.to_s

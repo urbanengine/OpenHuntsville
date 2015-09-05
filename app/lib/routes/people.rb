@@ -66,6 +66,40 @@ Pakyow::App.routes(:people) do
         view.scope(:main_menu).apply(request)
       end
 
+      get 'search' do
+        needle = params[:s]
+        fffound = Array.new
+        unless needle.nil? || needle.length == 0
+          needles = needle.split
+          haystack = People.where("approved = true").all
+          needles.each { |this_needle|
+            haystack.each { |person|
+              unless fffound.include? person || person.first_name.nil? || person.first_name.length == 0
+                if person.first_name.downcase.include? this_needle.downcase
+                  fffound.push(person)
+                end
+              end
+              unless fffound.include? person || person.last_name.nil? || person.last_name.length == 0
+                if person.last_name.downcase.include? this_needle.downcase
+                  fffound.push(person)
+                end
+              end
+            }
+          }
+        end
+        pp fffound
+        view.scope(:people).apply(fffound)
+        all_cats = Category.order(:slug).all
+        parent_cats = []
+        all_cats.each { |item|
+          if item.parent_id.nil?
+            parent_cats.push(item)
+          end
+        }
+        parent_cats.unshift("everyone")
+        view.scope(:categories_menu).apply(parent_cats)
+      end
+
       get 'profile-created' do
         if cookies[:people].nil? 
           redirect '/people/new'
