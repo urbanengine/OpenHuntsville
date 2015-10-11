@@ -72,6 +72,17 @@ Pakyow::App.routes(:people) do
         unless needle.nil? || needle.length == 0
           needles = needle.split
           haystack = People.where("approved = true").all
+          cats = Array.new
+          all_cats = Category.all
+          needles.each { |this_needle| 
+            all_cats.each { |tmp_cat|
+              if tmp_cat.category.downcase.include? this_needle.downcase
+                unless cats.include? tmp_cat
+                  cats.push(tmp_cat)
+                end
+              end
+            }
+          }
           needles.each { |this_needle|
             haystack.each { |person|
               unless fffound.include? person || person.first_name.nil? || person.first_name.length == 0
@@ -82,6 +93,28 @@ Pakyow::App.routes(:people) do
               unless fffound.include? person || person.last_name.nil? || person.last_name.length == 0
                 if person.last_name.downcase.include? this_needle.downcase
                   fffound.push(person)
+                end
+              end
+              unless fffound.include? person || person.bio.nil? || person.bio.length == 0
+                if person.bio.downcase.include? this_needle.downcase
+                  fffound.push(person)
+                end
+              end
+              unless fffound.include? person
+                unless person.categories.nil?
+                  unless person.categories.length == 0
+                    jsn = person.categories.to_s
+                    array = JSON.parse(jsn)    
+                    array.each { |item|
+                      cats.each { |cat|
+                        pp item
+                        pp cat.id
+                        if item == cat.id.to_s
+                          fffound.push(person)
+                        end
+                      }
+                    }
+                  end
                 end
               end
             }
