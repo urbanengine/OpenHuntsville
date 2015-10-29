@@ -397,6 +397,7 @@ nav li a.selected, nav li a.selected:hover {
 	width: 28%;
 	text-align: left;
 	margin-right: 4%;
+	vertical-align:top;
 }
 .about .content-body li:last-child {
 	margin-right: 0;
