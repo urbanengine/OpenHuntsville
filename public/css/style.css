@@ -10,6 +10,7 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	background-color: #091B1B;
+	padding-top:0px !important;
 }
 a {
 	text-decoration: none;
@@ -318,6 +319,11 @@ nav li a.selected, nav li a.selected:hover {
 .pattern .overlay {
 	background: rgba(256, 256, 256, 0.3);
 }
+
+/*============ PEOPLE PAGE ===============
+=========================================*/
+
+
 
 /*============== ABOUT PAGE ===============
 =========================================*/

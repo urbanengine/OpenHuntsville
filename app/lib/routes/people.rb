@@ -43,6 +43,7 @@ Pakyow::App.routes(:people) do
         }
         shuffled = subset.shuffle(random: Random.new(ran))
         view.scope(:people).apply(shuffled)
+        view.scope(:head).apply(request)
       end
 
       get 'unapproved' do
@@ -212,6 +213,7 @@ Pakyow::App.routes(:people) do
           custom_url = custom_url + i.to_s
         end
       end
+      view.scope(:head).apply(request)
       people.custom_url = custom_url
       people.image_url = find_image_url(params[:people][:email])
       people.approved = false
@@ -254,6 +256,7 @@ action :list do
   }
   parent_cats.unshift("everyone")
   view.scope(:categories_menu).apply(parent_cats)
+  view.scope(:head).apply(request)
 end
 
 # GET /people/:id
@@ -266,6 +269,7 @@ action :show do
     redirect '/errors/404'
   end
  view.scope(:people).apply(people)
+ view.scope(:head).apply(request)
 end
 
 action :edit, :before => :edit_profile_check do
@@ -279,7 +283,7 @@ end
 
 action :update, :before => :edit_profile_check do
   people = People[params[:people_id]]
-
+  view.scope(:head).apply(request)
   # 1. When an unapproved user edits
   # 2. When admin turns off or on 
   first_edit_mail = false
