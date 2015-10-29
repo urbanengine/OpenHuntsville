@@ -1,18 +1,25 @@
 ---
 template: about_new
 ---
-<ul class="breadcrumbs">
-	<li>
-		<a href="/">Home</a>
-	</li>
-	<li>&nbsp;/&nbsp;</li>
-	<li>
-		<a href="/">About</a>
-	</li>
-	<li class="right">
-		<a href="/people/search">Search</a>
-	</li>
-</ul>
+<div class="bread-search">
+	<ul class="breadcrumbs">
+		<li>
+			<a href="/">Home</a>
+		</li>
+		<li>&nbsp;/&nbsp;</li>
+		<li>
+			<a href="/">About</a>
+		</li>
+	</ul>
+	<div class="searchform">
+		<form action="/people/search" method="get">
+			<label for="search-experts">Search:</label>
+			<input type="text" name="s" value="" id="search-experts" placeholder="Search by name, keyword, or skill">
+			<input type="submit" value="Search" style="display:inline;">
+		</form>
+	</div>
+</div>
+<div class="clear"></div>
 <div class="content-body">
 
 	<h2>What's in a name?</h2>

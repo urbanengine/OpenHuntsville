@@ -1,21 +1,28 @@
 <div class="profiles">
 	<div class="description" data-scope="categories">
-		<ul class="breadcrumbs">
-			<li>
-				<a href="/people">Everyone</a>
-			</li>
-			<li class="slash">&nbsp;/&nbsp;</li>
-			<li>
-				<a data-prop="category_one_link" href="#"></a>
-			</li>
-			<li  data-prop="category_spacer_two" id="breadcrumb_spacer_two" class="slash"></li>
-			<li>
-				<a data-prop="category_two_link" id="breadcrumb_two_link" href="#"></a>
-			</li>
-			<li class="right">
-				<a href="/people/search">Search</a>
-			</li>
-		</ul>
+		<div class="bread-search">
+			<ul class="breadcrumbs">
+				<li>
+					<a href="/people">Everyone</a>
+				</li>
+				<li class="slash">&nbsp;/&nbsp;</li>
+				<li>
+					<a data-prop="category_one_link" href="#"></a>
+				</li>
+				<li  data-prop="category_spacer_two" id="breadcrumb_spacer_two" class="slash"></li>
+				<li>
+					<a data-prop="category_two_link" id="breadcrumb_two_link" href="#"></a>
+				</li>
+			</ul>
+			<div class="searchform">
+				<form action="/people/search" method="get">
+					<label for="search-experts">Search:</label>
+					<input type="text" name="s" value="" id="search-experts" placeholder="Search by name, keyword, or skill">
+					<input type="submit" value="Search" style="display:inline;">
+				</form>
+			</div>
+		</div>
+		<div class="clear"></div>
 		<h2 data-prop="category" id="category_title">Everyone</h2>
 		<p data-prop="description" id="category_description">This page features all of the freelancers, moonlighters, and consultants on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search.</p>
 	</div>

@@ -69,12 +69,18 @@ Pakyow::App.routes(:people) do
       get 'search' do
         needle = params[:s]
         fffound = Array.new
+        search_terms = ""
         unless needle.nil? || needle.length == 0
           needles = needle.split
           haystack = People.where("approved = true").all
           cats = Array.new
           all_cats = Category.all
-          needles.each { |this_needle| 
+          needles.each_with_index { |this_needle,index| 
+            this_needle.gsub!(/\W+/, '')
+            unless index == 0
+              search_terms << " "
+            end
+            search_terms << this_needle
             all_cats.each { |tmp_cat|
               if tmp_cat.category.downcase.include? this_needle.downcase
                 unless cats.include? tmp_cat
@@ -100,27 +106,26 @@ Pakyow::App.routes(:people) do
                   fffound.push(person)
                 end
               end
-              unless fffound.include? person
-                unless person.categories.nil?
-                  unless person.categories.length == 0
-                    jsn = person.categories.to_s
-                    array = JSON.parse(jsn)    
-                    array.each { |item|
-                      cats.each { |cat|
-                        pp item
-                        pp cat.id
-                        if item == cat.id.to_s
+              
+              unless person.categories.nil?
+                unless person.categories.length == 0
+                  jsn = person.categories.to_s
+                  array = JSON.parse(jsn)    
+                  array.each { |item|
+                    cats.each { |cat|
+                      if item == cat.id.to_s
+                        unless fffound.include? person
                           fffound.push(person)
                         end
-                      }
+                      end
                     }
-                  end
+                  }
                 end
               end
+            
             }
           }
         end
-        pp fffound
         view.scope(:people).apply(fffound)
         all_cats = Category.order(:slug).all
         parent_cats = []
@@ -131,6 +136,12 @@ Pakyow::App.routes(:people) do
         }
         parent_cats.unshift("everyone")
         view.scope(:categories_menu).apply(parent_cats)
+        tmp = Search.new()
+        tmp.search_terms = search_terms
+        tmp.number_results = fffound.length.to_s
+        view.scope(:search_results).apply(tmp)
+        
+        view.scope(:head).apply(request)
       end
 
       get 'profile-created' do
