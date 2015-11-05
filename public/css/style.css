@@ -341,7 +341,6 @@ nav li a.selected, nav li a.selected:hover {
 	overflow: hidden;
   	margin: 0;
   	float: left;
-  	width: 50%;
   	line-height: 36px;
 }
 .breadcrumbs li {
@@ -523,9 +522,13 @@ nav li a.selected, nav li a.selected:hover {
 	background-color: #00E1FF;
 }
 .subcats {
-	margin: 7px 0 0;
+	display: none;
 }
-.subcats li {
+li.selected.active .subcats {
+	margin: 7px 0 0;
+	display: block;
+}
+li.selected.active .subcats li {
 	margin-left: 20px;
 }
 .tinynav { 
@@ -716,7 +719,7 @@ nav li a.selected, nav li a.selected:hover {
 .form {
 	margin: 0 auto;
 }
-.form h2 {
+.content-body h2 {
 	font-size: 2em;
 }
 .errors {
@@ -1029,6 +1032,9 @@ footer a:hover {
 	.about .content-body li:last-child {
 		margin: 0 auto;
 		margin-bottom: 0;
+	}
+	ul.subcats {
+		display: none;
 	}
 }
 @media only screen and (max-width: 700px) {
