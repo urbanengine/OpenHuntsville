@@ -41,19 +41,14 @@ Pakyow::App.bindings :people do
 
 		binding(:twitter_link) do
 			show = "hide"
-			link = "#"
 			title = ""
 			unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
 				show = "show"
-			    if bindable.twitter.include? "http"
-			    	link = bindable.twitter
-			    else
-			    	link = "http://www.twitter.com/" + bindable.twitter
-			    end
 			end
 			unless bindable.first_name.nil? || bindable.last_name.nil?
 				title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
 			end
+			link = "/clicks/people/" + bindable.custom_url + "/twitter"
 			{
 				:target => "_blank",
 				:href => link,
@@ -68,11 +63,7 @@ Pakyow::App.bindings :people do
 			title = "LinkedIn Profile"
 			unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
 				show = "show"
-				if bindable.linkedin.include? "http"
-					link = bindable.linkedin
-				else
-					link = 'http://www.linkedin.com/in/' + bindable.linkedin
-				end
+				link = "/clicks/people/" + bindable.custom_url + "/linkedin"
 			end
 			unless bindable.first_name.nil? || bindable.last_name.nil?
 				title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
@@ -92,7 +83,7 @@ Pakyow::App.bindings :people do
 				
 			else
 				show = "show"
-				link = bindable.url
+				link = "/clicks/people/" + bindable.custom_url + "/url"
 			end
 			{
 				:target => "_blank",

@@ -19,11 +19,23 @@ module SharedRoutes
     elsif people.id.to_i == request.path.split('/')[2].to_i
       redirect_no_access = false
     end
-    pp people
-    pp request.path.split('/')
     if redirect_no_access
   	  redirect "/errors/403"
   	end
+  end
+
+  fn :log_visit do
+    visitor_id = nil
+    unless cookies.nil? || cookies[:people].nil?
+      visitor = People[cookies[:people]]
+      unless visitor.nil?
+        visitor_id = visitor.id
+      end
+    end
+    pageview = Pageview.new()
+    pageview.visitor = visitor_id
+    pageview.page = request.path
+    pageview.save
   end
 
 end

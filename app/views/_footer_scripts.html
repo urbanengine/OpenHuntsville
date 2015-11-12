@@ -13,3 +13,17 @@ ga('create', 'UA-66145632-2', 'auto');
   ga('send', 'pageview');
 
 </script>
+<script type="text/javascript">
+  $(document).ready(function(){
+  console.log("document ready");
+  var uid = $('input#uid').val();
+  if (null != uid && uid.length > 0)
+  {
+    $.ajax({
+    url: '/pageviews/?uid='+uid,
+    type: 'post',
+    dataType: 'html'
+    });
+	}
+});
+</script>
