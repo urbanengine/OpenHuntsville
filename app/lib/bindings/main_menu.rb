@@ -108,5 +108,17 @@ Pakyow::App.bindings :main_menu do
   			:href => href
   		}
   	end	
+	binding(:uid) do
+		val = ""
+		unless cookies[:people].nil?
+			person = People[cookies[:people]]
+		    unless person.nil?
+		    	val = person.id
+			end
+		end
+	  	{
+	  		:value => val
+	  	}
+	end
   end
 end

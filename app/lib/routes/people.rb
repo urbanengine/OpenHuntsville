@@ -2,7 +2,7 @@ Pakyow::App.routes(:people) do
   
   include SharedRoutes
 
-  expand :restful, :people, '/people', :before => :route_head do
+  expand :restful, :people, '/people', :before => :route_head, :after => :log_visit do
 
     collection do
       patch 'upload' do

@@ -117,6 +117,15 @@ module Pakyow::Helpers
     end
   end
 
+  def get_first_person_from_people_id(id)
+    person = nil
+    people = get_people_from_people_id(id)
+    unless people.nil? || people[0].nil?
+      person = people[0]
+    end
+    person
+  end
+
   def unique_url(id,url)
     retval = true
     id = id.to_s
