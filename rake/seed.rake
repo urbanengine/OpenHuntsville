@@ -71,29 +71,36 @@ namespace :seed do
     CSV.foreach(CATS_PATH, { :headers => false, :skip_blanks => true }) do |row|
         if r == 1
             row.each_with_index { |item,index|
-                category = Category.new
-                category.category = item
-                down = item.downcase
-                with_dashes = down.gsub(/[^0-9a-z]/i, '-')
-                category.slug = with_dashes
-                category.url = "/categories/" + with_dashes
-                category.save
-                print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
-                $stdout.flush
+                has_em = Category.where("category = ?",item).all
+                if has_em.nil? || has_em.length == 0
+                    category = Category.new
+                    category.category = item
+                    down = item.downcase
+                    with_dashes = down.gsub(/[^0-9a-z]/i, '-')
+                    category.slug = with_dashes
+                    category.url = "/categories/" + with_dashes
+                    category.save
+                    print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
+                    $stdout.flush
+                end
             }
         else
             row.each_with_index { |item,index|
                 unless item.nil?
-                    category = Category.new
-                    category.category = item
-                    category.parent_id = index + 1
-                    down = item.downcase
-                    with_dashes = down.gsub(/[^0-9a-z]/i, '-')
-                    category.slug = with_dashes
-                    category.url = Category[category.parent_id].url + "/" + with_dashes
-                    category.save
-                    print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
-                    $stdout.flush
+
+                    has_em = Category.where("category = ?",item).all
+                    if has_em.nil? || has_em.length == 0
+                        category = Category.new
+                        category.category = item
+                        category.parent_id = index + 1
+                        down = item.downcase
+                        with_dashes = down.gsub(/[^0-9a-z]/i, '-')
+                        category.slug = with_dashes
+                        category.url = Category[category.parent_id].url + "/" + with_dashes
+                        category.save
+                        print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
+                        $stdout.flush
+                    end
                 end
             }
         end
