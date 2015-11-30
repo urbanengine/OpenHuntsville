@@ -1,0 +1,84 @@
+---
+template: about
+---
+<h1>Unapproved</h1>
+<ul>
+	<li class="profile" data-scope="people" data-prop="container">
+		<img data-prop="image" style="width:30px; height:30px;" />
+		<div class="details">
+
+			<div style="float:right;">
+				<p style="margin:0px;">
+					<a class="approve" href="#" data-prop="approve_profile_url" style="   display: block;
+    background-color: #8ae6a0;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+    padding: 10px 0;
+    width: 100%;
+    border: 0;
+    outline: 0; min-width:150px;">Approve</a>
+				</p>
+				<p style="margin:0px;">
+					<a class="spam" href="#" data-prop="spam_profile_url" style="    display: block;
+    background-color: #d00;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+    padding: 10px 0;
+    width: 100%;
+    border: 0;
+    outline: 0; min-width:150px;">Spam</a>
+				</p>
+			</div>
+			<div class="details-wrapper">
+				<a data-prop="profile_link"></a> - Member #<span data-prop="member_number"></span> - 
+						<a data-prop="category_one_link" href="#"></a>
+						<a data-prop="category_two_link" href="#"></a>
+						<a data-prop="category_three_link" href="#"></a>
+				<span class="bio" data-prop="bio"></span></p>
+				<p>
+					<a href="#" data-prop="url_link"><span>Website</span></a>
+					<a href="#" data-prop="linkedin_link"><span>LinkedIn</span></a>
+					<a href="#" data-prop="twitter_link"><span>Twitter</span></a>
+				</p>
+			</div>
+		</div>
+	</li>
+</ul>
+<script type="text/javascript">
+	function doTheThing(a)
+	{
+		var returnValue = true;
+	    return $.ajax({
+	    url: a,
+	    type: 'get',
+	    dataType: 'html',
+	    data: $('#people-form').serialize(),
+	    success: function(data) {
+	      return (data == 'success');
+	      }
+	    });
+
+  }
+	$(document).ready(function(){
+		$('.approve').click(function(e){
+			e.preventDefault();
+			var here = $(this).attr('href');
+			if (doTheThing(here))
+			{
+				$(this).parent().parent().parent().parent().hide();
+			}
+		});
+	});
+	$(document).ready(function(){
+		$('.spam').click(function(e){
+			e.preventDefault();
+			var here = $(this).attr('href');
+			if (doTheThing(here))
+			{
+				$(this).parent().parent().parent().parent().hide();	
+			}
+		});
+	});
+</script>

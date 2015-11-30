@@ -24,6 +24,20 @@ module SharedRoutes
   	end
   end
 
+  fn :is_admin_check do
+    people = People[cookies[:people]]
+    if people.nil?
+      redirect "/errors/401"
+      end
+    redirect_no_access = true
+    if people.admin
+      redirect_no_access = false
+    end
+    if redirect_no_access
+      redirect "/errors/403"
+    end
+  end
+
   fn :log_visit do
     visitor_id = nil
     unless cookies.nil? || cookies[:people].nil?

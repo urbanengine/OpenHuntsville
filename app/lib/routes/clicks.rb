@@ -20,6 +20,7 @@ Pakyow::App.routes(:clicks) do
             click.column = link
             click.visitor = visitor_id
             click.profile = person.id
+            click.url = request.referer
             click.save
           end
 
@@ -48,8 +49,6 @@ Pakyow::App.routes(:clicks) do
             redirect redirect_url
           end
         end
-        
-        # pp request
       end # '/clicks/people/:click'
 
       # get 'title_and_description_from_slug' do

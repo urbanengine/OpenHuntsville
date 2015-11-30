@@ -5,6 +5,7 @@ Pakyow::App.routes(:people) do
   expand :restful, :people, '/people', :before => :route_head, :after => :log_visit do
 
     collection do
+
       patch 'upload' do
         if request.xhr?
           filename = params['files'].first[:filename]
@@ -189,6 +190,34 @@ Pakyow::App.routes(:people) do
         end
         send success
       end
+
+      get 'spam/:id', :before => :is_admin_check do
+        success = 'failure'
+        spammer = People[params[:id]]
+        spammer.spam = true
+        spammer.save
+        if request.xhr?
+          success = 'success'
+        else
+          redirect request.referer
+        end
+        send success
+      end
+
+      get 'approve/:id', :before => :is_admin_check do
+        success = 'failure'
+        approve_me = People[params[:id]]
+        approve_me.approved = true
+        approve_me.save
+        if request.xhr?
+          success = 'success'
+        else
+          redirect request.referer
+        end
+        send success
+      end
+
+
     end
     action :new do
       view.scope(:people).with do

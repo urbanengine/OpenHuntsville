@@ -20,6 +20,22 @@ Pakyow::App.bindings :people do
 				:value => bindable.id
 			}
 		end
+		binding(:member_number) do
+			{
+				:content => bindable.id,
+				:class => bindable.id
+			}
+		end
+		binding(:approve_profile_url) do
+			{
+				:href => '/people/approve/' + bindable.id.to_s
+			}
+		end
+		binding(:spam_profile_url) do
+			{
+				:href => '/people/spam/' + bindable.id.to_s
+			}
+		end
 
 		binding(:first_name) do
 			{
