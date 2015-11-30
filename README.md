@@ -60,4 +60,3 @@ The following resources might be handy:
 - [Pakyow Docs](http://pakyow.com/docs)
 - [Pakyow Code](http://github.com/pakyow/pakyow)
 - [Tech256 Slack (team chat)](http://www.tech256.com)
-
