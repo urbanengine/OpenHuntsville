@@ -256,7 +256,9 @@ Pakyow::App.routes(:people) do
           redirect '/'
         end
       else
-        presenter.path = '/people/new'
+        try_again = '/people/new'
+        pp try_again
+        presenter.path = try_again
         view.scope(:people).with do |ctx|
           ctx.bind(people)
 
