@@ -1,7 +1,7 @@
 Pakyow::App.routes(:categories) do
   include SharedRoutes
 
-  expand :restful, :categories, '/categories', :after => :log_visit do
+  expand :restful, :categories, '/categories' do
 
     collection do
       get '/:parent/:categories_id' do

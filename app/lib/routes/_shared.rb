@@ -39,17 +39,17 @@ module SharedRoutes
   end
 
   fn :log_visit do
-    visitor_id = nil
-    unless cookies.nil? || cookies[:people].nil?
-      visitor = People[cookies[:people]]
-      unless visitor.nil?
-        visitor_id = visitor.id
-      end
-    end
-    pageview = Pageview.new()
-    pageview.visitor = visitor_id
-    pageview.page = request.path
-    pageview.save
+    # visitor_id = nil
+    # unless cookies.nil? || cookies[:people].nil?
+    #   visitor = People[cookies[:people]]
+    #   unless visitor.nil?
+    #     visitor_id = visitor.id
+    #   end
+    # end
+    # pageview = Pageview.new()
+    # pageview.visitor = visitor_id
+    # pageview.page = request.path
+    # pageview.save
   end
 
 end

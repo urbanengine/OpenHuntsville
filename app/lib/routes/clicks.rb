@@ -5,24 +5,24 @@ Pakyow::App.routes(:clicks) do
 
     collection do
       get '/people/:person/:link' do
-        visitor_id = nil
-        visitor = People[cookies[:people]]
-        unless visitor.nil?
-          visitor_id = visitor.id
-        end
+        # visitor_id = nil
+        # visitor = People[cookies[:people]]
+        # unless visitor.nil?
+        #   visitor_id = visitor.id
+        # end
         
         link = params[:link]
         person = get_first_person_from_people_id(params[:person])
         unless person.nil? || link.nil?
 
-          if visitor.nil? || !visitor.admin
-            click = Peopleclick.new()
-            click.column = link
-            click.visitor = visitor_id
-            click.profile = person.id
-            click.url = request.referer
-            click.save
-          end
+          # if visitor.nil? || !visitor.admin
+          #   click = Peopleclick.new()
+          #   click.column = link
+          #   click.visitor = visitor_id
+          #   click.profile = person.id
+          #   click.url = request.referer
+          #   click.save
+          # end
 
           redirect_url = nil
           case link
