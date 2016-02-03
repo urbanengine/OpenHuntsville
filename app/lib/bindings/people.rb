@@ -56,55 +56,78 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:twitter_link) do
-			show = "hide"
-			title = ""
-			unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
-				show = "show"
+			show = "show"
+			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+			link = "/login"
+			content = "Log in to view"
+			unless session[:people].nil?
+				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
+					show = "show"
+				end
+				unless bindable.first_name.nil? || bindable.last_name.nil?
+					title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
+				end
+				link = "/clicks/people/" + bindable.custom_url + "/twitter"
+				content = "Twitter"
 			end
-			unless bindable.first_name.nil? || bindable.last_name.nil?
-				title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
-			end
-			link = "/clicks/people/" + bindable.custom_url + "/twitter"
 			{
 				:target => "_blank",
 				:href => link,
 				:class => show,
-				:title => title
+				:title => title,
+				:content => content
 			}
 		end
 
 		binding(:linkedin_link) do
-			show = "hide"
-			link = "#"
-			title = "LinkedIn Profile"
-			unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
-				show = "show"
-				link = "/clicks/people/" + bindable.custom_url + "/linkedin"
-			end
-			unless bindable.first_name.nil? || bindable.last_name.nil?
-				title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
+			show = "show"
+			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+			link = "/login"
+			content = "Log in to view"
+			
+			unless session[:people].nil?
+				content = "LinkedIn"
+				unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
+					show = "show"
+					link = "/clicks/people/" + bindable.custom_url + "/linkedin"
+				end
+				unless bindable.first_name.nil? || bindable.last_name.nil?
+					title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
+				end
 			end
 			{
 				:title => title,
 				:href => link,
 				:class => show,
-				:target => "_blank"
+				:target => "_blank",
+				:content => content
 			}
 		end
 
 		binding(:url_link) do
-			show = "hide"
-			link = "#"
-			if bindable.nil? || bindable.url.nil? || bindable.url.length == 0
-				
-			else
-				show = "show"
-				link = "/clicks/people/" + bindable.custom_url + "/url"
+			show = "show"
+			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+			link = "/login"
+			content = "Log in to view"
+			unless session[:people].nil?
+				content = "Website"
+				if bindable.nil? || bindable.url.nil? || bindable.url.length == 0
+					
+				else
+					show = "show"
+					link = "/clicks/people/" + bindable.custom_url + "/url"
+				end
+
+				unless bindable.first_name.nil? || bindable.last_name.nil?
+					title = bindable.first_name + " " + bindable.last_name + "'s URL"
+				end
 			end
 			{
 				:target => "_blank",
 				:href => link,
-				:class => show
+				:class => show,
+				:title => title,
+				:content => content
 			}
 		end
 
@@ -376,6 +399,7 @@ Pakyow::App.bindings :people do
 				:class => classes
 			}
 		end
+
 
     end
 end

@@ -1,5 +1,5 @@
 Pakyow::App.routes(:people) do
-  
+
   include SharedRoutes
 
   expand :restful, :people, '/people', :before => :route_head do
@@ -29,7 +29,6 @@ Pakyow::App.routes(:people) do
           send response_data.to_json, 'application/json'
         else
           puts "fail"
-          pp request
         end
       end
 
@@ -48,7 +47,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'unapproved' do
-        if cookies[:people].nil? 
+        if cookies[:people].nil?
           redirect '/errors/401'
         else
           person = People[cookies[:people]]
@@ -77,7 +76,7 @@ Pakyow::App.routes(:people) do
           haystack = People.where("approved = true").all
           cats = Array.new
           all_cats = Category.all
-          needles.each_with_index { |this_needle,index| 
+          needles.each_with_index { |this_needle,index|
             this_needle.gsub!(/\W+/, '')
             unless index == 0
               search_terms << " "
@@ -108,11 +107,11 @@ Pakyow::App.routes(:people) do
                   fffound.push(person)
                 end
               end
-              
+
               unless person.categories.nil?
                 unless person.categories.length == 0
                   jsn = person.categories.to_s
-                  array = JSON.parse(jsn)    
+                  array = JSON.parse(jsn)
                   array.each { |item|
                     cats.each { |cat|
                       if item == cat.id.to_s
@@ -124,7 +123,7 @@ Pakyow::App.routes(:people) do
                   }
                 end
               end
-            
+
             }
           }
         end
@@ -142,12 +141,12 @@ Pakyow::App.routes(:people) do
         tmp.search_terms = search_terms
         tmp.number_results = fffound.length.to_s
         view.scope(:search_results).apply(tmp)
-        
+
         view.scope(:head).apply(request)
       end
 
       get 'profile-created' do
-        if cookies[:people].nil? 
+        if cookies[:people].nil?
           redirect '/people/new'
         else
           view.scope(:people).bind(People[cookies[:people]])
@@ -157,7 +156,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'create-profile' do
-        if cookies[:people].nil? 
+        if cookies[:people].nil?
           redirect '/people/new'
         else
           view.scope(:people).bind(People[cookies[:people]])
@@ -165,9 +164,9 @@ Pakyow::App.routes(:people) do
           view.scope(:main_menu).apply(request)
         end
       end
-      
+
       get 'account-registered' do
-        if cookies[:people].nil? 
+        if cookies[:people].nil?
           redirect '/people/new'
         else
           view.scope(:head).apply(request)
@@ -249,7 +248,7 @@ Pakyow::App.routes(:people) do
       # TODO: If valid, save; if invalid, redirect
       if people.valid?
         people.save
-        # TODO 
+        # TODO
         if create_session(c_params)
           redirect '/people/create-profile'
         else
@@ -304,7 +303,7 @@ action :show do
 end
 
 action :edit, :before => :edit_profile_check do
-  
+
   people = get_people_from_people_id(params[:people_id])
   unless people[0].nil?
     view.scope(:people)[0].bind(people[0])
@@ -316,7 +315,7 @@ action :update, :before => :edit_profile_check do
   people = People[params[:people_id]]
   view.scope(:head).apply(request)
   # 1. When an unapproved user edits
-  # 2. When admin turns off or on 
+  # 2. When admin turns off or on
   first_edit_mail = false
   approve_mail = false
   suspend_mail = false
@@ -392,7 +391,7 @@ action :update, :before => :edit_profile_check do
 
   people.other_info = params[:people][:other_info]
   pp people.other_info
-  unless params[:people][:image_url].nil? || params[:people][:image_url].length == 0 
+  unless params[:people][:image_url].nil? || params[:people][:image_url].length == 0
     people.image_url = params[:people][:image_url]
   end
   pp people.image_url
@@ -404,7 +403,9 @@ action :update, :before => :edit_profile_check do
   people.categories = Sequel::Postgres::JSONHash.new(category_array)
   pp people.categories
   if unique_url(people.id,params[:people][:custom_url])
-    people.custom_url = params[:people][:custom_url].downcase
+    unless slug_contains_invalid(params[:people][:custom_url].downcase)
+      people.custom_url = params[:people][:custom_url].downcase
+    end
     # people.custom_url = params[:people][:custom_url].downcase.gsub(/[^0-9a-z]/i, '-')
   end
   pp people.custom_url
@@ -461,7 +462,7 @@ puts "ABOUT TO SAVE"
     people.save
     puts "SAVED"
   if people.valid?
-    # Save 
+    # Save
   elsif names_nil
     pp "PEOPLE ERRORS"
     pp people.errors
@@ -505,8 +506,8 @@ puts "ABOUT TO SAVE"
     <li>:custom_url => " + printme(people.custom_url) + ",</li>
     <li>:admin => " + printme(people.admin) + ",</li>
     <li>:bio => " + printme(people.bio) + ",</li>
-    <li>:approved => " + printme(people.approved) + "</li></ul>"    
-    
+    <li>:approved => " + printme(people.approved) + "</li></ul>"
+
     person = ""
     unless people.first_name.nil?
       person = people.first_name + " "
@@ -524,7 +525,7 @@ puts "ABOUT TO SAVE"
   elsif approve_mail
     send_email_template(people,:account_approval)
   end
-  redirect '/people/'
+  redirect '/people/' + people.custom_url + "/edit"
 end
 
 end

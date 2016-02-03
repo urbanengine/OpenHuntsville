@@ -30,7 +30,7 @@ module Pakyow::Helpers
     log_debug("/app/lib/helpers.rb :: getVal :: ", bindable.to_s)
     log_debug("/app/lib/helpers.rb :: getVal :: ", pos.to_s)
     retVal = Array.new(3)
-    
+
     unless bindable.nil?
       if bindable.include? ","
         retVal = bindable.split(",")
@@ -47,15 +47,15 @@ module Pakyow::Helpers
 
   def log_level()
     level = 0
-    if ENV['LOG_LEVEL'] == "TRACE" 
+    if ENV['LOG_LEVEL'] == "TRACE"
       level = 1
     end
     if ENV['LOG_LEVEL'] == "DEBUG"
-      level = 2 
+      level = 2
     end
-    if ENV['LOG_LEVEL'] == "INFO" 
+    if ENV['LOG_LEVEL'] == "INFO"
       level = 3
-    end 
+    end
     if ENV['LOG_LEVEL'] == "WARN"
       level = 4
     end
@@ -149,7 +149,7 @@ module Pakyow::Helpers
       #If API response successful create record; else output error to view
       return result['status'] == 200
   end
-  
+
   def find_image_url(email)
 
   # # def get_gravatar(email)
@@ -172,7 +172,7 @@ module Pakyow::Helpers
   #     # https://www.fullcontact.com/developer/try-fullcontact/
 
   #     url = [base_url, email, conj_url, api_key].join
-  
+
   #     #Calling API to get JSON response for parsing
   #     response = HTTParty.get(url)
   #     result = JSON.parse(response.body)
@@ -374,16 +374,32 @@ module Pakyow::Helpers
     opts
   end
 
-  def resize_and_crop(image, size)         
-    if image.width < image.height   
-      remove = ((image.height - image.width)/2).round 
-      image.shave("0x#{remove}") 
-    elsif image.width > image.height 
+  def resize_and_crop(image, size)
+    if image.width < image.height
+      remove = ((image.height - image.width)/2).round
+      image.shave("0x#{remove}")
+    elsif image.width > image.height
       remove = ((image.width - image.height)/2).round
       image.shave("#{remove}x0")
     end
     image.resize("#{size}x#{size}")
     return image
   end
-  
+
+  def slug_contains_invalid(string)
+    retval = false
+    if string.include? " "
+      retval = true
+    elsif string.include? "http"
+      retval = true
+    elsif string.include? ":"
+      retval = true
+    elsif string.include? "/"
+      retval = true
+    elsif string.include? "\\"
+      retval = true
+    end
+
+  end
+
 end # module Pakyow::Helpers
