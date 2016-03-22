@@ -72,7 +72,7 @@ Pakyow::App.routes do
     }
     pp subset
     view.scope(:people).apply(unapproved)
-    view.scope(:head).apply(request)
-    view.scope(:main_menu).apply(request)
+    # view.scope(:head).apply(request)
+    # view.scope(:main_menu).apply(request)
   end
 end
