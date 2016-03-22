@@ -346,7 +346,7 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:profile_link) do
-			pp bindable
+
 			first_name = ""
 			last_name = ""
 			unless bindable.first_name.nil?
@@ -355,6 +355,7 @@ Pakyow::App.bindings :people do
 			unless bindable.last_name.nil?
 				last_name = bindable.last_name
 			end
+			pp first_name + " " + last_name
 			{
 				:href => "/people/" + bindable.custom_url,
 				:content => first_name + " " + last_name
