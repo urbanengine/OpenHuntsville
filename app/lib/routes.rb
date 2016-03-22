@@ -59,16 +59,14 @@ Pakyow::App.routes do
   get :dashboard, '/dashboard', :before => :is_admin_check do
     # NOAH
     unapproved = People.where(:approved=>false).all
-    pp unapproved
+    
     subset = Array.new
     unapproved.each{|person|
       unless person.spam
         subset.push(person)
-        pp " [+] " + person
-      else
-        pp " [-] " + person
       end
     }
+    pp subset
     view.scope(:people).apply(subset)
     view.scope(:head).apply(request)
     view.scope(:main_menu).apply(request)
