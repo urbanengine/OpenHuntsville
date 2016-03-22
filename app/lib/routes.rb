@@ -75,7 +75,8 @@ Pakyow::App.routes do
       end
     }
     # pp subset
-    view.scope(:people).apply(subset)
+    
+    view.scope(:people).apply(all_people)
     # view.scope(:head).apply(request)
     # view.scope(:main_menu).apply(request)
   end
