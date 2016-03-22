@@ -61,13 +61,17 @@ Pakyow::App.routes do
     all_people = People.all
     #
     subset = Array.new
-    all_people.each{|person|
-      unless person.spam && person.approved
-        subset.push(person)
-        pp "ADD " + person.first_name + " " + person.last_name
-      else
+    all_people.each{ |person|
+      pp person
+      unless person.approved
 
-        pp "SPAM " + person.first_name + " " + person.last_name
+        unless person.spam.nil? || person.spam
+          subset.push(person)
+          pp "ADD " + person.first_name + " " + person.last_name
+        else
+
+          pp "SPAM " + person.first_name + " " + person.last_name
+        end
       end
     }
     # pp subset
