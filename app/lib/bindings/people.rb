@@ -84,7 +84,7 @@ Pakyow::App.bindings :people do
 			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
 			link = "/login"
 			content = "Log in to view"
-			
+
 			unless session[:people].nil?
 				content = "LinkedIn"
 				unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
@@ -112,7 +112,7 @@ Pakyow::App.bindings :people do
 			unless session[:people].nil?
 				content = "Website"
 				if bindable.nil? || bindable.url.nil? || bindable.url.length == 0
-					
+
 				else
 					show = "show"
 					link = "/clicks/people/" + bindable.custom_url + "/url"
@@ -185,7 +185,7 @@ Pakyow::App.bindings :people do
 			content = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)    
+				array = JSON.parse(jsn)
 
 				unless array[0].nil? || array[0].length == 0
 				    category = Category[array[0]]
@@ -205,9 +205,9 @@ Pakyow::App.bindings :people do
 			content = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)  
+				array = JSON.parse(jsn)
 				unless array[1].nil? || array[1].length == 0
-					
+
 				    category = Category[array[1]]
 					href = "#"
 					content = category.category
@@ -225,9 +225,9 @@ Pakyow::App.bindings :people do
 			content = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn) 
+				array = JSON.parse(jsn)
 
-				unless array[2].nil? || array[2].length == 0   
+				unless array[2].nil? || array[2].length == 0
 				   category = Category[array[2]]
 					href = "#"
 					content = category.category
@@ -252,11 +252,11 @@ Pakyow::App.bindings :people do
 			cat = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)    
+				array = JSON.parse(jsn)
 			   if array.length > 1 && array[1].length > 1
 			   	cat =  "&nbsp;/&nbsp;"
 			   end
-			end 
+			end
 			{
 				:content => cat
 			}
@@ -270,11 +270,11 @@ Pakyow::App.bindings :people do
 			cat = ""
 			unless bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)    
+				array = JSON.parse(jsn)
 			   if array.length > 2 && array[2].length > 1
 			   	cat =  "&nbsp;/&nbsp;"
 			   end
-			end 
+			end
 			{
 				:content => cat
 			}
@@ -346,6 +346,7 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:profile_link) do
+			pp bindable
 			first_name = ""
 			last_name = ""
 			unless bindable.first_name.nil?
@@ -385,11 +386,11 @@ Pakyow::App.bindings :people do
 				array = JSON.parse(jsn)
 				unless array[0].nil? || array[0].length == 0
 					classes = classes + " " + get_css_classes_for_category(array[0])
-				end   
+				end
 
 				unless array[1].nil? || array[1].length == 0
 					classes = classes + " " + get_css_classes_for_category(array[1])
-				end   
+				end
 
 				unless array[2].nil? || array[2].length == 0
 					classes = classes + " " + get_css_classes_for_category(array[2])
