@@ -58,20 +58,20 @@ Pakyow::App.routes do
 
   get :dashboard, '/dashboard', :before => :is_admin_check do
     # NOAH
-    # unapproved = People.where(:approved=>false).all
-    # 
-    # subset = Array.new
-    # unapproved.each{|person|
-    #   unless person.spam
-    #     subset.push(person)
-    #     pp "ADD " + person.first_name + " " + person.last_name
-    #   else
+    all_people = People.all
     #
-    #     pp "SPAM " + person.first_name + " " + person.last_name
-    #   end
-    # }
+    subset = Array.new
+    all_people.each{|person|
+      unless person.spam && person.approved
+        subset.push(person)
+        pp "ADD " + person.first_name + " " + person.last_name
+      else
+
+        pp "SPAM " + person.first_name + " " + person.last_name
+      end
+    }
     # pp subset
-    view.scope(:people).apply(People.all)
+    view.scope(:people).apply(subset)
     # view.scope(:head).apply(request)
     # view.scope(:main_menu).apply(request)
   end
