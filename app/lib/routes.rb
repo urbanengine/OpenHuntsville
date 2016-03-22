@@ -65,13 +65,13 @@ Pakyow::App.routes do
       pp person
       unless person.approved
 
-        unless person.spam.nil? || person.spam
+        # unless person.spam.nil? || person.spam
           subset.push(person)
-          pp "ADD " + person.first_name + " " + person.last_name
-        else
-
-          pp "SPAM " + person.first_name + " " + person.last_name
-        end
+        #   pp "ADD " + person.first_name + " " + person.last_name
+        # else
+        #
+        #   pp "SPAM " + person.first_name + " " + person.last_name
+        # end
       end
     }
     # pp subset
