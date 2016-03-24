@@ -106,7 +106,7 @@ Pakyow::App.bindings :people do
 
 		binding(:url_link) do
 			show = "show"
-			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+			title = "Log in to view " + bindable.first_name + "'s Website"
 			link = "/login"
 			content = "Log in to view"
 			unless session[:people].nil?
@@ -115,7 +115,7 @@ Pakyow::App.bindings :people do
 
 				else
 					show = "show"
-					link = "/clicks/people/" + bindable.custom_url + "/url"
+					link = "/clicks/people/" + bindable.url + "/url"
 				end
 
 				unless bindable.first_name.nil? || bindable.last_name.nil?
