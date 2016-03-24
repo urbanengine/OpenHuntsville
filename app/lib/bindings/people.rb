@@ -56,10 +56,16 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:twitter_link) do
-			show = "show"
-			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-			link = "/login"
-			content = "Log in to view"
+
+			show = "hide"
+			title = ""
+			link = ""
+			content = ""
+			if session[:people].nil?
+				show = "show"
+				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+				link = "/login"
+				content = "Log in to view"
 			unless session[:people].nil?
 				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
 					show = "show"
@@ -80,12 +86,18 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:linkedin_link) do
-			show = "show"
-			title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-			link = "/login"
-			content = "Log in to view"
 
-			unless session[:people].nil?
+			show = "hide"
+			title = ""
+			link = ""
+			content = ""
+			if session[:people].nil?
+				show = "show"
+				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+				link = "/login"
+				content = "Log in to view"
+
+			else
 				content = "LinkedIn"
 				unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
 					show = "show"
@@ -105,11 +117,16 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:url_link) do
-			show = "show"
-			title = "Log in to view " + bindable.first_name + "'s Website"
-			link = "/login"
-			content = "Log in to view"
-			unless session[:people].nil?
+			show = "hide"
+			title = ""
+			link = ""
+			content = ""
+			if session[:people].nil?
+					show = "show"
+					title = "Log in to view " + bindable.first_name + "'s Website"
+					link = "/login"
+					content = "Log in to view"
+			else
 				content = "Website"
 				if bindable.nil? || bindable.url.nil? || bindable.url.length == 0
 
