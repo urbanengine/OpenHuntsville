@@ -183,15 +183,17 @@ Pakyow::App.bindings :people do
 		binding (:category_one_link) do
 			href = ""
 			content = ""
-			unless bindable.categories.nil?
+			unless bindable.nil? || bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)
+				unless jsn.nil? || jsn.length == 0
+					array = JSON.parse(jsn)
 
-				unless array[0].nil? || array[0].length == 0
-				    category = Category[array[0]]
-					href = "#"
-					content = category.category
-					href = category.url
+					unless array[0].nil? || array[0].length == 0
+					    category = Category[array[0]]
+						href = "#"
+						content = category.category
+						href = category.url
+					end
 				end
 			end
 			{
@@ -203,15 +205,17 @@ Pakyow::App.bindings :people do
 		binding (:category_two_link) do
 			href = ""
 			content = ""
-			unless bindable.categories.nil?
+			unless bindable.nil? || bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)
-				unless array[1].nil? || array[1].length == 0
+				unless jsn.nil? || jsn.length == 0
+					array = JSON.parse(jsn)
+					unless array[1].nil? || array[1].length == 0
 
-				    category = Category[array[1]]
-					href = "#"
-					content = category.category
-					href = category.url
+					    category = Category[array[1]]
+						href = "#"
+						content = category.category
+						href = category.url
+					end
 				end
 			end
 			{
@@ -223,15 +227,17 @@ Pakyow::App.bindings :people do
 		binding (:category_three_link) do
 			href = ""
 			content = ""
-			unless bindable.categories.nil?
+			unless bindable.nil? || bindable.categories.nil?
 				jsn = bindable.categories.to_s
-				array = JSON.parse(jsn)
+				unless jsn.nil? || jsn.length == 0
+					array = JSON.parse(jsn)
 
-				unless array[2].nil? || array[2].length == 0
-				   category = Category[array[2]]
-					href = "#"
-					content = category.category
-					href = category.url
+					unless array[2].nil? || array[2].length == 0
+					   category = Category[array[2]]
+						href = "#"
+						content = category.category
+						href = category.url
+					end
 				end
 			end
 			{
@@ -355,7 +361,6 @@ Pakyow::App.bindings :people do
 			unless bindable.last_name.nil?
 				last_name = bindable.last_name
 			end
-			pp first_name + " " + last_name
 			{
 				:href => "/people/" + bindable.custom_url,
 				:content => first_name + " " + last_name
@@ -400,6 +405,9 @@ Pakyow::App.bindings :people do
 			{
 				:class => classes
 			}
+		end
+		binding(:bio) do
+			bindable.bio
 		end
 
 
