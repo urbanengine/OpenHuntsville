@@ -73,7 +73,7 @@ Pakyow::App.routes do
         end
 
         # unless person.spam.nil? || person.spam
-          subset.push(person)
+          # subset.push(person)
         #   pp "ADD " + person.first_name + " " + person.last_name
         # else
         #
@@ -84,7 +84,7 @@ Pakyow::App.routes do
     # pp subset
 
     view.scope(:people).apply(subset)
-    # view.scope(:head).apply(request)
-    # view.scope(:main_menu).apply(request)
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
 end
