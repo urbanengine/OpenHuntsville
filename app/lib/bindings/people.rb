@@ -66,7 +66,7 @@ Pakyow::App.bindings :people do
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
 				link = "/login"
 				content = "Log in to view"
-			unless session[:people].nil?
+			else
 				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
 					show = "show"
 				end
