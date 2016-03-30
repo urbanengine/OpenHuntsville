@@ -347,7 +347,7 @@ Pakyow::App.bindings :people do
 							'Jeff-Hammock',
 							'Jeff-Irons',
 							'Jeremiah-Arsenault',
-							'Joe-MacKenzie',
+							'Joe-MacKen	zie',
 							'Krista-Campbell',
 							'Kyle-Newman',
 							'Laurie-Heard',
@@ -365,13 +365,18 @@ Pakyow::App.bindings :people do
 							'Tarra-Anzalone',
 							'Vicki-Morris'
 						]
-						if manual_uploads.include? name
+						if manual_uploads.include?(name)
 							src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + name + ".jpg"
 						else
 							src = "/img/profile-backup.png"
 						end
+						puts 'ELSE bindable.image_url.nil? || bindable.image_url.length == 0'
 					end
+				else
+					puts 'ELSE bindable.first_name.nil? || bindable.last_name.nil?'
 				end
+			else
+				puts 'bindable NIL'
 			end
 			{
 				:src => bindable.image_url,
