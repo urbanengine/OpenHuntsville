@@ -383,7 +383,7 @@ Pakyow::App.bindings :people do
 			end
 			pp src
 			{
-				:src => bindable.image_url,
+				:src => src,
 				:title =>  name,
 				:alt => name
 			}
