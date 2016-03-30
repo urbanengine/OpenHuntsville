@@ -308,7 +308,7 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:image) do
-
+			puts 'binding(:image) do'
 
 			src = ""
 			name = ""
@@ -319,7 +319,6 @@ Pakyow::App.bindings :people do
 					unless bindable.image_url.nil? || bindable.image_url.length == 0
 						src = bindable.image_url
 					else
-						name = bindable.first_name + "-" + bindable.last_name
 						manual_uploads = [
 							'Abbie-Cataldo',
 							'Adam-Whipple',
