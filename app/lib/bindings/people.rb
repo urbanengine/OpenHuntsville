@@ -316,10 +316,60 @@ Pakyow::App.bindings :people do
 				unless bindable.first_name.nil? || bindable.last_name.nil?
 					name = bindable.first_name + " " + bindable.last_name
 
-					unless bindable.image_url.nil?
+					unless bindable.image_url.nil? || bindable.image_url.length == 0
 						src = bindable.image_url
 					else
-						src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
+						name = bindable.first_name + "-" + bindable.last_name
+						manual_uploads = [
+							'Abbie-Cataldo',
+							'Adam-Whipple',
+							'Alex-Moore',
+							'Andrew-Hall',
+							'Angie-Holt',
+							'Ben-Jarrell',
+							'Brad-Garland',
+							'Candy-Ballenger',
+							'Chris-Beaman',
+							'Clay-Thomas',
+							'Collier-Ward',
+							'Dale-Gipson',
+							'David-Cochran',
+							'Doug-Martinson',
+							'Drew-Chapman',
+							'Elissa-Cain',
+							'Eric-Gregorian',
+							'Eric-John',
+							'Everett-Brooks',
+							'George-Kobler',
+							'George-Smith',
+							'Hall-Bryant',
+							'Jacob-Birmingham',
+							'Jeff-Hammock',
+							'Jeff-Irons',
+							'Jeremiah-Arsenault',
+							'Joe-MacKenzie',
+							'Krista-Campbell',
+							'Kyle-Newman',
+							'Laurie-Heard',
+							'Marty-Sellers',
+							'Matt-Massaro',
+							'Mital-Modi',
+							'Paul-Finley',
+							'Rich-Marsden',
+							'Rob-Campbell',
+							'Robb-Dempsey',
+							'Samantha-Brinkley',
+							'Scott-Cribbs',
+							'Seth-Turner',
+							'Stephen-Hall',
+							'Tarra-Anzalone',
+							'Vicki-Morris'
+						]
+						if manual_uploads.include? name
+							src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + name + ".jpg"
+						else
+							src = "/img/profile-backup.png"
+						end
 					end
 				end
 			end
