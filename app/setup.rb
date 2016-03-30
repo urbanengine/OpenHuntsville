@@ -36,6 +36,7 @@ Pakyow::App.define do
   end
 
   configure :production do
+    app.log_output = true
   end
 
   middleware do |builder|
