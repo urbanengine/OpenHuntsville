@@ -1,3 +1,4 @@
+require 'pp'
 Pakyow::App.bindings :people do
 	scope :people do
 		restful :people
@@ -317,9 +318,11 @@ Pakyow::App.bindings :people do
 					name = bindable.first_name + " " + bindable.last_name
 
 					unless bindable.image_url.nil? || bindable.image_url.length == 0
+						pp 'bindable.image_url.nil? || bindable.image_url.length == 0'
 						src = bindable.image_url
 					else
-						manual_uploads = [
+						needle = bindable.first_name + "-" + bindable.last_name
+						haystack = [
 							'Abbie-Cataldo',
 							'Adam-Whipple',
 							'Alex-Moore',
@@ -364,19 +367,21 @@ Pakyow::App.bindings :people do
 							'Tarra-Anzalone',
 							'Vicki-Morris'
 						]
-						if manual_uploads.include?(name)
+						if haystack.include?(needle)
+							pp 'haystack includes needle'
 							src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + name + ".jpg"
 						else
 							src = "/img/profile-backup.png"
 						end
-						puts 'ELSE bindable.image_url.nil? || bindable.image_url.length == 0'
+						pp 'ELSE bindable.image_url.nil? || bindable.image_url.length == 0'
 					end
 				else
-					puts 'ELSE bindable.first_name.nil? || bindable.last_name.nil?'
+					pp 'ELSE bindable.first_name.nil? || bindable.last_name.nil?'
 				end
 			else
-				puts 'bindable NIL'
+				pp 'bindable NIL'
 			end
+			pp src
 			{
 				:src => bindable.image_url,
 				:title =>  name,
