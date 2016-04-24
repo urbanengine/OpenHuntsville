@@ -1,4 +1,7 @@
 require 'digest/md5'
+require 'nokogiri'
+require 'rack/utils'
+
 module Pakyow::Helpers
   def handle_errors(view)
     if @errors
@@ -257,85 +260,49 @@ module Pakyow::Helpers
   end # send_email_template(person, email_partial, options = {})
 
   def send_email(person, from_email, body, subject)
+    unless ENV['RACK_ENV'] != 'development'
+      recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
 
-    unless ENV['RACK_ENV'] == 'development'
-      begin
-        mandrill = Mandrill::API.new ENV['MANDRILL_API_KEY']
+      # First, instantiate the Mailgun Client with your API key
+      mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
+      # recipient = YAML.load(%Q(---\n"#{recipient}"\n))
+      # subject = YAML.load(%Q(---\n"#{subject}"\n))
+      # body = YAML.load(%Q(---\n"#{body}"\n))
+      # text = <%=h Nokogiri::HTML(body).text %>
+      # body = Rack::Utils.escape_html(body)
+      # Define your message parameters
+      message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
+                          to:   recipient,
+                          subject: subject,
+                          text: Nokogiri::HTML(body).text,
+                          html: body
+                          # subject: subject,
+                          # html: body
+                          # text: text
+                        }
 
-        message = {"merge"=>true,
-          "important"=>true,
-          # "text"=>body,
-          "metadata"=>{"website"=>"openhsv.com"},
-          "from_email"=>from_email,
-          "view_content_link"=>nil,
-          "html"=>body,
-          "tags"=>["error-report"],
-          "to"=> [{"email"=>person.email,
-            "name"=>"#{person.first_name} #{person.last_name}",
-            "type"=>"to"}],
-            "auto_html"=>nil,
-            "from_name"=>"#openHSV",
-            "subject"=>subject,
-            "signing_domain"=>nil,
-            "preserve_recipients"=>nil,
-            "auto_text"=>nil,
-            "headers"=>{"Reply-To"=>from_email},
-            "return_path_domain"=>nil,
-            "inline_css"=>nil,
-            "tracking_domain"=>nil,
-            "url_strip_qs"=>nil,
-            "track_opens"=>nil,
-            "track_clicks"=>nil}
-
-        async = false
-        ip_pool = "Main Pool"
-
-        result = mandrill.messages.send message, async, ip_pool
-      rescue Mandrill::Error => e
-        pp "A mandrill error occurred: #{e.class} - #{e.message}"
-        raise
-      end # begin
+      # Send your message through the client
+      mg_client.send_message 'sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org', message_params
     end # unless ENV['RACK_ENV'] == 'development'
   end # send_email(person, from_email, body, subject)
 
   def email_us(subject, body)
     unless ENV['RACK_ENV'] == 'development'
-      begin
-        mandrill = Mandrill::API.new ENV['MANDRILL_API_KEY']
+      recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
 
-        message = {"merge"=>true,
-          "important"=>true,
-          # "text"=>body,
-          "metadata"=>{"website"=>"openhsv.com"},
-          "from_email"=>"noreply@openhsv.com",
-          "view_content_link"=>nil,
-          "html"=>body,
-          "tags"=>["error-report"],
-          "to"=> [{"email"=>"openhsv@gmail.com",
-            "name"=>"#openHSV Webmasters",
-            "type"=>"to"}],
-            "auto_html"=>nil,
-            "from_name"=>"#openHSV",
-            "subject"=>subject,
-            "signing_domain"=>nil,
-            "preserve_recipients"=>nil,
-            "auto_text"=>nil,
-            "headers"=>{"Reply-To"=>"noreply@openhsv.com"},
-            "return_path_domain"=>nil,
-            "inline_css"=>nil,
-            "tracking_domain"=>nil,
-            "url_strip_qs"=>nil,
-            "track_opens"=>nil,
-            "track_clicks"=>nil}
+      # First, instantiate the Mailgun Client with your API key
+      mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
-        async = false
-        ip_pool = "Main Pool"
+      # Define your message parameters
+      message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
+                          to:   person.email,
+                          subject: subject,
+                          html: body,
+                          text: Nokogiri::HTML(body).text
+                        }
 
-        result = mandrill.messages.send message, async, ip_pool
-      rescue Mandrill::Error => e
-        pp "A mandrill error occurred: #{e.class} - #{e.message}"
-        raise
-      end # begin
+      # Send your message through the client
+      mg_client.send_message 'sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org', message_params
     end # unless ENV['RACK_ENV'] == 'development'
   end # email_us(user, from_email, body, subject)
 

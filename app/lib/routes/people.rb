@@ -519,6 +519,7 @@ puts "ABOUT TO SAVE"
 
     email_us("Profile created by " + person,body)
     send_email_template(people,:account_creation)
+    # http://www.rubydoc.info/gems/slack-api
     redirect '/people/profile-created'
   elsif suspend_mail
     send_email_template(people,:account_suspension)

@@ -27,9 +27,11 @@ gem "rake"
 
 gem "bcrypt"
 
-## Integrate with Mandrill to send transactional emails
-gem "mandrill-api"
+## Integrate with Mailgun to send transactional emails
+gem 'mailgun-ruby'
 
 
 gem 'aws-sdk', '~> 2'
 gem "mini_magick"
+gem 'nokogiri'
+# gem 'yaml'
