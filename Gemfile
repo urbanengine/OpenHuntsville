@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 ruby "2.2.0"
-gem "pakyow", git: "https://github.com/pakyow/pakyow.git"
+gem "pakyow", github: "pakyow/pakyow"
 
 # application server
 gem "puma"

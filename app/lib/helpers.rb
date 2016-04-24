@@ -260,7 +260,7 @@ module Pakyow::Helpers
   end # send_email_template(person, email_partial, options = {})
 
   def send_email(person, from_email, body, subject)
-    unless ENV['RACK_ENV'] != 'development'
+    unless ENV['RACK_ENV'] == 'development'
       recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
 
       # First, instantiate the Mailgun Client with your API key
@@ -288,14 +288,14 @@ module Pakyow::Helpers
 
   def email_us(subject, body)
     unless ENV['RACK_ENV'] == 'development'
-      recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
+      recipient = "The Awesome Team <openhsv@gmail.com>"
 
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
       # Define your message parameters
       message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
-                          to:   person.email,
+                          to:   recipient,
                           subject: subject,
                           html: body,
                           text: Nokogiri::HTML(body).text

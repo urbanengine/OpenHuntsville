@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/pakyow/pakyow.git
+  remote: git://github.com/pakyow/pakyow.git
   revision: 6af5bfea9980c943e8d2aecbe496f9f0d01fcaaa
   specs:
     pakyow (0.11.0)
@@ -86,6 +86,7 @@ GEM
       json (~> 1.8)
       rest-client (~> 1.6)
     mime-types (2.99.1)
+    mime-types-data (3.2016.0221)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
     multi_xml (0.5.5)
