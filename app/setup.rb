@@ -38,7 +38,7 @@ Pakyow::App.define do
 
   configure :production do
     app.static = true
-    realtime.redis = { url: ENV['REDIS_URL'] }
+    # realtime.redis = { url: ENV['REDIS_URL'] }
     app.log_output = true
     app.auto_reload = false
     app.errors_in_browser = false
