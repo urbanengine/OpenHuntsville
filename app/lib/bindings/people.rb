@@ -133,7 +133,7 @@ Pakyow::App.bindings :people do
 
 				else
 					show = "show"
-					link = "/clicks/people/" + bindable.url + "/url"
+					link = "/clicks/people/" + bindable.custom_url + "/url"
 				end
 
 				unless bindable.first_name.nil? || bindable.last_name.nil?
