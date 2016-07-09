@@ -34,4 +34,4 @@ gem 'mailgun-ruby'
 gem 'aws-sdk', '~> 2'
 gem "mini_magick"
 gem 'nokogiri'
-# gem 'yaml'
+# gem 'yaml

@@ -1,4 +1,4 @@
-require 'bundler/setup'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          require 'bundler/setup'
 
 require 'pakyow-support'
 require 'pakyow-core'
@@ -25,10 +25,10 @@ Pakyow::App.define do
   end
 
   configure :development do
-
+    server.port = 3001
     require 'dotenv'
-    Dotenv.load
-    $db = Sequel.connect(ENV['DATABASE_URL'])
+      Dotenv.load
+      $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 
   configure :prototype do

@@ -86,7 +86,6 @@ GEM
       json (~> 1.8)
       rest-client (~> 1.6)
     mime-types (2.99.1)
-    mime-types-data (3.2016.0221)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
     multi_xml (0.5.5)
