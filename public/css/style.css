@@ -34,7 +34,7 @@ ul {
 	margin: 0;
 }
 h1, h2 {
-	margin: 0; 
+	margin: 0;
 	padding: 0;
 }
 .content {
@@ -120,7 +120,7 @@ nav .pages {
 	margin-right: 40px;
 }
 nav li {
-	float: left; 
+	float: left;
 	margin-right: 40px;
 }
 nav li:last-child {
@@ -257,7 +257,7 @@ nav li a.selected, nav li a.selected:hover {
 .whyjoin .chevron:before, .whyjoin .chevron:after {
 	border: 24px solid transparent;
 }
-.whyjoin .chevron:before {	    
+.whyjoin .chevron:before {
 	border-top-color: #aaa;
 }
 .whyjoin .chevron:after {
@@ -328,7 +328,7 @@ nav li a.selected, nav li a.selected:hover {
 /*============== ABOUT PAGE ===============
 =========================================*/
 
-.about .bread-search { 
+.about .bread-search {
 	padding-top: 10px;
 }
 .bread-search {
@@ -438,7 +438,7 @@ nav li a.selected, nav li a.selected:hover {
   	box-shadow: 0 1px 0 #eee;
   	overflow: hidden;
   	margin-bottom: 5px;
-}		 
+}
 
 /*=============== ORIGINALS ===============
 =========================================*/
@@ -531,8 +531,8 @@ li.selected.active .subcats {
 li.selected.active .subcats li {
 	margin-left: 20px;
 }
-.tinynav { 
-	display: none 
+.tinynav {
+	display: none
 }
 
 /*================ INDEX ==================
@@ -664,7 +664,7 @@ li.selected.active .subcats li {
 	color: #00A3B8;
 	font-size: 0.9em;
 }
-.links a:before {    
+.links a:before {
 	font-family: 'FontAwesome';
 	margin:0 7px 0 0;
 	color: #091B1B;
@@ -851,7 +851,7 @@ footer a:hover {
 }
 }
 @media only screen and (max-width: 900px) {
-	
+
 	header {
 		background-size: 1600px;
 	}
@@ -860,7 +860,7 @@ footer a:hover {
 		margin: 0 auto;
 		text-align: center;
 	}
-	.header-bottom h2 { 
+	.header-bottom h2 {
 		text-align: center;
 		padding: 25px 0;
 		font-size: 1.3em;
@@ -913,21 +913,21 @@ footer a:hover {
 	}
 	nav li a {
 		font-size: 1.2em;
-	} 
-    .parentcats { 
-    	display: none; 
+	}
+    .parentcats {
+    	display: none;
     }
-	.tinynav { 
+	.tinynav {
 		display: block;
 		height: 40px;
 		border: 1px solid #eee;
 		background-color: #fff;
 	}
-    .js .tinynav { 
-    	display: block; 
+    .js .tinynav {
+    	display: block;
     }
-    .js .parentcats { 
-    	display: none; 
+    .js .parentcats {
+    	display: none;
     }
     .sidebar {
     	float: none;
@@ -1170,19 +1170,6 @@ footer a:hover {
 	overflow:hidden;
 	margin:0px;
 	padding:0px;
-}
-.slideshow 
-{
-	font-size:2em;
-}
-.slideshow img
-{
-	width:33%;
-	height:auto;
-}
-.slideshow li.profile
-{
-	margin-bottom:25%;
 }
 .breadcrumbs li.right
 {

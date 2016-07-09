@@ -73,4 +73,16 @@ Pakyow::App.routes do
     view.scope(:head).apply(request)
     view.scope(:main_menu).apply(request)
   end
+  get '/errors/401' do
+
+  end
+  get '/errors/404' do
+
+  end
+  get '/errors/403' do
+
+  end
+  get '/errors' do
+
+  end
 end

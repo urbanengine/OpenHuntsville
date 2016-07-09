@@ -33,7 +33,7 @@ ul {
 	margin: 0 !important;
 }
 h1, h2 {
-	margin: 0 !important; 
+	margin: 0 !important;
 	padding: 0 !important;
 }
 .content {
@@ -106,7 +106,7 @@ nav .pages {
 	margin-right: 40px !important;
 }
 nav li {
-	float: left !important; 
+	float: left !important;
 	margin-right: 40px !important;
 }
 nav li:last-child {
@@ -242,7 +242,7 @@ nav li a.selected, nav li a.selected:hover {
 .whyjoin .chevron:before, .whyjoin .chevron:after {
 	border: 24px solid transparent !important;
 }
-.whyjoin .chevron:before {	    
+.whyjoin .chevron:before {
 	border-top-color: #aaa !important;
 }
 .whyjoin .chevron:after {
@@ -463,8 +463,8 @@ nav li a.selected, nav li a.selected:hover {
 .subcats li {
 	margin-left: 20px !important;
 }
-.tinynav { 
-	display: none 
+.tinynav {
+	display: none
 }
 #submenu {
 	display: none !important;
@@ -607,7 +607,7 @@ nav li a.selected, nav li a.selected:hover {
 	color: #00A3B8 !important;
 	font-size: 0.9em !important;
 }
-.links a:before {    
+.links a:before {
 	font-family: 'FontAwesome' !important;
 	margin:0 7px 0 0 !important;
 	color: #091B1B !important;
@@ -794,7 +794,7 @@ footer a:hover {
 }
 }
 @media only screen and (max-width: 900px) {
-	
+
 	header {
 		background-size: 1600px !important;
 	}
@@ -803,7 +803,7 @@ footer a:hover {
 		margin: 0 auto !important;
 		text-align: center !important;
 	}
-	.header-bottom h2 { 
+	.header-bottom h2 {
 		text-align: center !important;
 		padding: 25px 0 !important;
 		font-size: 1.3em !important;
@@ -856,21 +856,21 @@ footer a:hover {
 	}
 	nav li a {
 		font-size: 1.2em !important;
-	} 
-    .parentcats { 
-    	display: none !important; 
+	}
+    .parentcats {
+    	display: none !important;
     }
-	.tinynav { 
+	.tinynav {
 		display: block !important;
 		height: 40px !important;
 		border: 1px solid #eee !important;
 		background-color: #fff !important;
 	}
-    .js .tinynav { 
-    	display: block !important; 
+    .js .tinynav {
+    	display: block !important;
     }
-    .js .parentcats { 
-    	display: none !important; 
+    .js .parentcats {
+    	display: none !important;
     }
     .sidebar {
     	float: none !important;
@@ -1097,18 +1097,4 @@ footer a:hover {
 	overflow:hidden !important;
 	margin:0px !important;
 	padding:0px !important;
-}
-.slideshow 
-{
-	font-size:2em !important;
-}
-.slideshow img
-{
-	width:33% !important;
-	height:auto !important;
-	/*margin:10%;*/
-}
-.slideshow li.profile
-{
-	/*margin-bottom:25% !important;*/
 }
