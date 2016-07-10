@@ -253,7 +253,7 @@ module Pakyow::Helpers
     when :account_creation
       presenter.view = store.view('mail/account_creation')
       view.scope(:people).bind(person)
-      subject = "How's your Step #3 coming along?"
+      subject = "Your #openHSV account is awaiting approval"
     end
 
     send_email(person, from_email, view.to_html, subject)

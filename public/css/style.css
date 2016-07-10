@@ -11,6 +11,7 @@ body {
 	font-weight: 400;
 	background-color: #091B1B;
 	padding-top:0px !important;
+	padding-bottom: 40px;
 }
 a {
 	text-decoration: none;
@@ -328,11 +329,9 @@ nav li a.selected, nav li a.selected:hover {
 /*============== ABOUT PAGE ===============
 =========================================*/
 
-.about .bread-search {
-	padding-top: 10px;
-}
 .bread-search {
-	padding: 0 0 10px;
+	border-top-color: #424243;
+	padding: 10px 0;
   	box-shadow: 0 1px 0 #eee;
   	overflow: hidden;
   	margin-bottom: 5px;
@@ -358,12 +357,14 @@ nav li a.selected, nav li a.selected:hover {
 .searchform label, .searchform input {
 	float: left;
 }
+.searchform input[type="text"] {
+	height: 37px;
+ }
 .searchform label {
 	line-height: 36px;
 	padding-right: 7px;
 }
 #search-experts {
-	height: 30px;
 	width: 270px;
 	margin-right: 5px;
 }
@@ -372,8 +373,7 @@ nav li a.selected, nav li a.selected:hover {
     text-align: center;
     color: #f6f6f6;
     font-size: 1em;
-    height: 36px;
-    padding: 0 15px;
+    padding: 7px 0 8px;
     border: 0;
     outline: 0;
 }
@@ -428,16 +428,6 @@ nav li a.selected, nav li a.selected:hover {
 }
 .theteam p {
 	font-size: 1.3em;
-}
-.about .bread-search {
-	padding-top: 10px;
-}
-.bread-search {
-	border-top-color: #424243;
-	padding: 0 0 10px;
-  	box-shadow: 0 1px 0 #eee;
-  	overflow: hidden;
-  	margin-bottom: 5px;
 }
 
 /*=============== ORIGINALS ===============
@@ -568,6 +558,12 @@ li.selected.active .subcats li {
 	padding: 10px;
 	margin: 0 0 15px;
 }
+.profiles-ul {
+		padding: 20px 0 40px;
+	}
+.profiles .profiles-ul {
+	padding: 0;
+}
 .profile:last-child {
 	margin-bottom: 0;
 }
@@ -636,6 +632,7 @@ li.selected.active .subcats li {
 .contactme:hover {
 	background-color: #054242;
 	color: #f6f6f6;
+	text-decoration: underline;
 }
 .contactme span:hover {
 	text-decoration: underline;
@@ -724,7 +721,8 @@ li.selected.active .subcats li {
 }
 .errors {
 	color: red;
-	font-size: 0.8em;
+	font-size: 1em;
+	line-height: 1.3;
 }
 fieldset {
 	margin: 5px 0 0;
@@ -742,16 +740,30 @@ fieldset li:last-of-type {
 fieldset label {
 	display: block;
 }
-.form input[type="text"], .form input[type="password"] {
+.sublabel {
+	font-size: 0.8em;
+	color: #666;
+	padding-bottom: 5px;
+}
+#people-form {
+	padding: 20px 0;
+}
+#people-form select {
+	border: 1px solid #ccc;
+	height: 39px;
+	background-color: #fff;
+}
+input[type="text"], input[type="password"] {
 	height: 35px;
 	margin: 0;
 	padding: 0 0 0 6px;
 	width: 240px;
+	border: 1px solid #ccc;
 }
 .form textarea {
 	width: 250px;
 	padding: 0 0 0 6px;
-	border: 1px solid #dfdfdf;
+	border: 1px solid #ccc;
 	height: 100px;
 }
 ::-webkit-input-placeholder {
@@ -768,7 +780,7 @@ fieldset label {
 	margin: 7px 0 0;
 	color: #888;
 }
-.form input[type="submit"] {
+input[type="submit"] {
 	display: block;
 	background-color: #091B1B;
 	text-align: center;
@@ -781,7 +793,7 @@ fieldset label {
 .form #submit {
 	margin-top: 20px;
 }
-.form input[type="submit"]:hover, .form #submit:hover {
+input[type="submit"]:hover, .form #submit:hover {
 	background-color: #054242;
 	text-decoration: underline;
 }
@@ -936,6 +948,7 @@ footer a:hover {
     }
     select.tinynav {
     	width: 100%;
+    	border: 1px solid #ccc;
     }
     .backdrop {
     	background-color: #eaeaea;
@@ -1106,7 +1119,17 @@ footer a:hover {
 		width: 200px;
 	}
 	.searchform input[type="submit"] {
-		padding: 0 10px;
+		padding: 7px 0 8px;
+		width: 80px;
+	}
+	footer .left {
+		float: none;
+		text-align: center;
+	}
+	footer .right {
+		float: none;
+		text-align: center;
+		padding-top: 10px;	
 	}
 }
 @media only screen and (max-width: 400px) {
