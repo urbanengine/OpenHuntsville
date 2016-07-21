@@ -259,11 +259,29 @@ action :list do
   if session[:random].nil?
     session[:random] = (rand(0...100)).to_s
   end
-  people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(10).all
+  my_limit = 10
   ran = session[:random].to_i*100
+  total_people = People.where("approved = true").count
+  # If user is authenticated, don't show default
+  page_no = 0
+  unless cookies[:people].nil? || cookies[:people].size == 0
+    unless params[:page].nil? || params[:page].size == 0
+      page_no = params[:page].to_i
+    end
+    previous_link = {:class => 'hide',:value => 'hidden'}
+    next_link = {:class => 'visible',:value => 'visible'}
+    more_links = {'previous_link'=>previous_link,'next_link'=>next_link}
+    view.scope(:after_people).bind(more_links)
+    view.scope(:after_people).use(:authenticated)
+  else
+    count = {'full-count' => total_people.to_s}
+    view.scope(:after_people).bind(count)
+    view.scope(:after_people).use(:normal)
+  end
+  people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
+  #people = People.where("approved = true").limit(my_limit).all
   shuffled = people.shuffle(random: Random.new(ran))
-  count = {'full-count' => People.where("approved = true").count.to_s}
-  view.partial(:'register_see_more').scope(:count).bind(count)
+
   view.scope(:people).apply(shuffled)
   all_cats = Category.order(:slug).all
   parent_cats = []
