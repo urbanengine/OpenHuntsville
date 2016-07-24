@@ -574,6 +574,7 @@ li.selected.active .subcats li {
 }
 .details {
 	overflow: hidden;
+	min-height:160px;
 }
 .details-wrapper {
 	padding: 0 10px 0 20px;

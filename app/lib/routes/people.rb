@@ -259,7 +259,12 @@ action :list do
   if session[:random].nil?
     session[:random] = (rand(0...100)).to_s
   end
-  my_limit = 2
+  my_limit = 10
+  unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
+    if ENV['RACK_ENV']== "development"
+      my_limit = 2
+    end
+  end
   ran = session[:random].to_i*100
   total_people = People.where("approved = true").count
   # If user is authenticated, don't show default
