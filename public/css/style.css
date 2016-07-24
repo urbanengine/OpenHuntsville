@@ -1129,7 +1129,7 @@ footer a:hover {
 	footer .right {
 		float: none;
 		text-align: center;
-		padding-top: 10px;	
+		padding-top: 10px;
 	}
 }
 @media only screen and (max-width: 400px) {
@@ -1195,6 +1195,14 @@ footer a:hover {
 	padding:0px;
 }
 .breadcrumbs li.right
+{
+	float:right;
+}
+.previous-next-btns
+{
+	border:solid 1px #00A3B8; padding:5px 10px;float:left;
+}
+a[rel~="next"].previous-next-btns
 {
 	float:right;
 }

@@ -259,17 +259,29 @@ action :list do
   if session[:random].nil?
     session[:random] = (rand(0...100)).to_s
   end
-  my_limit = 10
+  my_limit = 2
   ran = session[:random].to_i*100
   total_people = People.where("approved = true").count
   # If user is authenticated, don't show default
   page_no = 0
   unless cookies[:people].nil? || cookies[:people].size == 0
+    previous_link = {:class => 'hide',:value => 'hidden'}
     unless params[:page].nil? || params[:page].size == 0
       page_no = params[:page].to_i
+      unless page_no == 0
+        unless page_no == 1
+          previous_link = {:class => 'previous-next-btns', :href => "/people?page=#{page_no-1}"}
+        else
+          previous_link = {:class => 'previous-next-btns', :href => "/people"}
+        end
+      end
     end
-    previous_link = {:class => 'hide',:value => 'hidden'}
-    next_link = {:class => 'visible',:value => 'visible'}
+    current_last_profile_shown = (page_no + 1) * my_limit
+    pp 'current  ' + current_last_profile_shown.to_s
+    pp 'total_people  ' + total_people.to_s
+    if current_last_profile_shown < total_people
+      next_link = {:class => 'previous-next-btns',:href=>"/people?page=#{page_no+1}"}
+    end
     more_links = {'previous_link'=>previous_link,'next_link'=>next_link}
     view.scope(:after_people).bind(more_links)
     view.scope(:after_people).use(:authenticated)
