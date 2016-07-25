@@ -89,7 +89,7 @@
       </li>
     </ul>
   </fieldset>
-    
+
   <fieldset data-prop="admin_fieldset">
     <legend>Administrator Section</legend>
     <ul>
@@ -151,6 +151,7 @@ $(document).ready(function(){
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
+        type: "PATCH",
         done: function (e, data) {
             $.each(data.result.files, function (index, file) {
                 $('#fileupload').toggle();

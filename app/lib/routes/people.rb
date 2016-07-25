@@ -478,7 +478,7 @@ action :update, :before => :edit_profile_check do
 
         # Upload to S3.
         s3 = Aws::S3::Resource.new(region: 'us-east-1')
-        s3.bucket('openhsv.com/website-uploads').object(image_basename).upload_file(image_filename, acl:'public-read')
+        s3.bucket('openhsv.com').object('website-uploads/' + image_basename).upload_file(image_filename, acl:'public-read')
         # Remove the image from /tmp after uploading it.
         FileUtils.rm(image_filename)
         people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
