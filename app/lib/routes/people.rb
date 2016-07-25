@@ -127,8 +127,18 @@ Pakyow::App.routes(:people) do
         tmp.search_terms = search_terms
         tmp.number_results = fffound.length.to_s
         view.scope(:search_results).apply(tmp)
-
+        all_cats = Category.order(:slug).all
+        parent_cats = []
+        all_cats.each { |item|
+          if item.parent_id.nil?
+            parent_cats.push(item)
+          end
+        }
+        parent_cats.unshift("everyone")
+        view.scope(:categories_menu).apply(parent_cats)
+        pp request
         view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
       end
 
       get 'profile-created' do
