@@ -111,7 +111,7 @@ namespace :seed do
   end
 
   task :admins => ['pakyow:stage'] do
-    
+
     # Bryan Powell
     people = People.new
     people.first_name = "Bryan"
@@ -129,7 +129,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Chris Beaman
     people = People.new
     people.first_name = "Chris"
@@ -146,7 +146,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Tarra Anzalone
     people = People.new
     people.first_name = "Tarra"
@@ -163,7 +163,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Joe MacKenzie
     people = People.new
     people.first_name = "Joe"
@@ -180,7 +180,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Kyle Newman
     people = People.new
     people.first_name = "Kyle"
@@ -197,7 +197,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Andrew Hall
     people = People.new
     people.first_name = "Andrew"
@@ -215,11 +215,26 @@ namespace :seed do
     people.approved = true
     people.save
 
+    # David Jones
+    people = People.new
+    people.first_name = "David"
+    people.last_name = "Jones"
+    people.password = "test"
+    people.password_confirmation = "test"
+    people.linkedin = "david-h-jones"
+    people.url = "http://www.refractingideas.com"
+    people.image_url = "/img/David-Jones.jpg"
+    people.email = "david@newleafdigital.org"
+    people.bio = "Software and Website Designer and Developer"
+    people.custom_url = "david-jones"
+    people.admin = true
+    people.approved = true
+    people.save
   end
 
 
   task :sillycats => ['pakyow:stage'] do
-    
+
     cat = Category.new
     cat.category = "Bacon"
     cat.description = "Bacon ipsum dolor amet salami porchetta cupim andouille corned beef ball tip boudin."
@@ -241,6 +256,6 @@ namespace :seed do
     cat.category = "Strip steak"
     cat.description = "Strip steak meatloaf boudin, shankle cow filet mignon landjaeger bacon shoulder frankfurter ground round ball tip beef pastrami."
     cat.save
-   
+
   end
 end
