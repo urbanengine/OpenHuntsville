@@ -258,4 +258,30 @@ namespace :seed do
     cat.save
 
   end
+
+  task :groups => ['pakyow:stage'] do
+    group = Group.new
+    group.name = "New Leaf Digital"
+    group.save
+
+    group = Group.new
+    group.name = "CoWorking Night"
+    group.parent_id = 1
+    group.save
+
+    group = Group.new
+    group.name = "32/10"
+    group.parent_id = 1
+    group.save
+  end
+
+  task :group_admins => ['pakyow:stage'] do
+    admins = People.where("admin = true").all
+    groups = Group.all
+    admins.each { |person|
+      groups.each { |group|
+        person.add_group(group)
+      }
+    }
+  end
 end
