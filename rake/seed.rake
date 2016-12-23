@@ -266,12 +266,17 @@ namespace :seed do
 
     group = Group.new
     group.name = "CoWorking Night"
-    group.parent_id = 1
+    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
     group.save
 
     group = Group.new
     group.name = "32/10"
-    group.parent_id = 1
+    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.save
+
+    group = Group.new
+    group.name = "Designer's Corner"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.save
   end
 
@@ -283,5 +288,44 @@ namespace :seed do
         person.add_group(group)
       }
     }
+  end
+
+  task :events => ['pakyow:stage'] do
+    cwn = Group.where("name = 'CoWorking Night'").first
+    unless cwn.nil?
+      event = Event.new
+      event.name = "CoWorking Night #99"
+      event.description = "The 99th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #100"
+      event.description = "The 100th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #101"
+      event.description = "The 101th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #102"
+      event.description = "The 102th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+    end
+
+    dc = Group.where("name = 'Designer''s Corner'").first
+    unless dc.nil?
+      event = Event.new
+      event.name = "Designer's Corner #13"
+      event.description = "The 13th meeting of Designer's Corner"
+      event.group_id = dc.id
+      event.parent_id = Event.where("name = 'CoWorking Night #100'").first.id
+      event.save
+    end
   end
 end
