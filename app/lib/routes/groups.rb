@@ -2,6 +2,29 @@ Pakyow::App.routes(:groups) do
   include SharedRoutes
 
   expand :restful, :groups, '/groups' do
+    collection do
+      get 'unapproved' do
+        if cookies[:people].nil?
+          redirect '/errors/401'
+        else
+          person = People[cookies[:people]]
+          unless person.admin
+            redirect '/errors/403'
+          end
+        end
+        subset = Array.new
+        all =  Group.all
+        all.each { |group|
+          if group.approved.nil? || !(group.approved)
+            subset.push(group)
+          end
+        }
+        view.scope(:groups).apply(subset)
+        view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
+      end
+    end
+
     action :new do
       #redirect "/"
 
@@ -52,7 +75,7 @@ Pakyow::App.routes(:groups) do
         view.scope(:after_groups).bind(count)
         view.scope(:after_groups).use(:normal)
       end
-      #groups = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
+      #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
       groups = Group.where("approved = true").limit(my_limit).offset(page_no*my_limit).all
       shuffled = groups.shuffle(random: Random.new(ran))
 
