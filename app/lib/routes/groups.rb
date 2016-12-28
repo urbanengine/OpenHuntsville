@@ -102,9 +102,13 @@ Pakyow::App.routes(:groups) do
       view.scope(:main_menu).apply(request)
     end
 
-    # GET /people/:id/edit
+    # GET /groups/:groups_id/edit
     action :edit do
-      #redirect "/"
+      group = Group.where("id = ?", params[:groups_id]).first
+
+      view.scope(:groups).apply(group)
+      view.scope(:head).apply(request)
+      view.scope(:main_menu).apply(request)
     end
 
     action :update do

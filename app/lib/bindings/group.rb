@@ -3,21 +3,21 @@ Pakyow::App.bindings :groups do
 	scope :groups do
 		restful :groups
 
-		#options(:category_one) do
-		#	get_nested_category_id_and_category_name()
-		#end
-		#options(:category_two) do
-		#	get_nested_category_id_and_category_name()
-		#end
-		#options(:category_three) do
-		#	get_nested_category_id_and_category_name()
-		#end
+		options(:category_one) do
+			get_nested_category_id_and_category_name()
+		end
+		options(:category_two) do
+			get_nested_category_id_and_category_name()
+		end
+		options(:category_three) do
+			get_nested_category_id_and_category_name()
+		end
 
-		#binding(:id) do
-		#	{
-		#		:value => bindable.id
-		#	}
-		#end
+		binding(:id) do
+			{
+			:value => bindable.id
+			}
+		end
 
 		#binding(:member_number) do
 		#	{
@@ -37,6 +37,8 @@ Pakyow::App.bindings :groups do
 		#end
 
 		binding(:name) do
+			p "Namenamename: "
+			p bindable.name
 			{
 				:content => bindable.name
 			}
@@ -125,7 +127,7 @@ Pakyow::App.bindings :groups do
 
 				else
 					show = "show"
-					link = "/clicks/groups/" + bindable.custom_url + "/url" #TODO: David: This doesn't work current. Need to alter code for group logic
+					link = "/clicks/groups/" + bindable.id + "/url" #TODO: David: This doesn't work current. Need to alter code for group logic
 				end
 
 				unless bindable.name.nil?
@@ -175,14 +177,14 @@ Pakyow::App.bindings :groups do
 			}
 		end
 
-		#binding(:email) do
-		#	if bindable.email.nil?
-		#		bindable.email = "email"
-		#	end
-		#	{
-		#		:content => bindable.email
-		#	}
-		#end
+		binding(:email) do
+			if bindable.email.nil?
+				bindable.email = ""
+			end
+			{
+				:content => bindable.email
+			}
+		end
 
 		#binding(:categories_string) do
 		#	{
@@ -256,13 +258,17 @@ Pakyow::App.bindings :groups do
 			}
 		end
 
-		#binding(:category_one) do
-		#	bindable.category_one_id
-		#end
+		binding(:category_one) do
+			bindable.category_one_id
+		end
 
-		#binding(:category_two) do
-		#	bindable.category_two_id
-		#end
+		binding(:category_two) do
+			bindable.category_two_id
+		end
+
+		binding(:category_three) do
+			bindable.category_three_id
+		end
 
 		binding(:category_spacer_one) do
 			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
@@ -278,10 +284,6 @@ Pakyow::App.bindings :groups do
 				:content => cat
 			}
 		end
-
-		#binding(:category_three) do
-		#	bindable.category_three_id
-		#end
 
 		binding(:category_spacer_two) do
 			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
@@ -404,11 +406,9 @@ Pakyow::App.bindings :groups do
 		# 		:alt => name
 		# 	}
 		# end
-
-		# binding(:custom_url) do
-		# 	bindable.custom_url
-		# end
-    #
+		#binding(:custom_url) do
+		#	bindable.custom_url
+		#end
 		# binding(:admin) do
 		# 	{
 		# 		:checked => bindable[:admin]
@@ -420,29 +420,23 @@ Pakyow::App.bindings :groups do
 		# 		:checked => bindable[:approved]
 		# 	}
 		# end
-    #
-		# binding(:profile_link) do
-    #
-		# 	first_name = ""
-		# 	last_name = ""
-		# 	unless bindable.first_name.nil?
-		# 		first_name = bindable.first_name
-		# 	end
-		# 	unless bindable.last_name.nil?
-		# 		last_name = bindable.last_name
-		# 	end
-		# 	{
-		# 		:href => "/people/" + bindable.custom_url,
-		# 		:content => first_name + " " + last_name
-		# 	}
-		# end
-    #
-		# binding(:edit_profile_link) do
-    #
-		# 	{
-		# 		:href => "/people/" + bindable.custom_url.to_s + "/edit"
-		# 	}
-		# end
+
+		binding(:profile_link) do
+			name = ""
+		 	unless bindable.name.nil?
+		 		name = bindable.name
+		 	end
+		 	{
+		 	:href => "/groups/" + bindable.id,
+			:content => name
+			}
+		end
+
+		binding(:edit_profile_link) do
+				{
+		 		:href => "/groups/" + bindable.id + "/edit"
+		 		}
+		end
     #
 		# binding(:admin_fieldset) do
 		# 	visible = "show"
