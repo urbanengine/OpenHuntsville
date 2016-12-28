@@ -5,8 +5,13 @@ Sequel.migration do
       DateTime      :created_at
       DateTime      :updated_at
       String        :name
+      String        :url
       String        :image_url
       String        :description
+      String        :email
+      json          :categories
+      String        :categories_string
+      Boolean       :approved
       foreign_key :parent_id, :groups, :null=>true
     end
 

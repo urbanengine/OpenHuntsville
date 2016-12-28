@@ -262,21 +262,40 @@ namespace :seed do
   task :groups => ['pakyow:stage'] do
     group = Group.new
     group.name = "New Leaf Digital"
+    group.description = "The parent 501c(3) organization for CoWorking Night, 32/10, and Huntsville Founders."
+    group.categories_string = "Engineering"
+    group.approved = true
     group.save
 
     group = Group.new
     group.name = "CoWorking Night"
+    group.description = "Wednesday weekly thing"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
     group.save
 
     group = Group.new
     group.name = "32/10"
+    group.description = "Its a business thing for YP"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
     group.save
 
     group = Group.new
     group.name = "Designer's Corner"
+    group.description = "We design things with computers."
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Art and Design"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Dumb not approved group"
+    group.description = "Dont allow stupid groups"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Art and Design"
     group.save
   end
 
