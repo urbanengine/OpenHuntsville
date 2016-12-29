@@ -22,6 +22,16 @@ CSV_PATH = File.dirname(__FILE__) + '/seed_experts.csv'
 CATS_PATH = File.dirname(__FILE__) + '/cats.csv'
 
 namespace :seed do
+  
+  desc "seed the database using data for development"
+  task :dev => ['pakyow:stage'] do
+    Rake::Task["experts"].invoke
+    Rake::Task["categories"].invoke
+    Rake::Task["admins"].invoke
+    Rake::Task["groups"].invoke
+    Rake::Task["group_admins"].invoke
+    Rake::Task["events"].invoke
+  end
 
   desc "seed the database with MVP data"
   task :experts => ['pakyow:stage'] do
@@ -222,9 +232,9 @@ namespace :seed do
     people.password = "test"
     people.password_confirmation = "test"
     people.linkedin = "david-h-jones"
-    people.url = "http://tylerhughes.info/"
-    people.image_url = "/img/tyler-hughes.jpg"
-    people.email = "tylerd@newleafdigital.org"
+    people.url = "http://www.refractingideas.com"
+    people.image_url = "/img/David-Jones.jpg"
+    people.email = "david@newleafdigital.org"
     people.bio = "Software and Website Designer and Developer"
     people.custom_url = "david-jones"
     people.admin = true
@@ -238,9 +248,9 @@ namespace :seed do
     people.password = "test"
     people.password_confirmation = "test"
     people.linkedin = "thughes01"
-    people.url = "http://www.refractingideas.com"
-    people.image_url = "/img/David-Jones.jpg"
-    people.email = "david@newleafdigital.org"
+    people.url = "http://tylerhughes.info/"
+    people.image_url = "/img/tyler-hughes.jpg"
+    people.email = "tyler@newleafdigital.org"
     people.bio = "Software and Website Designer and Developer"
     people.custom_url = "tyler"
     people.admin = true
