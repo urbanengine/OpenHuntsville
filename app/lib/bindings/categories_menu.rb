@@ -2,7 +2,7 @@ Pakyow::App.bindings :categories_menu do
   require "pp"
   scope :categories_menu do
   restful :categories_menu
-   
+
     binding(:link) do
       content = ""
       href = "/people"
@@ -61,7 +61,7 @@ Pakyow::App.bindings :categories_menu do
   end
   scope :categories_submenu do
   restful :categories_submenu
-   
+
     binding(:link) do
       content = ""
       href = "/people"

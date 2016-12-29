@@ -111,7 +111,7 @@ namespace :seed do
   end
 
   task :admins => ['pakyow:stage'] do
-    
+
     # Bryan Powell
     people = People.new
     people.first_name = "Bryan"
@@ -129,7 +129,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Chris Beaman
     people = People.new
     people.first_name = "Chris"
@@ -146,7 +146,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Tarra Anzalone
     people = People.new
     people.first_name = "Tarra"
@@ -163,7 +163,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Joe MacKenzie
     people = People.new
     people.first_name = "Joe"
@@ -180,7 +180,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Kyle Newman
     people = People.new
     people.first_name = "Kyle"
@@ -197,7 +197,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Andrew Hall
     people = People.new
     people.first_name = "Andrew"
@@ -215,11 +215,26 @@ namespace :seed do
     people.approved = true
     people.save
 
+    # David Jones
+    people = People.new
+    people.first_name = "David"
+    people.last_name = "Jones"
+    people.password = "test"
+    people.password_confirmation = "test"
+    people.linkedin = "david-h-jones"
+    people.url = "http://www.refractingideas.com"
+    people.image_url = "/img/David-Jones.jpg"
+    people.email = "david@newleafdigital.org"
+    people.bio = "Software and Website Designer and Developer"
+    people.custom_url = "david-jones"
+    people.admin = true
+    people.approved = true
+    people.save
   end
 
 
   task :sillycats => ['pakyow:stage'] do
-    
+
     cat = Category.new
     cat.category = "Bacon"
     cat.description = "Bacon ipsum dolor amet salami porchetta cupim andouille corned beef ball tip boudin."
@@ -241,6 +256,95 @@ namespace :seed do
     cat.category = "Strip steak"
     cat.description = "Strip steak meatloaf boudin, shankle cow filet mignon landjaeger bacon shoulder frankfurter ground round ball tip beef pastrami."
     cat.save
-   
+
+  end
+
+  task :groups => ['pakyow:stage'] do
+    group = Group.new
+    group.name = "New Leaf Digital"
+    group.description = "The parent 501c(3) organization for CoWorking Night, 32/10, and Huntsville Founders."
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "CoWorking Night"
+    group.description = "Wednesday weekly thing"
+    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "32/10"
+    group.description = "Its a business thing for YP"
+    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Designer's Corner"
+    group.description = "We design things with computers."
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Art and Design"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Dumb not approved group"
+    group.description = "Dont allow stupid groups"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Art and Design"
+    group.save
+  end
+
+  task :group_admins => ['pakyow:stage'] do
+    admins = People.where("admin = true").all
+    groups = Group.all
+    admins.each { |person|
+      groups.each { |group|
+        person.add_group(group)
+      }
+    }
+  end
+
+  task :events => ['pakyow:stage'] do
+    cwn = Group.where("name = 'CoWorking Night'").first
+    unless cwn.nil?
+      event = Event.new
+      event.name = "CoWorking Night #99"
+      event.description = "The 99th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #100"
+      event.description = "The 100th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #101"
+      event.description = "The 101th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #102"
+      event.description = "The 102th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+    end
+
+    dc = Group.where("name = 'Designer''s Corner'").first
+    unless dc.nil?
+      event = Event.new
+      event.name = "Designer's Corner #13"
+      event.description = "The 13th meeting of Designer's Corner"
+      event.group_id = dc.id
+      event.parent_id = Event.where("name = 'CoWorking Night #100'").first.id
+      event.save
+    end
   end
 end
