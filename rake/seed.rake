@@ -222,11 +222,27 @@ namespace :seed do
     people.password = "test"
     people.password_confirmation = "test"
     people.linkedin = "david-h-jones"
+    people.url = "http://tylerhughes.info/"
+    people.image_url = "/img/tyler-hughes.jpg"
+    people.email = "tylerd@newleafdigital.org"
+    people.bio = "Software and Website Designer and Developer"
+    people.custom_url = "david-jones"
+    people.admin = true
+    people.approved = true
+    people.save
+    
+    # Tyler Hughes
+    people = People.new
+    people.first_name = "Tyler"
+    people.last_name = "Hughes"
+    people.password = "test"
+    people.password_confirmation = "test"
+    people.linkedin = "thughes01"
     people.url = "http://www.refractingideas.com"
     people.image_url = "/img/David-Jones.jpg"
     people.email = "david@newleafdigital.org"
     people.bio = "Software and Website Designer and Developer"
-    people.custom_url = "david-jones"
+    people.custom_url = "tyler"
     people.admin = true
     people.approved = true
     people.save
