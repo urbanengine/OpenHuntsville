@@ -1,0 +1,44 @@
+<link rel="stylesheet" type="text/css" href="/css/datetimepicker/jquery.datetimepicker.css"/>
+
+<form data-scope="events" id="people-form" data-prop="action">
+  <ul class="errors"><li data-scope="error"></li></ul>
+  <fieldset class="margin-t">
+    <legend>Event Information</legend>
+    <ul>
+    <input type="hidden" data-prop="id" />
+      <li>
+        <label>Name</label>
+        <input type="text" data-prop="name" name="events[name]" placeholder="Name">
+      </li>
+      <li>
+        <label>Description</label>
+        <textarea data-prop="description" id="bio" name="events[description]" placeholder="Enter your event description (160 characters or less)"></textarea>
+        <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
+      </li>
+      <li style="width:100%;">
+        <label>Group</label>
+        <select type="text" data-prop="parent_group" class="chosen"></select>
+      </li>
+      <li>
+        <label>Start DateTime</label>
+        <input type="text" data-prop="start_datetime" id="datetimepicker"/>
+      </li>
+      <li style="width:100%;">
+        <label>Venue</label>
+        <select type="text" data-prop="venue" class="chosen"></select>
+      </li>
+    </ul>
+    <input id="submit" type="submit" value="Save">
+  </fieldset>
+</form>
+<script src="/js/datetimepicker/jquery.js"></script>
+<script src="/js/datetimepicker/jquery.datetimepicker.full.js"></script>
+<script>
+$.datetimepicker.setLocale('en');
+$('#datetimepicker').datetimepicker({
+	disabledWeekDays: [0,1,2,4,5,6],
+	allowTimes:['18:00','19:00','20:00','21:00'],
+  formatTime:'g:i A',
+  format: 'Y-m-d h:i A'
+});
+</script>
