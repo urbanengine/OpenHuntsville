@@ -25,12 +25,26 @@ namespace :seed do
   
   desc "seed the database using data for development"
   task :dev => ['pakyow:stage'] do
+    
+    puts "Starting the seed:categories task"
     Rake::Task["seed:categories"].invoke
+    
+    puts "Starting the seed:admins task"
     Rake::Task["seed:admins"].invoke
+    
+    puts "Starting the seed:experts task"
     Rake::Task["seed:experts"].invoke
+    
+    puts "Starting the seed:groups task"
     Rake::Task["seed:groups"].invoke
+    
+    puts "Starting the seed:group_admins task"
     Rake::Task["seed:group_admins"].invoke
+    
+    puts "Starting the seed:venues task"
     Rake::Task["seed:venues"].invoke
+    
+    # puts "Starting the seed:events task"
     # Rake::Task["seed:events"].invoke
   end
 
