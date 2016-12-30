@@ -269,7 +269,6 @@ namespace :seed do
 
     group = Group.new
     group.name = "CoWorking Night"
-    group.description = "Wednesday weekly thing"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
     group.categories_string = "Engineering"
     group.approved = true
@@ -277,7 +276,6 @@ namespace :seed do
 
     group = Group.new
     group.name = "32/10"
-    group.description = "Its a business thing for YP"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
     group.categories_string = "Engineering"
     group.approved = true
@@ -285,17 +283,21 @@ namespace :seed do
 
     group = Group.new
     group.name = "Designer's Corner"
-    group.description = "We design things with computers."
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Art and Design"
     group.approved = true
     group.save
 
     group = Group.new
-    group.name = "Dumb not approved group"
-    group.description = "Dont allow stupid groups"
+    group.name = "4 Hours To Product"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Art and Design"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Dumb not approved group"
+    group.description = "Dont allow stupid groups that aren't approved"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.save
   end
 
@@ -346,5 +348,51 @@ namespace :seed do
       event.parent_id = Event.where("name = 'CoWorking Night #100'").first.id
       event.save
     end
+  end
+
+  task :venues => ['pakyow:stage'] do
+    venue = Venue.new
+    venue.name = "AL.com Building"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Space Station Area"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "2nd Floor Open Area"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Orion Open Area"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Apollo Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "The Vault"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "John Hunt Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Redstone Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Saturn V Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Limestone Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Madison Room"
+    venue.save
   end
 end
