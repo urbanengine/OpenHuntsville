@@ -25,7 +25,7 @@ namespace :seed do
   
   desc "seed the database using data for development"
   task :dev => ['pakyow:stage'] do
-    Rake::Task["db:migrate --trace"].invoke
+    Rake::Task["heroku:rake"].invoke("db:migrate --trace", args.app_name)
     Rake::Task["experts"].invoke
     Rake::Task["categories"].invoke
     Rake::Task["admins"].invoke
