@@ -25,12 +25,14 @@ namespace :seed do
   
   desc "seed the database using data for development"
   task :dev => ['pakyow:stage'] do
+    Rake::Task["db:migrate --trace"].invoke
     Rake::Task["experts"].invoke
     Rake::Task["categories"].invoke
     Rake::Task["admins"].invoke
     Rake::Task["groups"].invoke
     Rake::Task["group_admins"].invoke
     Rake::Task["events"].invoke
+    Rake::Task["venues"].invoke
   end
 
   desc "seed the database with MVP data"
