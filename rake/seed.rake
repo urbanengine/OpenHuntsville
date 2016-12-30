@@ -31,7 +31,7 @@ namespace :seed do
     Rake::Task["seed:groups"].invoke
     Rake::Task["seed:group_admins"].invoke
     Rake::Task["seed:venues"].invoke
-    Rake::Task["seed:events"].invoke
+    # Rake::Task["seed:events"].invoke
   end
 
   desc "seed the database with MVP data"
