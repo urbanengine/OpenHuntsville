@@ -34,6 +34,26 @@ Pakyow::App.bindings :events do
       {
         :content => bindable.start_datetime
       }
-    end
+		end
+
+		binding(:venue_name) do
+			venue = Venue.where("id = ?", bindable.venue_id).first
+			{
+				:content => venue.name
+			}
+		end
+
+		binding(:group_name) do
+			group = Group.where("id = ?", bindable.group_id).first
+			{
+				:content => group.name
+			}
+		end
+
+		binding(:duration) do
+			{
+				:content => bindable.duration.to_s + " hour(s)"
+			}
+		end
   end
 end

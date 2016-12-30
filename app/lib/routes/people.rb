@@ -234,7 +234,7 @@ Pakyow::App.routes(:people) do
             }
           end
           view.scope(:people).bind(people)
-          view.scope(:events).bind(events_all)
+          view.scope(:events).apply(events_all)
           view.scope(:head).apply(request)
           view.scope(:main_menu).apply(request)
         end
@@ -244,6 +244,7 @@ Pakyow::App.routes(:people) do
           view.scope(:events).with do
             bind(Event.new)
           end
+          view.scope(:people).bind(get_first_person_from_people_id(params[:people_id]))
           view.scope(:head).apply(request)
           view.scope(:main_menu).apply(request)
         end
@@ -257,7 +258,7 @@ Pakyow::App.routes(:people) do
                 "description" => params[:events][:description],
                 "group_id" => params[:events][:parent_group].to_i,
                 "start_datetime" => parsed_time,
-                "duration" => 1,
+                "duration" => 1, #TODO: Expost this to users through the form
                 "venue_id" => params[:events][:venue].to_i
               }
             event = Event.new(c_params)
@@ -268,6 +269,7 @@ Pakyow::App.routes(:people) do
         action :update do
           event = Event[params[:events_id]]
           p event
+          p "update?? when do we enter here?"
         end
       end
     end
