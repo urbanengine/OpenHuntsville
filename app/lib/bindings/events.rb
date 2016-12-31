@@ -7,7 +7,7 @@ Pakyow::App.bindings :events do
     end
 
     binding(:parent_group) do
-      { }
+      bindable.group_id
     end
 
     options(:venue) do
@@ -15,7 +15,7 @@ Pakyow::App.bindings :events do
     end
 
     binding(:venue) do
-      { }
+				bindable.venue_id
     end
 
     binding(:name) do
@@ -34,6 +34,43 @@ Pakyow::App.bindings :events do
       {
         :content => bindable.start_datetime
       }
-    end
+		end
+
+		binding(:venue_name) do
+			venue = Venue.where("id = ?", bindable.venue_id).first
+			{
+				:content => venue.name
+			}
+		end
+
+		binding(:group_name) do
+			group = Group.where("id = ?", bindable.group_id).first
+			{
+				:content => group.name
+			}
+		end
+
+		binding(:duration) do
+			{
+				:content => bindable.duration.to_s + " hour(s)"
+			}
+		end
+
+
+		binding(:edit_event_link) do
+			people = People[session[:people]]
+			{
+			:content => "Edit Event",
+			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s + '/edit'
+			}
+		end
+
+		binding(:event_link) do
+			people = People[session[:people]]
+			{
+			:content => bindable.name,
+			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s
+			}
+		end
   end
 end

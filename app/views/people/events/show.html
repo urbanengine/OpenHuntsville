@@ -1,25 +1,34 @@
 ---
 template: about
 ---
-<div data-scope="people">
+<div>
   <div class="bread-search">
   	<ul class="breadcrumbs">
-  		<li>
-  			<a href="/">Home</a>
-  		</li>
+      <content data-scope="people">
+    		<li>
+    			<a href="/">Home</a>
+    		</li>
+    		<li>&nbsp;/&nbsp;</li>
+    		<li>
+    			<a href="/people">People</a>
+    		</li>
+        <li>&nbsp;/&nbsp;</li>
+        <li>
+          <a href="#" data-prop="profile_link">#</a>
+        </li>
+        <li>&nbsp;/&nbsp;</li>
+        <li>
+          <a href="#" data-prop="events_link">Events</a>
+        </li>
+    </content>
+    <content data-scope="events">
   		<li>&nbsp;/&nbsp;</li>
   		<li>
-  			<a href="/people">People</a>
+  			<a href="#" data-prop="event_link">#</a>
   		</li>
-  		<li>&nbsp;/&nbsp;</li>
-  		<li>
-  			<a href="#" data-prop="profile_link">#</a>
-  		</li>
-  		<li>&nbsp;/&nbsp;</li>
-  		<li>
-  			<a href="#" data-prop="events_link">Events</a>
-  		</li>
+    </content>
   	</ul>
+
 
   	<div class="searchform">
   		<form action="/people/search" method="get">

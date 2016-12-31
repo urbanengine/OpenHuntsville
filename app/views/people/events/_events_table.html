@@ -1,17 +1,41 @@
-<!-- TODO: Handle the look for no events; Can hide and show divs -->
-<table border="1">
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Start Time</th>
-    <th>Duration</th>
-    <th></th>
-  </tr>
-  <tr data-scope="events">
-    <td data-prop="name"> </td>
-    <td data-prop="description"> </td>
-    <td data-prop="start_time"> </td>
-    <td data-prop="duration"> </td>
-    <td><a href="#" data-prop="event_edit_link"> </a></td>
-  </tr>
+<link rel="stylesheet" type="text/css" href="/css/datatables/jquery.dataTables.css"/>
+
+<!-- TODO: Handle the look for no events; Can hide and show divs if events.size == 0 -->
+<table id="eventstable" class="display" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start Date/Time</th>
+      <th>Duration</th>
+      <th>Venue</th>
+      <th>Group</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-scope="events">
+      <td data-prop="name"> </td>
+      <td data-prop="description"> </td>
+      <td data-prop="start_datetime"> </td>
+      <td data-prop="duration"> </td>
+      <td data-prop="venue_name"> </td>
+      <td data-prop="group_name"> </td>
+      <td><a href="#" data-prop="edit_event_link"></a></td>
+    </tr>
+  </tbody>
 </table>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/datatables/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+	$('#eventstable').DataTable(
+      {
+      responsive: true,
+      "columnDefs":
+        [
+          {"className": "dt-center", "targets": "_all"}
+        ]
+      });
+    });
+</script>
