@@ -3,7 +3,6 @@ Pakyow::App.bindings :people do
 	scope :people do
 		restful :people
 
-
 		options(:category_one) do
 			get_nested_category_id_and_category_name()
 		end
@@ -13,8 +12,6 @@ Pakyow::App.bindings :people do
 		options(:category_three) do
 			get_nested_category_id_and_category_name()
 		end
-
-
 
 		binding(:id) do
 			{

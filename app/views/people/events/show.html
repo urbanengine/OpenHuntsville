@@ -1,0 +1,46 @@
+---
+template: about
+---
+<div>
+  <div class="bread-search">
+  	<ul class="breadcrumbs">
+      <content data-scope="people">
+    		<li>
+    			<a href="/">Home</a>
+    		</li>
+    		<li>&nbsp;/&nbsp;</li>
+    		<li>
+    			<a href="/people">People</a>
+    		</li>
+        <li>&nbsp;/&nbsp;</li>
+        <li>
+          <a href="#" data-prop="profile_link">#</a>
+        </li>
+        <li>&nbsp;/&nbsp;</li>
+        <li>
+          <a href="#" data-prop="events_link">Events</a>
+        </li>
+    </content>
+    <content data-scope="events">
+  		<li>&nbsp;/&nbsp;</li>
+  		<li>
+  			<a href="#" data-prop="event_link">#</a>
+  		</li>
+    </content>
+  	</ul>
+
+
+  	<div class="searchform">
+  		<form action="/people/search" method="get">
+  			<label for="search-experts">Search:</label>
+  			<input type="text" name="s" value="" id="search-experts" placeholder="Search by name, keyword, or skill">
+  			<input type="submit" value="Search" style="display:inline;">
+  		</form>
+  	</div>
+  </div>
+
+  <div class="clear"></div>
+  <h2>Manage Events</h2>
+  <a href="#" data-prop="schedule_event_link">Schedule Event</a>
+</div>
+<!-- @include events_table -->

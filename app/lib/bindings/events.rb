@@ -7,7 +7,7 @@ Pakyow::App.bindings :events do
     end
 
     binding(:parent_group) do
-      { }
+      bindable.group_id
     end
 
     options(:venue) do
@@ -15,7 +15,7 @@ Pakyow::App.bindings :events do
     end
 
     binding(:venue) do
-      { }
+				bindable.venue_id
     end
 
     binding(:name) do
@@ -53,6 +53,23 @@ Pakyow::App.bindings :events do
 		binding(:duration) do
 			{
 				:content => bindable.duration.to_s + " hour(s)"
+			}
+		end
+
+
+		binding(:edit_event_link) do
+			people = People[session[:people]]
+			{
+			:content => "Edit Event",
+			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s + '/edit'
+			}
+		end
+
+		binding(:event_link) do
+			people = People[session[:people]]
+			{
+			:content => bindable.name,
+			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s
 			}
 		end
   end

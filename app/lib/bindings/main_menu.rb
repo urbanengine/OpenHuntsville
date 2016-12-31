@@ -98,6 +98,25 @@ Pakyow::App.bindings :main_menu do
   		}
   	end
 
+	binding(:manage_events_link) do
+		css_class = "hide"
+		content = ""
+		href = "#"
+		unless cookies[:people].nil?
+			person = People[cookies[:people]]
+			unless person.nil?
+				content = "Manage Events"
+				href = "/people/" + person.custom_url + "/events"
+        css_class = ""
+			end
+		end
+  		{
+  			:class => css_class,
+  			:content => content,
+  			:href => href
+  		}
+  end
+
 	binding(:login_link) do
   		css_class = ""
   		content = "Log In"

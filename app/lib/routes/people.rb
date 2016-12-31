@@ -239,6 +239,16 @@ Pakyow::App.routes(:people) do
           view.scope(:main_menu).apply(request)
         end
 
+        # GET people/:people_id/events/:events_id
+        action :show do
+          event = Event.where("id = ?", params[:events_id]).first
+          people = get_first_person_from_people_id(params[:people_id])
+          view.scope(:people).bind(people)
+          view.scope(:events).apply([event, event])
+          view.scope(:head).apply(request)
+          view.scope(:main_menu).apply(request)
+        end
+
         # GET 'people/:people_id/events/new'
         action :new do
           view.scope(:events).with do
@@ -266,10 +276,30 @@ Pakyow::App.routes(:people) do
             redirect '/people/' + params[:people_id] + '/events'
         end
 
+        #PATCH 'people/:people_id/events/:events_id'
         action :update do
-          event = Event[params[:events_id]]
-          p event
-          p "update?? when do we enter here?"
+          event = Event.where("id = ?", params[:events][:id]).first
+          #TODO: Show and use the same string everywhere. This is failing because its tryign to parse in an invalid format. Need to show the DateTime string properly in the table and then here read it in that format
+          #parsed_time = DateTime.strptime(params[:events][:start_datetime], '%Y-%m-%d %H:%M:%S %p')
+
+          event.name = params[:events][:name]
+          event.description = params[:events][:description]
+          event.group_id = params[:events][:parent_group].to_i
+          #event.start_datetime = parsed_time
+          event.duration = 1 #TODO: Expost this to users through the form
+          event.venue_id = params[:events][:venue].to_i
+
+          event.save
+          redirect '/people/' + params[:people_id] + '/events'
+        end
+
+        # GET 'people/:people_id/events/:events_id/edit'
+        action :edit do
+          event = Event.where("id = ?", params[:events_id]).first
+          view.scope(:events).bind([event, event])
+          view.scope(:people).bind(get_first_person_from_people_id(params[:people_id]))
+          view.scope(:head).apply(request)
+          view.scope(:main_menu).apply(request)
         end
       end
     end
