@@ -55,8 +55,8 @@ h1, h2 {
     visibility: hidden;
 }
 
-.btn {
-	    display: inline-block;
+a.btn {
+    display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
     font-size: 14px;
@@ -77,7 +77,7 @@ h1, h2 {
     border-radius: 4px;
 }
 
-.btn-blue {
+a.btn-blue {
 	color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
