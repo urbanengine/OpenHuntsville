@@ -28,19 +28,19 @@ Pakyow::App.bindings :main_menu do
   			:class => css_class
   		}
   	end
-
-  	binding(:groups_link) do
-  		css_class = ""
-  		splat = request.path.split("/")
-  		unless splat[1].nil? || splat[1].length == 0
-  			if splat[1] == "groups"
-  				css_class = "selected"
-        end
-  		end
-    		{
-    			:class => css_class
-    		}
-    	end
+#TODO: Remove groups until its working
+  	# binding(:groups_link) do
+  	# 	css_class = ""
+  	# 	splat = request.path.split("/")
+  	# 	unless splat[1].nil? || splat[1].length == 0
+  	# 		if splat[1] == "groups"
+  	# 			css_class = "selected"
+    #     end
+  	# 	end
+    # 		{
+    # 			:class => css_class
+    # 		}
+    # 	end
 
 	binding(:about_link) do
   		css_class = ""
