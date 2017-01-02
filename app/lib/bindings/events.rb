@@ -1,3 +1,4 @@
+require 'date'
 Pakyow::App.bindings :events do
 	scope :events do
 		restful :events
@@ -32,7 +33,7 @@ Pakyow::App.bindings :events do
 
     binding(:start_datetime) do
       {
-        :content => bindable.start_datetime
+        :content => if bindable.start_datetime then bindable.start_datetime.getlocal().strftime('%b %d, %Y %I:%M %p') else "" end
       }
 		end
 

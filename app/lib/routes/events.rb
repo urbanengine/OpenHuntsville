@@ -96,13 +96,13 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
-      parsed_time = DateTime.strptime(params[:events][:start_datetime], '%Y-%m-%d %H:%M %p')
+      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
       c_params =
         {
           "name" => params[:events][:name],
           "description" => params[:events][:description],
           "group_id" => params[:events][:parent_group].to_i,
-          "start_datetime" => parsed_time,
+          "start_datetime" => parsed_time, #Note: This is stored in the db without timezone applied (so CST -6hrs)
           "duration" => 1, #TODO: Expost this to users through the form
           "venue_id" => params[:events][:venue].to_i,
           "approved" => false
@@ -119,16 +119,13 @@ Pakyow::App.routes(:events) do
         redirect '/errors/404'
       end
       event = Event.where("id = ?", params[:events][:id]).first
-      #TODO: Show and use the same string everywhere. This is failing because its tryign to parse in an invalid format. Need to show the DateTime string properly in the table and then here read it in that format
-      #parsed_time = DateTime.strptime(params[:events][:start_datetime], '%Y-%m-%d %H:%M:%S %p')
-
+      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
       event.name = params[:events][:name]
       event.description = params[:events][:description]
       event.group_id = params[:events][:parent_group].to_i
-      #event.start_datetime = parsed_time
-      event.duration = 1 #TODO: Expost this to users through the form
+      event.start_datetime = parsed_time
+      event.duration = 1 #TODO: Expose this to users through the form
       event.venue_id = params[:events][:venue].to_i
-
       event.save
       redirect '/events/manage'
     end
