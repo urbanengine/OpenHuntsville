@@ -8,6 +8,7 @@ Sequel.migration do
       String        :description
       DateTime      :start_datetime
       Integer       :duration
+      Boolean       :approved
       foreign_key   :parent_id, :events, :null=>true
       foreign_key   :group_id,  :groups, :null=>false
       foreign_key   :venue_id,  :venues, :null=>false

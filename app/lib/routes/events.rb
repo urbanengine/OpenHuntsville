@@ -23,6 +23,27 @@ Pakyow::App.routes(:events) do
         view.scope(:head).apply(request)
         view.scope(:main_menu).apply(request)
       end
+
+      get '/dashboard', :before => :is_admin_check do
+        unapproved = Event.where(:approved=>true).invert.all
+        p unapproved
+        view.scope(:events).apply(unapproved)
+        view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
+      end
+
+      get 'approve/:events_id', :before => :is_admin_check do
+        success = 'failure'
+        approve_me = Event[params[:events_id]]
+        approve_me.approved = true
+        approve_me.save
+        if request.xhr?
+          success = 'success'
+        else
+          redirect request.referer
+        end
+        send success
+      end
     end
 
     # GET /events; same as Index
@@ -84,7 +105,8 @@ Pakyow::App.routes(:events) do
           "group_id" => params[:events][:parent_group].to_i,
           "start_datetime" => parsed_time,
           "duration" => 1, #TODO: Expost this to users through the form
-          "venue_id" => params[:events][:venue].to_i
+          "venue_id" => params[:events][:venue].to_i,
+          "approved" => false
         }
       event = Event.new(c_params)
       event.save
