@@ -16,21 +16,21 @@ template: about
       <li>
         <a href="#" data-prop="profile_link">#</a>
       </li>
-      <li>&nbsp;/&nbsp;</li>
-      <li>
-        <a href="#" data-prop="events_link">Events</a>
-      </li>
-  </content>
-  <content data-scope="events">
+  	</content>
 		<li>&nbsp;/&nbsp;</li>
-		<li>
-			<a href="#" data-prop="event_link">#</a>
-		</li>
-		<li>&nbsp;/&nbsp;</li>
-		<li>
-			<a href="#" data-prop="edit_event_link">Schedule Event</a>
-		</li>
-  </content>
+    <li>
+      <a href="/events/manage" data-prop="events_link">Events</a>
+    </li>
+	  <content data-scope="events">
+			<li>&nbsp;/&nbsp;</li>
+			<li>
+				<a href="#" data-prop="event_link">#</a>
+			</li>
+			<li>&nbsp;/&nbsp;</li>
+			<li>
+				<a href="/events/new" data-prop="edit_event_link">Schedule Event</a>
+			</li>
+	  </content>
 	</ul>
 
 	<div class="searchform">

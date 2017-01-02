@@ -217,93 +217,6 @@ Pakyow::App.routes(:people) do
 
     end
 
-    # '/people/:people_id/*'
-    member do
-      expand :restful, :events, '/events', :before => :route_head do
-        # GET people/:people_id/events; same as Index
-        action :list do
-          events_all = []
-          people = get_first_person_from_people_id(params[:people_id])
-          unless people.nil?
-            groups = people.groups()
-            groups.each { |group|
-              events = Event.where('group_id = ?', group.id).all
-              events.each { |event|
-                events_all.push(event)
-              }
-            }
-          end
-          view.scope(:people).bind(people)
-          view.scope(:events).apply(events_all)
-          view.scope(:head).apply(request)
-          view.scope(:main_menu).apply(request)
-        end
-
-        # GET people/:people_id/events/:events_id
-        action :show do
-          event = Event.where("id = ?", params[:events_id]).first
-          people = get_first_person_from_people_id(params[:people_id])
-          view.scope(:people).bind(people)
-          view.scope(:events).apply([event, event])
-          view.scope(:head).apply(request)
-          view.scope(:main_menu).apply(request)
-        end
-
-        # GET 'people/:people_id/events/new'
-        action :new do
-          view.scope(:events).with do
-            bind(Event.new)
-          end
-          view.scope(:people).bind(get_first_person_from_people_id(params[:people_id]))
-          view.scope(:head).apply(request)
-          view.scope(:main_menu).apply(request)
-        end
-
-        #POST 'people/:people_id/events/'
-        action :create do
-            parsed_time = DateTime.strptime(params[:events][:start_datetime], '%Y-%m-%d %H:%M %p')
-            c_params =
-              {
-                "name" => params[:events][:name],
-                "description" => params[:events][:description],
-                "group_id" => params[:events][:parent_group].to_i,
-                "start_datetime" => parsed_time,
-                "duration" => 1, #TODO: Expost this to users through the form
-                "venue_id" => params[:events][:venue].to_i
-              }
-            event = Event.new(c_params)
-            event.save
-            redirect '/people/' + params[:people_id] + '/events'
-        end
-
-        #PATCH 'people/:people_id/events/:events_id'
-        action :update do
-          event = Event.where("id = ?", params[:events][:id]).first
-          #TODO: Show and use the same string everywhere. This is failing because its tryign to parse in an invalid format. Need to show the DateTime string properly in the table and then here read it in that format
-          #parsed_time = DateTime.strptime(params[:events][:start_datetime], '%Y-%m-%d %H:%M:%S %p')
-
-          event.name = params[:events][:name]
-          event.description = params[:events][:description]
-          event.group_id = params[:events][:parent_group].to_i
-          #event.start_datetime = parsed_time
-          event.duration = 1 #TODO: Expost this to users through the form
-          event.venue_id = params[:events][:venue].to_i
-
-          event.save
-          redirect '/people/' + params[:people_id] + '/events'
-        end
-
-        # GET 'people/:people_id/events/:events_id/edit'
-        action :edit do
-          event = Event.where("id = ?", params[:events_id]).first
-          view.scope(:events).bind([event, event])
-          view.scope(:people).bind(get_first_person_from_people_id(params[:people_id]))
-          view.scope(:head).apply(request)
-          view.scope(:main_menu).apply(request)
-        end
-      end
-    end
-
     action :new do
       view.scope(:people).with do
         bind(People.new)
@@ -581,10 +494,10 @@ Pakyow::App.routes(:people) do
         end
       end
 
-    pp people.image_url
-    puts "ABOUT TO SAVE"
-        people.save
-        puts "SAVED"
+      pp people.image_url
+      puts "ABOUT TO SAVE"
+      people.save
+      puts "SAVED"
       if people.valid?
         # Save
       elsif names_nil
@@ -652,5 +565,5 @@ Pakyow::App.routes(:people) do
       end
       redirect '/people/' + people.custom_url + "/edit"
     end
-    end
+  end
 end

@@ -483,20 +483,5 @@ Pakyow::App.bindings :people do
 			bindable.bio
 		end
 
-		binding(:events_link) do
-			{
-			:content => "Events",
-			:href => '/people/' + bindable.custom_url.to_s + '/events'
-			}
-		end
-
-		binding(:schedule_event_link) do
-			{
-			:content => "Schedule Event",
-			:href => '/people/' + bindable.custom_url.to_s + '/events/new'
-			}
-		end
-
-
-    end
+  end
 end

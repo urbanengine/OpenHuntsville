@@ -61,7 +61,7 @@ Pakyow::App.bindings :events do
 			people = People[session[:people]]
 			{
 			:content => "Edit Event",
-			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s + '/edit'
+			:href => '/events/' + bindable.id.to_s + '/edit'
 			}
 		end
 
@@ -69,7 +69,7 @@ Pakyow::App.bindings :events do
 			people = People[session[:people]]
 			{
 			:content => bindable.name,
-			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s
+			:href => '/events/' + bindable.id.to_s
 			}
 		end
   end

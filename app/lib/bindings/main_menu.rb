@@ -106,7 +106,7 @@ Pakyow::App.bindings :main_menu do
 			person = People[cookies[:people]]
 			unless person.nil?
 				content = "Manage Events"
-				href = "/people/" + person.custom_url + "/events"
+				href = "/events/manage"
         css_class = ""
 			end
 		end
