@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/css/datatables/jquery.dataTables.css"/>
 
-<!-- TODO: Handle the look for no events; Can hide and show divs if events.size == 0 -->
+<!-- TODO: Handle the view when no events are present; Can hide and show divs if events.size == 0 -->
 <table id="eventstable" class="display" cellspacing="0" width="100%">
   <thead>
     <tr>
@@ -10,6 +10,7 @@
       <th>Duration</th>
       <th>Venue</th>
       <th>Group</th>
+      <th>Approved</th>
       <th></th>
     </tr>
   </thead>
@@ -21,6 +22,7 @@
       <td data-prop="duration"> </td>
       <td data-prop="venue_name"> </td>
       <td data-prop="group_name"> </td>
+      <td data-prop="approved"> </td>
       <td><a href="#" data-prop="edit_event_link"></a></td>
     </tr>
   </tbody>

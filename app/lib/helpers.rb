@@ -345,7 +345,9 @@ module Pakyow::Helpers
     opts = [[]]
     people = People[cookies[:people]]
     people.groups().each do |group|
-      opts << [group.id, group.name]
+      if group.approved
+        opts << [group.id, group.name]
+      end
     end
     opts
   end

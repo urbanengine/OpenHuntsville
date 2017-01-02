@@ -56,12 +56,17 @@ Pakyow::App.bindings :events do
 			}
 		end
 
+		binding(:approved) do
+			{
+				:content => if bindable.approved then "Approved" else "Unapproved" end
+			}
+		end
 
 		binding(:edit_event_link) do
 			people = People[session[:people]]
 			{
 			:content => "Edit Event",
-			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s + '/edit'
+			:href => '/events/' + bindable.id.to_s + '/edit'
 			}
 		end
 
@@ -69,7 +74,13 @@ Pakyow::App.bindings :events do
 			people = People[session[:people]]
 			{
 			:content => bindable.name,
-			:href => '/people/' + people.custom_url.to_s + '/events/' + bindable.id.to_s
+			:href => '/events/' + bindable.id.to_s
+			}
+		end
+
+		binding(:approve_event_url) do
+			{
+				:href => '/events/approve/' + bindable.id.to_s
 			}
 		end
   end
