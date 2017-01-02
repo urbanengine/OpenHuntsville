@@ -26,7 +26,6 @@ Pakyow::App.routes(:events) do
 
       get '/dashboard', :before => :is_admin_check do
         unapproved = Event.where(:approved=>true).invert.all
-        p unapproved
         view.scope(:events).apply(unapproved)
         view.scope(:head).apply(request)
         view.scope(:main_menu).apply(request)
