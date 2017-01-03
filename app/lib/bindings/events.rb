@@ -58,8 +58,17 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:approved) do
+			content = if bindable.approved then "Approved" else "Unapproved" end
+			people = People[session[:people]]
+			if people.admin
+				if bindable.approved
+					content = "<p style=\"margin:0px;\"><a class=\"approve\" href=\"/events/unapprove/" + bindable.id.to_s + "\" style=\"display: block; background-color: #e6968a; text-align: center; color: white; font-size: 1em; padding: 10px 0; width: 100%; border: 0; outline: 0; min-width:150px;\">Unapprove</a></p>"
+				else
+					content = "<p style=\"margin:0px;\"><a class=\"approve\" href=\"/events/approve/" + bindable.id.to_s + "\" style=\"display: block; background-color: #8ae6a0; text-align: center; color: white; font-size: 1em; padding: 10px 0; width: 100%; border: 0; outline: 0; min-width:150px;\">Approve</a></p>"
+				end
+			end
 			{
-				:content => if bindable.approved then "Approved" else "Unapproved" end
+				:content => content
 			}
 		end
 
