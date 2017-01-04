@@ -3,3 +3,5 @@
 3. Email all admins when their event has been approved
 4. Don't show past events
 5. ~~Refine the approval process. Make the dashboard page the same as the manage page but different for admins~~
+6. Fix the breadcrumbs for events so instead of showing Home / People / Tyler Hughes / Events it says Home / Events
+7. Make it so that when an Admin creates an event or a group, it is automatically approved
