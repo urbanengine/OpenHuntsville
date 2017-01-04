@@ -1,7 +1,7 @@
 require 'pp'
-Pakyow::App.bindings :people do
-	scope :people do
-		restful :people
+Pakyow::App.bindings :groups do
+	scope :groups do
+		restful :groups
 
 		options(:category_one) do
 			get_nested_category_id_and_category_name()
@@ -15,104 +15,101 @@ Pakyow::App.bindings :people do
 
 		binding(:id) do
 			{
-				:value => bindable.id
-			}
-		end
-		binding(:member_number) do
-			{
-				:content => bindable.id,
-				:class => bindable.id
-			}
-		end
-		binding(:approve_profile_url) do
-			{
-				:href => '/people/approve/' + bindable.id.to_s
-			}
-		end
-		binding(:spam_profile_url) do
-			{
-				:href => '/people/spam/' + bindable.id.to_s
+			:value => bindable.id
 			}
 		end
 
-		binding(:first_name) do
+		#binding(:member_number) do
+		#	{
+		#		:content => bindable.id,
+		#		:class => bindable.id
+		#	}
+		#end
+		#binding(:approve_profile_url) do
+		#	{
+		#		:href => '/people/approve/' + bindable.id.to_s
+		#	}
+		#end
+		#binding(:spam_profile_url) do
+		#	{
+		#		:href => '/people/spam/' + bindable.id.to_s
+		#	}
+		#end
+
+		binding(:name) do
+			p "Namenamename: "
+			p bindable.name
 			{
-				:content => bindable.first_name
+				:content => bindable.name
 			}
 		end
 
-		binding(:last_name) do
-			{
-				:content => bindable.last_name
-			}
-		end
+		#binding(:company) do
+		#	{
+		#		:content => bindable.company
+		#	}
+		#end
 
-		binding(:company) do
-			{
-				:content => bindable.company
-			}
-		end
+		# binding(:twitter_link) do
+    #
+		# 	show = "hide"
+		# 	title = ""
+		# 	link = ""
+		# 	content = ""
+		# 	if session[:people].nil?
+		# 		show = "show"
+		# 		title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+		# 		link = "/login"
+		# 		content = "Log in to view"
+		# 	else
+		# 		unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
+		# 			show = "show"
+		# 		end
+		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
+		# 			title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
+		# 		end
+		# 		link = "/clicks/people/" + bindable.custom_url + "/twitter"
+		# 		content = "Twitter"
+		# 	end
+		# 	{
+		# 		:target => "_blank",
+		# 		:href => link,
+		# 		:class => show,
+		# 		:title => title,
+		# 		:content => content
+		# 	}
+		# end
 
-		binding(:twitter_link) do
-
-			show = "hide"
-			title = ""
-			link = ""
-			content = ""
-			if session[:people].nil?
-				show = "show"
-				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-				link = "/login"
-				content = "Log in to view"
-			else
-				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
-					show = "show"
-				end
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
-				end
-				link = "/clicks/people/" + bindable.custom_url + "/twitter"
-				content = "Twitter"
-			end
-			{
-				:target => "_blank",
-				:href => link,
-				:class => show,
-				:title => title,
-				:content => content
-			}
-		end
-
-		binding(:linkedin_link) do
-
-			show = "hide"
-			title = ""
-			link = ""
-			content = ""
-			if session[:people].nil?
-				show = "show"
-				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-				link = "/login"
-				content = "Log in to view"
-
-			else
-				content = "LinkedIn"
-				unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
-					show = "show"
-					link = "/clicks/people/" + bindable.custom_url + "/linkedin"
-				end
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
-				end
-			end
-			{
-				:title => title,
-				:href => link,
-				:class => show,
-				:target => "_blank",
-				:content => content
-			}
-		end
+		# binding(:linkedin_link) do
+    #
+		# 	show = "hide"
+		# 	title = ""
+		# 	link = ""
+		# 	content = ""
+		# 	if session[:people].nil?
+		# 		show = "show"
+		# 		title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+		# 		link = "/login"
+		# 		content = "Log in to view"
+    #
+		# 	else
+		# 		content = "LinkedIn"
+		# 		unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
+		# 			show = "show"
+		# 			link = "/clicks/people/" + bindable.custom_url + "/linkedin"
+		# 		end
+		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
+		# 			title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
+		# 		end
+		# 	end
+		# 	{
+		# 		:title => title,
+		# 		:href => link,
+		# 		:class => show,
+		# 		:target => "_blank",
+		# 		:content => content
+		# 	}
+		# end
 
 		binding(:url_link) do
 			show = "hide"
@@ -121,7 +118,7 @@ Pakyow::App.bindings :people do
 			content = ""
 			if session[:people].nil?
 					show = "show"
-					title = "Log in to view " + bindable.first_name + "'s Website"
+					title = "Log in to view " + bindable.name + "'s Website"
 					link = "/login"
 					content = "Log in to view"
 			else
@@ -130,11 +127,11 @@ Pakyow::App.bindings :people do
 
 				else
 					show = "show"
-					link = "/clicks/people/" + bindable.custom_url + "/url"
+					link = "/clicks/groups/" + bindable.id + "/url" #TODO: David: This doesn't work current. Need to alter code for group logic
 				end
 
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					title = bindable.first_name + " " + bindable.last_name + "'s URL"
+				unless bindable.name.nil?
+					title = bindable.name + "'s URL"
 				end
 			end
 			{
@@ -146,29 +143,29 @@ Pakyow::App.bindings :people do
 			}
 		end
 
-		binding(:twitter) do
-			{
-				:content => bindable.twitter
-			}
-		end
+		#binding(:twitter) do
+		#	{
+		#		:content => bindable.twitter
+		#	}
+		#end
 
-		binding(:linkedin) do
-			{
-				:content => bindable.linkedin
-			}
-		end
+		#binding(:linkedin) do
+		#	{
+		#		:content => bindable.linkedin
+		#	}
+		#end
 
-		binding(:url) do
-			{
-				:content => bindable.url
-			}
-		end
+		#binding(:url) do
+		#	{
+		#		:content => bindable.url
+		#	}
+		#end
 
-		binding(:other_info) do
-			{
-				:content => bindable.other_info
-			}
-		end
+		#binding(:other_info) do
+		#	{
+		#		:content => bindable.other_info
+		#	}
+		#end
 
 		binding(:email_link) do
 			if bindable.email.nil?
@@ -182,18 +179,18 @@ Pakyow::App.bindings :people do
 
 		binding(:email) do
 			if bindable.email.nil?
-				bindable.email = "email"
+				bindable.email = ""
 			end
 			{
 				:content => bindable.email
 			}
 		end
 
-		binding(:categories_string) do
-			{
-				:content => bindable.categories_string
-			}
-		end
+		#binding(:categories_string) do
+		#	{
+		#		:content => bindable.categories_string
+		#	}
+		#end
 
 		binding (:category_one_link) do
 			href = ""
@@ -268,6 +265,11 @@ Pakyow::App.bindings :people do
 		binding(:category_two) do
 			bindable.category_two_id
 		end
+
+		binding(:category_three) do
+			bindable.category_three_id
+		end
+
 		binding(:category_spacer_one) do
 			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
 			cat = ""
@@ -283,9 +285,6 @@ Pakyow::App.bindings :people do
 			}
 		end
 
-		binding(:category_three) do
-			bindable.category_three_id
-		end
 		binding(:category_spacer_two) do
 			log_debug("/app/lib/bindings.rb :: category_spacer_one :: ", bindable.categories_string.to_s)
 			cat = ""
@@ -301,9 +300,9 @@ Pakyow::App.bindings :people do
 			}
 		end
 
-		binding(:image_url) do
-			bindable.image_url
-		end
+		#binding(:image_url) do
+		#	bindable.image_url
+		#end
 
 		binding(:image) do
 			puts 'binding(:image) do'
@@ -311,14 +310,14 @@ Pakyow::App.bindings :people do
 			src = ""
 			name = ""
 			unless bindable.nil?
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					name = bindable.first_name + " " + bindable.last_name
+				unless bindable.name.nil?
+					name = bindable.name
 
 					unless bindable.image_url.nil? || bindable.image_url.length == 0
 						pp 'bindable.image_url.nil? || bindable.image_url.length == 0'
 						src = bindable.image_url
 					else
-						needle = bindable.first_name + "-" + bindable.last_name
+						needle = bindable.name
 						haystack = [
 							'Abbie-Cataldo',
 							'Adam-Whipple',
@@ -373,7 +372,7 @@ Pakyow::App.bindings :people do
 						pp 'ELSE bindable.image_url.nil? || bindable.image_url.length == 0'
 					end
 				else
-					pp 'ELSE bindable.first_name.nil? || bindable.last_name.nil?'
+					pp 'ELSE bindable.name.nil?'
 				end
 			else
 				pp 'bindable NIL'
@@ -386,77 +385,69 @@ Pakyow::App.bindings :people do
 			}
 		end
 
-		binding(:image_unveil) do
-			src = ""
-			name = ""
-			unless bindable.nil?
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					name = bindable.first_name + " " + bindable.last_name
-
-					unless bindable.image_url.nil?
-						src = bindable.image_url
-					else
-						src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
-					end
-				end
-			end
-			{
-
-				:'data-src' => src,
-				:title =>  name,
-				:alt => name
-			}
-		end
-
-		binding(:custom_url) do
-			bindable.custom_url
-		end
-
-		binding(:admin) do
-			{
-				:checked => bindable[:admin]
-			}
-		end
-
-		binding(:approved) do
-			{
-				:checked => bindable[:approved]
-			}
-		end
+		# binding(:image_unveil) do
+		# 	src = ""
+		# 	name = ""
+		# 	unless bindable.nil?
+		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
+		# 			name = bindable.first_name + " " + bindable.last_name
+    #
+		# 			unless bindable.image_url.nil?
+		# 				src = bindable.image_url
+		# 			else
+		# 				src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
+		# 			end
+		# 		end
+		# 	end
+		# 	{
+    #
+		# 		:'data-src' => src,
+		# 		:title =>  name,
+		# 		:alt => name
+		# 	}
+		# end
+		#binding(:custom_url) do
+		#	bindable.custom_url
+		#end
+		# binding(:admin) do
+		# 	{
+		# 		:checked => bindable[:admin]
+		# 	}
+		# end
+    #
+		# binding(:approved) do
+		# 	{
+		# 		:checked => bindable[:approved]
+		# 	}
+		# end
 
 		binding(:profile_link) do
-
-			first_name = ""
-			last_name = ""
-			unless bindable.first_name.nil?
-				first_name = bindable.first_name
-			end
-			unless bindable.last_name.nil?
-				last_name = bindable.last_name
-			end
-			{
-				:href => "/people/" + bindable.custom_url,
-				:content => first_name + " " + last_name
+			name = ""
+		 	unless bindable.name.nil?
+		 		name = bindable.name
+		 	end
+		 	{
+		 	:href => "/groups/" + bindable.id,
+			:content => name
 			}
 		end
 
 		binding(:edit_profile_link) do
-
-			{
-				:href => "/people/" + bindable.custom_url.to_s + "/edit"
-			}
+				{
+		 		:href => "/groups/" + bindable.id + "/edit"
+		 		}
 		end
-
-		binding(:admin_fieldset) do
-			visible = "show"
-		  	people = People[cookies[:people]]
-			if people.nil? || people.admin.nil? || people.admin == false
-			 	visible = "hide"
-			end
-			{
-				:class => visible
-			}
-		end
+    #
+		# binding(:admin_fieldset) do
+		# 	visible = "show"
+		#   	people = People[cookies[:people]]
+		# 	if people.nil? || people.admin.nil? || people.admin == false
+		# 	 	visible = "hide"
+		# 	end
+		# 	{
+		# 		:class => visible
+		# 	}
+		# end
 
 		binding(:container) do
 			classes = "profile"
@@ -479,28 +470,9 @@ Pakyow::App.bindings :people do
 				:class => classes
 			}
 		end
-		binding(:bio) do
-			bindable.bio
+
+		binding(:description) do
+			bindable.description
 		end
-
-		binding(:events_link) do
-			{
-			:content => "Events",
-			:href => '/people/' + bindable.custom_url.to_s + '/events'
-			}
-		end
-		
-		# schedule_event_link
-    	# previous_link = {:class => 'previous-next-btns', :href => "/people"}
-
-		binding(:schedule_event_link) do
-			{
-			:css => "btn btn-blue",
-			:content => "Schedule Event",
-			:href => '/people/' + bindable.custom_url.to_s + '/events/new'
-			}
-		end
-
-
-    end
+  end
 end

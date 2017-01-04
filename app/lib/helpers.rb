@@ -341,6 +341,25 @@ module Pakyow::Helpers
     opts
   end
 
+  def get_groups_for_logged_in_person()
+    opts = [[]]
+    people = People[cookies[:people]]
+    people.groups().each do |group|
+      if group.approved
+        opts << [group.id, group.name]
+      end
+    end
+    opts
+  end
+
+  def get_venues()
+    opts = [[]]
+    Venue.all.each do |venue|
+      opts << [venue.id, venue.name]
+    end
+    opts
+  end
+
   def resize_and_crop(image, size)
     if image.width < image.height
       remove = ((image.height - image.width)/2).round
