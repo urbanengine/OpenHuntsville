@@ -1,7 +1,7 @@
 Pakyow::App.routes(:groups) do
   include SharedRoutes
 
-  expand :restful, :groups, '/groups' do
+  expand :restful, :groups, '/groups', :before => :route_head do
     collection do
       get 'unapproved' do
         if cookies[:people].nil?
@@ -25,13 +25,43 @@ Pakyow::App.routes(:groups) do
       end
     end
 
-    action :new do
-      #redirect "/"
-
+    # GET '/groups/new'
+    action :new, :before => :is_admin_check do
+      people = People[session[:people]]
+      if people.nil?
+        redirect '/errors/404'
+      end
+      view.scope(:groups).with do
+        bind(Group.new)
+      end
+      view.scope(:people).bind(people)
+      view.scope(:head).apply(request)
+      view.scope(:main_menu).apply(request)
     end
 
-    action :create do
-      #redirect "/"
+    #POST '/groups/'
+    action :create, :before => :is_admin_check  do
+      people = People[session[:people]]
+      if people.nil?
+        redirect '/errors/404'
+      end
+      category_array = [params[:groups][:category_one],params[:groups][:category_two],params[:groups][:category_three]]
+      c_params =
+        {
+          "name" => params[:groups][:name],
+          "description" => params[:groups][:description],
+          "approved" => true,
+          "categories" => Sequel::Postgres::JSONHash.new(category_array)
+        }
+      group = Group.new(c_params)
+      group.save
+
+      admins = People.where("admin = true").all
+      admins.each { |person|
+        person.add_group(group)
+      }
+
+      redirect '/groups/' + group.id.to_s + '/edit'
     end
 
     # GET /groups; same as Index
@@ -103,7 +133,11 @@ Pakyow::App.routes(:groups) do
     end
 
     # GET /groups/:groups_id/edit
-    action :edit do
+    action :edit, :before => :is_admin_check  do
+      people = People[session[:people]]
+      if people.nil?
+        redirect '/errors/404'
+      end
       group = Group.where("id = ?", params[:groups_id]).first
 
       view.scope(:groups).apply(group)
@@ -113,10 +147,6 @@ Pakyow::App.routes(:groups) do
 
     action :update do
       #redirect "/"
-    end
-
-    post :save, 'save' do
-      #redirect "/categories"
     end
   end
 end

@@ -6,7 +6,7 @@
 <form data-scope="groups" id="people-form" data-prop="action"> <!-- TODO: proper css id -->
   <ul class="errors"><li data-scope="error"></li></ul>
   <fieldset class="margin-t">
-    <legend>Group Profile Information</legend>
+    <legend>Group Information</legend>
     <ul>
     <input type="hidden" data-prop="id" />
       <li>
@@ -14,16 +14,8 @@
         <input type="text" data-prop="name" name="groups[name]" placeholder="Name">
       </li>
       <li>
-        <label>Email</label>
-        <input type="text" data-prop="email" name="groups[email]" placeholder="Email">
-      </li>
-      <li>
-        <label>Website</label>
-        <input type="text" data-prop="url" name="groups[url]" placeholder="Website URL (optional)">
-      </li>
-      <li>
-        <label>Bio</label>
-        <textarea data-prop="bio" id="bio" name="groups[description]" placeholder="Enter your description (160 characters or less)"></textarea>
+        <label>Description</label>
+        <textarea data-prop="description" id="bio" name="groups[description]" placeholder="Enter your description (160 characters or less)"></textarea>
         <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
       </li>
       <li style="width:100%;">
@@ -38,37 +30,25 @@
         <label>Third Industry Category</label>
         <select type="text" data-prop="category_three"></select>
       </li>
+<!--
       <li>
         <label>Group Profile Image</label>
           <input id="fileupload" type="file" name="files[]">
           <br>
-          <br>
-          <!-- The global progress bar -->
+          <br>-->
+          <!-- The global progress bar --> <!--
           <div id="progress" class="progress">
               <div class="progress-bar progress-bar-success"></div>
-          </div>
-          <!-- The container for the uploaded files -->
+          </div>-->
+          <!-- The container for the uploaded files --> <!--
           <div id="files" class="files" data-prop="image_url"></div>
           <input type="hidden" id="tempimage" name="tempimage"></input>
       </li>
+      -->
     </ul>
     <input id="submit" type="submit" value="Save">
   </fieldset>
 <!--
-  <fieldset>
-    <legend>Password Reset</legend>
-    <ul>
-      <li>
-        <label>Enter New Password</label>
-        <input type="password" data-prop="password" name="people[password]" value="" placeholder="Enter Your Password">
-      </li>
-      <li>
-        <label>Re-Enter New Password</label>
-        <input type="password" data-prop="password_confirmation" name="people[password_confirmation]" value="" placeholder="Confirm Your Password">
-      </li>
-    </ul>
-  </fieldset>
-
   <fieldset data-prop="admin_fieldset">
     <legend>Administrator Section</legend>
     <ul>
@@ -95,6 +75,7 @@
 <script src="/js/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
 <script src="/js/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+<!--
 <script type="text/javascript">
 $(document).ready(function(){
   console.log("document ready");
@@ -150,4 +131,4 @@ $(document).ready(function(){
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
 });
-</script>
+</script>-->

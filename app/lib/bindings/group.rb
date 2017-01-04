@@ -19,97 +19,11 @@ Pakyow::App.bindings :groups do
 			}
 		end
 
-		#binding(:member_number) do
-		#	{
-		#		:content => bindable.id,
-		#		:class => bindable.id
-		#	}
-		#end
-		#binding(:approve_profile_url) do
-		#	{
-		#		:href => '/people/approve/' + bindable.id.to_s
-		#	}
-		#end
-		#binding(:spam_profile_url) do
-		#	{
-		#		:href => '/people/spam/' + bindable.id.to_s
-		#	}
-		#end
-
 		binding(:name) do
-			p "Namenamename: "
-			p bindable.name
 			{
 				:content => bindable.name
 			}
 		end
-
-		#binding(:company) do
-		#	{
-		#		:content => bindable.company
-		#	}
-		#end
-
-		# binding(:twitter_link) do
-    #
-		# 	show = "hide"
-		# 	title = ""
-		# 	link = ""
-		# 	content = ""
-		# 	if session[:people].nil?
-		# 		show = "show"
-		# 		title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-		# 		link = "/login"
-		# 		content = "Log in to view"
-		# 	else
-		# 		unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
-		# 			show = "show"
-		# 		end
-		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
-		# 			title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
-		# 		end
-		# 		link = "/clicks/people/" + bindable.custom_url + "/twitter"
-		# 		content = "Twitter"
-		# 	end
-		# 	{
-		# 		:target => "_blank",
-		# 		:href => link,
-		# 		:class => show,
-		# 		:title => title,
-		# 		:content => content
-		# 	}
-		# end
-
-		# binding(:linkedin_link) do
-    #
-		# 	show = "hide"
-		# 	title = ""
-		# 	link = ""
-		# 	content = ""
-		# 	if session[:people].nil?
-		# 		show = "show"
-		# 		title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-		# 		link = "/login"
-		# 		content = "Log in to view"
-    #
-		# 	else
-		# 		content = "LinkedIn"
-		# 		unless bindable.nil? || bindable.linkedin.nil? || bindable.linkedin.length == 0
-		# 			show = "show"
-		# 			link = "/clicks/people/" + bindable.custom_url + "/linkedin"
-		# 		end
-		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
-		# 			title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
-		# 		end
-		# 	end
-		# 	{
-		# 		:title => title,
-		# 		:href => link,
-		# 		:class => show,
-		# 		:target => "_blank",
-		# 		:content => content
-		# 	}
-		# end
 
 		binding(:url_link) do
 			show = "hide"
@@ -143,54 +57,11 @@ Pakyow::App.bindings :groups do
 			}
 		end
 
-		#binding(:twitter) do
-		#	{
-		#		:content => bindable.twitter
-		#	}
-		#end
-
-		#binding(:linkedin) do
-		#	{
-		#		:content => bindable.linkedin
-		#	}
-		#end
-
-		#binding(:url) do
-		#	{
-		#		:content => bindable.url
-		#	}
-		#end
-
-		#binding(:other_info) do
-		#	{
-		#		:content => bindable.other_info
-		#	}
-		#end
-
-		binding(:email_link) do
-			if bindable.email.nil?
-				bindable.email = "webmaster@openhsv.com"
-			end
+		binding(:categories_string) do
 			{
-				:content => bindable.email,
-				:href => "mailto:" + bindable.email
+				:content => bindable.categories_string
 			}
 		end
-
-		binding(:email) do
-			if bindable.email.nil?
-				bindable.email = ""
-			end
-			{
-				:content => bindable.email
-			}
-		end
-
-		#binding(:categories_string) do
-		#	{
-		#		:content => bindable.categories_string
-		#	}
-		#end
 
 		binding (:category_one_link) do
 			href = ""
