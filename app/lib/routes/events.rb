@@ -28,13 +28,6 @@ Pakyow::App.routes(:events) do
         view.scope(:main_menu).apply(request)
       end
 
-      get '/dashboard', :before => :is_admin_check do
-        unapproved = Event.where(:approved=>true).invert.all
-        view.scope(:events).apply(unapproved)
-        view.scope(:head).apply(request)
-        view.scope(:main_menu).apply(request)
-      end
-
       get 'approve/:events_id', :before => :is_admin_check do
         success = 'failure'
         approve_me = Event[params[:events_id]]
