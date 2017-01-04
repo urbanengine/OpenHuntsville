@@ -12,12 +12,16 @@ Pakyow::App.routes(:events) do
         if people.nil?
           redirect '/errors/404'
         end
-        people.groups().each { |group|
-          events = Event.where('group_id = ?', group.id).all
-          events.each { |event|
-            events_all.push(event)
+        if people.admin
+          events_all = Event.all #TODO: only events in the future
+        else
+          people.groups().each { |group|
+            events = Event.where('group_id = ?', group.id).all  #TODO: only events in the future
+            events.each { |event|
+              events_all.push(event)
+            }
           }
-        }
+        end
         view.scope(:people).bind(people)
         view.scope(:events).apply(events_all)
         view.scope(:head).apply(request)
@@ -35,6 +39,19 @@ Pakyow::App.routes(:events) do
         success = 'failure'
         approve_me = Event[params[:events_id]]
         approve_me.approved = true
+        approve_me.save
+        if request.xhr?
+          success = 'success'
+        else
+          redirect request.referer
+        end
+        send success
+      end
+
+      get 'unapprove/:events_id', :before => :is_admin_check do
+        success = 'failure'
+        approve_me = Event[params[:events_id]]
+        approve_me.approved = false
         approve_me.save
         if request.xhr?
           success = 'success'
