@@ -292,20 +292,20 @@ Pakyow::App.bindings :groups do
 		# 	}
 		# end
 
-		binding(:profile_link) do
+		binding(:group_link) do
 			name = ""
 		 	unless bindable.name.nil?
 		 		name = bindable.name
 		 	end
 		 	{
-		 	:href => "/groups/" + bindable.id,
+		 	:href => "/groups/" + bindable.id.to_s,
 			:content => name
 			}
 		end
 
-		binding(:edit_profile_link) do
+		binding(:edit_group_link) do
 				{
-		 		:href => "/groups/" + bindable.id + "/edit"
+		 		:href => "/groups/" + bindable.id.to_s + "/edit"
 		 		}
 		end
     #

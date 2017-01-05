@@ -126,8 +126,18 @@ Pakyow::App.routes(:groups) do
     # GET /groups/:groups_id
     action :show do
       group = Group.where("id = ?", params[:groups_id]).first
+      view.scope(:groups).apply(group)
 
-      view.scope(:group).apply(group)
+      all_cats = Category.order(:slug).all
+      parent_cats = []
+      all_cats.each { |item|
+        if item.parent_id.nil?
+          parent_cats.push(item)
+        end
+      }
+      parent_cats.unshift("everyone")
+      view.scope(:categories_menu).apply(parent_cats)
+
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
@@ -140,7 +150,7 @@ Pakyow::App.routes(:groups) do
       end
       group = Group.where("id = ?", params[:groups_id]).first
 
-      view.scope(:groups).apply(group)
+      view.scope(:groups).apply([group, group])
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
