@@ -107,7 +107,14 @@ Pakyow::App.bindings :main_menu do
 			unless person.nil?
 				content = "Manage Events"
 				href = "/events/manage"
-        css_class = ""
+    		splat = request.path.split("/")
+    		unless splat[1].nil? || splat[1].length == 0
+    			if splat[1] == "events"
+    				css_class = "selected"
+          else
+            css_class = ""
+          end
+    		end
 			end
 		end
   		{
