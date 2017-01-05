@@ -2,6 +2,7 @@
 1. Error checking on events to make sure that in the edit page a user has the correct credentials to have edit rights. I think currently someone could edit any event by manipulating the url
 2. ~~Don't show past events~~
 3. Make it so that when an Admin creates an event or a group, it is automatically approved
+4. Add admin interface for Groups. Should be able to add people as group admins
 
 # Enhancements
 1. ~~Group workflows for group creation~~
