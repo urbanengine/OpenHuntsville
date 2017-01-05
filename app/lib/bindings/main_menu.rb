@@ -84,7 +84,7 @@ Pakyow::App.bindings :main_menu do
 				end
 			end
 		end
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
 			person = People[cookies[:people]]
 			unless person.nil?
 				content = "Edit Profile"
@@ -102,7 +102,7 @@ Pakyow::App.bindings :main_menu do
 		css_class = "hide"
 		content = ""
 		href = "#"
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
 			person = People[cookies[:people]]
 			unless person.nil?
 				content = "Manage Events"
@@ -127,7 +127,7 @@ Pakyow::App.bindings :main_menu do
 				css_class = "selected"
 			end
 		end
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
 			person = People[cookies[:people]]
 			unless person.nil?
 				content = "Log Out"
@@ -142,7 +142,7 @@ Pakyow::App.bindings :main_menu do
   	end
 	binding(:uid) do
 		val = ""
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
 			person = People[cookies[:people]]
 		    unless person.nil?
 		    	val = person.id

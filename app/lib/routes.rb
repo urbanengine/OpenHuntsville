@@ -6,8 +6,6 @@ Pakyow::App.routes do
     redirect(router.group(:session).path(:new)) unless session[:people]
   end
 
-
-
   get '/' do
     log_debug("/app/lib/routes.rb :: default :: session :: ", session.to_s)
     log_debug("/app/lib/routes.rb :: default :: cookies[:people] :: ", cookies[:people])
@@ -34,7 +32,7 @@ Pakyow::App.routes do
 
   get :logout, '/logout' do
     uid = cookies[:people]
-    cookies[:people] = 0
+    cookies[:people] = nil
     reroute router.group(:session).path(:remove), :delete
   end
   get :about, '/about' do

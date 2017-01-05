@@ -35,7 +35,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'unapproved' do
-        if cookies[:people].nil?
+        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
           redirect '/errors/401'
         else
           person = People[cookies[:people]]
@@ -144,7 +144,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'profile-created' do
-        if cookies[:people].nil?
+        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
           redirect '/people/new'
         else
           view.scope(:people).bind(People[cookies[:people]])
@@ -154,7 +154,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'create-profile' do
-        if cookies[:people].nil?
+        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
           redirect '/people/new'
         else
           view.scope(:people).bind(People[cookies[:people]])
@@ -164,7 +164,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'account-registered' do
-        if cookies[:people].nil?
+        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
           redirect '/people/new'
         else
           view.scope(:head).apply(request)
@@ -282,7 +282,7 @@ Pakyow::App.routes(:people) do
       total_people = People.where("approved = true").count
       # If user is authenticated, don't show default
       page_no = 0
-      unless cookies[:people].nil? || cookies[:people].size == 0
+      unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
         previous_link = {:class => 'hide',:value => 'hidden'}
         unless params[:page].nil? || params[:page].size == 0
           page_no = params[:page].to_i
