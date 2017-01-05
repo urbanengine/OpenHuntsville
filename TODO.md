@@ -3,6 +3,7 @@
 2. ~~Don't show past events~~
 3. Make it so that when an Admin creates an event or a group, it is automatically approved
 4. Add admin interface for Groups. Should be able to add people as group admins
+5. If an event start_datetime or venue is updated, but has already been approved, it should be set back to unapproved
 
 # Enhancements
 1. ~~Group workflows for group creation~~
