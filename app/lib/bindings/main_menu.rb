@@ -114,6 +114,8 @@ Pakyow::App.bindings :main_menu do
           else
             css_class = ""
           end
+        else
+          css_class = ""
     		end
 			end
 		end
