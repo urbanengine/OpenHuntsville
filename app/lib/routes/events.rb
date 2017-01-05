@@ -13,10 +13,10 @@ Pakyow::App.routes(:events) do
           redirect '/errors/404'
         end
         if people.admin
-          events_all = Event.all #TODO: only events in the future
+          events_all = Event.where('start_datetime > ?', DateTime.now).all
         else
           people.groups().each { |group|
-            events = Event.where('group_id = ?', group.id).all  #TODO: only events in the future
+            events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now).all
             events.each { |event|
               events_all.push(event)
             }
