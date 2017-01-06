@@ -16,4 +16,4 @@
 
 # Potential Enhancements
 1. Fix the breadcrumbs for events so instead of showing Home / People / Tyler Hughes / Events it says Home / Events
-2. Clean up `dashboard` route: move it to `people/dashboard`, and make it look like the `events/manage`
+2. Clean up `dashboard` route: move it to `people/manage`, and make it look like the `events/manage`
