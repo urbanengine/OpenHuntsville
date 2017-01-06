@@ -55,32 +55,31 @@ h1, h2 {
     visibility: hidden;
 }
 
-a.btn {
-    display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
+.btn {
+	background-color: #091B1B;
     text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 4px;
+    color: #f6f6f6;
+    font-size: 1em;
+    padding: 7px 10px 8px;
+    border: 0;
+    outline: 0;
+    width: 140px;
 }
 
-a.btn-blue {
-	color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
+.btn:hover {
+	background-color: #054242;
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+.sub-heading {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.pull-right {
+	float: right;
 }
 
 /*================ HEADER =================
@@ -456,6 +455,47 @@ nav li a.selected, nav li a.selected:hover {
 }
 .theteam p {
 	font-size: 1.3em;
+}
+
+/*============ MANAGE EVENTS===============
+=========================================*/
+
+#schedule-toolbar {
+	padding: 0 0 20px 0;
+}
+
+#eventstable_wrapper {
+	padding: 0 0 20px 0;
+}
+
+.approve-btn {
+	background-color: #449D44;
+    text-align: center;
+    color: #f6f6f6;
+    font-size: 1em;
+    padding: 7px 10px 8px;
+    border: 0;
+    outline: 0;
+    width: 140px;
+}
+
+.approve-btn:hover {
+	color: #f6f6f6;
+}
+
+.unapprove-btn {
+	background-color: #C9302C;
+    text-align: center;
+    color: #f6f6f6;
+    font-size: 1em;
+    padding: 7px 10px 8px;
+    border: 0;
+    outline: 0;
+    width: 140px;
+}
+
+.unapprove-btn:hover {
+	color: #f6f6f6;
 }
 
 /*=============== ORIGINALS ===============
@@ -1218,7 +1258,7 @@ footer a:hover {
 
 .hide
 {
-	height:0px;  
+	height:0px;
 	overflow:hidden;
 	margin:0px;
 	padding:0px;
