@@ -388,17 +388,30 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_group_admin_or_site_admin()
-      people = People[cookies[:people]]
-      if people.nil?
-        return false
-      end
-      if people.admin
-        return true
-      end
-      if people.groups().length == 0
-        return false
-      end
+    people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
+    if people.admin
       return true
+    end
+    if people.groups().length == 0
+      return false
+    end
+    return true
+  end
+
+  def logged_in_user_is_manager_of_event(event)
+    people = People[cookies[:people]]
+    people.groups().each{ |group|
+      logged_in_users_events = Event.where("group_id = ?", group.id).all
+      logged_in_users_events.each { |logged_in_user_event|
+        if logged_in_user_event.id == event
+          return true
+        end
+      }
+    }
+    return false
   end
 
 end # module Pakyow::Helpers
