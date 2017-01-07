@@ -115,7 +115,7 @@ Pakyow::App.routes(:events) do
           "start_datetime" => parsed_time, #Note: This is stored in the db without timezone applied (so CST -6hrs)
           "duration" => 1, #TODO: Expost this to users through the form
           "venue_id" => params[:events][:venue].to_i,
-          "approved" => false
+          "approved" => if people.admin then true else false end
         }
       event = Event.new(c_params)
       event.save
@@ -135,7 +135,7 @@ Pakyow::App.routes(:events) do
       parsed_datetime = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
       venue_id = params[:events][:venue].to_i
       minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
-      if minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id
+      if people.admin == false && (minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id)
         event.approved = false
       end
       event.name = params[:events][:name]
