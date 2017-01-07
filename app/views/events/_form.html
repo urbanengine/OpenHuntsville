@@ -34,7 +34,15 @@
 <script>
 $.datetimepicker.setLocale('en');
 var nextWednesday = new Date();
+var monthAbbreviations = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+  "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+];
+//Algo reference for nextWedneday: http://stackoverflow.com/questions/3638906/get-date-of-specific-day-of-the-week-in-javascript
 nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
+var defaultValue = monthAbbreviations[nextWednesday.getMonth()] + " "
+                    + nextWednesday.getDate().toString() + ", "
+                    + nextWednesday.getFullYear().toString() + " "
+                    + "18:00 PM";
 $('#datetimepicker').datetimepicker({
 	disabledWeekDays: [0,1,2,4,5,6],
 	allowTimes:['18:00','19:00','20:00','21:00'],
@@ -43,6 +51,7 @@ $('#datetimepicker').datetimepicker({
   inline:true,
   defaultDate: nextWednesday,
   minDate: nextWednesday,
-  defaultTime: "18:00"
+  defaultTime: "18:00",
+  value: defaultValue
 });
 </script>
