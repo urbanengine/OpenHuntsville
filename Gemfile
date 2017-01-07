@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-ruby "2.2.0"
-gem "pakyow", git: "https://github.com/pakyow/pakyow.git"
+
+gem "pakyow", '~> 0.11.3'
 
 # application server
 gem "puma"
@@ -25,11 +25,12 @@ gem "pg"
 ## A make-like build utility for Ruby. - http://docs.seattlerb.org/rake
 gem "rake"
 
-gem "bcrypt"
-
-## Integrate with Mandrill to send transactional emails
-gem "mandrill-api"
+## Integrate with Mailgun to send transactional emails
+gem 'mailgun-ruby'
 
 
 gem 'aws-sdk', '~> 2'
 gem "mini_magick"
+gem 'nokogiri'
+gem 'bcrypt-ruby', '3.1.5', :require => 'bcrypt'
+# gem 'yaml

@@ -1,9 +1,18 @@
 Pakyow::App.routes do
-
+  include SharedRoutes
   fn :require_auth do
     log_debug("/app/lib/routes.rb :: require_auth :: session :: ", session.to_s)
     log_debug("/app/lib/routes.rb :: require_auth :: cookies[:people] :: ", cookies[:people])
     redirect(router.group(:session).path(:new)) unless session[:people]
+  end
+
+  get '/' do
+    log_debug("/app/lib/routes.rb :: default :: session :: ", session.to_s)
+    log_debug("/app/lib/routes.rb :: default :: cookies[:people] :: ", cookies[:people])
+    log_debug("/app/lib/routes.rb :: default :: cookies :: ", cookies.to_s)
+    log_debug("/app/lib/routes.rb :: default :: params :: ", params.to_s)
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
 
   default do
@@ -23,7 +32,7 @@ Pakyow::App.routes do
 
   get :logout, '/logout' do
     uid = cookies[:people]
-    cookies[:people] = 0
+    cookies[:people] = nil
     reroute router.group(:session).path(:remove), :delete
   end
   get :about, '/about' do
@@ -43,5 +52,35 @@ Pakyow::App.routes do
     view.scope(:people).apply(People.all)
     view.scope(:head).apply(request)
     view.scope(:main_menu).apply(request)
+  end
+
+  get :dashboard, '/dashboard', :before => :is_admin_check do
+    # NOAH
+    unapproved = People.where(:approved=>false).all
+    pp unapproved
+    subset = Array.new
+    unapproved.each{|person|
+      unless person.spam
+        subset.push(person)
+
+      end
+    }
+    # pp subset
+
+    view.scope(:people).apply(subset)
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
+  end
+  get '/errors/401' do
+
+  end
+  get '/errors/404' do
+
+  end
+  get '/errors/403' do
+
+  end
+  get '/errors' do
+
   end
 end

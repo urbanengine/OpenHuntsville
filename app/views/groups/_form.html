@@ -1,0 +1,134 @@
+<!-- Generic page styles -->
+<link rel="stylesheet" href="/js/jQuery-File-Upload/css/style.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="/js/jQuery-File-Upload/css/jquery.fileupload.css">
+
+<form data-scope="groups" id="people-form" data-prop="action"> <!-- TODO: proper css id -->
+  <ul class="errors"><li data-scope="error"></li></ul>
+  <fieldset class="margin-t">
+    <legend>Group Information</legend>
+    <ul>
+    <input type="hidden" data-prop="id" />
+      <li>
+        <label>Name</label>
+        <input type="text" data-prop="name" name="groups[name]" placeholder="Name">
+      </li>
+      <li>
+        <label>Description</label>
+        <textarea data-prop="description" id="bio" name="groups[description]" placeholder="Enter your description (160 characters or less)"></textarea>
+        <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
+      </li>
+      <li style="width:100%;">
+        <label>First Industry Category</label>
+        <select type="text" data-prop="category_one" class="chosen"><option data-prop="category_one_id" selected></option></select>
+      </li>
+      <li style="width:100%;">
+        <label>Second Industry Category</label>
+        <select type="text" data-prop="category_two"></select>
+      </li>
+      <li style="width:100%;">
+        <label>Third Industry Category</label>
+        <select type="text" data-prop="category_three"></select>
+      </li>
+<!--
+      <li>
+        <label>Group Profile Image</label>
+          <input id="fileupload" type="file" name="files[]">
+          <br>
+          <br>-->
+          <!-- The global progress bar --> <!--
+          <div id="progress" class="progress">
+              <div class="progress-bar progress-bar-success"></div>
+          </div>-->
+          <!-- The container for the uploaded files --> <!--
+          <div id="files" class="files" data-prop="image_url"></div>
+          <input type="hidden" id="tempimage" name="tempimage"></input>
+      </li>
+      -->
+    </ul>
+    <input id="submit" type="submit" value="Save">
+  </fieldset>
+<!--
+  <fieldset data-prop="admin_fieldset">
+    <legend>Administrator Section</legend>
+    <ul>
+      <li>
+        <label>Is approved?</label>
+        <input data-prop="approved" type="checkbox" value="#" name="people[approved]">
+      </li>
+      <li>
+        <label>Is admin?</label>
+        <input data-prop="admin" type="checkbox" value="#" name="people[admin]" >
+      </li>
+      <li>
+        <label>Image URL</label>
+        <input id="image_url" type="text" data-prop="image_url" name="people[image_url]">
+      </li>
+    </ul>
+  </fieldset>
+-->
+</form>
+<script src="/js/jquery.min.js"></script>
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="/js/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="/js/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+<!--
+<script type="text/javascript">
+$(document).ready(function(){
+  console.log("document ready");
+  $('#custom_url').blur(function(){
+    $.ajax({
+    url: '/groups/url-available',
+    type: 'get',
+    dataType: 'html',
+    data: $('#people-form').serialize(),
+    success: function(data) {
+      if (data == 'failure')
+      {
+        $('#custom_url').css('background-color','rgba(255,0,0,0.25)');
+      }
+      else
+      {
+        $('#custom_url').css('background-color','white');
+      }
+      return false;
+      }
+    });
+  if ($('#image_url').val().length == 0 || $('#image_url').val().indexOf("profile-backup") != -1)
+  {
+     $('#image_url').after("<p style='color:#00A3B8;'>We tried to find your picture automatically, but we did not find the JPGs we were looking for. Please try uploading your favorite profile image to gravatar.com and coming back to #openHSV and saving your profile. We promise that this will be a good move for your future on the Internetz.</p>");
+  }
+  });
+        'use strict';
+    // Change this to the location of your server-side upload handler:
+    // var url = window.location.hostname === 'blueimp.github.io' ?
+    //             '//jquery-file-upload.appspot.com/' : 'server/php/';
+    var url = '/groups/upload/';
+    console.log(url);
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        type: "PATCH",
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('#fileupload').toggle();
+                $('#files').html("<strong>" + file.name + "</strong> queued for upload. Save profile to upload.");
+                $('#tempimage').val(file.temp);
+                $('#progress .progress-bar').css('width', 0);
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+});
+</script>-->

@@ -22,6 +22,31 @@ CSV_PATH = File.dirname(__FILE__) + '/seed_experts.csv'
 CATS_PATH = File.dirname(__FILE__) + '/cats.csv'
 
 namespace :seed do
+  
+  desc "seed the database using data for development"
+  task :dev => ['pakyow:stage'] do
+    
+    puts "Starting the seed:categories task"
+    Rake::Task["seed:categories"].invoke
+    
+    puts "Starting the seed:admins task"
+    Rake::Task["seed:admins"].invoke
+    
+    puts "Starting the seed:experts task"
+    Rake::Task["seed:experts"].invoke
+    
+    puts "Starting the seed:groups task"
+    Rake::Task["seed:groups"].invoke
+    
+    puts "Starting the seed:group_admins task"
+    Rake::Task["seed:group_admins"].invoke
+    
+    puts "Starting the seed:venues task"
+    Rake::Task["seed:venues"].invoke
+    
+    # puts "Starting the seed:events task"
+    # Rake::Task["seed:events"].invoke
+  end
 
   desc "seed the database with MVP data"
   task :experts => ['pakyow:stage'] do
@@ -71,29 +96,36 @@ namespace :seed do
     CSV.foreach(CATS_PATH, { :headers => false, :skip_blanks => true }) do |row|
         if r == 1
             row.each_with_index { |item,index|
-                category = Category.new
-                category.category = item
-                down = item.downcase
-                with_dashes = down.gsub(/[^0-9a-z]/i, '-')
-                category.slug = with_dashes
-                category.url = "/categories/" + with_dashes
-                category.save
-                print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
-                $stdout.flush
+                has_em = Category.where("category = ?",item).all
+                if has_em.nil? || has_em.length == 0
+                    category = Category.new
+                    category.category = item
+                    down = item.downcase
+                    with_dashes = down.gsub(/[^0-9a-z]/i, '-')
+                    category.slug = with_dashes
+                    category.url = "/categories/" + with_dashes
+                    category.save
+                    print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
+                    $stdout.flush
+                end
             }
         else
             row.each_with_index { |item,index|
                 unless item.nil?
-                    category = Category.new
-                    category.category = item
-                    category.parent_id = index + 1
-                    down = item.downcase
-                    with_dashes = down.gsub(/[^0-9a-z]/i, '-')
-                    category.slug = with_dashes
-                    category.url = Category[category.parent_id].url + "/" + with_dashes
-                    category.save
-                    print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
-                    $stdout.flush
+
+                    has_em = Category.where("category = ?",item).all
+                    if has_em.nil? || has_em.length == 0
+                        category = Category.new
+                        category.category = item
+                        category.parent_id = index + 1
+                        down = item.downcase
+                        with_dashes = down.gsub(/[^0-9a-z]/i, '-')
+                        category.slug = with_dashes
+                        category.url = Category[category.parent_id].url + "/" + with_dashes
+                        category.save
+                        print "< " + r.to_s + " :: " + (index+1).to_s + " >\n"
+                        $stdout.flush
+                    end
                 end
             }
         end
@@ -104,7 +136,7 @@ namespace :seed do
   end
 
   task :admins => ['pakyow:stage'] do
-    
+
     # Bryan Powell
     people = People.new
     people.first_name = "Bryan"
@@ -122,7 +154,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Chris Beaman
     people = People.new
     people.first_name = "Chris"
@@ -139,7 +171,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Tarra Anzalone
     people = People.new
     people.first_name = "Tarra"
@@ -156,7 +188,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Joe MacKenzie
     people = People.new
     people.first_name = "Joe"
@@ -173,7 +205,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Kyle Newman
     people = People.new
     people.first_name = "Kyle"
@@ -190,7 +222,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Andrew Hall
     people = People.new
     people.first_name = "Andrew"
@@ -208,11 +240,42 @@ namespace :seed do
     people.approved = true
     people.save
 
+    # David Jones
+    people = People.new
+    people.first_name = "David"
+    people.last_name = "Jones"
+    people.password = "test"
+    people.password_confirmation = "test"
+    people.linkedin = "david-h-jones"
+    people.url = "http://www.refractingideas.com"
+    people.image_url = "/img/David-Jones.jpg"
+    people.email = "david@newleafdigital.org"
+    people.bio = "Software and Website Designer and Developer"
+    people.custom_url = "david-jones"
+    people.admin = true
+    people.approved = true
+    people.save
+    
+    # Tyler Hughes
+    people = People.new
+    people.first_name = "Tyler"
+    people.last_name = "Hughes"
+    people.password = "test"
+    people.password_confirmation = "test"
+    people.linkedin = "thughes01"
+    people.url = "http://tylerhughes.info/"
+    people.image_url = "/img/tyler-hughes.jpg"
+    people.email = "tyler@newleafdigital.org"
+    people.bio = "Software and Website Designer and Developer"
+    people.custom_url = "tyler"
+    people.admin = true
+    people.approved = true
+    people.save
   end
 
 
   task :sillycats => ['pakyow:stage'] do
-    
+
     cat = Category.new
     cat.category = "Bacon"
     cat.description = "Bacon ipsum dolor amet salami porchetta cupim andouille corned beef ball tip boudin."
@@ -234,6 +297,143 @@ namespace :seed do
     cat.category = "Strip steak"
     cat.description = "Strip steak meatloaf boudin, shankle cow filet mignon landjaeger bacon shoulder frankfurter ground round ball tip beef pastrami."
     cat.save
-   
+
+  end
+
+  task :groups => ['pakyow:stage'] do
+    group = Group.new
+    group.name = "New Leaf Digital"
+    group.description = "The parent 501c(3) organization for CoWorking Night, 32/10, and Huntsville Founders."
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "CoWorking Night"
+    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "32/10"
+    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Designer's Corner"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Art and Design"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "4 Hours To Product"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Dumb not approved group"
+    group.description = "Dont allow stupid groups that aren't approved"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.save
+  end
+
+  task :group_admins => ['pakyow:stage'] do
+    admins = People.where("admin = true").all
+    groups = Group.all
+    admins.each { |person|
+      groups.each { |group|
+        person.add_group(group)
+      }
+    }
+  end
+
+  task :events => ['pakyow:stage'] do
+    cwn = Group.where("name = 'CoWorking Night'").first
+    unless cwn.nil?
+      event = Event.new
+      event.name = "CoWorking Night #99"
+      event.description = "The 99th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #100"
+      event.description = "The 100th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #101"
+      event.description = "The 101th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+
+      event = Event.new
+      event.name = "CoWorking Night #102"
+      event.description = "The 102th weekly CoWorking Night"
+      event.group_id = cwn.id
+      event.save
+    end
+
+    dc = Group.where("name = 'Designer''s Corner'").first
+    unless dc.nil?
+      event = Event.new
+      event.name = "Designer's Corner #13"
+      event.description = "The 13th meeting of Designer's Corner"
+      event.group_id = dc.id
+      event.parent_id = Event.where("name = 'CoWorking Night #100'").first.id
+      event.save
+    end
+  end
+
+  task :venues => ['pakyow:stage'] do
+    venue = Venue.new
+    venue.name = "AL.com Building"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Space Station Area"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "2nd Floor Open Area"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Orion Open Area"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Apollo Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "The Vault"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "John Hunt Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Redstone Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Saturn V Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Limestone Room"
+    venue.save
+
+    venue = Venue.new
+    venue.name = "Madison Room"
+    venue.save
   end
 end

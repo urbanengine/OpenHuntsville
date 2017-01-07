@@ -1,4 +1,4 @@
-require 'bundler/setup'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          require 'bundler/setup'
 
 require 'pakyow-support'
 require 'pakyow-core'
@@ -10,8 +10,7 @@ require 'sequel/extensions/pg_json'
 
 require 'httparty'
 
-require 'mandrill'
-
+require 'mailgun'
 require 'aws-sdk'
 require "mini_magick"
 
@@ -22,12 +21,14 @@ Pakyow::App.define do
     # put global config here and they'll be available across environments
     app.name = 'OpenHSV'
 
-    $db = Sequel.connect(ENV['DATABASE_URL'])
+    # $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 
   configure :development do
+    server.port = 3001
     require 'dotenv'
-    Dotenv.load
+      Dotenv.load
+      $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 
   configure :prototype do
@@ -36,6 +37,13 @@ Pakyow::App.define do
   end
 
   configure :production do
+    app.static = true
+    # realtime.redis = { url: ENV['REDIS_URL'] }
+    app.log_output = true
+    app.auto_reload = false
+    app.errors_in_browser = false
+
+    $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 
   middleware do |builder|

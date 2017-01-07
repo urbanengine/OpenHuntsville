@@ -1,4 +1,7 @@
 require 'digest/md5'
+require 'nokogiri'
+require 'rack/utils'
+
 module Pakyow::Helpers
   def handle_errors(view)
     if @errors
@@ -30,7 +33,7 @@ module Pakyow::Helpers
     log_debug("/app/lib/helpers.rb :: getVal :: ", bindable.to_s)
     log_debug("/app/lib/helpers.rb :: getVal :: ", pos.to_s)
     retVal = Array.new(3)
-    
+
     unless bindable.nil?
       if bindable.include? ","
         retVal = bindable.split(",")
@@ -47,15 +50,15 @@ module Pakyow::Helpers
 
   def log_level()
     level = 0
-    if ENV['LOG_LEVEL'] == "TRACE" 
+    if ENV['LOG_LEVEL'] == "TRACE"
       level = 1
     end
     if ENV['LOG_LEVEL'] == "DEBUG"
-      level = 2 
+      level = 2
     end
-    if ENV['LOG_LEVEL'] == "INFO" 
+    if ENV['LOG_LEVEL'] == "INFO"
       level = 3
-    end 
+    end
     if ENV['LOG_LEVEL'] == "WARN"
       level = 4
     end
@@ -117,6 +120,15 @@ module Pakyow::Helpers
     end
   end
 
+  def get_first_person_from_people_id(id)
+    person = nil
+    people = get_people_from_people_id(id)
+    unless people.nil? || people[0].nil?
+      person = people[0]
+    end
+    person
+  end
+
   def unique_url(id,url)
     retval = true
     id = id.to_s
@@ -140,48 +152,49 @@ module Pakyow::Helpers
       #If API response successful create record; else output error to view
       return result['status'] == 200
   end
-  
+
   def find_image_url(email)
 
-  # def get_gravatar(email)
-    nospace = email.gsub(/ /i, '')
-    down = nospace.downcase
-    digest = Digest::MD5.hexdigest(down)
-    # &d=404 will return 404 if no image associated
-    gravatar = "http://www.gravatar.com/avatar/" + digest + "?s=160&d=404"
-    response = HTTParty.get(gravatar)
-    unless response.start_with?("404")
-      url = gravatar
-    else
-      api_key = ENV['FULLCONTACT_API_KEY']
+  # # def get_gravatar(email)
+  #   nospace = email.gsub(/ /i, '')
+  #   down = nospace.downcase
+  #   digest = Digest::MD5.hexdigest(down)
+  #   # &d=404 will return 404 if no image associated
+  #   gravatar = "http://www.gravatar.com/avatar/" + digest + "?s=160&d=404"
+  #   response = HTTParty.get(gravatar)
+  #   unless response.start_with?("404")
+  #     url = gravatar
+  #   else
+  #     api_key = ENV['FULLCONTACT_API_KEY']
 
-      #Building components of the API URL to Full Contact
-      base_url = "https://api.fullcontact.com/v2/person.json?email="
-      conj_url = "&apiKey="
-      # apiKey = ENV['FULL_CONTACT_API_KEY']
-      # You can get a trial Full Contact API key from:
-      # https://www.fullcontact.com/developer/try-fullcontact/
+  #     #Building components of the API URL to Full Contact
+  #     base_url = "https://api.fullcontact.com/v2/person.json?email="
+  #     conj_url = "&apiKey="
+  #     # apiKey = ENV['FULL_CONTACT_API_KEY']
+  #     # You can get a trial Full Contact API key from:
+  #     # https://www.fullcontact.com/developer/try-fullcontact/
 
-      url = [base_url, email, conj_url, api_key].join
-  
-      #Calling API to get JSON response for parsing
-      response = HTTParty.get(url)
-      result = JSON.parse(response.body)
-      return_url = "/img/profile-backup.png"
-      #If API response successful create record; else output error to view
-      if result['status'] == 200 then
-        fullcontact_url = result['photos'][0]['url']
-        photo = HTTParty.get(url)
-        unless photo.to_s.start_with?("404")
-          return_url = fullcontact_url
-        else
-          # pp "Unable to find photo for " + email
-        end
-      else
-        # pp "Unable to find photo for " + email
-      end
-    end
-    return_url
+  #     url = [base_url, email, conj_url, api_key].join
+
+  #     #Calling API to get JSON response for parsing
+  #     response = HTTParty.get(url)
+  #     result = JSON.parse(response.body)
+  #     return_url = "/img/profile-backup.png"
+  #     #If API response successful create record; else output error to view
+  #     if result['status'] == 200 then
+  #       fullcontact_url = result['photos'][0]['url']
+  #       photo = HTTParty.get(url)
+  #       unless photo.to_s.start_with?("404")
+  #         return_url = fullcontact_url
+  #       else
+  #         # pp "Unable to find photo for " + email
+  #       end
+  #     else
+  #       # pp "Unable to find photo for " + email
+  #     end
+  #   end
+  #   return_url
+    nil
   end # def find_image_url(email)
 
   def get_css_classes_for_category(category_id)
@@ -240,88 +253,57 @@ module Pakyow::Helpers
     when :account_creation
       presenter.view = store.view('mail/account_creation')
       view.scope(:people).bind(person)
-      subject = "How's your Step #3 coming along?"
+      subject = "Your #openHSV account is awaiting approval"
     end
 
     send_email(person, from_email, view.to_html, subject)
   end # send_email_template(person, email_partial, options = {})
 
   def send_email(person, from_email, body, subject)
-    begin
-      mandrill = Mandrill::API.new ENV['MANDRILL_API_KEY']
+    unless ENV['RACK_ENV'] == 'development'
+      recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
 
-      message = {"merge"=>true,
-        "important"=>true,
-        # "text"=>body,
-        "metadata"=>{"website"=>"openhsv.com"},
-        "from_email"=>from_email,
-        "view_content_link"=>nil,
-        "html"=>body,
-        "tags"=>["error-report"],
-        "to"=> [{"email"=>person.email,
-          "name"=>"#{person.first_name} #{person.last_name}",
-          "type"=>"to"}],
-          "auto_html"=>nil,
-          "from_name"=>"#openHSV",
-          "subject"=>subject,
-          "signing_domain"=>nil,
-          "preserve_recipients"=>nil,
-          "auto_text"=>nil,
-          "headers"=>{"Reply-To"=>from_email},
-          "return_path_domain"=>nil,
-          "inline_css"=>nil,
-          "tracking_domain"=>nil,
-          "url_strip_qs"=>nil,
-          "track_opens"=>nil,
-          "track_clicks"=>nil}
+      # First, instantiate the Mailgun Client with your API key
+      mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
+      # recipient = YAML.load(%Q(---\n"#{recipient}"\n))
+      # subject = YAML.load(%Q(---\n"#{subject}"\n))
+      # body = YAML.load(%Q(---\n"#{body}"\n))
+      # text = <%=h Nokogiri::HTML(body).text %>
+      # body = Rack::Utils.escape_html(body)
+      # Define your message parameters
+      message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
+                          to:   recipient,
+                          subject: subject,
+                          text: Nokogiri::HTML(body).text,
+                          html: body
+                          # subject: subject,
+                          # html: body
+                          # text: text
+                        }
 
-      async = false
-      ip_pool = "Main Pool"
-
-      result = mandrill.messages.send message, async, ip_pool
-    rescue Mandrill::Error => e
-      pp "A mandrill error occurred: #{e.class} - #{e.message}"
-      raise
-    end # begin
+      # Send your message through the client
+      mg_client.send_message 'sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org', message_params
+    end # unless ENV['RACK_ENV'] == 'development'
   end # send_email(person, from_email, body, subject)
 
   def email_us(subject, body)
-    begin
-      mandrill = Mandrill::API.new ENV['MANDRILL_API_KEY']
+    unless ENV['RACK_ENV'] == 'development'
+      recipient = "The Awesome Team <openhsv@gmail.com>"
 
-      message = {"merge"=>true,
-        "important"=>true,
-        # "text"=>body,
-        "metadata"=>{"website"=>"openhsv.com"},
-        "from_email"=>"noreply@openhsv.com",
-        "view_content_link"=>nil,
-        "html"=>body,
-        "tags"=>["error-report"],
-        "to"=> [{"email"=>"openhsv@gmail.com",
-          "name"=>"#openHSV Webmasters",
-          "type"=>"to"}],
-          "auto_html"=>nil,
-          "from_name"=>"#openHSV",
-          "subject"=>subject,
-          "signing_domain"=>nil,
-          "preserve_recipients"=>nil,
-          "auto_text"=>nil,
-          "headers"=>{"Reply-To"=>"noreply@openhsv.com"},
-          "return_path_domain"=>nil,
-          "inline_css"=>nil,
-          "tracking_domain"=>nil,
-          "url_strip_qs"=>nil,
-          "track_opens"=>nil,
-          "track_clicks"=>nil}
+      # First, instantiate the Mailgun Client with your API key
+      mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
-      async = false
-      ip_pool = "Main Pool"
+      # Define your message parameters
+      message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
+                          to:   recipient,
+                          subject: subject,
+                          html: body,
+                          text: Nokogiri::HTML(body).text
+                        }
 
-      result = mandrill.messages.send message, async, ip_pool
-    rescue Mandrill::Error => e
-      pp "A mandrill error occurred: #{e.class} - #{e.message}"
-      raise
-    end # begin
+      # Send your message through the client
+      mg_client.send_message 'sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org', message_params
+    end # unless ENV['RACK_ENV'] == 'development'
   end # email_us(user, from_email, body, subject)
 
   def create_session(parms)
@@ -359,16 +341,77 @@ module Pakyow::Helpers
     opts
   end
 
-  def resize_and_crop(image, size)         
-    if image.width < image.height   
-      remove = ((image.height - image.width)/2).round 
-      image.shave("0x#{remove}") 
-    elsif image.width > image.height 
+  def get_groups_for_logged_in_person()
+    opts = [[]]
+    people = People[cookies[:people]]
+    people.groups().each do |group|
+      if group.approved
+        opts << [group.id, group.name]
+      end
+    end
+    opts
+  end
+
+  def get_venues()
+    opts = [[]]
+    Venue.all.each do |venue|
+      opts << [venue.id, venue.name]
+    end
+    opts
+  end
+
+  def resize_and_crop(image, size)
+    if image.width < image.height
+      remove = ((image.height - image.width)/2).round
+      image.shave("0x#{remove}")
+    elsif image.width > image.height
       remove = ((image.width - image.height)/2).round
       image.shave("#{remove}x0")
     end
     image.resize("#{size}x#{size}")
     return image
   end
-  
+
+  def slug_contains_invalid(string)
+    retval = false
+    if string.include? " "
+      retval = true
+    elsif string.include? "http"
+      retval = true
+    elsif string.include? ":"
+      retval = true
+    elsif string.include? "/"
+      retval = true
+    elsif string.include? "\\"
+      retval = true
+    end
+  end
+
+  def logged_in_user_is_group_admin_or_site_admin()
+    people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
+    if people.admin
+      return true
+    end
+    if people.groups().length == 0
+      return false
+    end
+    return true
+  end
+
+  def logged_in_user_is_manager_of_event(event)
+    people = People[cookies[:people]]
+    people.groups().each{ |group|
+      logged_in_users_events = Event.where("group_id = ?", group.id).all
+      logged_in_users_events.each { |logged_in_user_event|
+        if logged_in_user_event.id == event.id
+          return true
+        end
+      }
+    }
+    return false
+  end
+
 end # module Pakyow::Helpers

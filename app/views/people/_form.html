@@ -10,10 +10,6 @@
     <ul>
     <input type="hidden" data-prop="id" />
       <li>
-        <label>Custom URL - alphanumeric and dashes only.</label>
-        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" >
-      </li>
-      <li>
         <label>First Name</label>
         <input type="text" data-prop="first_name" name="people[first_name]" placeholder="First Name">
       </li>
@@ -26,8 +22,13 @@
         <input type="text" data-prop="email" name="people[email]">
       </li>
       <li>
+        <label>Profile URL</label>
+        <label class="sublabel">Customize your profile URL so that you can share your profile with your friends and colleagues, ie. "openhsv.com/people/<strong>chris</strong>"</label>
+        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" >
+      </li>
+      <li>
         <label>Company</label>
-        <input type="text" data-prop="company" name="people[company]">
+        <input type="text" data-prop="company" name="people[company]" placeholder="Company">
       </li>
       <li>
         <label>Twitter</label>
@@ -47,15 +48,15 @@
         <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
       </li>
       <li style="width:100%;">
-        <label>First Category</label>
+        <label>First Industry Category</label>
         <select type="text" data-prop="category_one" class="chosen"><option data-prop="category_one_id" selected></option></select>
       </li>
       <li style="width:100%;">
-        <label>Second Category</label>
+        <label>Second Industry Category</label>
         <select type="text" data-prop="category_two"></select>
       </li>
       <li style="width:100%;">
-        <label>Third Category</label>
+        <label>Third Industry Category</label>
         <select type="text" data-prop="category_three"></select>
       </li>
       <li>
@@ -72,6 +73,7 @@
           <input type="hidden" id="tempimage" name="tempimage"></input>
       </li>
     </ul>
+    <input id="submit" type="submit" value="Save">
   </fieldset>
 
   <fieldset>
@@ -87,7 +89,7 @@
       </li>
     </ul>
   </fieldset>
-    
+
   <fieldset data-prop="admin_fieldset">
     <legend>Administrator Section</legend>
     <ul>
@@ -106,7 +108,6 @@
     </ul>
   </fieldset>
 
-  <input id="submit" type="submit" value="Save">
 </form>
 <script src="/js/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
@@ -150,6 +151,7 @@ $(document).ready(function(){
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
+        type: "PATCH",
         done: function (e, data) {
             $.each(data.result.files, function (index, file) {
                 $('#fileupload').toggle();
