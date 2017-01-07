@@ -34,10 +34,16 @@
 <script src="/js/datetimepicker/jquery.datetimepicker.full.js"></script>
 <script>
 $.datetimepicker.setLocale('en');
+var nextWednesday = new Date();
+nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
 $('#datetimepicker').datetimepicker({
 	disabledWeekDays: [0,1,2,4,5,6],
 	allowTimes:['18:00','19:00','20:00','21:00'],
   formatTime:'g:i A',
-  format: 'M j, Y g:i A'
+  format: 'M j, Y g:i A',
+  inline:true,
+  defaultDate: nextWednesday,
+  minDate: nextWednesday,
+  defaultTime: "18:00"
 });
 </script>
