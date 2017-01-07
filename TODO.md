@@ -6,7 +6,7 @@
 5. ~~If an event start_datetime or venue is updated, but has already been approved, it should be set back to unapproved~~
 6. ~~Remove all the search boxes from the pages where the search box doesn't work. Basically all the events/group pages.~~
 7. Heroku DateTime parsing is off for some reason. Maybe something about where the Heroku server is? Do we have some sort of hardcoded timezone that is screwing up our logic? For example: events.rb ln. 135; Basically we need to have all backend logic done in UTC, but, anytime we show a DateTime to a user, we should use localtime.
-8. **Need prior to Wednesday:** Add logic to Event creation/editing to make sure the user inputs a Name, selects a Group and Venue!
+8. ~~**Need prior to Wednesday:** Add logic to Event creation/editing to make sure the user inputs a Name, selects a Group and Venue!~~
 
 # Enhancements
 1. ~~Group workflows for group creation~~
