@@ -4,7 +4,7 @@
 3. Make it so that when an Admin creates an event or a group, it is automatically approved
 4. Add admin interface for Groups. Should be able to add people as group admins
 5. If an event start_datetime or venue is updated, but has already been approved, it should be set back to unapproved
-6. Remove all the search boxes from the pages where the search box doesn't work. Basically all the events/group pages.
+6. ~~Remove all the search boxes from the pages where the search box doesn't work. Basically all the events/group pages.~~
 
 # Enhancements
 1. ~~Group workflows for group creation~~
