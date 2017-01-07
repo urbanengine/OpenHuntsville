@@ -20,3 +20,4 @@
 # Potential Enhancements
 1. Fix the breadcrumbs for events so instead of showing Home / People / Tyler Hughes / Events it says Home / Events
 2. Clean up `dashboard` route: move it to `people/manage`, and make it look like the `events/manage`
+3. Make error pages actually represent the reason you're receiving the error
