@@ -406,7 +406,7 @@ module Pakyow::Helpers
     people.groups().each{ |group|
       logged_in_users_events = Event.where("group_id = ?", group.id).all
       logged_in_users_events.each { |logged_in_user_event|
-        if logged_in_user_event.id == event
+        if logged_in_user_event.id == event.id
           return true
         end
       }

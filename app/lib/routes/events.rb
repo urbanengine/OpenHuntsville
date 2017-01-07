@@ -130,7 +130,7 @@ Pakyow::App.routes(:events) do
       end
       event = Event.where("id = ?", params[:events][:id]).first
       if logged_in_user_is_manager_of_event(event) == false
-        redirect "errors/403"
+        redirect "/errors/403"
       end
       parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
       event.name = params[:events][:name]
@@ -151,7 +151,7 @@ Pakyow::App.routes(:events) do
       end
       event = Event.where("id = ?", params[:events_id]).first
       if logged_in_user_is_manager_of_event(event) == false
-        redirect "errors/403"
+        redirect "/errors/403"
       end
       view.scope(:events).bind([event, event])
       view.scope(:people).bind(people)
