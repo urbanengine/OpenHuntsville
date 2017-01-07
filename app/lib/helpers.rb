@@ -385,7 +385,20 @@ module Pakyow::Helpers
     elsif string.include? "\\"
       retval = true
     end
+  end
 
+  def logged_in_user_is_group_admin_or_site_admin()
+      people = People[cookies[:people]]
+      if people.nil?
+        return false
+      end
+      if people.admin
+        return true
+      end
+      if people.groups().length == 0
+        return false
+      end
+      return true
   end
 
 end # module Pakyow::Helpers

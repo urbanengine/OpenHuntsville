@@ -6,7 +6,7 @@ Pakyow::App.routes(:events) do
 
     collection do
       # GET /events/manage;
-      get 'manage' do
+      get 'manage', :before => :is_event_manager do
         events_all = []
   			people = People[session[:people]]
         if people.nil?
@@ -87,7 +87,7 @@ Pakyow::App.routes(:events) do
     end
 
     # GET '/events/new'
-    action :new do
+    action :new, :before => :is_event_manager do
       people = People[session[:people]]
       if people.nil?
         redirect '/errors/404'
@@ -101,7 +101,7 @@ Pakyow::App.routes(:events) do
     end
 
     #POST '/events/'
-    action :create do
+    action :create, :before => :is_event_manager do
       people = People[session[:people]]
       if people.nil?
         redirect '/errors/404'
@@ -123,7 +123,7 @@ Pakyow::App.routes(:events) do
     end
 
     #PATCH '/events/:events_id'
-    action :update do
+    action :update, :before => :is_event_manager do
       people = People[session[:people]]
       if people.nil?
         redirect '/errors/404'
@@ -141,7 +141,7 @@ Pakyow::App.routes(:events) do
     end
 
     # GET '/events/:events_id/edit'
-    action :edit do
+    action :edit, :before => :is_event_manager do
       people = People[session[:people]]
       if people.nil?
         redirect '/errors/404'
