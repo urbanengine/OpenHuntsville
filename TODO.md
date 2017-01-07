@@ -22,3 +22,12 @@
 1. Fix the breadcrumbs for events so instead of showing Home / People / Tyler Hughes / Events it says Home / Events
 2. Clean up `dashboard` route: move it to `people/manage`, and make it look like the `events/manage`
 3. Make error pages actually represent the reason you're receiving the error
+4. Add ability to request assets (i.e. TV/Projector/Whiteboard etc.)
+
+
+# Event Flow Notes
+1. We need some type of question asking how long the event will be. (i.e. Designer's Corner is 1hr and 4 Hours To Product is 4 hours)
+2. Once we set up the form so that various questions are exposed one question at a time we should add a question asking what resources are needed.
+    - This question is only neccesary if this is a CoWorking Night event. Other events such as 3210 or Big Spring Wine Crush will not need this.
+3. Would be good if we could ask if this is the first time the event is being held (CoWorking Night only)
+    - This is so that I will know to reach out to them (in case an event organizer points someone to the form instead of talking to me)

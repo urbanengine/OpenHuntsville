@@ -3,12 +3,11 @@
 <form data-scope="events" id="people-form" data-prop="action">
   <ul class="errors"><li data-scope="error"></li></ul>
   <fieldset class="margin-t">
-    <legend>Event Information</legend>
     <ul>
     <input type="hidden" data-prop="id" />
       <li>
-        <label>Name</label>
-        <input type="text" data-prop="name" name="events[name]" placeholder="Name">
+        <label>Event Name</label>
+        <input type="text" data-prop="name" name="events[name]" placeholder="Name" required>
       </li>
       <li>
         <label>Description</label>
@@ -17,7 +16,7 @@
       </li>
       <li style="width:100%;">
         <label>Group</label>
-        <select type="text" data-prop="parent_group" class="chosen"></select>
+        <select type="text" data-prop="parent_group" class="chosen" required></select>
       </li>
       <li>
         <label>Start DateTime</label>
@@ -25,7 +24,7 @@
       </li>
       <li style="width:100%;">
         <label>Venue</label>
-        <select type="text" data-prop="venue" class="chosen"></select>
+        <select type="text" data-prop="venue" class="chosen" required></select>
       </li>
     </ul>
     <input id="submit" type="submit" value="Save">
