@@ -132,13 +132,18 @@ Pakyow::App.routes(:events) do
       if logged_in_user_is_manager_of_event(event) == false
         redirect "/errors/403"
       end
-      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
+      parsed_datetime = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
+      venue_id = params[:events][:venue].to_i
+      minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
+      if minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id
+        event.approved = false
+      end
       event.name = params[:events][:name]
       event.description = params[:events][:description]
       event.group_id = params[:events][:parent_group].to_i
-      event.start_datetime = parsed_time
+      event.start_datetime = parsed_datetime
       event.duration = 1 #TODO: Expose this to users through the form
-      event.venue_id = params[:events][:venue].to_i
+      event.venue_id = venue_id
       event.save
       redirect '/events/manage'
     end
