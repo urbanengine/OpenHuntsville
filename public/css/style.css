@@ -357,11 +357,10 @@ nav li a.selected, nav li a.selected:hover {
 =========================================*/
 
 .bread-search {
-	border-top-color: #424243;
-	padding: 10px 0;
-  	box-shadow: 0 1px 0 #eee;
+	padding: 10px 0 15px 0;
   	overflow: hidden;
-  	margin-bottom: 5px;
+  	margin: 0px 0px 15px 0px;
+	box-shadow: 0 1px 0 #C6C6C6;
 }
 .breadcrumbs {
 	overflow: hidden;
@@ -459,6 +458,10 @@ nav li a.selected, nav li a.selected:hover {
 
 /*============ MANAGE EVENTS===============
 =========================================*/
+
+.horiz-rule {
+	color: #C6C6C6;
+}
 
 #schedule-toolbar {
 	padding: 0 0 20px 0;
