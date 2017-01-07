@@ -14,6 +14,7 @@
 5. Need to add an /events/past route to show past events
 6. Implement a search box such that you can search a particular category. Would be nice to search for People, or Events, or Groups, or all of the above. Would be nice to have a dropdown with checkboxes on what categories to search
 7. `/events/` and `/events/:events_id/` routes should look / operate like `/people/` and `/people/:people_id/`
+8. Add mechanism to have users join groups. Group admins should be able to approve users if the group is set up to require approved on join request
 
 # Potential Enhancements
 1. Fix the breadcrumbs for events so instead of showing Home / People / Tyler Hughes / Events it says Home / Events
