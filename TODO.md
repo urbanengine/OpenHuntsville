@@ -7,6 +7,7 @@
 6. ~~Remove all the search boxes from the pages where the search box doesn't work. Basically all the events/group pages.~~
 7. Heroku DateTime parsing is off for some reason. Maybe something about where the Heroku server is? Do we have some sort of hardcoded timezone that is screwing up our logic? For example: events.rb ln. 135; Basically we need to have all backend logic done in UTC, but, anytime we show a DateTime to a user, we should use localtime.
 8. ~~**Need prior to Wednesday:** Add logic to Event creation/editing to make sure the user inputs a Name, selects a Group and Venue!~~
+9. I now realized why `logout` simply changed the `cookies[:people]` to 0. Should revert the change I made and return to the old workflow for cookie management. Especially with Kyle's recent change for opt-in
 
 # Enhancements
 1. ~~Group workflows for group creation~~
