@@ -28,6 +28,7 @@
 2. Clean up `dashboard` route: move it to `people/manage`, and make it look like the `events/manage`
 3. Make error pages actually represent the reason you're receiving the error
 4. Add ability to request assets (i.e. TV/Projector/Whiteboard etc.)
+5. Look into using webshim for Safari form validation
 
 
 # Event Flow Notes
