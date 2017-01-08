@@ -388,7 +388,7 @@ nav li a.selected, nav li a.selected:hover {
 }
 body.about
 {
-	background-image:url(http://localhost:3001/img/grey.png);
+	background-image:url(/img/grey.png);
 }
 .about .content
 {
