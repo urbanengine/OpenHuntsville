@@ -12,7 +12,7 @@ Pakyow::App.routes(:categories) do
         all.each { |person|
           unless person.categories.nil?
             jsn = person.categories.to_s
-            array = JSON.parse(jsn)    
+            array = JSON.parse(jsn)
             array.each { |item|
               unless item.nil? || category.nil?
                 if item == category.id.to_s
@@ -40,6 +40,8 @@ Pakyow::App.routes(:categories) do
         child_cats = Category.where("parent_id = ?",current_cat.parent_id).all
         view.scope(:categories_submenu).apply(child_cats)
         view.scope(:head).apply(request)
+        current_user = People[cookies[:people]]
+        view.scope(:optin).apply(current_user)
         view.scope(:main_menu).apply(request)
       end # '/:parent/:categories_id'
 
@@ -71,6 +73,8 @@ Pakyow::App.routes(:categories) do
 
     # GET /people; same as Index
     action :list, :before => :route_head do
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       categories = Category.all
       view.scope(:categories).apply(categories)
     end
@@ -79,7 +83,7 @@ Pakyow::App.routes(:categories) do
     action :show do
       category = Category.where("slug = ?",params[:categories_id]).first
       subset = Array.new
-      
+
       if session[:random].nil?
         session[:random] = (rand(0...100)).to_s
       end
@@ -90,7 +94,7 @@ Pakyow::App.routes(:categories) do
       shuffled.each { |person|
         unless person.categories.nil?
           jsn = person.categories.to_s
-          array = JSON.parse(jsn)    
+          array = JSON.parse(jsn)
           array.each { |cat|
             unless cat.nil? || cat.length == 0 || category.nil?
               if cat == category.id.to_s
@@ -126,6 +130,8 @@ Pakyow::App.routes(:categories) do
       child_cats = Category.where("parent_id = ?",current_cat.id).all
       view.scope(:categories_submenu).apply(child_cats)
       view.scope(:head).apply(request)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:main_menu).apply(request)
     end
 
