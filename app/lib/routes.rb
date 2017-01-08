@@ -35,8 +35,8 @@ Pakyow::App.routes do
   get :login, '/login' do
     log_debug("/app/lib/routes.rb :: login :: session :: ", session.to_s)
     log_debug("/app/lib/routes.rb :: login :: cookies[:people] :: ", cookies[:people])
-    current_user = People[cookies[:people]]
-    view.scope(:optin).apply(current_user)
+    # current_user = People[cookies[:people]]
+    # view.scope(:optin).apply(current_user)
     reroute router.group(:session).path(:new)
   end
 
