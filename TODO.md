@@ -1,3 +1,7 @@
+# Opt-in/out Additions
+1. Update the `people` `:edit` route such that if a user has chosen to opt-out, we’ll require them to opt-in before editing their profile. Basically I’m envisioning showing a page that says “You have opted out. Please opt-in to OpenHSV Version 2.0 before editing your profile information. This will allow your profile to be public again.”
+2. Add logic that pulls the list of `people` and filter it so that its only the list of `people` that have opted in.
+
 # Bugs
 1. ~~Error checking on events to make sure that in the edit page a user has the correct credentials to have edit rights. I think currently someone could edit any event by manipulating the url~~
 2. ~~Don't show past events~~
