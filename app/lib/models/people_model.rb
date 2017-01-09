@@ -3,7 +3,7 @@ require 'bcrypt'
 class People < Sequel::Model(:people)
   attr_accessor :password, :password_confirmation
 
-  many_to_many :groups, :left_key=>:people_id, :right_key=>:group_id, :join_table=>:group_admins
+  many_to_many :groups, :left_key=>:people_id, :right_key=>:group_id, :join_table=>:group_admins, :class=>"Group"
 
   def password=(password)
     @password = password

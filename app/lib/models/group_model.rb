@@ -1,7 +1,7 @@
 class Group < Sequel::Model(:groups)
   plugin :validation_helpers
 
-  many_to_many :people, :left_key=>:group_id, :right_key=>:people_id, :join_table=>:group_admins
+  many_to_many :people, :left_key=>:group_id, :right_key=>:people_id, :join_table=>:group_admins, :class=>"People"
 
   def validate
     # validates_presence :name

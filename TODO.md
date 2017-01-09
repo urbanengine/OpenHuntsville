@@ -1,3 +1,7 @@
+# Opt-in/out Additions
+1. Update the `people` `:edit` route such that if a user has chosen to opt-out, we’ll require them to opt-in before editing their profile. Basically I’m envisioning showing a page that says “You have opted out. Please opt-in to OpenHSV Version 2.0 before editing your profile information. This will allow your profile to be public again.”
+2. Add logic that pulls the list of `people` and filter it so that its only the list of `people` that have opted in.
+
 # Bugs
 1. ~~Error checking on events to make sure that in the edit page a user has the correct credentials to have edit rights. I think currently someone could edit any event by manipulating the url~~
 2. ~~Don't show past events~~
@@ -7,6 +11,7 @@
 6. ~~Remove all the search boxes from the pages where the search box doesn't work. Basically all the events/group pages.~~
 7. Heroku DateTime parsing is off for some reason. Maybe something about where the Heroku server is? Do we have some sort of hardcoded timezone that is screwing up our logic? For example: events.rb ln. 135; Basically we need to have all backend logic done in UTC, but, anytime we show a DateTime to a user, we should use localtime.
 8. ~~**Need prior to Wednesday:** Add logic to Event creation/editing to make sure the user inputs a Name, selects a Group and Venue!~~
+9. I now realized why `logout` simply changed the `cookies[:people]` to 0. Should revert the change I made and return to the old workflow for cookie management. Especially with Kyle's recent change for opt-in
 
 # Enhancements
 1. ~~Group workflows for group creation~~
@@ -23,6 +28,7 @@
 2. Clean up `dashboard` route: move it to `people/manage`, and make it look like the `events/manage`
 3. Make error pages actually represent the reason you're receiving the error
 4. Add ability to request assets (i.e. TV/Projector/Whiteboard etc.)
+5. Look into using webshim for Safari form validation
 
 
 # Event Flow Notes

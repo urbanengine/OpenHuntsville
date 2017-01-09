@@ -360,6 +360,18 @@ module Pakyow::Helpers
     opts
   end
 
+  def get_people_to_add_as_group_admin(group_id)
+    opts = [[]]
+    group = Group.where("id = ?", group_id).first
+    group_admins = group.people()
+    People.order(:first_name).each do |people|
+      if group_admins.all? { |group_admin| group_admin.id != people.id }
+        opts << [people.id, people.first_name + " " + people.last_name]
+      end
+    end
+    opts
+  end
+
   def resize_and_crop(image, size)
     if image.width < image.height
       remove = ((image.height - image.width)/2).round
@@ -412,6 +424,11 @@ module Pakyow::Helpers
       }
     }
     return false
+  end
+
+  def logged_in_user_is_manager_of_group(group)
+    people = People[cookies[:people]]
+    return people.groups().any?{ |persons_group| persons_group.id == group.id }
   end
 
 end # module Pakyow::Helpers

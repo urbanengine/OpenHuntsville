@@ -13,6 +13,22 @@ Pakyow::App.bindings :groups do
 			get_nested_category_id_and_category_name()
 		end
 
+		options(:add_group_admin) do
+			splat = request.path.split("/")
+			unless splat[1].nil? || splat[1].length == 0
+				if splat[1] == "groups"
+					unless splat[2].nil? || splat[2].length == 0
+						unless splat[2] == "new"
+							get_people_to_add_as_group_admin(splat[2])
+						end
+					end
+				end
+			end
+		end
+
+		binding(:add_group_admin) do
+		end
+
 		binding(:id) do
 			{
 			:value => bindable.id
@@ -308,17 +324,40 @@ Pakyow::App.bindings :groups do
 		 		:href => "/groups/" + bindable.id.to_s + "/edit"
 		 		}
 		end
-    #
-		# binding(:admin_fieldset) do
-		# 	visible = "show"
-		#   	people = People[cookies[:people]]
-		# 	if people.nil? || people.admin.nil? || people.admin == false
-		# 	 	visible = "hide"
-		# 	end
-		# 	{
-		# 		:class => visible
-		# 	}
-		# end
+
+		binding(:admin_fieldset) do
+      visible = "show"
+      people = People[cookies[:people]]
+      if people.nil? || people.admin.nil? || people.admin == false
+        visible = "hide"
+			else
+				# we are an admin, but
+				# check to make sure we're editing the group (not creating a new one)
+				# new: /events/new
+				# edit: /events/:events_id/edit
+				splat = request.path.split("/")
+				unless splat[1].nil? || splat[1].length == 0
+					if splat[1] == "groups"
+						unless splat[2].nil? || splat[2].length == 0
+							if splat[2] == "new"
+								visible = "hide"
+							else
+								visible = if splat[3].nil? == false && splat[3].length > 0 && splat[3] == "edit" then "show" else "hide" end
+							end
+						else
+							visible = "hide"
+						end
+					else
+						visible = "hide"
+					end
+				else
+					visible = "hide"
+				end
+      end
+      {
+        :class => visible
+      }
+    end
 
 		binding(:container) do
 			classes = "profile"
@@ -346,4 +385,50 @@ Pakyow::App.bindings :groups do
 			bindable.description
 		end
   end
+end
+
+Pakyow::App.bindings :group_admins do
+	scope :group_admins do
+		restful :group_admins
+
+		binding(:admin_name) do
+			{
+			:content => bindable.first_name + " " + bindable.last_name
+			}
+		end
+
+		binding(:remove_admin) do
+			group_id = ""
+			content = "[x]"
+			cssclass = ""
+			splat = request.path.split("/")
+			unless splat[1].nil? || splat[1].length == 0
+				if splat[1] == "groups"
+					unless splat[2].nil? || splat[2].length == 0
+						unless splat[2] == "new"
+							group_id = splat[2]
+						end
+					end
+				end
+			end
+			href = "#"
+			#Note: we are not allowing a user to remove themselves as admin
+      people = People[cookies[:people]]
+      unless people.nil?
+				if people.id == bindable.id
+					content = ""
+					cssclass = "hide"
+				elsif group_id.length == 0
+					href = "/"
+				else
+					href = "/groups/" + group_id + "/removeadmin/" + bindable.id.to_s
+				end
+			end
+			{
+				:class => cssclass,
+				:content => content,
+				:href => href
+			}
+		end
+	end
 end
