@@ -25,6 +25,20 @@ Pakyow::App.routes(:groups) do
       end
     end
 
+    member do
+      get 'removeadmin/:people_id' do
+        person = People[params[:people_id]]
+        group = Group[params[:groups_id]]
+        if logged_in_user_is_manager_of_group(group) == false
+          redirect "/errors/403"
+        end
+        unless person.nil? || group.nil?
+          group.remove_person(person)
+        end
+        redirect '/groups/' + group.id.to_s + '/edit'
+      end
+    end
+
     # GET '/groups/new'
     action :new, :before => :is_admin_check do
       people = People[session[:people]]
@@ -143,20 +157,44 @@ Pakyow::App.routes(:groups) do
     end
 
     # GET /groups/:groups_id/edit
-    action :edit, :before => :is_admin_check  do
+    action :edit do
       people = People[session[:people]]
       if people.nil?
         redirect '/errors/404'
       end
       group = Group.where("id = ?", params[:groups_id]).first
-
+      if logged_in_user_is_manager_of_group(group) == false
+        redirect "/errors/403"
+      end
       view.scope(:groups).apply([group, group])
+      group_admins = group.people().sort_by(&:first_name)
+      view.scope(:groups).scope(:group_admins).apply(group_admins)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
 
+    #PATCH '/groups/:groups_id'
     action :update do
-      #redirect "/"
+      group = Group[params[:groups][:id]]
+      if logged_in_user_is_manager_of_group(group) == false
+        redirect "/errors/403"
+      end
+      unless group.nil?
+        #if adding group admins, only update group admins
+        unless params[:groups][:add_group_admin].nil? || params[:groups][:add_group_admin].length == 0
+          person_to_add = People[params[:groups][:add_group_admin]]
+          unless person_to_add.nil?
+            group.add_person(person_to_add)
+          end
+        else
+          group.name = params[:groups][:name]
+          group.description = params[:groups][:description]
+          category_array = [params[:groups][:category_one],params[:groups][:category_two],params[:groups][:category_three]]
+          group.categories = Sequel::Postgres::JSONHash.new(category_array)
+          group.save
+        end
+        redirect '/groups/' + params[:groups][:id].to_s + '/edit'
+      end
     end
   end
 end
