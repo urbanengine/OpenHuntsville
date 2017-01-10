@@ -35,7 +35,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'unapproved' do
-        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+        if cookies[:people].nil? || cookies[:people] == 0
           redirect '/errors/401'
         else
           person = People[cookies[:people]]
@@ -145,7 +145,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'profile-created' do
-        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+        if cookies[:people].nil? || cookies[:people] == 0
           redirect '/people/new'
         else
           view.scope(:people).bind(People[cookies[:people]])
@@ -156,7 +156,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'create-profile' do
-        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+        if cookies[:people].nil? || cookies[:people] == 0
           redirect '/people/new'
         else
           view.scope(:people).bind(People[cookies[:people]])
@@ -166,7 +166,7 @@ Pakyow::App.routes(:people) do
       end
 
       get 'account-registered' do
-        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+        if cookies[:people].nil? || cookies[:people] == 0
           redirect '/people/new'
         else
           view.scope(:head).apply(request)
