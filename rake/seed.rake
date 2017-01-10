@@ -22,28 +22,28 @@ CSV_PATH = File.dirname(__FILE__) + '/seed_experts.csv'
 CATS_PATH = File.dirname(__FILE__) + '/cats.csv'
 
 namespace :seed do
-  
+
   desc "seed the database using data for development"
   task :dev => ['pakyow:stage'] do
-    
+
     puts "Starting the seed:categories task"
     Rake::Task["seed:categories"].invoke
-    
+
     puts "Starting the seed:admins task"
     Rake::Task["seed:admins"].invoke
-    
+
     puts "Starting the seed:experts task"
     Rake::Task["seed:experts"].invoke
-    
+
     puts "Starting the seed:groups task"
     Rake::Task["seed:groups"].invoke
-    
+
     puts "Starting the seed:group_admins task"
     Rake::Task["seed:group_admins"].invoke
-    
+
     puts "Starting the seed:venues task"
     Rake::Task["seed:venues"].invoke
-    
+
     # puts "Starting the seed:events task"
     # Rake::Task["seed:events"].invoke
   end
@@ -255,7 +255,7 @@ namespace :seed do
     people.admin = true
     people.approved = true
     people.save
-    
+
     # Tyler Hughes
     people = People.new
     people.first_name = "Tyler"
@@ -304,34 +304,196 @@ namespace :seed do
     group = Group.new
     group.name = "New Leaf Digital"
     group.description = "The parent 501c(3) organization for CoWorking Night, 32/10, and Huntsville Founders."
-    group.categories_string = "Engineering"
+    group.categories_string = "Multidisciplinary"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "CoWorking Night"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
-    group.categories_string = "Engineering"
+    group.categories_string = "Multidisciplinary"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "32/10"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
-    group.categories_string = "Engineering"
-    group.approved = true
-    group.save
-
-    group = Group.new
-    group.name = "Designer's Corner"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Art and Design"
+    group.categories_string = "Multidisciplinary"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "4 Hours To Product"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Multidisciplinary"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Adulting 101"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Multidisciplinary"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "After Hours Game Dev"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Game Development"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "AngularJS"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Software"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Babes Who Blog"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Writing"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Code the South"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Software"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Coders GSD"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Software"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Designer's Corner"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Design"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Hackster.io Hardware Hacking"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Hardware"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Keyframe: Motion Graphics & Animation"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Animation"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Leadership Lounge"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Leadership"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Lean In Circle for Women"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Leadership"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Mathletes of Huntsville"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Mathematics"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Mindfulness at Work"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Meditation"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "On Target Marketing"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Marketing"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "OverEngineered"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Engineering"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Photo-Synthesis"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Photography"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "ReactHSV"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Software"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Responsive Web Design"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Software"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Sales Funnel"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Sales"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Social Tribe"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Marketing"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Startup Book Club"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Startups"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Untitled Film Group"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "Film"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "UXPA Tennessee Valley"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.categories_string = "User Experience"
+    group.approved = true
+    group.save
+
+    group = Group.new
+    group.name = "Women Who Code"
+    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    roup.categories_string = "Software"
     group.approved = true
     group.save
 
@@ -393,47 +555,52 @@ namespace :seed do
 
   task :venues => ['pakyow:stage'] do
     venue = Venue.new
-    venue.name = "AL.com Building"
+    venue.name = "Real Estate Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "Space Station Area"
+    venue.name = "Apollo Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "2nd Floor Open Area"
+    venue.name = "Main Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "Orion Open Area"
+    venue.name = "Mission Control"
     venue.save
 
     venue = Venue.new
-    venue.name = "Apollo Room"
+    venue.name = "Solar Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "The Vault"
+    venue.name = "Proxima Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "John Hunt Room"
+    venue.name = "Saturn Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "Redstone Room"
+    venue.name = "Endeavor Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "Saturn V Room"
+    venue.name = "Milky Way Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "Limestone Room"
+    venue.name = "Andromeda Row"
     venue.save
 
     venue = Venue.new
-    venue.name = "Madison Room"
+    venue.name = "Orion Row"
     venue.save
+
+    venue = Venue.new
+    venue.name = "Space Station"
+    venue.save
+
   end
 end
