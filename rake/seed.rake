@@ -493,7 +493,7 @@ namespace :seed do
     group = Group.new
     group.name = "Women Who Code"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    roup.categories_string = "Software"
+    group.categories_string = "Software"
     group.approved = true
     group.save
 
