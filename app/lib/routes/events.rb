@@ -24,6 +24,8 @@ Pakyow::App.routes(:events) do
         end
         view.scope(:people).bind(people)
         view.scope(:events).apply(events_all)
+        current_user = People[cookies[:people]]
+        view.scope(:optin).apply(current_user)
         view.scope(:head).apply(request)
         view.scope(:main_menu).apply(request)
       end
@@ -69,6 +71,8 @@ Pakyow::App.routes(:events) do
         }
       }
       view.scope(:events).apply(events_all)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
@@ -82,6 +86,8 @@ Pakyow::App.routes(:events) do
       event = Event.where("id = ?", params[:events_id]).first
       view.scope(:people).bind(people)
       view.scope(:events).apply([event, event])
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
@@ -96,6 +102,8 @@ Pakyow::App.routes(:events) do
         bind(Event.new)
       end
       view.scope(:people).bind(people)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
@@ -160,6 +168,8 @@ Pakyow::App.routes(:events) do
       end
       view.scope(:events).bind([event, event])
       view.scope(:people).bind(people)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end

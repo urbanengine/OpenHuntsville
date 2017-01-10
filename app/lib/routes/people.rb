@@ -138,8 +138,9 @@ Pakyow::App.routes(:people) do
         }
         parent_cats.unshift("everyone")
         view.scope(:categories_menu).apply(parent_cats)
-        pp request
         view.scope(:head).apply(request)
+        current_user = People[cookies[:people]]
+        view.scope(:optin).apply(current_user)
         view.scope(:main_menu).apply(request)
       end
 
@@ -149,6 +150,7 @@ Pakyow::App.routes(:people) do
         else
           view.scope(:people).bind(People[cookies[:people]])
           view.scope(:head).apply(request)
+
           view.scope(:main_menu).apply(request)
         end
       end
@@ -223,7 +225,8 @@ Pakyow::App.routes(:people) do
       end
       view.scope(:people).prop(:type).remove
       view.scope(:people).prop(:type_label).remove
-
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
     end
 
     action :create do
@@ -323,6 +326,8 @@ Pakyow::App.routes(:people) do
       parent_cats.unshift("everyone")
       view.scope(:categories_menu).apply(parent_cats)
       view.scope(:head).apply(request)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
     end
 
     # GET /people/:id
@@ -336,6 +341,8 @@ Pakyow::App.routes(:people) do
       end
      view.scope(:people).apply(people)
      view.scope(:head).apply(request)
+     current_user = People[cookies[:people]]
+     view.scope(:optin).apply(current_user)
     end
 
     action :edit, :before => :edit_profile_check do
@@ -345,6 +352,8 @@ Pakyow::App.routes(:people) do
         view.scope(:people)[0].bind(people[0])
         view.scope(:people)[1].bind(people[0])
       end
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
     end
 
     action :update, :before => :edit_profile_check do

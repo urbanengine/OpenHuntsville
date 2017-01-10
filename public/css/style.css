@@ -412,6 +412,14 @@ nav li a.selected, nav li a.selected:hover {
 	padding-bottom: 30px;
 	font-family: 'Montserrat', sans-serif;
 }
+body.about
+{
+	background-image:url(/img/grey.png);
+}
+.about .content
+{
+	background-color:transparent;
+}
 .about .content-body ul {
 	text-align: center;
 	overflow: hidden;
@@ -1277,4 +1285,15 @@ footer a:hover {
 a[rel~="next"].previous-next-btns
 {
 	float:right;
+}
+
+#optin
+{
+	background-color:#FEEA50;
+}
+#optin .wrapper
+{
+	text-align:right;
+	font-size:12px;
+	padding:3px;
 }

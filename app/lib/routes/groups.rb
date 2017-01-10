@@ -49,6 +49,8 @@ Pakyow::App.routes(:groups) do
         bind(Group.new)
       end
       view.scope(:people).bind(people)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
@@ -134,6 +136,8 @@ Pakyow::App.routes(:groups) do
       }
       parent_cats.unshift("everyone")
       view.scope(:categories_menu).apply(parent_cats)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
     end
 
@@ -152,6 +156,8 @@ Pakyow::App.routes(:groups) do
       parent_cats.unshift("everyone")
       view.scope(:categories_menu).apply(parent_cats)
 
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
@@ -169,6 +175,8 @@ Pakyow::App.routes(:groups) do
       view.scope(:groups).apply([group, group])
       group_admins = group.people().sort_by(&:first_name)
       view.scope(:groups).scope(:group_admins).apply(group_admins)
+      current_user = People[cookies[:people]]
+      view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
     end
