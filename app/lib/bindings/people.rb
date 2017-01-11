@@ -489,7 +489,7 @@ Pakyow::App.bindings :people do
 			:href => '/people/' + bindable.custom_url.to_s + '/events'
 			}
 		end
-		
+
 		# schedule_event_link
     	# previous_link = {:class => 'previous-next-btns', :href => "/people"}
 

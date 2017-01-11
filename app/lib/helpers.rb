@@ -431,4 +431,13 @@ module Pakyow::Helpers
     return people.groups().any?{ |persons_group| persons_group.id == group.id }
   end
 
+  def update_group_admins_for_person(person)
+    if person.admin == true
+      groups_to_admin = Group.all - person.groups
+      groups_to_admin.each { |group|
+        group.add_person(person)
+      }
+    end
+  end
+
 end # module Pakyow::Helpers
