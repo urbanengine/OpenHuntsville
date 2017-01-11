@@ -329,7 +329,7 @@ namespace :seed do
     group.name = "4 Hours To Product"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Multidisciplinary"
-    group.image_url = ""
+    group.image_url = "/img/groups/4HoursToProduct.jpg"
     group.approved = true
     group.save
 
@@ -337,7 +337,7 @@ namespace :seed do
     group.name = "Adulting 101"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Multidisciplinary"
-    group.image_url = ""
+    group.image_url = "/img/groups/Adulting101.jpg"
     group.approved = true
     group.save
 
@@ -361,7 +361,7 @@ namespace :seed do
     group.name = "Babes Who Blog"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Writing"
-    group.image_url = ""
+    group.image_url = "/img/groups/BabesWhoBlog.jpg"
     group.approved = true
     group.save
 
@@ -409,7 +409,7 @@ namespace :seed do
     group.name = "Leadership Lounge"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Leadership"
-    group.image_url = ""
+    group.image_url = "/img/groups/LeadershipLounge.jpg"
     group.approved = true
     group.save
 
@@ -433,7 +433,7 @@ namespace :seed do
     group.name = "Mindfulness at Work"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Meditation"
-    group.image_url = ""
+    group.image_url = "/img/groups/MindfulnessAtWork.jpg"
     group.approved = true
     group.save
 
@@ -449,7 +449,7 @@ namespace :seed do
     group.name = "OverEngineered"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Engineering"
-    group.image_url = ""
+    group.image_url = "/img/groups/OverEngineered.jpg"
     group.approved = true
     group.save
 
@@ -473,7 +473,7 @@ namespace :seed do
     group.name = "Responsive Web Design"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "Software"
-    group.image_url = ""
+    group.image_url = "/img/groups/ResponsiveWebDesign.jpg"
     group.approved = true
     group.save
 
@@ -513,7 +513,7 @@ namespace :seed do
     group.name = "UXPA Tennessee Valley"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
     group.categories_string = "User Experience"
-    group.image_url = ""
+    group.image_url = "/img/groups/UXPA.png"
     group.approved = true
     group.save
 
