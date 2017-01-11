@@ -415,7 +415,7 @@ Pakyow::App.bindings :group_admins do
 			#Note: we are not allowing a user to remove themselves as admin
       people = People[cookies[:people]]
       unless people.nil?
-				if people.id == bindable.id
+				if people.id == bindable.id || bindable.admin == true
 					content = ""
 					cssclass = "hide"
 				elsif group_id.length == 0
