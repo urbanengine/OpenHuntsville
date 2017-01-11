@@ -66,20 +66,23 @@ Date.daysBetween = function( date1, date2 ) {
 }
 
 $.datetimepicker.setLocale('en');
+
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+                          "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+
 var nextWednesday = new Date();
-var monthAbbreviations = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-  "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-];
-//Algo reference for nextWedneday: http://stackoverflow.com/questions/3638906/get-date-of-specific-day-of-the-week-in-javascript
 nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
 var daysBetweenNowAndNextWednesday = Date.daysBetween(new Date(), nextWednesday);
 if (daysBetweenNowAndNextWednesday <= 4)
     nextWednesday.setDate(nextWednesday.getDate() + 7);
 
-var defaultValue = monthAbbreviations[nextWednesday.getMonth()] + " "
+var defaultValue = months[nextWednesday.getMonth()] + " "
                     + nextWednesday.getDate().toString() + ", "
                     + nextWednesday.getFullYear().toString() + " "
                     + "18:00 PM";
+
+
 $('#datetimepicker').datetimepicker({
 	disabledWeekDays: [0,1,2,4,5,6],
 	allowTimes:['18:00','19:00','20:00','21:00'],
