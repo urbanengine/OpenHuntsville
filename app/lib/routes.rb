@@ -146,4 +146,47 @@ Pakyow::App.routes do
     view.scope(:head).apply(request)
     view.scope(:main_menu).apply(request)
   end
+  get '/2_0' do
+    people = People[cookies[:people]]
+  	if people.nil?
+      redirect "/"
+    end
+    view.scope(:optin).apply(people)
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
+  end
+  post '2_0' do
+    current_user = People[cookies[:people]]
+  	if current_user.nil?
+      redirect "/"
+    end
+    if params['opt'] == 'in'
+      current_user.opt_in = true
+      current_user.opt_in_time = Time.now
+      current_user.save
+    elsif params['opt'] == 'out'
+      current_user.opt_in = false
+      current_user.opt_in_time = Time.now
+      current_user.save
+    end
+    redirect '/2_0_opted'
+  end
+  get '2_0_opted' do
+    current_user = People[cookies[:people]]
+    unless current_user.nil?
+      if current_user.opt_in_time.nil?
+        redirect '/'
+      end
+      if current_user.opt_in
+        view.scope(:message).use(:in)
+      else
+        view.scope(:message).use(:out)
+      end
+    else
+      view.scope(:message).use(:empty)
+    end
+    view.scope(:optin).apply(current_user)
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
+  end
 end
