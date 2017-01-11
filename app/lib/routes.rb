@@ -88,16 +88,20 @@ Pakyow::App.routes do
     view.scope(:main_menu).apply(request)
   end
   get '/errors/401' do
-
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
   get '/errors/404' do
-
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
   get '/errors/403' do
-
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
   get '/errors' do
-
+    view.scope(:head).apply(request)
+    view.scope(:main_menu).apply(request)
   end
   get '/2_0' do
     people = People[cookies[:people]]
