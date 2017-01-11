@@ -49,22 +49,40 @@ $("form").submit(function(e) {
     });  return true;
 });
 
+//http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1
+Date.daysBetween = function( date1, date2 ) {
+  //Get 1 day in milliseconds
+  var one_day=1000*60*60*24;
+
+  // Convert both dates to milliseconds
+  var date1_ms = date1.getTime();
+  var date2_ms = date2.getTime();
+
+  // Calculate the difference in milliseconds
+  var difference_ms = date2_ms - date1_ms;
+
+  // Convert back to days and return
+  return Math.round(difference_ms/one_day);
+}
+
 $.datetimepicker.setLocale('en');
 
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "June",
                           "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
-/*
 var nextWednesday = new Date();
 nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
+var daysBetweenNowAndNextWednesday = Date.daysBetween(new Date(), nextWednesday);
+if (daysBetweenNowAndNextWednesday <= 4)
+    nextWednesday.setDate(nextWednesday.getDate() + 7);
+
 var defaultValue = months[nextWednesday.getMonth()] + " "
                     + nextWednesday.getDate().toString() + ", "
                     + nextWednesday.getFullYear().toString() + " "
                     + "18:00 PM";
-*/
-var nextWednesday = getnextWednesday();
-var defaultValue = nextWednesday.month + " " + nextWednesday.day + ", " + nextWednesday.year + " " + "18:00 PM";
+
+
 $('#datetimepicker').datetimepicker({
 	disabledWeekDays: [0,1,2,4,5,6],
 	allowTimes:['18:00','19:00','20:00','21:00'],
@@ -76,23 +94,4 @@ $('#datetimepicker').datetimepicker({
   defaultTime: "18:00",
   value: defaultValue
 });
-
-/**
- * Gets the date of the next Wednesday. If today is Wednesday,
- * the result will then be the Wednesday of the following week.
- * @see http://stackoverflow.com/questions/3638906/get-date-of-specific-day-of-the-week-in-javascript
- * @param {Date} date Today's date
- * @returns {Date} Returns the date of the next Wednesday.
- */
-function getnextWednesday(date) {
-    var nextWed = new Date(date || new Date());
-    nextWed.setDate(nextWed.getDate() + (3 - 1 - nextWed.getDay() + 7) % 7 + 1);
-
-    return {
-      month: nextWed.getMonth(),
-      day: nextWed.getDate().toString(),
-      year: nextWed.getFullYear().toString(),
-      dayOfWeek: nextWed.getDay()
-    };
-}
 </script>

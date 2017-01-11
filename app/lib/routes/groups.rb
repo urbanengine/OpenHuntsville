@@ -4,7 +4,7 @@ Pakyow::App.routes(:groups) do
   expand :restful, :groups, '/groups', :before => :route_head do
     collection do
       get 'unapproved' do
-        if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+        if cookies[:people].nil? || cookies[:people] == 0
           redirect '/errors/401'
         else
           person = People[cookies[:people]]
@@ -95,7 +95,7 @@ Pakyow::App.routes(:groups) do
       total_groups = Group.where("approved = true").count
       # If user is authenticated, don't show default
       page_no = 0
-      unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+      unless cookies[:people].nil? || cookies[:people] == 0
         previous_link = {:class => 'hide',:value => 'hidden'}
         unless params[:page].nil? || params[:page].size == 0
           page_no = params[:page].to_i

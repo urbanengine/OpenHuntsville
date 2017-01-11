@@ -7,7 +7,7 @@ module SharedRoutes
   end
 
   fn :edit_profile_check do
-    if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+    if cookies[:people].nil? || cookies[:people] == 0
       redirect "/errors/404"
     end
   	people = People[cookies[:people]]
@@ -28,7 +28,7 @@ module SharedRoutes
   end
 
   fn :is_admin_check do
-    if cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+    if cookies[:people].nil? || cookies[:people] == 0
       redirect "/errors/404"
     end
     people = People[cookies[:people]]
