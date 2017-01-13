@@ -247,6 +247,8 @@ Pakyow::App.routes(:people) do
       people.custom_url = custom_url
       people.image_url = find_image_url(params[:people][:email])
       people.approved = false
+      people.opt_in = true
+      people.opt_in_time = Time.now
       # TODO: If valid, save; if invalid, redirect
       if people.valid?
         people.save
@@ -311,7 +313,7 @@ Pakyow::App.routes(:people) do
         view.scope(:after_people).bind(count)
         view.scope(:after_people).use(:normal)
       end
-      people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
+      people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").limit(my_limit).offset(page_no*my_limit).all
       #people = People.where("approved = true").limit(my_limit).all
       shuffled = people.shuffle(random: Random.new(ran))
 
@@ -333,7 +335,8 @@ Pakyow::App.routes(:people) do
     # GET /people/:id
     action :show do
       people = get_people_from_people_id(params[:people_id])
-      if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0
+      p people
+      if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].opt_in == false
        redirect '/errors/404'
       end
       unless people[0].approved || People[session[:people]].admin || people[0].id == session[:people].to_i
