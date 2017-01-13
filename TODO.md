@@ -1,6 +1,6 @@
 # Opt-in/out Additions
 1. Update the `people` `:edit` route such that if a user has chosen to opt-out, we’ll require them to opt-in before editing their profile. Basically I’m envisioning showing a page that says “You have opted out. Please opt-in to OpenHSV Version 2.0 before editing your profile information. This will allow your profile to be public again.”
-2. Add logic that pulls the list of `people` and filter it so that its only the list of `people` that have opted in.
+2. ~~Add logic that pulls the list of `people` and filter it so that its only the list of `people` that have opted in.~~
 3. ~~Fix the use of cookies[:people] using the original logic with `/logout` setting the cookies[:people] = 0. Should be sufficient to reset cookies.~~
 4. Figure out bug in `/login`. Not sure why the change was required.
 
