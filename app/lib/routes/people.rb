@@ -352,6 +352,11 @@ Pakyow::App.routes(:people) do
 
       people = get_people_from_people_id(params[:people_id])
       unless people[0].nil?
+        if people[0].opt_in == false
+          redirect '/2_0'
+        end
+      end
+      unless people[0].nil?
         view.scope(:people)[0].bind(people[0])
         view.scope(:people)[1].bind(people[0])
       end
