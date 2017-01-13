@@ -284,7 +284,7 @@ Pakyow::App.routes(:people) do
         end
       end
       ran = session[:random].to_i*100
-      total_people = People.where("approved = true").count
+      total_people = People.where("approved = true AND opt_in = true").count
       # If user is authenticated, don't show default
       page_no = 0
       unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
