@@ -18,6 +18,7 @@ Pakyow::App.routes(:events) do
           people.groups().each { |group|
             events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now).all
             events.each { |event|
+              puts "event::"
               puts event.start_datetime
               events_all.push(event)
             }
