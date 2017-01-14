@@ -125,7 +125,7 @@ Pakyow::App.routes(:events) do
       puts params[:events][:start_datetime]
       parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
       puts 'parsed'
-      puts parsed_time
+      puts parsed_time.zone
       c_params =
         {
           "name" => params[:events][:name],
@@ -137,8 +137,10 @@ Pakyow::App.routes(:events) do
           "approved" => if people.admin then true else false end
         }
       event = Event.new(c_params)
+      #event.start_datetime.new_offset('-06:00')
       puts 'event.start_datetime before save'
       puts event.start_datetime
+      puts event.start_datetime.zone
       event.save
       redirect '/events/manage'
     end
