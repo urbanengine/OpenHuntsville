@@ -4,7 +4,6 @@ Pakyow::App.routes(:sessions) do
     new do
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
-      puts "here"
       view.scope(:session).with do |view|
         view.bind(@session || Session.new({}))
         handle_errors(view)

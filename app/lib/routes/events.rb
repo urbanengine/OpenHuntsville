@@ -15,7 +15,7 @@ Pakyow::App.routes(:events) do
         if people.admin
           events_all = Event.where('start_datetime > ?', DateTime.now).all
           events_all.each { |event|
-            puts "event::"
+            puts "manage event.start_datetime"
             puts event.start_datetime
           }
         else
@@ -123,6 +123,7 @@ Pakyow::App.routes(:events) do
       puts 'create action'
       puts params[:events][:start_datetime]
       parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
+      puts 'parsed'
       puts parsed_time
       c_params =
         {
@@ -135,6 +136,8 @@ Pakyow::App.routes(:events) do
           "approved" => if people.admin then true else false end
         }
       event = Event.new(c_params)
+      puts 'event.start_datetime before save'
+      puts event.start_datetime
       event.save
       redirect '/events/manage'
     end
