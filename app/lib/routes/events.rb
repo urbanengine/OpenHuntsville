@@ -18,10 +18,10 @@ Pakyow::App.routes(:events) do
           events_all = Event.where('start_datetime > ?', DateTime.now).all
           events_all.each { |event|
             puts "manage event.start_datetime"
-            puts event.start_datetime.to_datetime
             puts event.start_datetime
-            event.start_datetime = event.start_datetime.change(:offset => '-06:00')
-            puts event.start_datetime.to_datetime
+            datetime_with_offset = event.start_datetime.change(:offset => '-0600')
+            puts datetime_with_offset
+            event.start_datetime = datetime_with_offset
             puts event.start_datetime
             puts ""
           }
