@@ -114,7 +114,10 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
+      puts 'create action'
+      puts params[:events][:start_datetime]
       parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
+      puts parsed_time
       c_params =
         {
           "name" => params[:events][:name],
