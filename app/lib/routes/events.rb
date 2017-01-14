@@ -7,6 +7,7 @@ Pakyow::App.routes(:events) do
     collection do
       # GET /events/manage;
       get 'manage', :before => :is_event_manager do
+        puts DateTime.now.zone
         events_all = []
   			people = People[session[:people]]
         if people.nil?
