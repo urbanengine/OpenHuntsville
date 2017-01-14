@@ -19,6 +19,9 @@ Pakyow::App.routes(:events) do
           events_all.each { |event|
             puts "manage event.start_datetime"
             puts event.start_datetime
+            event.start_datetime = event.start_datetime.to_datetime.change(:offset => '-0600')
+            puts event.start_datetime
+            puts ""
           }
         else
           people.groups().each { |group|
@@ -122,26 +125,19 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
-      puts 'create action'
-      puts params[:events][:start_datetime]
-      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
-      puts 'parsed'
-      puts parsed_time.zone
+      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
       c_params =
         {
           "name" => params[:events][:name],
           "description" => params[:events][:description],
           "group_id" => params[:events][:parent_group].to_i,
-          "start_datetime" => parsed_time, #Note: This is stored in the db without timezone applied (so CST -6hrs)
-          "duration" => 1, #TODO: Expost this to users through the form
+          "start_datetime" => parsed_time,
+          "duration" => 1, #TODO: Expose this to users through the form
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end
         }
       event = Event.new(c_params)
-      event.start_datetime.change(:offset => '-06:00')
-      puts 'event.start_datetime before save'
       puts event.start_datetime
-      puts event.start_datetime.zone
       event.save
       redirect '/events/manage'
     end
