@@ -124,6 +124,8 @@ Pakyow::App.routes(:events) do
       puts params[:events][:start_datetime]
       parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
       puts parsed_time
+      puts "utc?"
+      puts parsed_time.utc
       c_params =
         {
           "name" => params[:events][:name],
