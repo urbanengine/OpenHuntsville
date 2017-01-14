@@ -34,3 +34,4 @@ gem "mini_magick"
 gem 'nokogiri'
 gem 'bcrypt-ruby', '3.1.5', :require => 'bcrypt'
 # gem 'yaml
+gem 'activesupport', '~> 5.0', '>= 5.0.0.1'

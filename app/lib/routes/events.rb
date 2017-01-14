@@ -1,4 +1,5 @@
 require 'date'
+require 'active_support/all'
 Pakyow::App.routes(:events) do
   include SharedRoutes
 
