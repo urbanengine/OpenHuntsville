@@ -137,6 +137,8 @@ Pakyow::App.routes(:events) do
           "approved" => if people.admin then true else false end
         }
       event = Event.new(c_params)
+      puts event
+      puts "create event.start_datetime"
       puts event.start_datetime
       event.save
       redirect '/events/manage'
