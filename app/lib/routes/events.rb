@@ -137,7 +137,7 @@ Pakyow::App.routes(:events) do
           "approved" => if people.admin then true else false end
         }
       event = Event.new(c_params)
-      #event.start_datetime.new_offset('-06:00')
+      event.start_datetime.new_offset('-06:00')
       puts 'event.start_datetime before save'
       puts event.start_datetime
       puts event.start_datetime.zone
