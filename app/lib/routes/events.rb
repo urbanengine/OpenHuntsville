@@ -14,6 +14,10 @@ Pakyow::App.routes(:events) do
         end
         if people.admin
           events_all = Event.where('start_datetime > ?', DateTime.now).all
+          events_all.each { |event|
+            puts "event::"
+            puts event.start_datetime
+          }
         else
           people.groups().each { |group|
             events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now).all
