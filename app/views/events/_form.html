@@ -12,7 +12,7 @@
       <li>
         <label>Description</label>
         <textarea data-prop="description" id="desc" name="events[description]" placeholder="Enter your event description (140 characters or less)" maxlength="140"></textarea>
-        <p class="smalltext">You have <span id="desc-character-count"></span> characters left.</p>
+        <p class="smalltext">You have <span id="desc-character-count">140</span> characters left.</p>
       </li>
       <li style="width:100%;">
         <label>Group</label>
@@ -50,7 +50,7 @@ $("form").submit(function(e) {
 });
 
 document.getElementById("desc").onkeyup = function () {
-  document.getElementById("desc-character-count").innerHTML = (500 - this.value.length);
+  document.getElementById("desc-character-count").innerHTML = (140 - this.value.length);
 };
 
 //http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1
