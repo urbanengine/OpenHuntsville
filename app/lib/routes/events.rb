@@ -57,6 +57,19 @@ Pakyow::App.routes(:events) do
       end
     end
 
+    member do
+      #TODO: DELETE '/events/:events_id' route. This is a workaround
+      # GET ''/events/:events_id/delete'
+      get 'delete' do
+        event = Event.where("id = ?", params[:events_id]).first
+        if logged_in_user_is_manager_of_event(event) == false
+          redirect "/errors/403"
+        end
+        event.destroy
+        redirect '/events/manage'
+      end
+    end
+
     # GET /events; same as Index
     action :list do
       people = People[session[:people]]

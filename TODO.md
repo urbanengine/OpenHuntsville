@@ -15,6 +15,7 @@
 8. ~~**Need prior to Wednesday:** Add logic to Event creation/editing to make sure the user inputs a Name, selects a Group and Venue!~~
 9. ~~I now realized why `logout` simply changed the `cookies[:people]` to 0. Should revert the change I made and return to the old workflow for cookie management. Especially with Kyle's recent change for opt-in~~
 10. \_form.html uses local time, meaning if someone tried to schedule an event it could cut them off early if they were in Australia
+11. Center buttons columns in event_management form
 
 # Enhancements
 1. ~~Group workflows for group creation~~

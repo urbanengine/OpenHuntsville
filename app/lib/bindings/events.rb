@@ -81,6 +81,27 @@ Pakyow::App.bindings :events do
 			}
 		end
 
+		binding(:delete_event_link) do
+			cssclass = "delete-btn"
+			splat = request.path.split("/")
+			# Either /events/new, or /events/:events_id/edit
+			unless splat[1].nil? || splat[1].length == 0
+				if splat[1] == "events"
+					unless splat[2].nil? || splat[2].length == 0
+						if splat[2] == "new"
+							cssclass = "hide"
+						end
+					end
+				end
+			end
+			people = People[session[:people]]
+			{
+			:content => "Delete",
+			:href => '/events/' + bindable.id.to_s + '/delete',
+			:class => cssclass
+			}
+		end
+
 		binding(:event_link) do
 			people = People[session[:people]]
 			{
