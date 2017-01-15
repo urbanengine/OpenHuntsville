@@ -17,10 +17,8 @@ Pakyow::App.routes(:events) do
         if people.admin
           events_all = Event.where('start_datetime > ?', DateTime.now).all
           events_all.each { |event|
-            puts "manage event.start_datetime"
-            puts event.start_datetime
-            event.start_datetime = event.start_datetime.to_datetime.change(:offset => '-0600')
-            puts event.start_datetime
+            puts "manage event.start_datetime in_time_zone"
+            puts event.start_datetime.in_time_zone("Central Time (US & Canada)")
             puts ""
           }
         else
