@@ -6,7 +6,7 @@ Sequel.migration do
       DateTime      :updated_at
       String        :name
       String        :description
-      DateTime      :start_datetime
+      column :start_datetime, 'timestamp with time zone'
       Integer       :duration
       Boolean       :approved
       foreign_key   :parent_id, :events, :null=>true
