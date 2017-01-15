@@ -1,5 +1,4 @@
 require 'date'
-require 'active_support/all'
 Pakyow::App.routes(:events) do
   include SharedRoutes
 
@@ -16,23 +15,14 @@ Pakyow::App.routes(:events) do
         end
         if people.admin
           events_all = Event.where('start_datetime > ?', DateTime.now).all
-          events_all.each { |event|
-            event.start_datetime = event.start_datetime.in_time_zone("Central Time (US & Canada)")
-          }
         else
           people.groups().each { |group|
             events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now).all
             events.each { |event|
-              event.start_datetime = event.start_datetime.in_time_zone("Central Time (US & Canada)")
               events_all.push(event)
             }
           }
         end
-        puts "printing events"
-        events_all.each { |event|
-          puts event.start_datetime
-          puts ""
-        }
         view.scope(:people).bind(people)
         view.scope(:events).apply(events_all)
         current_user = People[cookies[:people]]
