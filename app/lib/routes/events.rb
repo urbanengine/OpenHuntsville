@@ -20,6 +20,7 @@ Pakyow::App.routes(:events) do
             puts "manage event.start_datetime in_time_zone"
             puts event.start_datetime.in_time_zone("Central Time (US & Canada)")
             event.start_datetime = event.start_datetime.in_time_zone("Central Time (US & Canada)")
+            puts event.start_datetime
             puts ""
           }
         else
