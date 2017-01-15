@@ -65,7 +65,7 @@ Date.daysBetween = function( date1, date2 ) {
   return Math.round(difference_ms/one_day);
 }
 
-#http://stackoverflow.com/questions/8207655/how-to-get-time-of-specific-timezone-using-javascript
+//http://stackoverflow.com/questions/8207655/how-to-get-time-of-specific-timezone-using-javascript
 function calcTime(offset) {
     // create Date object for current location
     var d = new Date();
@@ -86,7 +86,7 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "June",
                           "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
-var nextWednesday = calcTime('-6');
+var nextWednesday = calcTime(-6);
 nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
 var daysBetweenNowAndNextWednesday = Date.daysBetween(calcTime('-6'), nextWednesday);
 if (daysBetweenNowAndNextWednesday <= 4)
