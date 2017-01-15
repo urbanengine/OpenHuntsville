@@ -17,22 +17,22 @@ Pakyow::App.routes(:events) do
         if people.admin
           events_all = Event.where('start_datetime > ?', DateTime.now).all
           events_all.each { |event|
-            puts "manage event.start_datetime in_time_zone"
-            puts event.start_datetime.in_time_zone("Central Time (US & Canada)")
             event.start_datetime = event.start_datetime.in_time_zone("Central Time (US & Canada)")
-            puts event.start_datetime
-            puts ""
           }
         else
           people.groups().each { |group|
             events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now).all
             events.each { |event|
-              puts "event::"
-              puts event.start_datetime
+              event.start_datetime = event.start_datetime.in_time_zone("Central Time (US & Canada)")
               events_all.push(event)
             }
           }
         end
+        puts "printing events"
+        events_all.each { |event|
+          puts event.start_datetime
+          puts ""
+        }
         view.scope(:people).bind(people)
         view.scope(:events).apply(events_all)
         current_user = People[cookies[:people]]
