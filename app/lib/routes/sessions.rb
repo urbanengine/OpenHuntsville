@@ -1,5 +1,5 @@
 Pakyow::App.routes(:sessions) do
-  
+
   restful :session, '/sessions' do
     new do
       view.scope(:head).apply(request)
@@ -24,4 +24,4 @@ Pakyow::App.routes(:sessions) do
       redirect "/"
     end
   end
-end 
+end

@@ -1,4 +1,5 @@
 require 'date'
+require 'active_support/all'
 Pakyow::App.bindings :events do
 	scope :events do
 		restful :events
@@ -33,7 +34,7 @@ Pakyow::App.bindings :events do
 
     binding(:start_datetime) do
       {
-        :content => if bindable.start_datetime then bindable.start_datetime.getlocal().strftime('%b %d, %Y %I:%M %p') else "" end
+        :content => if bindable.start_datetime then bindable.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') else "" end
       }
 		end
 

@@ -13,10 +13,10 @@ Pakyow::App.routes(:events) do
           redirect '/errors/404'
         end
         if people.admin
-          events_all = Event.where('start_datetime > ?', DateTime.now).all
+          events_all = Event.where('start_datetime > ?', DateTime.now.utc).all
         else
           people.groups().each { |group|
-            events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now).all
+            events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now.utc).all
             events.each { |event|
               events_all.push(event)
             }
@@ -114,14 +114,14 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
-      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "Central Time (US & Canada)", '%b %d, %Y %I:%M %p %Z')
+      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
       c_params =
         {
           "name" => params[:events][:name],
           "description" => params[:events][:description],
           "group_id" => params[:events][:parent_group].to_i,
-          "start_datetime" => parsed_time, #Note: This is stored in the db without timezone applied (so CST -6hrs)
-          "duration" => 1, #TODO: Expost this to users through the form
+          "start_datetime" => parsed_time.to_datetime.utc,
+          "duration" => 1, #TODO: Expose this to users through the form
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end
         }
@@ -149,7 +149,7 @@ Pakyow::App.routes(:events) do
       event.name = params[:events][:name]
       event.description = params[:events][:description]
       event.group_id = params[:events][:parent_group].to_i
-      event.start_datetime = parsed_datetime
+      event.start_datetime = parsed_datetime.to_datetime.utc
       event.duration = 1 #TODO: Expose this to users through the form
       event.venue_id = venue_id
       event.save
