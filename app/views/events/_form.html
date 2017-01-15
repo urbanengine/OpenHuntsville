@@ -73,8 +73,6 @@ var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
 var nextWednesday = new Date();
 nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
-alert (nextWednesday)
-alert(new Date())
 var daysBetweenNowAndNextWednesday = Date.daysBetween(new Date(), nextWednesday);
 if (daysBetweenNowAndNextWednesday <= 4)
     nextWednesday.setDate(nextWednesday.getDate() + 7);
