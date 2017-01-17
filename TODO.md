@@ -44,6 +44,6 @@
 
 
 #Immediate TODOS
-1. Fix api to change route like Tyler and I talked about.
+1. ~~Fix api to change route like Tyler and I talked about.~~
 2. Fix api json to add in 'cwn' number. Need to add a column in event table which will hold the reoccuring number. We'll need to add some mechanism of parent_events to the event creation in order to know which events to pull at the given api endpoint. For now I think a select dropdown will suffice with the group's parent group events. We need to have something working before next Sunday, so this can work for now. Eventually we need to have a responsive form that will handle all of the logic. For example if the parent_event is chosen, we already know the date that the event will occur, so we don't need to show a datetimepicker, just a time picker.
 3. ~~Make groups better by adding edit button (to add admins) and expose create group button for site admins~~
