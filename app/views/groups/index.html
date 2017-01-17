@@ -1,14 +1,19 @@
+---
+template: about
+---
 <div class="profiles">
 	<div class="description">
-		<h2>Everyone</h2>
-		<p>This page features some of the groups on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search. Register to see all groups.</p>
+		<h2 style="display: inline-block;">Everyone</h2>
+		<a href="#" data-scope="admins" data-prop="create_group_link"></a>
+		<p>This page features some of the groups on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search.</p>
 	</div>
 	<ul class="profiles-ul">
 		<li class="profile" data-scope="groups" data-prop="container">
 			<img data-prop="image" />
 			<div class="details">
 				<div class="details-wrapper">
-					<h3><span data-prop="name"></span></h3>
+					<h3 style="display: inline-block;"><span data-prop="name"></span></h3>
+					<a href="#" class="btn hide" data-prop="group_edit_link"></a>
 					<ul class="categories">
 						<li>
 							<a data-prop="category_one_link" href="#"></a>

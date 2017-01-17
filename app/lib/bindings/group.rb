@@ -384,6 +384,19 @@ Pakyow::App.bindings :groups do
 		binding(:description) do
 			bindable.description
 		end
+
+		binding(:group_edit_link) do
+			cssclass = "btn pull-right"
+			group = Group[bindable.id]
+			if logged_in_user_is_manager_of_group(group) == false
+				cssclass = "hide"
+			end
+			{
+				:content => "Edit Group",
+				:class => cssclass,
+				:href => "/groups/" + bindable.id.to_s + "/edit"
+			}
+		end
   end
 end
 

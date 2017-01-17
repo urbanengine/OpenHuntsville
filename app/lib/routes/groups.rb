@@ -108,8 +108,6 @@ Pakyow::App.routes(:groups) do
           end
         end
         current_last_profile_shown = (page_no + 1) * my_limit
-        pp 'current  ' + current_last_profile_shown.to_s
-        pp 'total_pgroups  ' + total_groups.to_s
         if current_last_profile_shown < total_groups
           next_link = {:class => 'previous-next-btns',:href=>"/groups?page=#{page_no+1}"}
         end
@@ -124,19 +122,9 @@ Pakyow::App.routes(:groups) do
       #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
       groups = Group.where("approved = true").limit(my_limit).offset(page_no*my_limit).all
       shuffled = groups.shuffle(random: Random.new(ran))
-
       view.scope(:groups).apply(shuffled)
-
-      all_cats = Category.order(:slug).all
-      parent_cats = []
-      all_cats.each { |item|
-        if item.parent_id.nil?
-          parent_cats.push(item)
-        end
-      }
-      parent_cats.unshift("everyone")
-      view.scope(:categories_menu).apply(parent_cats)
       current_user = People[cookies[:people]]
+      view.scope(:admins).apply(current_user)
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
     end
