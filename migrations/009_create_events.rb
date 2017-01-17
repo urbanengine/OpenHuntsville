@@ -9,6 +9,7 @@ Sequel.migration do
       column :start_datetime, 'timestamp with time zone'
       Integer       :duration
       Boolean       :approved
+      Integer       :instance_number
       foreign_key   :parent_id, :events, :null=>true
       foreign_key   :group_id,  :groups, :null=>false
       foreign_key   :venue_id,  :venues, :null=>false

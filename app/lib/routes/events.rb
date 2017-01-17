@@ -34,6 +34,14 @@ Pakyow::App.routes(:events) do
         success = 'failure'
         approve_me = Event[params[:events_id]]
         approve_me.approved = true
+        previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", approve_me.group_id, approve_me.start_datetime).order(:start_datetime).last
+        instance_number = 1
+        unless previous_event.nil?
+          #TODO: Need to rethink this. There could be a bug when the approval doesn't happen in order...
+          #      Same thing could happen with event creation if it doesn't happen sequentially; sigh
+          instance_number = previous_event.instance_number + 1
+        end
+        approve_me.instance_number = instance_number
         approve_me.save
         if request.xhr?
           success = 'success'
@@ -128,6 +136,11 @@ Pakyow::App.routes(:events) do
         redirect '/errors/404'
       end
       parsed_time = DateTime.strptime(params[:events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
+      previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", params[:events][:parent_group].to_i, parsed_time.to_datetime.utc).order(:start_datetime).last
+      instance_number = 1
+      unless previous_event.nil?
+        instance_number = previous_event.instance_number + 1
+      end
       c_params =
         {
           "name" => params[:events][:name],
@@ -136,7 +149,8 @@ Pakyow::App.routes(:events) do
           "start_datetime" => parsed_time.to_datetime.utc,
           "duration" => 1, #TODO: Expose this to users through the form
           "venue_id" => params[:events][:venue].to_i,
-          "approved" => if people.admin then true else false end
+          "approved" => if people.admin then true else false end,
+          "instance_number" => if people.admin then instance_number else nil end
         }
       event = Event.new(c_params)
       event.save
