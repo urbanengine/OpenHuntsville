@@ -147,7 +147,7 @@ Pakyow::App.routes(:events) do
           "description" => params[:events][:description],
           "group_id" => params[:events][:parent_group].to_i,
           "start_datetime" => parsed_time.to_datetime.utc,
-          "duration" => 1, #TODO: Expose this to users through the form
+          "duration" => params[:events][:duration].to_i,
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end,
           "instance_number" => if people.admin then instance_number else nil end

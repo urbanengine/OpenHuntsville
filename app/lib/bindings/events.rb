@@ -12,6 +12,20 @@ Pakyow::App.bindings :events do
       bindable.group_id
     end
 
+		options(:duration) do
+			opts = [[]]
+			opts << [1, "1 hour"]
+			opts << [2, "2 hours"]
+			opts << [3, "3 hours"]
+			opts << [4, "4 hours"]
+			opts << [5, "5 hours"]
+			opts
+		end
+
+    binding(:duration) do
+      bindable.duration
+    end
+
     options(:venue) do
       get_venues()
     end
