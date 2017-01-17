@@ -47,7 +47,7 @@ Pakyow::App.routes(:api) do
                         "time_req" => event.start_datetime.utc,
                         "room_req" => Venue.where("id = ?", event.venue_id).first.name,
                         "start_time" => event.start_datetime.utc,
-                        "end_time" => (event.start_datetime.to_time + 1).utc
+                        "end_time" => (event.start_datetime.to_time + event.duration.hours).utc
                       }
                       response.write(json.to_json)
                   }
