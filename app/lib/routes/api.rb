@@ -12,7 +12,7 @@ Pakyow::App.routes(:api) do
             member do
 
               expand :restful, :events, '/events' do
-                action :list do
+                get 'schedule' do
                   # "approved":true,
                   # "cwn":88,
                   # "timestamp":"2017-01-09T20:27:22.161Z",
@@ -53,6 +53,15 @@ Pakyow::App.routes(:api) do
                   }
                   response.write(']')
                 end # action :list
+
+                action :list do
+                  group_events = Event.where("group_id = ?", params[:groups_id]).all
+                  parent_group = Group.where("id = ?", params[:groups_id]).first
+                  unless parent_group.parent_id.nil?
+                    group_events.concat(Event.where("group_id = ?", parent_group.parent_id).all)
+                  end
+                  response.write(group_events.to_json)
+                end
               end # expand :restful, :events, '/events' do
 
             end # member do

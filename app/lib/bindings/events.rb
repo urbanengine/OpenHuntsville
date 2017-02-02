@@ -66,9 +66,32 @@ Pakyow::App.bindings :events do
 			}
 		end
 
-		binding(:duration) do
+		binding(:parent_event_li) do
+			css_class = "hide"
+			unless bindable.group_id.nil?
+				css_class = ""
+			end
 			{
-				:content => bindable.duration.to_s + " hour(s)"
+				:class => css_class
+			}
+		end
+
+		options(:parent_event_selector) do
+			get_events_for_group_id(bindable.group_id)
+		end
+
+		binding(:parent_event_selector) do
+			unless bindable.parent_id.nil?
+				bindable.parent_id
+			else
+				p "didn't set"
+			end
+		end
+
+		binding(:duration_text) do
+			hours_string = if bindable.duration > 1 then " hours" else " hour" end
+			{
+				:content => bindable.duration.to_s + hours_string
 			}
 		end
 
@@ -127,6 +150,17 @@ Pakyow::App.bindings :events do
 		binding(:approve_event_url) do
 			{
 				:href => '/events/approve/' + bindable.id.to_s
+			}
+		end
+
+		binding(:parent_event) do
+			content = "(Empty)"
+			unless bindable.parent_id.nil?
+				parent_event = Event.where("id = ?", bindable.parent_id).first
+				content = parent_event.name
+			end
+			{
+				:content => content
 			}
 		end
   end

@@ -440,4 +440,19 @@ module Pakyow::Helpers
     end
   end
 
+  def get_events_for_group_id(group_id)
+    opts = [[]]
+    unless group_id.nil?
+      group_events = Event.where("group_id = ?", group_id).all
+      parent_group = Group.where("id = ?", group_id).first
+      unless parent_group.parent_id.nil?
+        group_events.concat(Event.where("group_id = ?", parent_group.parent_id).all)
+      end
+      group_events.each { |event|
+        opts << [event.id, event.name]
+      }
+    end
+    opts
+  end
+
 end # module Pakyow::Helpers

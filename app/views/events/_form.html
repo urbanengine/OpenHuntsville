@@ -16,7 +16,11 @@
       </li>
       <li style="width:100%;">
         <label>Group</label>
-        <select type="text" data-prop="parent_group" class="chosen" required></select>
+        <select id="group_selector" type="text" data-prop="parent_group" class="chosen" required></select>
+      </li>
+      <li data-prop="parent_event_li" class="hide" id="parent_event_li" style="width:100%;">
+        <label>Parent Event</label>
+        <select id="parent_event_selector" type="text" data-prop="parent_event_selector"></select>
       </li>
       <li>
         <label>Start DateTime</label>
@@ -101,6 +105,41 @@ $('#datetimepicker').datetimepicker({
   defaultDate: nextWednesday,
   minDate: nextWednesday,
   defaultTime: "18:00",
-  value: defaultValue
+  value: defaultValue,
+  scrollMonth: false,
+  scrollTime: false,
+  scrollInput: false
 });
+
+$("#group_selector")
+  .change(function () {
+    $( "#group_selector option:selected" ).each(function() {
+      var groupId = $(this).val();
+      if (groupId) {
+        $.ajax({
+          dataType: "json",
+          url: "/api/v1/groups/" + groupId + "/events/",
+          success: function(events) {
+            selector = $('#parent_event_selector');
+            alert(selector.val());
+            alert(selector.val() == "");
+            if (selector.val() == null || selector.val() == "") {
+              selector.find('option').remove().end();
+              selector.append('<option value="" selected="selected"></option>');
+              $.each(events, function(index, event) {
+                  selector.append($("<option />").val(event.id).text(event.name));
+              });
+
+              if (events.length > 0) {
+                if ($("#parent_event_li").hasClass('hide') == true) $("#parent_event_li").removeClass('hide');
+              } else {
+                if ($("#parent_event_li").hasClass('hide') == false) $("#parent_event_li").addClass('hide');
+              }
+            }
+          }
+        });
+      }
+    });
+  })
+  .change();
 </script>
