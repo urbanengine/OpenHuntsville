@@ -150,7 +150,8 @@ Pakyow::App.routes(:events) do
           "duration" => params[:events][:duration].to_i,
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end,
-          "instance_number" => if people.admin then instance_number else nil end
+          "instance_number" => if people.admin then instance_number else nil end,
+          "parent_id" => if params[:events][:parent_event].blank? then nil else params[:events][:parent_event].to_i end
         }
       event = Event.new(c_params)
       event.save
@@ -177,7 +178,10 @@ Pakyow::App.routes(:events) do
       event.description = params[:events][:description]
       event.group_id = params[:events][:parent_group].to_i
       event.start_datetime = parsed_datetime.to_datetime.utc
-      event.duration = 1 #TODO: Expose this to users through the form
+      event.duration = params[:events][:duration].to_i
+      unless params[:events][:parent_event].blank?
+        event.parent_id = params[:events][:parent_event].to_i
+      end
       event.venue_id = venue_id
       event.save
       redirect '/events/manage'
