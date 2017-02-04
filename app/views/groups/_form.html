@@ -15,8 +15,8 @@
       </li>
       <li>
         <label>Description</label>
-        <textarea data-prop="description" id="bio" name="groups[description]" placeholder="Enter your description (160 characters or less)"></textarea>
-        <p class="smalltext">You have <span id="bio-character-count"></span> characters left.</p>
+        <textarea data-prop="description" id="group-desc" name="groups[description]" placeholder="Enter your description (300 characters or less)"></textarea>
+        <p class="smalltext">You have <span id="group-desc-character-count"></span> characters left.</p>
       </li>
       <li style="width:100%;">
         <label>First Industry Category</label>
@@ -68,6 +68,16 @@
 <script src="/js/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
 <script src="/js/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+
+<script type="text/javascript">
+  var charCountForGroupDesc = 300;
+
+  document.getElementById("group-desc-character-count").innerHTML = charCountForGroupDesc;
+
+  document.getElementById("group-desc").onkeyup = function () {
+    document.getElementById("group-desc-character-count").innerHTML = (charCountForGroupDesc - this.value.length);
+  };
+</script>
 <!--
 <script type="text/javascript">
 $(document).ready(function(){
