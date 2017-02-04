@@ -28,7 +28,7 @@
         <input type="text" data-prop="start_datetime" id="datetimepicker" />
       </li>
       <li style="width:100%;">
-        <label>Duration</label>
+        <label>How long do you want your event to be?</label>
         <select type="text" data-prop="duration" class="chosen" required></select>
       </li>
       <li style="width:100%;">
@@ -132,8 +132,6 @@ $("#group_selector")
           url: "/api/v1/groups/" + groupId + "/events/",
           success: function(events) {
             selector = $('#parent_event_selector');
-            alert(selector.val());
-            alert(selector.val() == "");
             if (selector.val() == null || selector.val() == "") {
               selector.find('option').remove().end();
               selector.append('<option value="" selected="selected"></option>');
