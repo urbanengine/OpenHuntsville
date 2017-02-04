@@ -96,7 +96,7 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:approved) do
-			content = if bindable.approved then "Approved" else "Unapproved" end
+			content = if bindable.approved then "Approved" else "Pending" end
 			people = People[session[:people]]
 			if people.admin
 				if bindable.approved
