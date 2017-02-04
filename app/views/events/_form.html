@@ -7,7 +7,8 @@
     <input type="hidden" data-prop="id" />
       <li>
         <label>Event Name</label>
-        <input type="text" data-prop="name" name="events[name]" placeholder="Name" required>
+        <input type="text" id="name" data-prop="name" name="events[name]" placeholder="Name" maxlength="44" required />
+        <p class="smalltext">You have <span id="name-character-count">44</span> characters left.</p>
       </li>
       <li>
         <label>Description</label>
@@ -24,7 +25,7 @@
       </li>
       <li>
         <label>Start DateTime</label>
-        <input type="text" data-prop="start_datetime" id="datetimepicker"/>
+        <input type="text" data-prop="start_datetime" id="datetimepicker" />
       </li>
       <li style="width:100%;">
         <label>Duration</label>
@@ -58,14 +59,21 @@ $("form").submit(function(e) {
     });  return true;
 });
 
+var charCountforTitle = 44;
+var charCountForDesc = 140;
+
+document.getElementById("name").onkeyup = function () {
+  document.getElementById("name-character-count").innerHTML = (charCountforTitle - this.value.length);
+};
+
 document.getElementById("desc").onkeyup = function () {
-  document.getElementById("desc-character-count").innerHTML = (140 - this.value.length);
+  document.getElementById("desc-character-count").innerHTML = (charCountForDesc - this.value.length);
 };
 
 //http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1
 Date.daysBetween = function( date1, date2 ) {
   //Get 1 day in milliseconds
-  var one_day=1000*60*60*24;
+  var one_day= 1000 * 60 * 60 * 24;
 
   // Convert both dates to milliseconds
   var date1_ms = date1.getTime();
@@ -81,7 +89,7 @@ Date.daysBetween = function( date1, date2 ) {
 $.datetimepicker.setLocale('en');
 
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-                          "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+              "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
 var nextWednesday = new Date();
