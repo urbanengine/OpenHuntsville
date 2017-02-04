@@ -8,12 +8,12 @@
       <li>
         <label>Event Name</label>
         <input type="text" id="name" data-prop="name" name="events[name]" placeholder="Name" maxlength="44" required />
-        <p class="smalltext">You have <span id="name-character-count">44</span> characters left.</p>
+        <p class="smalltext">You have <span id="name-character-count"></span> characters left.</p>
       </li>
       <li>
         <label>Description</label>
         <textarea data-prop="description" id="desc" name="events[description]" placeholder="Enter your event description (140 characters or less)" maxlength="140" required></textarea>
-        <p class="smalltext">You have <span id="desc-character-count">140</span> characters left.</p>
+        <p class="smalltext">You have <span id="desc-character-count"></span> characters left.</p>
       </li>
       <li style="width:100%;">
         <label>Group</label>
@@ -61,6 +61,9 @@ $("form").submit(function(e) {
 
 var charCountforTitle = 44;
 var charCountForDesc = 140;
+
+document.getElementById("name-character-count").innerHTML = charCountforTitle;
+document.getElementById("desc-character-count").innerHTML = charCountForDesc;
 
 document.getElementById("name").onkeyup = function () {
   document.getElementById("name-character-count").innerHTML = (charCountforTitle - this.value.length);
