@@ -326,34 +326,35 @@ Pakyow::App.bindings :groups do
 		end
 
 		binding(:admin_fieldset) do
-      visible = "show"
-      people = People[cookies[:people]]
-      if people.nil? || people.admin.nil? || people.admin == false
-        visible = "hide"
-			else
-				# we are an admin, but
-				# check to make sure we're editing the group (not creating a new one)
-				# new: /events/new
-				# edit: /events/:events_id/edit
-				splat = request.path.split("/")
-				unless splat[1].nil? || splat[1].length == 0
-					if splat[1] == "groups"
-						unless splat[2].nil? || splat[2].length == 0
-							if splat[2] == "new"
-								visible = "hide"
-							else
-								visible = if splat[3].nil? == false && splat[3].length > 0 && splat[3] == "edit" then "show" else "hide" end
-							end
-						else
-							visible = "hide"
+      visible = "hide"
+
+			# 1. Check to make sure that the route is only shown for editting the group (not creating a new group)
+			# new: /events/new
+			# edit: /events/:events_id/edit
+			isEditPage = false
+			splat = request.path.split("/")
+			unless splat[1].nil? || splat[1].length == 0
+				if splat[1] == "groups"
+					unless splat[2].nil? || splat[2].length == 0
+						if splat[2] != "new"
+							isEditPage = if splat[3].nil? == false && splat[3].length > 0 && splat[3] == "edit" then true else false end
 						end
-					else
-						visible = "hide"
 					end
-				else
-					visible = "hide"
 				end
-      end
+			end
+
+			if isEditPage
+				# 2. We are editting, but check if we're site admin and/or group admin to expose admin_fieldset
+      	people = People[cookies[:people]]
+				isSiteAdmin = people != nil && people.admin != nil && people.admin == true
+
+				group = Group[bindable.id]
+				isGroupAdmin = logged_in_user_is_manager_of_group(group)
+
+				if isGroupAdmin || isSiteAdmin
+					visible = "show"
+				end
+			end
       {
         :class => visible
       }
