@@ -83,8 +83,6 @@ Pakyow::App.bindings :events do
 		binding(:parent_event_selector) do
 			unless bindable.parent_id.nil?
 				bindable.parent_id
-			else
-				p "didn't set"
 			end
 		end
 
