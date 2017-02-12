@@ -151,7 +151,7 @@ Pakyow::App.routes(:events) do
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end,
           "instance_number" => if people.admin then instance_number else nil end,
-          "parent_id" => if params[:events][:parent_event].blank? then nil else params[:events][:parent_event].to_i end
+          "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end
         }
       event = Event.new(c_params)
       event.save
