@@ -55,10 +55,10 @@ Pakyow::App.routes(:api) do
                 end # action :list
 
                 action :list do
-                  group_events = Event.where("group_id = ?", params[:groups_id]).all
+                  group_events = Event.where("group_id = ? AND start_datetime > ?", params[:groups_id], DateTime.now.utc).all
                   parent_group = Group.where("id = ?", params[:groups_id]).first
                   unless parent_group.parent_id.nil?
-                    group_events.concat(Event.where("group_id = ?", parent_group.parent_id).all)
+                    group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, DateTime.now.utc).all)
                   end
                   response.write(group_events.to_json)
                 end
