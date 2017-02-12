@@ -428,6 +428,9 @@ module Pakyow::Helpers
 
   def logged_in_user_is_manager_of_group(group)
     people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
     return people.groups().any?{ |persons_group| persons_group.id == group.id }
   end
 
