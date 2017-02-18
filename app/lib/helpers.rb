@@ -443,6 +443,22 @@ module Pakyow::Helpers
     end
   end
 
+  #traverse down the tree returning all the events on the way
+  def get_child_events_for_event(event)
+    all_events = []
+    child_events = Event.where("approved = true AND parent_id = ?", event.id).all
+    p child_events
+    while child_events.length != 0
+      child_event = child_events.shift
+      p child_event
+      child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
+      p "child_events"
+      p child_events
+      all_events << child_event
+    end
+    all_events
+  end
+
   def readjust_event_instance_number_for_group(start_datetime, group_id)
     #an event has been created, edited, or deleted. Therefore we adjust all the future events
     previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", group_id, start_datetime).order(:start_datetime).last

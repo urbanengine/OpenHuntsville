@@ -26,8 +26,16 @@ Pakyow::App.routes(:api) do
                   # "start_time":"2017-01-12T02:00:00.000Z",
                   # "end_time":"2017-01-12T03:00:00.000Z"
 
+                  #For now, we'll keep this only exposed for cwn
+                  cwn = Group.where("id = ?", params[:groups_id]).first
+                  if cwn.name != "CoWorking Night"
+                    redirect '/errors/403'
+                  end
+
+                  #So, since we know this is CWN, now lets get all the events for this group. This means all of this group's events and its event's children
+                  next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ?", DateTime.now.utc, cwn.id).order(:start_datetime).first
+                  events = get_child_events_for_event(next_cwn_event)
                   response.write('[')
-                  events = Event.where("approved = true AND start_datetime > ?", DateTime.now.utc).all
                   first_time = true
                   events.each { |event|
                     if first_time == true
@@ -38,6 +46,7 @@ Pakyow::App.routes(:api) do
                     json =
                       {
                         "approved" => event.approved,
+                        "cwn" => next_cwn_event.instance_number,
                         "timestamp" => event.created_at.utc,
                         "group" => Group.where("id = ?", event.group_id).first.name,
                         "title" => event.name,
