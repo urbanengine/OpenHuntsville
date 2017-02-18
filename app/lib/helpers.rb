@@ -443,6 +443,19 @@ module Pakyow::Helpers
     end
   end
 
+  def readjust_event_instance_number_for_group(start_datetime, group_id)
+    #an event has been created, edited, or deleted. Therefore we adjust all the future events
+    previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", group_id, start_datetime).order(:start_datetime).last
+    previous_event_instance_number = previous_event.instance_number
+    print previous_event
+    future_events = Event.where("approved = true AND group_id = ? AND start_datetime > ?", group_id, previous_event.start_datetime).order(:start_datetime).all
+    future_events.each { |event|
+      previous_event_instance_number = previous_event_instance_number + 1
+      event.instance_number = previous_event_instance_number
+      event.save
+    }
+  end
+
   def get_events_for_group_id(group_id)
     opts = [[]]
     unless group_id.nil?

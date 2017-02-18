@@ -32,17 +32,16 @@ Pakyow::App.routes(:events) do
 
       get 'approve/:events_id', :before => :is_admin_check do
         success = 'failure'
-        approve_me = Event[params[:events_id]]
-        approve_me.approved = true
-        previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", approve_me.group_id, approve_me.start_datetime).order(:start_datetime).last
+        event = Event[params[:events_id]]
+        event.approved = true
+        previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime).order(:start_datetime).last
         instance_number = 1
         unless previous_event.nil?
-          #TODO: Need to rethink this. There could be a bug when the approval doesn't happen in order...
-          #      Same thing could happen with event creation if it doesn't happen sequentially; sigh
           instance_number = previous_event.instance_number + 1
         end
-        approve_me.instance_number = instance_number
-        approve_me.save
+        readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
+        event.instance_number = instance_number
+        event.save
         if request.xhr?
           success = 'success'
         else
@@ -53,8 +52,10 @@ Pakyow::App.routes(:events) do
 
       get 'unapprove/:events_id', :before => :is_admin_check do
         success = 'failure'
-        approve_me = Event[params[:events_id]]
-        approve_me.approved = false
+        event = Event[params[:events_id]]
+        event.approved = false
+        event.instance_number = nil
+        readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
         approve_me.save
         if request.xhr?
           success = 'success'
@@ -73,7 +74,13 @@ Pakyow::App.routes(:events) do
         if logged_in_user_is_manager_of_event(event) == false
           redirect "/errors/403"
         end
+        event_start_datetime = event.start_datetime
+        event_group_id = event.group_id
+        event_is_approved = event.approved
         event.destroy
+        if event_is_approved
+          readjust_event_instance_number_for_group(event_start_datetime, event_group_id)
+        end
         redirect '/events/manage'
       end
     end
@@ -150,11 +157,14 @@ Pakyow::App.routes(:events) do
           "duration" => params[:events][:duration].to_i,
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end,
-          "instance_number" => if people.admin then instance_number else nil end,
+          "instance_number" => instance_number,
           "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end
         }
       event = Event.new(c_params)
       event.save
+      if event.approved
+        readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
+      end
       redirect '/events/manage'
     end
 
@@ -171,15 +181,25 @@ Pakyow::App.routes(:events) do
       parsed_datetime = DateTime.strptime(params[:events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
       venue_id = params[:events][:venue].to_i
       minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
+      if event.approved && minutes_between_old_and_new_date > 0.99
+        p "readjusting"
+        readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
+      end
+
       if people.admin == false && (minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id)
         event.approved = false
+      end
+      unless event.approved
+        event.instance_number = nil
       end
       event.name = params[:events][:name]
       event.description = params[:events][:description]
       event.group_id = params[:events][:parent_group].to_i
       event.start_datetime = parsed_datetime.to_datetime.utc
       event.duration = params[:events][:duration].to_i
-      unless params[:events][:parent_event].blank?
+      if params[:events][:parent_event].blank?
+        event.parent_id = nil
+      else
         event.parent_id = params[:events][:parent_event].to_i
       end
       event.venue_id = venue_id
