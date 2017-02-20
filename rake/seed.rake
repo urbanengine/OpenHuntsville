@@ -304,224 +304,224 @@ namespace :seed do
     group = Group.new
     group.name = "New Leaf Digital"
     group.description = "The parent 501c(3) organization for CoWorking Night, 32/10, and Huntsville Founders."
-    group.categories_string = "Multidisciplinary"
-    group.image_url = ""
+    #group.categories_string = "Multidisciplinary"
+    #group.image_url = ""
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "CoWorking Night"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
-    group.categories_string = "Multidisciplinary"
-    group.image_url = ""
+    #group.categories_string = "Multidisciplinary"
+    #group.image_url = ""
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "32/10"
     group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
-    group.categories_string = "Multidisciplinary"
-    group.image_url = ""
+    #group.categories_string = "Multidisciplinary"
+    #group.image_url = ""
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "4 Hours To Product"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Multidisciplinary"
-    group.image_url = "/img/groups/4HoursToProduct.jpg"
+    #group.categories_string = "Multidisciplinary"
+    #group.image_url = "/img/groups/4HoursToProduct.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Adulting 101"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Multidisciplinary"
-    group.image_url = "/img/groups/Adulting101.jpg"
+    #group.categories_string = "Multidisciplinary"
+    #group.image_url = "/img/groups/Adulting101.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "After Hours Game Dev"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Game Development"
-    group.image_url = "/img/groups/AfterHoursGameDev.jpg"
+    #group.categories_string = "Game Development"
+    #group.image_url = "/img/groups/AfterHoursGameDev.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "AngularJS"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Software"
-    group.image_url = ""
+    #group.categories_string = "Software"
+    #group.image_url = ""
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Babes Who Blog"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Writing"
-    group.image_url = "/img/groups/BabesWhoBlog.jpg"
+    #group.categories_string = "Writing"
+    #group.image_url = "/img/groups/BabesWhoBlog.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Code the South"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Software"
-    group.image_url = "/img/groups/CodeTheSouth.jpg"
+    #group.categories_string = "Software"
+    #group.image_url = "/img/groups/CodeTheSouth.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Coders GSD"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Software"
-    group.image_url = "/img/groups/CodersGSD.jpg"
+    #group.categories_string = "Software"
+    #group.image_url = "/img/groups/CodersGSD.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Designer's Corner"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Design"
-    group.image_url = "/img/groups/DesignersCorner.jpg"
+    #group.categories_string = "Design"
+    #group.image_url = "/img/groups/DesignersCorner.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Hackster.io Hardware Hacking"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Hardware"
-    group.image_url = "/img/groups/Hackster.jpg"
+    #group.categories_string = "Hardware"
+    #group.image_url = "/img/groups/Hackster.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Keyframe: Motion Graphics & Animation"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Animation"
-    group.image_url = "/img/groups/Keyframe.jpg"
+    #group.categories_string = "Animation"
+    #group.image_url = "/img/groups/Keyframe.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Leadership Lounge"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Leadership"
-    group.image_url = "/img/groups/LeadershipLounge.jpg"
+    #group.categories_string = "Leadership"
+    #group.image_url = "/img/groups/LeadershipLounge.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Lean In Circle for Women"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Leadership"
-    group.image_url = "/img/groups/LeanIn.jpg"
+    #group.categories_string = "Leadership"
+    #group.image_url = "/img/groups/LeanIn.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Mathletes of Huntsville"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Mathematics"
-    group.image_url = "/img/groups/Mathletes.jpg"
+    #group.categories_string = "Mathematics"
+    #group.image_url = "/img/groups/Mathletes.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Mindfulness at Work"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Meditation"
-    group.image_url = "/img/groups/MindfulnessAtWork.jpg"
+    #group.categories_string = "Meditation"
+    #group.image_url = "/img/groups/MindfulnessAtWork.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "On Target Marketing"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Marketing"
-    group.image_url = "/img/groups/OnTargetMarketing.jpg"
+    #group.categories_string = "Marketing"
+    #group.image_url = "/img/groups/OnTargetMarketing.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "OverEngineered"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Engineering"
-    group.image_url = "/img/groups/OverEngineered.jpg"
+    #group.categories_string = "Engineering"
+    #group.image_url = "/img/groups/OverEngineered.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Photo-Synthesis"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Photography"
-    group.image_url = "/img/groups/Photo-Synthesis.jpg"
+    #group.categories_string = "Photography"
+    #group.image_url = "/img/groups/Photo-Synthesis.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "ReactHSV"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Software"
-    group.image_url = "/img/groups/ReactHSV.jpg"
+    #group.categories_string = "Software"
+    #group.image_url = "/img/groups/ReactHSV.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Responsive Web Design"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Software"
-    group.image_url = "/img/groups/ResponsiveWebDesign.jpg"
+    #group.categories_string = "Software"
+    #group.image_url = "/img/groups/ResponsiveWebDesign.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Sales Funnel"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Sales"
-    group.image_url = ""
+    #group.categories_string = "Sales"
+    #group.image_url = ""
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Social Tribe"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Marketing"
-    group.image_url = "/img/groups/TheSocialTribe.jpg"
+    #group.categories_string = "Marketing"
+    #group.image_url = "/img/groups/TheSocialTribe.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Startup Book Club"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Startups"
-    group.image_url = "/img/groups/StartupBookClub.jpg"
+    #group.categories_string = "Startups"
+    #group.image_url = "/img/groups/StartupBookClub.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Untitled Film Group"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Film"
-    group.image_url = "/img/groups/UntitledFilmGroup.jpg"
+    #group.categories_string = "Film"
+    #group.image_url = "/img/groups/UntitledFilmGroup.jpg"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "UXPA Tennessee Valley"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "User Experience"
-    group.image_url = "/img/groups/UXPA.png"
+    #group.categories_string = "User Experience"
+    #group.image_url = "/img/groups/UXPA.png"
     group.approved = true
     group.save
 
     group = Group.new
     group.name = "Women Who Code"
     group.parent_id = Group.where("name = 'CoWorking Night'").first.id
-    group.categories_string = "Software"
-    group.image_url = "/img/groups/WomenWhoCode.png"
+    #group.categories_string = "Software"
+    #group.image_url = "/img/groups/WomenWhoCode.png"
     group.approved = true
     group.save
 
@@ -630,5 +630,103 @@ namespace :seed do
     venue.name = "Space Station"
     venue.save
 
+  end
+
+  desc "seed the database with event data from a CSV file"
+  task :eventsFromCSV => ['pakyow:stage'] do
+    date_format = "%m/%d/%Y %H:%M:%S"
+    feb_22 = "2/22/2017 18:00:00"
+    cwn_start_datetime = DateTime.strptime(feb_22, date_format).utc
+    cwn_group_id = Group.where("name = ?", "CoWorking Night").first.id
+    cwn_venue_id = Venue.where("name = ?", "Real Estate Row").first.id
+
+    for cwn_instance_number in 94..99
+      event = Event.new
+      event.name = "CoWorking Night #" + cwn_instance_number.to_s
+      event.description = "The " + cwn_instance_number.to_s + "th CoWorking Night"
+      event.created_at = DateTime.now
+      event.updated_at = DateTime.now
+      event.start_datetime = cwn_start_datetime
+      cwn_start_datetime = cwn_start_datetime + 7.days
+      event.duration = 4
+      event.instance_number = cwn_instance_number
+      event.group_id = cwn_group_id
+      event.venue_id = cwn_venue_id
+
+      event.save
+    end
+    CSV.foreach(EVENTS_PATH, { :headers => true, :skip_blanks => true }) do |row|
+        puts row
+        event = Event.new
+        if row["Start"].nil?
+          next
+        else
+          start_at_cst = DateTime.strptime(row["Start"], date_format)
+          if start_at_cst < DateTime.now
+            next
+          end
+        end
+        event.start_datetime = start_at_cst.utc
+
+        # 12/5/2016 9:55:54
+        if row["Timestamp"].nil?
+          created_at_cst = DateTime.now
+        else
+          created_at_cst = DateTime.strptime(row["Timestamp"], date_format)
+        end
+        event.created_at = created_at_cst.utc
+
+        event.name = row["Event Title"]
+        event.description = row["Event Description"]
+
+        group = Group.where("name = ?", row["Group Name"]).first
+
+        if group.nil?
+          newGroup = Group.new
+          newGroup.name = row["Group Name"]
+          newGroup.description = row["Group Name"]
+          newGroup.parent_id = Group.where("name = 'CoWorking Night'").first.id
+          newGroup.save
+
+          event.group_id = newGroup.id
+        else
+          event.group_id = group.id
+        end
+
+        venue = Venue.where("name = ?", row["Room Requested"]).first
+        event.venue_id = venue.id
+
+        case row["Numerical Duration"]
+          when "1:00:00"
+            event.duration = 1
+          when "2:00:00"
+            event.duration = 2
+          when "3:00:00"
+            event.duration = 3
+        end
+
+        event.approved = row["Approved"]
+        if event.approved
+
+          previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime).order(:start_datetime).last
+          instance_number = 1
+          unless previous_event.nil?
+            instance_number = previous_event.instance_number + 1
+          end
+
+          event.instance_number = instance_number
+        end
+
+        cwn_events = Event.where("approved = true AND group_id = ?", cwn_group_id).all
+        cwn_events.each { |cwn_event|
+          hours_between_old_and_new_date = (((cwn_event.start_datetime - event.start_datetime)*24).to_i).abs
+          if hours_between_old_and_new_date < 24
+            event.parent_id = cwn_event.id
+            break
+          end
+        }
+
+        event.save
+    end
   end
 end
