@@ -21,7 +21,6 @@ Pakyow::App.bindings do
 
       binding(:container) do
         clazz = 'hide'
-        pp bindable
         unless bindable.nil?
           if bindable.opt_in_time.nil?
             clazz = 'show'

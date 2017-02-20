@@ -1,0 +1,154 @@
+<link rel="stylesheet" type="text/css" href="/css/datetimepicker/jquery.datetimepicker.css"/>
+
+<form data-scope="events" id="people-form" data-prop="action">
+  <ul class="errors"><li data-scope="error"></li></ul>
+  <fieldset class="margin-t">
+    <ul>
+    <input type="hidden" data-prop="id" />
+      <li>
+        <label>Event Name</label>
+        <input type="text" id="name" data-prop="name" name="events[name]" placeholder="Name" maxlength="44" required />
+        <p class="smalltext">You have <span id="name-character-count"></span> characters left.</p>
+      </li>
+      <li>
+        <label>Description</label>
+        <textarea data-prop="description" id="desc" name="events[description]" placeholder="Enter your event description (140 characters or less)" maxlength="140" required></textarea>
+        <p class="smalltext">You have <span id="desc-character-count"></span> characters left.</p>
+      </li>
+      <li style="width:100%;">
+        <label>Please choose the group that is associated with your event.</label>
+        <select id="group_selector" type="text" data-prop="parent_group" class="chosen" required></select>
+      </li>
+      <li data-prop="parent_event_li" class="hide" id="parent_event_li" style="width:100%;">
+        <label>Is you event being hosted under another event (i.e. CoWorking Night)? If so, please choose the Parent Event below.</label>
+        <select id="parent_event_selector" type="text" data-prop="parent_event_selector"></select>
+      </li>
+      <li>
+        <label>When do you want your event to start?</label>
+        <input type="text" data-prop="start_datetime" id="datetimepicker" />
+      </li>
+      <li style="width:100%;">
+        <label>How long do you want your event to be?</label>
+        <select type="text" data-prop="duration" class="chosen" required></select>
+      </li>
+      <li style="width:100%;">
+        <label>Venue</label>
+        <select type="text" data-prop="venue" class="chosen" required></select>
+      </li>
+    </ul>
+    <input id="submit" type="submit" style="display: inline-block;" value="Save">
+    <a href="#" class="delete-btn" data-prop="delete_event_link"></a>
+  </fieldset>
+</form>
+<script src="/js/datetimepicker/jquery.datetimepicker.full.js"></script>
+<script>
+$("form").submit(function(e) {
+
+    var ref = $(this).find("[required]");
+
+    $(ref).each(function(){
+        if ( $(this).val() == '' )
+        {
+            alert("Required field should not be blank.");
+
+            $(this).focus();
+
+            e.preventDefault();
+            return false;
+        }
+    });  return true;
+});
+
+var charCountforTitle = 44;
+var charCountForDesc = 140;
+
+document.getElementById("name-character-count").innerHTML = charCountforTitle;
+document.getElementById("desc-character-count").innerHTML = charCountForDesc;
+
+document.getElementById("name").onkeyup = function () {
+  document.getElementById("name-character-count").innerHTML = (charCountforTitle - this.value.length);
+};
+
+document.getElementById("desc").onkeyup = function () {
+  document.getElementById("desc-character-count").innerHTML = (charCountForDesc - this.value.length);
+};
+
+//http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1
+Date.daysBetween = function( date1, date2 ) {
+  //Get 1 day in milliseconds
+  var one_day= 1000 * 60 * 60 * 24;
+
+  // Convert both dates to milliseconds
+  var date1_ms = date1.getTime();
+  var date2_ms = date2.getTime();
+
+  // Calculate the difference in milliseconds
+  var difference_ms = date2_ms - date1_ms;
+
+  // Convert back to days and return
+  return Math.round(difference_ms/one_day);
+}
+
+$.datetimepicker.setLocale('en');
+
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+              "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+
+var nextWednesday = new Date();
+nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() + 7) % 7 + 1);
+var daysBetweenNowAndNextWednesday = Date.daysBetween(new Date(), nextWednesday);
+if (daysBetweenNowAndNextWednesday <= 4)
+    nextWednesday.setDate(nextWednesday.getDate() + 7);
+
+var defaultValue = months[nextWednesday.getMonth()] + " "
+                    + nextWednesday.getDate().toString() + ", "
+                    + nextWednesday.getFullYear().toString() + " "
+                    + "18:00 PM";
+
+
+$('#datetimepicker').datetimepicker({
+	disabledWeekDays: [0,1,2,4,5,6],
+	allowTimes:['18:00','19:00','20:00','21:00'],
+  formatTime:'g:i A',
+  format: 'M j, Y g:i A',
+  inline:true,
+  defaultDate: nextWednesday,
+  minDate: nextWednesday,
+  defaultTime: "18:00",
+  value: defaultValue,
+  scrollMonth: false,
+  scrollTime: false,
+  scrollInput: false
+});
+
+$("#group_selector")
+  .change(function () {
+    $( "#group_selector option:selected" ).each(function() {
+      var groupId = $(this).val();
+      if (groupId) {
+        $.ajax({
+          dataType: "json",
+          url: "/api/v1/groups/" + groupId + "/events/",
+          success: function(events) {
+            selector = $('#parent_event_selector');
+            if (selector.val() == null || selector.val() == "") {
+              selector.find('option').remove().end();
+              selector.append('<option value="" selected="selected"></option>');
+              $.each(events, function(index, event) {
+                  selector.append($("<option />").val(event.id).text(event.name));
+              });
+
+              if (events.length > 0) {
+                if ($("#parent_event_li").hasClass('hide') == true) $("#parent_event_li").removeClass('hide');
+              } else {
+                if ($("#parent_event_li").hasClass('hide') == false) $("#parent_event_li").addClass('hide');
+              }
+            }
+          }
+        });
+      }
+    });
+  })
+  .change();
+</script>

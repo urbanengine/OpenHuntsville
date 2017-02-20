@@ -3,7 +3,6 @@ Pakyow::App.bindings :people do
 	scope :people do
 		restful :people
 
-
 		options(:category_one) do
 			get_nested_category_id_and_category_name()
 		end
@@ -13,8 +12,6 @@ Pakyow::App.bindings :people do
 		options(:category_three) do
 			get_nested_category_id_and_category_name()
 		end
-
-
 
 		binding(:id) do
 			{
@@ -484,6 +481,24 @@ Pakyow::App.bindings :people do
 		end
 		binding(:bio) do
 			bindable.bio
+		end
+
+		binding(:events_link) do
+			{
+			:content => "Events",
+			:href => '/people/' + bindable.custom_url.to_s + '/events'
+			}
+		end
+
+		# schedule_event_link
+    	# previous_link = {:class => 'previous-next-btns', :href => "/people"}
+
+		binding(:schedule_event_link) do
+			{
+			:css => "btn btn-blue",
+			:content => "Schedule Event",
+			:href => '/people/' + bindable.custom_url.to_s + '/events/new'
+			}
 		end
 
 
