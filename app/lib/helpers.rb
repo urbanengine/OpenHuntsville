@@ -446,15 +446,13 @@ module Pakyow::Helpers
   #traverse down the tree returning all the events on the way
   def get_child_events_for_event(event)
     all_events = []
-    child_events = Event.where("approved = true AND parent_id = ?", event.id).all
-    p child_events
-    while child_events.length != 0
-      child_event = child_events.shift
-      p child_event
-      child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
-      p "child_events"
-      p child_events
-      all_events << child_event
+    unless event.id.nil?
+      child_events = Event.where("approved = true AND parent_id = ?", event.id).all
+      while child_events.length != 0
+        child_event = child_events.shift
+        child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
+        all_events << child_event
+      end
     end
     all_events
   end
