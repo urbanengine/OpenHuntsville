@@ -161,5 +161,29 @@ Pakyow::App.bindings :events do
 				:content => content
 			}
 		end
+
+		binding(:websiteadmin_fieldset) do
+			visible = "hide"
+			people = People[cookies[:people]]
+			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
+			if isSiteAdmin
+				visible = "show"
+			end
+			{
+			:class => visible
+			}
+		end
+
+		binding(:flyer_category) do
+			{
+			:content => bindable.flyer_category
+			}
+		end
+
+		binding(:flyer_fa_icon) do
+			{
+			:content => bindable.flyer_fa_icon
+			}
+		end
   end
 end

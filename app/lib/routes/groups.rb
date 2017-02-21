@@ -67,7 +67,9 @@ Pakyow::App.routes(:groups) do
           "name" => params[:groups][:name],
           "description" => params[:groups][:description],
           "approved" => true,
-          "categories" => Sequel::Postgres::JSONHash.new(category_array)
+          "categories" => Sequel::Postgres::JSONHash.new(category_array),
+          "flyer_category" => params[:groups][:flyer_category],
+          "flyer_fa_icon" => params[:groups][:flyer_fa_icon]
         }
       group = Group.new(c_params)
       group.save
@@ -187,6 +189,8 @@ Pakyow::App.routes(:groups) do
           group.description = params[:groups][:description]
           category_array = [params[:groups][:category_one],params[:groups][:category_two],params[:groups][:category_three]]
           group.categories = Sequel::Postgres::JSONHash.new(category_array)
+          group.flyer_category = params[:groups][:flyer_category]
+          group.flyer_fa_icon = params[:groups][:flyer_fa_icon]
           group.save
         end
         redirect '/groups/' + params[:groups][:id].to_s + '/edit'

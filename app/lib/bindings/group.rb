@@ -326,7 +326,7 @@ Pakyow::App.bindings :groups do
 		end
 
 		binding(:admin_fieldset) do
-      visible = "hide"
+      		visible = "hide"
 
 			# 1. Check to make sure that the route is only shown for editting the group (not creating a new group)
 			# new: /events/new
@@ -345,20 +345,20 @@ Pakyow::App.bindings :groups do
 
 			if isEditPage
 				# 2. We are editting, but check if we're site admin and/or group admin to expose admin_fieldset
-      	people = People[cookies[:people]]
-				isSiteAdmin = people != nil && people.admin != nil && people.admin == true
+				people = People[cookies[:people]]
+						isSiteAdmin = people != nil && people.admin != nil && people.admin == true
 
-				group = Group[bindable.id]
-				isGroupAdmin = logged_in_user_is_manager_of_group(group)
+						group = Group[bindable.id]
+						isGroupAdmin = logged_in_user_is_manager_of_group(group)
 
-				if isGroupAdmin || isSiteAdmin
-					visible = "show"
-				end
-			end
-      {
-        :class => visible
-      }
-    end
+						if isGroupAdmin || isSiteAdmin
+							visible = "show"
+						end
+					end
+			{
+				:class => visible
+			}
+		end
 
 		binding(:container) do
 			classes = "profile"
@@ -396,6 +396,30 @@ Pakyow::App.bindings :groups do
 				:content => "Edit Group",
 				:class => cssclass,
 				:href => "/groups/" + bindable.id.to_s + "/edit"
+			}
+		end
+
+		binding(:websiteadmin_fieldset) do
+      		visible = "hide"
+			people = People[cookies[:people]]
+			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
+			if isSiteAdmin
+				visible = "show"
+			end
+			{
+			:class => visible
+			}
+		end
+
+		binding(:flyer_category) do
+			{
+			:content => bindable.flyer_category
+			}
+		end
+
+		binding(:flyer_fa_icon) do
+			{
+			:content => bindable.flyer_fa_icon
 			}
 		end
   end

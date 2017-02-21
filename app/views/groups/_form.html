@@ -60,6 +60,21 @@
       <select type="text" data-prop="add_group_admin" id="add-groupadmin" ></select>
       <input type="submit" value="Add" style="display:inline;">
   </fieldset>
+  <fieldset data-prop="websiteadmin_fieldset">
+      <legend>Webite-Administrator Section</legend>
+      <h3 style="margin-top: 0;">Website Admins</h3>
+      <ul>
+        <li>
+          <label>Flyer Category</label>
+          <input type="text" data-prop="flyer_category" name="groups[flyer_category]">
+        </li>
+        <li>
+          <label>Flyer FontAwesome Icon</label>
+          <input type="text" data-prop="flyer_fa_icon" name="groups[flyer_fa_icon]">
+        </li>
+      </ul>
+      <input id="submit" type="submit" value="Save">
+  </fieldset>
 </form>
 <script src="/js/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->

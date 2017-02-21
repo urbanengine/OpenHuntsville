@@ -161,6 +161,11 @@ Pakyow::App.routes(:events) do
           "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end
         }
       event = Event.new(c_params)
+      unless event.group_id.nil?
+        group = Group.where("id = ?", event.group_id).first
+        event.flyer_category = group.flyer_category
+        event.flyer_fa_icon = group.flyer_fa_icon
+      end
       event.save
       if event.approved
         readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
@@ -203,6 +208,8 @@ Pakyow::App.routes(:events) do
         event.parent_id = params[:events][:parent_event].to_i
       end
       event.venue_id = venue_id
+      event.flyer_category = params[:events][:flyer_category]
+      event.flyer_fa_icon = params[:events][:flyer_fa_icon]
       event.save
       redirect '/events/manage'
     end
