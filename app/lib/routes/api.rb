@@ -76,7 +76,7 @@ Pakyow::App.routes(:api) do
                     response.write(group_events.to_json)
                   else
                     # respond to normal request
-                    response.write([])
+                    redirect '/errors/403'
                   end
                 end
               end # expand :restful, :events, '/events' do
