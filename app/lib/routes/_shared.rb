@@ -8,7 +8,7 @@ module SharedRoutes
 
   fn :edit_profile_check do
     if cookies[:people].nil? || cookies[:people] == 0
-      redirect "/errors/404"
+      redirect "/errors/401"
     end
   	people = People[cookies[:people]]
   	if people.nil?
