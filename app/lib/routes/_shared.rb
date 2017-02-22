@@ -7,10 +7,13 @@ module SharedRoutes
   end
 
   fn :edit_profile_check do
+    if cookies[:people].nil? || cookies[:people] == 0
+      redirect "/errors/401"
+    end
   	people = People[cookies[:people]]
   	if people.nil?
       redirect "/errors/401"
-    	end
+  	end
     redirect_no_access = true
     if people.admin
       redirect_no_access = false
@@ -25,15 +28,24 @@ module SharedRoutes
   end
 
   fn :is_admin_check do
+    if cookies[:people].nil? || cookies[:people] == 0
+      redirect "/errors/404"
+    end
     people = People[cookies[:people]]
     if people.nil?
       redirect "/errors/401"
-      end
+    end
     redirect_no_access = true
     if people.admin
       redirect_no_access = false
     end
     if redirect_no_access
+      redirect "/errors/403"
+    end
+  end
+
+  fn :is_event_manager do
+    if logged_in_user_is_group_admin_or_site_admin() == false
       redirect "/errors/403"
     end
   end

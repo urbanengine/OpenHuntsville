@@ -341,6 +341,37 @@ module Pakyow::Helpers
     opts
   end
 
+  def get_groups_for_logged_in_person()
+    opts = [[]]
+    people = People[cookies[:people]]
+    people.groups().each do |group|
+      if group.approved
+        opts << [group.id, group.name]
+      end
+    end
+    opts
+  end
+
+  def get_venues()
+    opts = [[]]
+    Venue.all.each do |venue|
+      opts << [venue.id, venue.name]
+    end
+    opts
+  end
+
+  def get_people_to_add_as_group_admin(group_id)
+    opts = [[]]
+    group = Group.where("id = ?", group_id).first
+    group_admins = group.people()
+    People.order(:first_name).each do |people|
+      if group_admins.all? { |group_admin| group_admin.id != people.id }
+        opts << [people.id, people.first_name + " " + people.last_name]
+      end
+    end
+    opts
+  end
+
   def resize_and_crop(image, size)
     if image.width < image.height
       remove = ((image.height - image.width)/2).round
@@ -366,7 +397,96 @@ module Pakyow::Helpers
     elsif string.include? "\\"
       retval = true
     end
+  end
 
+  def logged_in_user_is_group_admin_or_site_admin()
+    people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
+    if people.admin
+      return true
+    end
+    if people.groups().length == 0
+      return false
+    end
+    return true
+  end
+
+  def logged_in_user_is_manager_of_event(event)
+    people = People[cookies[:people]]
+    people.groups().each{ |group|
+      logged_in_users_events = Event.where("group_id = ?", group.id).all
+      logged_in_users_events.each { |logged_in_user_event|
+        if logged_in_user_event.id == event.id
+          return true
+        end
+      }
+    }
+    return false
+  end
+
+  def logged_in_user_is_manager_of_group(group)
+    people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
+    return people.groups().any?{ |persons_group| persons_group.id == group.id }
+  end
+
+  def update_group_admins_for_person(person)
+    if person.admin == true
+      groups_to_admin = Group.all - person.groups
+      groups_to_admin.each { |group|
+        group.add_person(person)
+      }
+    end
+  end
+
+  #traverse down the tree returning all the events on the way
+  def get_child_events_for_event(event)
+    all_events = []
+    unless event.nil? || event.id.nil?
+      child_events = Event.where("approved = true AND parent_id = ?", event.id).all
+      while child_events.length != 0
+        child_event = child_events.shift
+        child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
+        all_events << child_event
+      end
+    end
+    all_events
+  end
+
+  def readjust_event_instance_number_for_group(start_datetime, group_id)
+    #an event has been created, edited, or deleted. Therefore we adjust all the future events
+    previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", group_id, start_datetime).order(:start_datetime).last
+    unless previous_event.nil?
+      previous_event_instance_number = previous_event.instance_number
+      future_events = Event.where("approved = true AND group_id = ? AND start_datetime > ?", group_id, previous_event.start_datetime).order(:start_datetime).all
+    else
+      previous_event_instance_number = 1
+      future_events = Event.where("approved = true AND group_id = ? AND start_datetime > ?", group_id, start_datetime).order(:start_datetime).all
+    end
+    future_events.each { |event|
+      previous_event_instance_number = previous_event_instance_number + 1
+      event.instance_number = previous_event_instance_number
+      event.save
+    }
+  end
+
+  def get_events_for_group_id(group_id)
+    opts = [[]]
+    unless group_id.nil?
+      group_events = Event.where("group_id = ? AND start_datetime > ?", group_id, DateTime.now.utc).all
+      parent_group = Group.where("id = ?", group_id).first
+      unless parent_group.parent_id.nil?
+        group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, DateTime.now.utc).all)
+      end
+      group_events.each { |event|
+        opts << [event.id, event.name]
+      }
+    end
+    opts
   end
 
 end # module Pakyow::Helpers

@@ -6,7 +6,7 @@ Pakyow::App.bindings :main_menu do
   		{
   		}
   	end
-	
+
 	binding(:people_link) do
 		css_class = ""
 		splat = request.path.split("/")
@@ -28,6 +28,19 @@ Pakyow::App.bindings :main_menu do
   			:class => css_class
   		}
   	end
+
+  	binding(:groups_link) do
+  		css_class = ""
+  		splat = request.path.split("/")
+  		unless splat[1].nil? || splat[1].length == 0
+  			if splat[1] == "groups"
+  				css_class = "selected"
+        end
+  		end
+    		{
+    			:class => css_class
+    		}
+    	end
 
 	binding(:about_link) do
   		css_class = ""
@@ -71,7 +84,7 @@ Pakyow::App.bindings :main_menu do
 				end
 			end
 		end
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == 0
 			person = People[cookies[:people]]
 			unless person.nil?
 				content = "Edit Profile"
@@ -85,6 +98,36 @@ Pakyow::App.bindings :main_menu do
   		}
   	end
 
+	binding(:manage_events_link) do
+		css_class = "hide"
+		content = ""
+		href = "#"
+		unless cookies[:people].nil? || cookies[:people] == 0
+			person = People[cookies[:people]]
+			unless person.nil?
+        if logged_in_user_is_group_admin_or_site_admin()
+  				content = "Manage Events"
+  				href = "/events/manage"
+      		splat = request.path.split("/")
+      		unless splat[1].nil? || splat[1].length == 0
+      			if splat[1] == "events"
+      				css_class = "selected"
+            else
+              css_class = ""
+            end
+          else
+            css_class = ""
+      		end
+        end
+			end
+		end
+  		{
+  			:class => css_class,
+  			:content => content,
+  			:href => href
+  		}
+  end
+
 	binding(:login_link) do
   		css_class = ""
   		content = "Log In"
@@ -95,7 +138,7 @@ Pakyow::App.bindings :main_menu do
 				css_class = "selected"
 			end
 		end
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == 0
 			person = People[cookies[:people]]
 			unless person.nil?
 				content = "Log Out"
@@ -107,10 +150,10 @@ Pakyow::App.bindings :main_menu do
   			:content => content,
   			:href => href
   		}
-  	end	
+  	end
 	binding(:uid) do
 		val = ""
-		unless cookies[:people].nil?
+		unless cookies[:people].nil? || cookies[:people] == 0
 			person = People[cookies[:people]]
 		    unless person.nil?
 		    	val = person.id

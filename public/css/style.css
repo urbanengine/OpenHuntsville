@@ -55,6 +55,34 @@ h1, h2 {
     visibility: hidden;
 }
 
+.btn {
+	display: block;
+	background-color: #091B1B;
+    text-align: center;
+    color: #f6f6f6;
+    font-size: 1em;
+    padding: 7px 10px 8px;
+    border: 0;
+    outline: 0;
+    width: 120px;
+}
+
+.btn:hover {
+	background-color: #054242;
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+.sub-heading {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.pull-right {
+	float: right;
+}
+
 /*================ HEADER =================
 =========================================*/
 header {
@@ -330,11 +358,10 @@ nav li a.selected, nav li a.selected:hover {
 =========================================*/
 
 .bread-search {
-	border-top-color: #424243;
-	padding: 10px 0;
-  	box-shadow: 0 1px 0 #eee;
+	padding: 10px 0 15px 0;
   	overflow: hidden;
-  	margin-bottom: 5px;
+  	margin: 0px 0px 15px 0px;
+	box-shadow: 0 1px 0 #C6C6C6;
 }
 .breadcrumbs {
 	overflow: hidden;
@@ -436,6 +463,69 @@ body.about
 }
 .theteam p {
 	font-size: 1.3em;
+}
+
+/*============ MANAGE EVENTS===============
+=========================================*/
+
+.horiz-rule {
+	color: #C6C6C6;
+}
+
+#schedule-toolbar {
+	padding: 0 0 20px 0;
+}
+
+#eventstable_wrapper {
+	padding: 0 0 20px 0;
+}
+
+.approve-btn {
+	display: block;
+	background-color: #449D44;
+    text-align: center;
+    color: #f6f6f6;
+    font-size: 1em;
+    padding: 7px 10px 8px;
+    border: 0;
+    outline: 0;
+    width: 80px;
+}
+
+.approve-btn:hover {
+	color: #f6f6f6;
+}
+
+.unapprove-btn {
+	display: block;
+	background-color: #C9302C;
+    text-align: center;
+    color: #f6f6f6;
+    font-size: 1em;
+    padding: 7px 10px 8px;
+    border: 0;
+    outline: 0;
+    width: 80px;
+}
+
+.unapprove-btn:hover {
+	color: #f6f6f6;
+}
+
+.delete-btn {
+	display: inline-block;
+	background-color: #C9302C;
+    text-align: center;
+    color: #f6f6f6;
+    font-size: 1em;
+    border: 0;
+    outline: 0;
+    width: 140px;
+		padding: 10px 0;
+}
+
+.delete-btn:hover {
+	color: #f6f6f6;
 }
 
 /*=============== ORIGINALS ===============
@@ -585,7 +675,7 @@ li.selected.active .subcats li {
 	min-height:160px;
 }
 .details-wrapper {
-	padding: 0 10px 0 20px;
+	padding: 0 0 0 20px;
 	overflow: hidden;
 }
 .details h3 {
@@ -618,7 +708,7 @@ li.selected.active .subcats li {
 .categories .slash {
 	color: #ddd;
 }
-.bio {
+.desc {
 	padding: 10px 0 0;
 	margin: 0;
 	font-size: 1em;
