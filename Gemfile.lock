@@ -163,5 +163,8 @@ DEPENDENCIES
   sequel
   thin
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
-   1.13.7
+   1.14.5
