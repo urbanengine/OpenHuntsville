@@ -366,7 +366,14 @@ module Pakyow::Helpers
     group_admins = group.people()
     People.order(:first_name).each do |people|
       if group_admins.all? { |group_admin| group_admin.id != people.id }
-        opts << [people.id, people.first_name + " " + people.last_name]
+        person_has_first_name = people.first_name.nil? == false && people.first_name.empty? == false
+        person_has_last_name = people.last_name.nil? == false && people.last_name.empty? == false
+        if person_has_first_name && person_has_last_name
+          person_to_add_string = people.first_name + " " + people.last_name
+        else
+          person_to_add_string = people.email
+        end
+        opts << [people.id, person_to_add_string]
       end
     end
     opts
