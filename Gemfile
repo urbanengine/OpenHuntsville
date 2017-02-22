@@ -1,6 +1,10 @@
 source "https://rubygems.org"
+ruby "~> 2.3.0"
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 gem "pakyow", '~> 0.11.3'
 
 # application server

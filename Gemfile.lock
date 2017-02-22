@@ -54,9 +54,15 @@ GEM
     multi_xml (0.6.0)
     netrc (0.11.0)
     nokogiri (1.7.0)
+<<<<<<< HEAD
       mini_portile2 (~> 2.1.0)
     nokogiri (1.7.0-x64-mingw32)
       mini_portile2 (~> 2.1.0)
+=======
+      mini_portile2 (~> 2.1.0)
+    nokogiri (1.7.0-x64-mingw32)
+      mini_portile2 (~> 2.1.0)
+>>>>>>> master
     oga (2.7)
       ast
       ruby-ll (~> 2.1)
@@ -163,5 +169,12 @@ DEPENDENCIES
   sequel
   thin
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
+<<<<<<< HEAD
    1.13.7
+=======
+   1.14.5
+>>>>>>> master
