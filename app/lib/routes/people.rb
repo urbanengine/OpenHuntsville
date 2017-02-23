@@ -313,11 +313,8 @@ Pakyow::App.routes(:people) do
         view.scope(:after_people).bind(count)
         view.scope(:after_people).use(:normal)
       end
-      people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").limit(my_limit).offset(page_no*my_limit).all
-      #people = People.where("approved = true").limit(my_limit).all
-      shuffled = people.shuffle(random: Random.new(ran))
-
-      view.scope(:people).apply(shuffled)
+      people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").limit(my_limit).offset(page_no*my_limit).order(:first_name).all
+      view.scope(:people).apply(people)
       all_cats = Category.order(:slug).all
       parent_cats = []
       all_cats.each { |item|

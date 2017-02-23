@@ -122,9 +122,8 @@ Pakyow::App.routes(:groups) do
         view.scope(:after_groups).use(:normal)
       end
       #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
-      groups = Group.where("approved = true").limit(my_limit).offset(page_no*my_limit).all
-      shuffled = groups.shuffle(random: Random.new(ran))
-      view.scope(:groups).apply(shuffled)
+      groups = Group.where("approved = true").limit(my_limit).offset(page_no*my_limit).order(:name).all
+      view.scope(:groups).apply(groups)
       current_user = People[cookies[:people]]
       view.scope(:admins).apply(current_user)
       view.scope(:optin).apply(current_user)
