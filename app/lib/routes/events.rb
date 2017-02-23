@@ -148,6 +148,7 @@ Pakyow::App.routes(:events) do
       unless previous_event.nil?
         instance_number = previous_event.instance_number + 1
       end
+      group = Group.where("id = ?", params[:events][:parent_group].to_i).first
       c_params =
         {
           "name" => params[:events][:name],
@@ -158,14 +159,11 @@ Pakyow::App.routes(:events) do
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end,
           "instance_number" => instance_number,
-          "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end
+          "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end,
+          "flyer_category" => if params[:events][:flyer_category].nil? || params[:events][:flyer_category].empty? then group.flyer_category else params[:events][:flyer_category] end,
+          "flyer_fa_icon" => if params[:events][:flyer_fa_icon].nil? || params[:events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:events][:flyer_fa_icon] end
         }
       event = Event.new(c_params)
-      unless event.group_id.nil?
-        group = Group.where("id = ?", event.group_id).first
-        event.flyer_category = group.flyer_category
-        event.flyer_fa_icon = group.flyer_fa_icon
-      end
       event.save
       if event.approved
         readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
@@ -187,7 +185,6 @@ Pakyow::App.routes(:events) do
       venue_id = params[:events][:venue].to_i
       minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
       if event.approved && minutes_between_old_and_new_date > 0.99
-        p "readjusting"
         readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
       end
 
