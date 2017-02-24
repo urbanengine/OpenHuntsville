@@ -61,7 +61,7 @@ Pakyow::App.routes(:people) do
         search_terms = ""
         unless needle.nil? || needle.length == 0
           needles = needle.split
-          haystack = People.where("approved = true").all
+          haystack = People.where("approved = true AND opt_in = true").all
           cats = Array.new
           all_cats = Category.all
           needles.each_with_index { |this_needle,index|
