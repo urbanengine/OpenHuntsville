@@ -5,6 +5,7 @@
   <fieldset class="margin-t">
     <ul>
     <input type="hidden" data-prop="id" />
+    <input type="hidden" id="should_restrict_event_starttime" data-prop="should_restrict_event_starttime" />
       <li>
         <label>Event Name</label>
         <input type="text" id="name" data-prop="name" name="events[name]" placeholder="Name" maxlength="44" required />
@@ -57,6 +58,7 @@
 </form>
 <script src="/js/datetimepicker/jquery.datetimepicker.full.js"></script>
 <script>
+var shouldRestrictEventStartTime = $('#should_restrict_event_starttime').val() == "true";
 $("form").submit(function(e) {
 
     var ref = $(this).find("[required]");
@@ -115,27 +117,50 @@ nextWednesday.setDate(nextWednesday.getDate() + (3 - 1 - nextWednesday.getDay() 
 var daysBetweenNowAndNextWednesday = Date.daysBetween(new Date(), nextWednesday);
 if (daysBetweenNowAndNextWednesday <= 4)
     nextWednesday.setDate(nextWednesday.getDate() + 7);
+var seedValue = $('#datetimepicker').val();
+if (seedValue && seedValue != '')
+  var defaultValue = seedValue;
+else
+  var defaultValue = months[nextWednesday.getMonth()] + " "
+                      + nextWednesday.getDate().toString() + ", "
+                      + nextWednesday.getFullYear().toString() + " "
+                      + "18:00 PM";
+var defaultValueSplit = defaultValue.split(" ");
+var defaultTime = defaultValueSplit[defaultValueSplit.length - 2] + " " + defaultValueSplit[defaultValueSplit.length - 1];
 
-var defaultValue = months[nextWednesday.getMonth()] + " "
-                    + nextWednesday.getDate().toString() + ", "
-                    + nextWednesday.getFullYear().toString() + " "
-                    + "18:00 PM";
-
-
-$('#datetimepicker').datetimepicker({
-	disabledWeekDays: [0,1,2,4,5,6],
-	allowTimes:['18:00','19:00','20:00','21:00'],
-  formatTime:'g:i A',
-  format: 'M j, Y g:i A',
-  inline:true,
-  defaultDate: nextWednesday,
-  minDate: nextWednesday,
-  defaultTime: "18:00",
-  value: defaultValue,
-  scrollMonth: false,
-  scrollTime: false,
-  scrollInput: false
-});
+if (shouldRestrictEventStartTime)
+  {
+  $('#datetimepicker').datetimepicker({
+    disabledWeekDays: [0,1,2,4,5,6],
+    allowTimes:['18:00','19:00','20:00','21:00'],
+    formatTime:'g:i A',
+    format: 'M j, Y g:i A',
+    inline:true,
+    defaultDate: nextWednesday,
+    minDate: nextWednesday,
+    defaultTime: defaultTime,
+    value: defaultValue,
+    scrollMonth: false,
+    scrollTime: false,
+    scrollInput: false
+  });
+  }
+else
+  {
+  $('#datetimepicker').datetimepicker({
+    disabledWeekDays: [0,1,2,4,5,6],
+    allowTimes:['18:00','19:00','20:00','21:00'],
+    formatTime:'g:i A',
+    format: 'M j, Y g:i A',
+    inline:true,
+    defaultDate: nextWednesday,
+    defaultTime: defaultTime,
+    value: defaultValue,
+    scrollMonth: false,
+    scrollTime: false,
+    scrollInput: false
+  });
+  }
 
 $("#group_selector")
   .change(function () {

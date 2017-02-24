@@ -4,6 +4,13 @@ Pakyow::App.bindings :events do
 	scope :events do
 		restful :events
 
+		binding(:should_restrict_event_starttime) do
+			people = People[cookies[:people]]
+			{
+				:content => if (!people.nil? && !people.admin.nil? && people.admin) then "false" else "true" end
+			}
+		end
+
     options(:parent_group) do
       get_groups_for_logged_in_person()
     end
