@@ -497,3 +497,9 @@ module Pakyow::Helpers
   end
 
 end # module Pakyow::Helpers
+
+class String
+  def is_number?
+    true if Float(self) rescue false
+  end
+end
