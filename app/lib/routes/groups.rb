@@ -32,7 +32,9 @@ Pakyow::App.routes(:groups) do
         if logged_in_user_is_manager_of_group(group) == false
           redirect "/errors/403"
         end
-        unless person.nil? || group.nil?
+        if person.nil? || group.nil?
+          redirect "/errors/404"
+        else
           group.remove_person(person)
         end
         redirect '/groups/' + group.id.to_s + '/edit'
@@ -132,7 +134,13 @@ Pakyow::App.routes(:groups) do
 
     # GET /groups/:groups_id
     action :show do
+      if params[:groups_id].is_number? == false
+        redirect "/errors/404"
+      end
       group = Group.where("id = ?", params[:groups_id]).first
+      if group.nil?
+        redirect "/errors/404"
+      end
       view.scope(:groups).apply(group)
 
       all_cats = Category.order(:slug).all
@@ -157,7 +165,13 @@ Pakyow::App.routes(:groups) do
       if people.nil?
         redirect '/errors/404'
       end
+      if params[:groups_id].is_number? == false
+        redirect "/errors/404"
+      end
       group = Group.where("id = ?", params[:groups_id]).first
+      if group.nil?
+        redirect "/errors/404"
+      end
       if logged_in_user_is_manager_of_group(group) == false
         redirect "/errors/403"
       end
@@ -172,7 +186,13 @@ Pakyow::App.routes(:groups) do
 
     #PATCH '/groups/:groups_id'
     action :update do
+      if params[:groups][:id].is_number? == false
+        redirect "/errors/404"
+      end
       group = Group[params[:groups][:id]]
+      if group.nil?
+        redirect "/errors/404"
+      end
       if logged_in_user_is_manager_of_group(group) == false
         redirect "/errors/403"
       end
