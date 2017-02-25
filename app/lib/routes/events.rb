@@ -32,7 +32,13 @@ Pakyow::App.routes(:events) do
 
       get 'approve/:events_id', :before => :is_admin_check do
         success = 'failure'
+        if params[:events_id].is_number? == false
+          redirect "/errors/404"
+        end
         event = Event[params[:events_id]]
+        if event.nil?
+          redirect "/errors/404"
+        end
         event.approved = true
         previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime).order(:start_datetime).last
         instance_number = 1
@@ -52,7 +58,13 @@ Pakyow::App.routes(:events) do
 
       get 'unapprove/:events_id', :before => :is_admin_check do
         success = 'failure'
+        if params[:events_id].is_number? == false
+          redirect "/errors/404"
+        end
         event = Event[params[:events_id]]
+        if event.nil?
+          redirect "/errors/404"
+        end
         event.approved = false
         event.instance_number = nil
         readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
@@ -70,7 +82,13 @@ Pakyow::App.routes(:events) do
       #TODO: DELETE '/events/:events_id' route. This is a workaround
       # GET ''/events/:events_id/delete'
       get 'delete' do
+        if params[:events_id].is_number? == false
+          redirect "/errors/404"
+        end
         event = Event.where("id = ?", params[:events_id]).first
+        if event.nil?
+          redirect "/errors/404"
+        end
         if logged_in_user_is_manager_of_event(event) == false
           redirect "/errors/403"
         end
@@ -111,7 +129,13 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
+      if params[:events_id].is_number? == false
+        redirect "/errors/404"
+      end
       event = Event.where("id = ?", params[:events_id]).first
+      if event.nil?
+        redirect "/errors/404"
+      end
       view.scope(:people).bind(people)
       view.scope(:events).apply([event, event])
       current_user = People[cookies[:people]]
@@ -177,7 +201,13 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
+      if params[:events][:id].is_number? == false
+        redirect "/errors/404"
+      end
       event = Event.where("id = ?", params[:events][:id]).first
+      if event.nil?
+        redirect "/errors/404"
+      end
       if logged_in_user_is_manager_of_event(event) == false
         redirect "/errors/403"
       end
@@ -217,7 +247,13 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
+      if params[:events_id].is_number? == false
+        redirect "/errors/404"
+      end
       event = Event.where("id = ?", params[:events_id]).first
+      if event.nil?
+        redirect "/errors/404"
+      end
       if logged_in_user_is_manager_of_event(event) == false
         redirect "/errors/403"
       end
