@@ -40,7 +40,7 @@ class People < Sequel::Model(:people)
   end
 
   def self.auth(session)
-    people = first(email: session[:email])
+    people = first(email: session[:email].downcase)
 
     if people && people.auth?(session.password)
       return people
