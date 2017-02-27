@@ -125,18 +125,23 @@ Pakyow::App.bindings :events do
 
 		binding(:delete_event_link) do
 			cssclass = "delete-btn"
-			splat = request.path.split("/")
-			# Either /events/new, or /events/:events_id/edit
-			unless splat[1].nil? || splat[1].length == 0
-				if splat[1] == "events"
-					unless splat[2].nil? || splat[2].length == 0
-						if splat[2] == "new"
-							cssclass = "hide"
+			people = People[cookies[:people]]
+			isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
+			if bindable.approved && isNotSiteAdmin
+				cssclass = "hide"
+			else
+				splat = request.path.split("/")
+				# Either /events/new, or /events/:events_id/edit
+				unless splat[1].nil? || splat[1].length == 0
+					if splat[1] == "events"
+						unless splat[2].nil? || splat[2].length == 0
+							if splat[2] == "new"
+								cssclass = "hide"
+							end
 						end
 					end
 				end
 			end
-			people = People[session[:people]]
 			{
 			:content => "Delete",
 			:href => '/events/' + bindable.id.to_s + '/delete',
@@ -145,7 +150,6 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:event_link) do
-			people = People[session[:people]]
 			{
 			:content => bindable.name,
 			:href => '/events/' + bindable.id.to_s
