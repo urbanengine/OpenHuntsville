@@ -115,7 +115,18 @@ Pakyow::App.routes(:groups) do
         if current_last_profile_shown < total_groups
           next_link = {:class => 'previous-next-btns',:href=>"/groups?page=#{page_no+1}"}
         end
-        more_links = {'previous_link'=>previous_link,'next_link'=>next_link}
+        number_of_pages = total_groups / my_limit
+        content_string = "<div class=\"pagination\">"
+        for page_number in 0..(number_of_pages-1)
+          if page_number == page_no
+            content_string = content_string + "<a href=\"" + "/groups?page=" + page_number.to_s + "\" class=\"active\">"+(page_number+1).to_s+"</a>"
+          else
+            content_string = content_string + "<a href=\"" + "/groups?page=" + page_number.to_s + "\">"+(page_number+1).to_s+"</a>"
+          end
+        end
+        content_string = content_string + "</div>"
+        pagination_links = {:content => content_string, :class=>"pagination-parent"}
+        more_links = {'previous_link'=>previous_link,'next_link'=>next_link, 'pagination_links'=>pagination_links}
         view.scope(:after_groups).bind(more_links)
         view.scope(:after_groups).use(:authenticated)
       else
