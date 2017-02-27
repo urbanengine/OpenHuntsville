@@ -92,7 +92,7 @@ Pakyow::App.routes(:events) do
         isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
         if event.approved && isNotSiteAdmin
           redirect "/errors/404"
-        else
+        end
         if logged_in_user_is_manager_of_event(event) == false
           redirect "/errors/403"
         end
