@@ -86,16 +86,12 @@ Pakyow::App.routes(:groups) do
 
     # GET /groups; same as Index
     action :list, :before => :route_head do
-      if session[:random].nil?
-        session[:random] = (rand(0...100)).to_s
-      end
       my_limit = 10
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           my_limit = 2
         end
       end
-      ran = session[:random].to_i*100
       total_groups = Group.where("approved = true").count
       # If user is authenticated, don't show default
       page_no = 0
@@ -115,7 +111,7 @@ Pakyow::App.routes(:groups) do
         if current_last_profile_shown < total_groups
           next_link = {:class => 'previous-next-btns',:href=>"/groups?page=#{page_no+1}"}
         end
-        number_of_pages = total_groups / my_limit
+        number_of_pages = (total_groups / my_limit.to_f).ceil
         content_string = "<div class=\"pagination\">"
         for page_number in 0..(number_of_pages-1)
           if page_number == page_no

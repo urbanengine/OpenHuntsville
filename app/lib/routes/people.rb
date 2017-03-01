@@ -274,17 +274,13 @@ Pakyow::App.routes(:people) do
 
     # GET /people; same as Index
     action :list do
-      if session[:random].nil?
-        session[:random] = (rand(0...100)).to_s
-      end
       my_limit = 10
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
           my_limit = 2
         end
       end
-      ran = session[:random].to_i*100
-      total_people = People.where("approved = true AND opt_in = true").count
+      total_people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").count
       # If user is authenticated, don't show default
       page_no = 0
       unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
@@ -305,7 +301,7 @@ Pakyow::App.routes(:people) do
         if current_last_profile_shown < total_people
           next_link = {:class => 'previous-next-btns',:href=>"/people?page=#{page_no+1}"}
         end
-        number_of_pages = total_people / my_limit
+        number_of_pages = (total_people / my_limit.to_f).ceil
         content_string = "<div class=\"pagination\">"
         for page_number in 0..(number_of_pages-1)
           if page_number == page_no
