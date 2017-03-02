@@ -343,7 +343,7 @@ Pakyow::App.routes(:people) do
       if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].opt_in == false
        redirect '/errors/404'
       end
-      unless people[0].approved || People[session[:people]].admin || people[0].id == session[:people].to_i
+      unless people[0].approved || People[cookies[:people]].admin || people[0].id == cookies[:people].to_i
         redirect '/errors/404'
       end
      view.scope(:people).apply(people)
@@ -378,8 +378,8 @@ Pakyow::App.routes(:people) do
       suspend_mail = false
       current_user = nil
       names_nil = false
-      unless session[:people].nil?
-        current_user = People[session[:people]]
+      unless cookies[:people].nil?
+        current_user = People[cookies[:people]]
       end
 
       if current_user.first_name.nil? || current_user.first_name.length == 0

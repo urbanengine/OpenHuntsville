@@ -102,7 +102,7 @@ Pakyow::App.bindings :events do
 
 		binding(:approved) do
 			content = if bindable.approved then "Approved" else "Pending" end
-			people = People[session[:people]]
+			people = People[cookies[:people]]
 			if people.admin
 				if bindable.approved
 					content = "<p><a class='unapprove-btn' href='/events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
@@ -116,7 +116,7 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:edit_event_link) do
-			people = People[session[:people]]
+			people = People[cookies[:people]]
 			{
 			:content => "Edit Event",
 			:href => '/events/' + bindable.id.to_s + '/edit'

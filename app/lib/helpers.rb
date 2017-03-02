@@ -311,7 +311,6 @@ module Pakyow::Helpers
     pp @session
     returnValue = false
     if people = People.auth(@session)
-      session[:people] = people.id
       cookies[:people] = people.id
       unless people.id.nil?
         returnValue = true

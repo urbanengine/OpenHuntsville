@@ -59,7 +59,7 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
 				link = "/login"
@@ -89,7 +89,7 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
 				link = "/login"
@@ -119,7 +119,7 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 					show = "show"
 					title = "Log in to view " + bindable.first_name + "'s Website"
 					link = "/login"

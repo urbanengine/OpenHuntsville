@@ -5,7 +5,7 @@ Pakyow::App.routes do
     log_debug("/app/lib/routes.rb :: require_auth :: cookies[:people] :: ", cookies[:people])
     current_user = People[cookies[:people]]
     view.scope(:optin).apply(current_user)
-    redirect(router.group(:session).path(:new)) unless session[:people]
+    redirect(router.group(:session).path(:new)) unless cookies[:people]
   end
 
   get '/' do
@@ -41,7 +41,6 @@ Pakyow::App.routes do
   end
 
   get :logout, '/logout' do
-    cookies[:people] = 0
     reroute router.group(:session).path(:remove), :delete
   end
   get :about, '/about' do

@@ -46,7 +46,7 @@ Pakyow::App.bindings :groups do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 					show = "show"
 					title = "Log in to view " + bindable.name + "'s Website"
 					link = "/login"

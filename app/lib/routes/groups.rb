@@ -43,7 +43,7 @@ Pakyow::App.routes(:groups) do
 
     # GET '/groups/new'
     action :new, :before => :is_admin_check do
-      people = People[session[:people]]
+      people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
       end
@@ -59,7 +59,7 @@ Pakyow::App.routes(:groups) do
 
     #POST '/groups/'
     action :create, :before => :is_admin_check  do
-      people = People[session[:people]]
+      people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
       end
@@ -168,7 +168,7 @@ Pakyow::App.routes(:groups) do
 
     # GET /groups/:groups_id/edit
     action :edit do
-      people = People[session[:people]]
+      people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
       end
