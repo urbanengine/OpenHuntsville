@@ -277,7 +277,7 @@ Pakyow::App.routes(:people) do
       my_limit = 10
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          my_limit = 2
+          my_limit = 10
         end
       end
       total_people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").count
