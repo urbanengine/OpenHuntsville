@@ -89,7 +89,7 @@ Pakyow::App.routes(:groups) do
       my_limit = 10
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          my_limit = 2
+          my_limit = 10
         end
       end
       total_groups = Group.where("approved = true").count
