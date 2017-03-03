@@ -21,7 +21,7 @@ Pakyow::App.routes(:api) do
                     nextThursday = nextThursday + delta
 
                     people = People[cookies[:people]]
-                    if people.nil? == false && people.admin?
+                    if people.nil? == false && people.admin
                       time_limit = DateTime.now.utc
                     else      
                       time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
