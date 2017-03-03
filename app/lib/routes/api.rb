@@ -72,7 +72,7 @@ Pakyow::App.routes(:api) do
                   "timestamp" => event.created_at.utc,
                   "group" => Group.where("id = ?", event.group_id).first.name,
                   "title" => event.name,
-                  "description" => event.description,
+                  "description" => event.summary,
                   "date" => event.start_datetime.utc,
                   "time_req_form" => event.start_datetime.utc,
                   "time_req" => event.start_datetime.utc,

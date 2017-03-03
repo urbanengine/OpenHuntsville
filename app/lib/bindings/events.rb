@@ -53,6 +53,12 @@ Pakyow::App.bindings :events do
       }
     end
 
+    binding(:summary) do
+      {
+        :content => bindable.summary
+      }
+    end
+
     binding(:start_datetime) do
       {
         :content => if bindable.start_datetime then bindable.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') else "" end

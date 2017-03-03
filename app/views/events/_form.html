@@ -12,9 +12,13 @@
         <p class="smalltext">You have <span id="name-character-count"></span> characters left.</p>
       </li>
       <li>
+        <label>Summary</label>
+        <textarea data-prop="summary" id="summary" name="events[summary]" placeholder="Enter your event summary (140 characters or less)" maxlength="140" required></textarea>
+        <p class="smalltext">You have <span id="summary-character-count"></span> characters left.</p>
+      </li>
+      <li>
         <label>Description</label>
-        <textarea data-prop="description" id="desc" name="events[description]" placeholder="Enter your event description (140 characters or less)" maxlength="140" required></textarea>
-        <p class="smalltext">You have <span id="desc-character-count"></span> characters left.</p>
+        <textarea data-prop="description" name="events[description]" placeholder="Enter your event description" required></textarea>
       </li>
       <li style="width:100%;">
         <label>Please choose the group that is associated with your event.</label>
@@ -77,17 +81,17 @@ $("form").submit(function(e) {
 });
 
 var charCountforTitle = 44;
-var charCountForDesc = 140;
+var charCountForSummary = 140;
 
 document.getElementById("name-character-count").innerHTML = charCountforTitle;
-document.getElementById("desc-character-count").innerHTML = charCountForDesc;
+document.getElementById("summary-character-count").innerHTML = charCountForSummary;
 
 document.getElementById("name").onkeyup = function () {
   document.getElementById("name-character-count").innerHTML = (charCountforTitle - this.value.length);
 };
 
-document.getElementById("desc").onkeyup = function () {
-  document.getElementById("desc-character-count").innerHTML = (charCountForDesc - this.value.length);
+document.getElementById("summary").onkeyup = function () {
+  document.getElementById("summary-character-count").innerHTML = (charCountForSummary - this.value.length);
 };
 
 //http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1

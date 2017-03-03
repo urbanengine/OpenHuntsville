@@ -180,6 +180,7 @@ Pakyow::App.routes(:events) do
       c_params =
         {
           "name" => params[:events][:name],
+          "summary" => params[:events][:summary],
           "description" => params[:events][:description],
           "group_id" => params[:events][:parent_group].to_i,
           "start_datetime" => parsed_time.to_datetime.utc,
@@ -230,6 +231,7 @@ Pakyow::App.routes(:events) do
       end
       event.name = params[:events][:name]
       event.description = params[:events][:description]
+      event.summary = params[:events][:summary]
       event.group_id = params[:events][:parent_group].to_i
       event.start_datetime = parsed_datetime.to_datetime.utc
       event.duration = params[:events][:duration].to_i
