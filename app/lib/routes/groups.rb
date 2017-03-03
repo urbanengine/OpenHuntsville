@@ -87,11 +87,6 @@ Pakyow::App.routes(:groups) do
     # GET /groups; same as Index
     action :list, :before => :route_head do
       my_limit = 10
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          my_limit = 10
-        end
-      end
       total_groups = Group.where("approved = true").count
       # If user is authenticated, don't show default
       page_no = 0
