@@ -483,10 +483,21 @@ module Pakyow::Helpers
   def get_events_for_group_id(group_id)
     opts = [[]]
     unless group_id.nil?
-      group_events = Event.where("group_id = ? AND start_datetime > ?", group_id, DateTime.now.utc).all
+      nextThursday = Date.parse('Thursday')
+      delta = nextThursday > Date.today ? 0 : 7
+      nextThursday = nextThursday + delta
+
+      people = People[cookies[:people]]
+      if people.nil? == false && people.admin?
+        time_limit = DateTime.now.utc
+      else      
+        time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+      end
+
+      group_events = Event.where("group_id = ? AND start_datetime > ?", group_id, time_limit).all
       parent_group = Group.where("id = ?", group_id).first
       unless parent_group.parent_id.nil?
-        group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, DateTime.now.utc).all)
+        group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, time_limit).all)
       end
       group_events.each { |event|
         opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]

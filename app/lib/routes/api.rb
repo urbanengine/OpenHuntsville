@@ -1,4 +1,5 @@
 require 'json'
+require 'date'
 Pakyow::App.routes(:api) do
   include SharedRoutes
 
@@ -15,10 +16,21 @@ Pakyow::App.routes(:api) do
                 action :list do
                   if request.xhr?
                     # respond to Ajax request
-                    group_events = Event.where("group_id = ? AND start_datetime > ?", params[:groups_id], DateTime.now.utc).all
+                    nextThursday = Date.parse('Thursday')
+                    delta = nextThursday > Date.today ? 0 : 7
+                    nextThursday = nextThursday + delta
+
+                    people = People[cookies[:people]]
+                    if people.nil? == false && people.admin?
+                      time_limit = DateTime.now.utc
+                    else      
+                      time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+                    end
+
+                    group_events = Event.where("group_id = ? AND start_datetime > ?", params[:groups_id], time_limit).all
                     parent_group = Group.where("id = ?", params[:groups_id]).first
                     unless parent_group.parent_id.nil?
-                      group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, DateTime.now.utc).all)
+                      group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, time_limit).all)
                     end
                     response.write(group_events.to_json)
                   else
