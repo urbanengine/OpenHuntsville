@@ -7,12 +7,12 @@
     <input type="hidden" data-prop="id" />
     <input type="hidden" id="should_restrict_event_starttime" data-prop="should_restrict_event_starttime" />
       <li>
-        <label>Event Name</label>
+        <label>Event Name (Shown as the title on the flyer)</label>
         <input type="text" id="name" data-prop="name" name="events[name]" placeholder="Name" maxlength="44" required />
         <p class="smalltext">You have <span id="name-character-count"></span> characters left.</p>
       </li>
       <li>
-        <label>Summary</label>
+        <label>Summary (Shown as the description on the flyer)</label>
         <textarea data-prop="summary" id="summary" name="events[summary]" placeholder="Enter your event summary (140 characters or less)" maxlength="140" required></textarea>
         <p class="smalltext">You have <span id="summary-character-count"></span> characters left.</p>
       </li>
@@ -25,7 +25,7 @@
         <select id="group_selector" type="text" data-prop="parent_group" class="chosen" required></select>
       </li>
       <li data-prop="parent_event_li" class="hide" id="parent_event_li" style="width:100%;">
-        <label>Is you event being hosted under another event (i.e. CoWorking Night)? If so, please choose the Parent Event below.</label>
+        <label>Is you event being hosted with another event (i.e. CoWorking Night)? If so, please choose that event below.</label>
         <select id="parent_event_selector" type="text" data-prop="parent_event_selector"></select>
       </li>
       <li>
