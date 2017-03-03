@@ -180,7 +180,7 @@ $("#group_selector")
               selector.find('option').remove().end();
               selector.append('<option value="" selected="selected"></option>');
               $.each(events, function(index, event) {
-                  selector.append($("<option />").val(event.id).text(event.name));
+                  selector.append($("<option />").val(event.id).text(event.name + "   (" + new Date(Date.parse(event.start_datetime)).toLocaleDateString() + ")"));
               });
 
               if (events.length > 0) {

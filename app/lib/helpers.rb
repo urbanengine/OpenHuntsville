@@ -489,7 +489,7 @@ module Pakyow::Helpers
         group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, DateTime.now.utc).all)
       end
       group_events.each { |event|
-        opts << [event.id, event.name]
+        opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
       }
     end
     opts

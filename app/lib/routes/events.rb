@@ -68,7 +68,7 @@ Pakyow::App.routes(:events) do
         event.approved = false
         event.instance_number = nil
         readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
-        approve_me.save
+        event.save
         if request.xhr?
           success = 'success'
         else
@@ -235,10 +235,10 @@ Pakyow::App.routes(:events) do
       event.group_id = params[:events][:parent_group].to_i
       event.start_datetime = parsed_datetime.to_datetime.utc
       event.duration = params[:events][:duration].to_i
-      if params[:events][:parent_event].blank?
+      if params[:events][:parent_event_selector].blank?
         event.parent_id = nil
       else
-        event.parent_id = params[:events][:parent_event].to_i
+        event.parent_id = params[:events][:parent_event_selector].to_i
       end
       event.venue_id = venue_id
       event.flyer_category = params[:events][:flyer_category]
