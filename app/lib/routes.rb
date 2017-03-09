@@ -70,9 +70,7 @@ Pakyow::App.routes do
   end
 
   get :dashboard, '/dashboard', :before => :is_admin_check do
-    # NOAH
-    unapproved = People.where(:approved=>false).all
-    pp unapproved
+    unapproved = People.where(:approved=>true).invert.all
     subset = Array.new
     unapproved.each{|person|
       unless person.spam
