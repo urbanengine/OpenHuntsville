@@ -153,6 +153,32 @@ Pakyow::App.routes(:api) do
             }
             response.write(']')
           end #get 'cwn_flyer/:cwn_instance_num'
+
+          get 'cwn_events' do
+            if request.xhr?
+              # respond to Ajax request
+              cwn = Group.where("name = 'CoWorking Night'").first
+              if cwn.nil?
+                redirect '/errors/403'
+              end
+
+              nextThursday = Date.parse('Thursday')
+              delta = nextThursday > Date.today ? 0 : 7
+              nextThursday = nextThursday + delta
+
+              people = People[cookies[:people]]
+              if people.nil? == false && people.admin
+                time_limit = DateTime.now.utc
+              else      
+                time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+              end
+              group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+              response.write(group_events.to_json)
+            else
+              # respond to normal request
+              redirect '/errors/403'
+            end
+          end #get cwn_events
         end # collection do
       end # expand :restful, :v1, '/v1' do
 

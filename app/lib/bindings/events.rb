@@ -90,7 +90,7 @@ Pakyow::App.bindings :events do
 		end
 
 		options(:parent_event_selector) do
-			get_events_for_group_id(bindable.group_id)
+			get_events_for_coworkingnight()
 		end
 
 		binding(:parent_event_selector) do

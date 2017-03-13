@@ -506,6 +506,29 @@ module Pakyow::Helpers
     opts
   end
 
+  def get_events_for_coworkingnight()
+    opts = [[]]
+    cwn = Group.where("name = 'CoWorking Night'").first
+    unless cwn.nil? || cwn.id.nil?
+      nextThursday = Date.parse('Thursday')
+      delta = nextThursday > Date.today ? 0 : 7
+      nextThursday = nextThursday + delta
+
+      people = People[cookies[:people]]
+      if people.nil? == false && people.admin
+        time_limit = DateTime.now.utc
+      else      
+        time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+      end
+
+      group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+      group_events.each { |event|
+        opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
+      }
+    end
+    opts
+  end
+
 end # module Pakyow::Helpers
 
 class String

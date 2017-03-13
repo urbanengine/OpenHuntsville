@@ -173,7 +173,8 @@ $("#group_selector")
       if (groupId) {
         $.ajax({
           dataType: "json",
-          url: "/api/v1/groups/" + groupId + "/events/",
+          //url: "/api/v1/groups/" + groupId + "/events/",
+          url: "/api/v1/cwn_events",
           success: function(events) {
             selector = $('#parent_event_selector');
             if (selector.val() == null || selector.val() == "") {
