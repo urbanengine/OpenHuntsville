@@ -454,13 +454,13 @@ module Pakyow::Helpers
     all_events = []
     unless event.nil? || event.id.nil?
       child_events = Event.where("approved = true AND parent_id = ?", event.id).all
-      while child_events.length != 0
-        child_event = child_events.shift
-        child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
-        all_events << child_event
-      end
+      #while child_events.length != 0
+      #  child_event = child_events.shift
+      #  child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
+      #  all_events << child_event
+      #end
+      child_events
     end
-    all_events
   end
 
   def readjust_event_instance_number_for_group(start_datetime, group_id)
