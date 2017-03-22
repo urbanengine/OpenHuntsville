@@ -130,7 +130,7 @@ Pakyow::App.routes(:api) do
             end
 
             #Now lets get all the events for this group. This means all of this group's events and its event's children
-            cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND instance_number = ?", DateTime.now.utc, cwn.id, params[:cwn_instance_number]).order(:start_datetime).first
+            cwn_event = Event.where("approved = true AND group_id = ? AND instance_number = ?", cwn.id, params[:cwn_instance_number]).order(:start_datetime).first
             events = get_child_events_for_event(cwn_event)
             response.write('[')
             first_time = true
