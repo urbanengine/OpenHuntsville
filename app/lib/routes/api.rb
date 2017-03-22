@@ -69,6 +69,13 @@ Pakyow::App.routes(:api) do
 
             #Now lets get all the events for this group. This means all of this group's events and its event's children
             next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ?", DateTime.now.utc, cwn.id).order(:start_datetime).first
+
+            #check is last cwn_event is still occurring. If it is, then use it
+            last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ?", DateTime.now.utc, cwn.id).order(:start_datetime).last
+            if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+              next_cwn_event = last_cwn_event
+            end
+
             events = get_child_events_for_event(next_cwn_event)
             response.write('[')
             first_time = true
