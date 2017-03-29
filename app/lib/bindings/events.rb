@@ -47,6 +47,12 @@ Pakyow::App.bindings :events do
       }
     end
 
+		binding(:description) do
+			{
+				:content => bindable.description
+			}
+		end
+
     binding(:summary) do
       {
         :content => bindable.summary
