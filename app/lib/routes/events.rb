@@ -190,7 +190,9 @@ Pakyow::App.routes(:events) do
           "instance_number" => instance_number,
           "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end,
           "flyer_category" => if params[:events][:flyer_category].nil? || params[:events][:flyer_category].empty? then group.flyer_category else params[:events][:flyer_category] end,
-          "flyer_fa_icon" => if params[:events][:flyer_fa_icon].nil? || params[:events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:events][:flyer_fa_icon] end
+          "flyer_fa_icon" => if params[:events][:flyer_fa_icon].nil? || params[:events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:events][:flyer_fa_icon] end,
+          "created_by" => people.id,
+          "updated_by" => people.id
         }
       event = Event.new(c_params)
       event.save
@@ -243,6 +245,7 @@ Pakyow::App.routes(:events) do
       event.venue_id = venue_id
       event.flyer_category = params[:events][:flyer_category]
       event.flyer_fa_icon = params[:events][:flyer_fa_icon]
+      event.updated_by = people.id
       event.save
       redirect '/events/manage'
     end
@@ -263,7 +266,7 @@ Pakyow::App.routes(:events) do
       if logged_in_user_is_manager_of_event(event) == false
         redirect "/errors/403"
       end
-      view.scope(:events).bind([event, event])
+      view.scope(:events).bind([event, event, event])
       view.scope(:people).bind(people)
       current_user = People[cookies[:people]]
       view.scope(:optin).apply(current_user)
