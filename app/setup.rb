@@ -13,6 +13,7 @@ require 'httparty'
 require 'mailgun'
 require 'aws-sdk'
 require "mini_magick"
+require 'rack/ssl'
 
 Sequel::Model.plugin :timestamps, update_on_create: true
 
@@ -42,6 +43,8 @@ Pakyow::App.define do
     app.log_output = true
     app.auto_reload = false
     app.errors_in_browser = false
+    
+    use Rack::SSL
 
     $db = Sequel.connect(ENV['DATABASE_URL'])
   end
