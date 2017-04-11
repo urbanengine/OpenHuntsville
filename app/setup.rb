@@ -43,8 +43,6 @@ Pakyow::App.define do
     app.log_output = true
     app.auto_reload = false
     app.errors_in_browser = false
-    
-    use Rack::SSL
 
     $db = Sequel.connect(ENV['DATABASE_URL'])
   end
