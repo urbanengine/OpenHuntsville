@@ -114,6 +114,8 @@ GEM
     public_suffix (2.0.5)
     puma (3.6.2)
     rack (1.6.5)
+    rack-ssl (1.4.1)
+      rack
     rake (11.3.0)
     redis (3.3.2)
     rest-client (2.0.0)
@@ -159,6 +161,7 @@ DEPENDENCIES
   pakyow (~> 0.11.3)
   pg
   puma
+  rack-ssl
   rake
   sequel
   thin
