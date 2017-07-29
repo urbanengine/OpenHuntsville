@@ -188,7 +188,7 @@ Pakyow::App.routes(:events) do
           "venue_id" => params[:events][:venue].to_i,
           "approved" => if people.admin then true else false end,
           "instance_number" => instance_number,
-          "parent_id" => if params[:events][:parent_event_selector].blank? then nil else params[:events][:parent_event_selector].to_i end,
+          "parent_id" => params[:events][:parent_event_selector].to_i,
           "flyer_category" => if params[:events][:flyer_category].nil? || params[:events][:flyer_category].empty? then group.flyer_category else params[:events][:flyer_category] end,
           "flyer_fa_icon" => if params[:events][:flyer_fa_icon].nil? || params[:events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:events][:flyer_fa_icon] end,
           "created_by" => people.id,
