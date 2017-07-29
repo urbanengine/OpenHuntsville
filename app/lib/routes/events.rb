@@ -89,6 +89,7 @@ Pakyow::App.routes(:events) do
         if event.nil?
           redirect "/errors/404"
         end
+        people = People[cookies[:people]]
         isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
         if event.approved && isNotSiteAdmin
           redirect "/errors/404"
