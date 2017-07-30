@@ -71,7 +71,7 @@ Pakyow::App.routes(:api) do
             next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
 
             #check is last cwn_event is still occurring. If it is, then use it
-            last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archive = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+            last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
             if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
               next_cwn_event = last_cwn_event
             end
