@@ -453,7 +453,7 @@ module Pakyow::Helpers
   def get_child_events_for_event(event)
     all_events = []
     unless event.nil? || event.id.nil?
-      child_events = Event.where("approved = true AND parent_id = ?", event.id).all
+      child_events = Event.where("approved = true AND parent_id = ? AND archived = ?", event.id, false).all
       #while child_events.length != 0
       #  child_event = child_events.shift
       #  child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
