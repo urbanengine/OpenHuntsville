@@ -27,10 +27,10 @@ Pakyow::App.routes(:api) do
                       time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
                     end
 
-                    group_events = Event.where("group_id = ? AND start_datetime > ?", params[:groups_id], time_limit).all
+                    group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", params[:groups_id], time_limit, false).all
                     parent_group = Group.where("id = ?", params[:groups_id]).first
                     unless parent_group.parent_id.nil?
-                      group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, time_limit).all)
+                      group_events.concat(Event.where("group_id = ? AND start_datetime > ? AND archived = ?", parent_group.parent_id, time_limit, false).all)
                     end
                     response.write(group_events.to_json)
                   else
