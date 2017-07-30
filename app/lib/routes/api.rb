@@ -130,7 +130,7 @@ Pakyow::App.routes(:api) do
             end
 
             #Now lets get all the events for this group. This means all of this group's events and its event's children
-            cwn_event = Event.where("approved = true AND group_id = ? AND instance_number = ?", cwn.id, params[:cwn_instance_number]).order(:start_datetime).first
+            cwn_event = Event.where("approved = true AND group_id = ? AND instance_number = ? AND archived = ?", cwn.id, params[:cwn_instance_number], false).order(:start_datetime).first
             events = get_child_events_for_event(cwn_event)
             response.write('[')
             first_time = true
@@ -180,7 +180,7 @@ Pakyow::App.routes(:api) do
               else      
                 time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
               end
-              group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+              group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false).order(:start_datetime).all
               response.write(group_events.to_json)
             else
               # respond to normal request
