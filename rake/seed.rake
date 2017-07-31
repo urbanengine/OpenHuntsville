@@ -32,8 +32,8 @@ namespace :seed do
     puts "Starting the seed:admins task"
     Rake::Task["seed:admins"].invoke
 
-    puts "Starting the seed:experts task"
-    Rake::Task["seed:experts"].invoke
+    # puts "Starting the seed:experts task"
+    # Rake::Task["seed:experts"].invoke
 
     puts "Starting the seed:groups task"
     Rake::Task["seed:groups"].invoke

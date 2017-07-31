@@ -126,7 +126,7 @@ Pakyow::App.routes(:groups) do
         view.scope(:after_groups).use(:normal)
       end
       #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
-      groups = Group.where("approved = true").limit(my_limit).offset(page_no*my_limit).order(:name).all
+      groups = Group.where("approved = true AND archived = ?", false).limit(my_limit).offset(page_no*my_limit).order(:name).all
       view.scope(:groups).apply(groups)
       current_user = People[cookies[:people]]
       view.scope(:admins).apply(current_user)
@@ -215,6 +215,29 @@ Pakyow::App.routes(:groups) do
           group.save
         end
         redirect '/groups/' + params[:groups][:id].to_s + '/edit'
+      end
+    end
+
+    member do
+      #TODO: DELETE '/groups/:group_id' route. This is a workaround
+      # GET ''/groups/:group_id/delete'
+      get 'delete' do
+        if params[:groups_id].is_number? == false
+          redirect "/errors/404"
+        end
+        group = Group.where("id = ?", params[:groups_id]).first
+        if group.nil?
+          redirect "/errors/404"
+        end
+        people = People[cookies[:people]]
+        isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
+        if group.approved && isNotSiteAdmin
+          redirect "/errors/403"
+        end
+
+        group.archived = true
+        group.save
+        redirect '/groups'
       end
     end
   end
