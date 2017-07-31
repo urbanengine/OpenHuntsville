@@ -312,6 +312,7 @@ module Pakyow::Helpers
     returnValue = false
     if people = People.auth(@session)
       cookies[:people] = people.id
+      # cookies[:people] = hash_and_salt_str(people.id)
       unless people.id.nil?
         returnValue = true
       end
@@ -326,6 +327,11 @@ module Pakyow::Helpers
     end
     printval
   end #print_me(val)
+
+  def hash_and_salt_str(str)
+    salt = ENV['salt']
+    return BCrypt::Password.create(salt + str)
+  end
 
   def get_nested_category_id_and_category_name()
     opts = [[]]
