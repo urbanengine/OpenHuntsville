@@ -740,7 +740,16 @@ li.selected.active .subcats li {
 	float: right;
 	width: 160px;
 }
-.contactme {
+
+.editUserBtn {
+	margin-bottom: 10px;
+}
+
+.editUserBtn a {
+	color: #f6f6f6;
+}
+
+.contactme, .editUserBtn {
 	display: block;
 	background-color: #091B1B;
 	text-align: center;
@@ -751,17 +760,24 @@ li.selected.active .subcats li {
 	border: 0;
 	outline: 0;
 }
-.contactme:hover {
+.contactme:hover, .editUserBtn:hover {
 	background-color: #054242;
 	color: #f6f6f6;
 	text-decoration: underline;
 }
-.contactme span:hover {
+.contactme span:hover, .editUserBtn a:hover {
 	text-decoration: underline;
 }
+
+.editUserBtn:before {
+	font-family: 'FontAwesome';
+	margin: 0 7px 0 0;
+	color: #f6f6f6;
+}
+
 .contactme:before {
 	font-family: 'FontAwesome';
-	margin:0 7px 0 0;
+	margin: 0 7px 0 0;
 	color: #f6f6f6;
 	content: '\f0e0';
 }
@@ -1305,9 +1321,6 @@ footer a:hover {
 		font-size: 1em;
 	}
 }
-
-
-
 
 .hide
 {

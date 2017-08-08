@@ -224,6 +224,9 @@ module Pakyow::Helpers
     classes
   end # def get_css_classes_for_category(category)
 
+  def get_css_classes_for_edit_user_btn()
+
+  end # def get_css_classes_for_edit_user_btn()
 
   ### ----------------------------
   ### EMAIL
