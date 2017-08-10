@@ -203,11 +203,13 @@ Pakyow::App.routes(:people) do
         send success
       end
 
+      # Approve a user
       get 'approve/:id', :before => :is_admin_check do
         success = 'failure'
-        approve_me = People[params[:id]]
-        approve_me.approved = true
-        approve_me.save
+        user = People[params[:id]]
+        user.approved = true
+        user.approved_on = DateTime.now.utc
+        user.save
         if request.xhr?
           success = 'success'
         else
