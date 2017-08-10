@@ -24,23 +24,23 @@
       <li>
         <label>Profile URL</label>
         <label class="sublabel">Customize your profile URL so that you can share your profile with your friends and colleagues, ie. "openhsv.com/people/<strong>chris</strong>".<br />Please use letters and numbers only. Special characters are not allowed.</label>
-        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" pattern="[a-zA-Z0-9]+" >
+        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" pattern="[a-zA-Z0-9-]+" >
       </li>
       <li>
         <label>Company</label>
         <input type="text" data-prop="company" name="people[company]" placeholder="Company">
       </li>
       <li>
-        <label>Twitter</label>
-        <input type="text" data-prop="twitter" name="people[twitter]" placeholder="Twitter URL (optional)">
+        <label>Twitter (Optional)</label>
+        <input type="text" data-prop="twitter" name="people[twitter]" placeholder="Twitter URL">
       </li>
       <li>
-        <label>LinkedIn</label>
-        <input type="text" data-prop="linkedin" name="people[linkedin]" placeholder="LinkedIn URL (optional)">
+        <label>LinkedIn (Optional)</label>
+        <input type="text" data-prop="linkedin" name="people[linkedin]" placeholder="LinkedIn URL">
       </li>
       <li>
-        <label>Website</label>
-        <input type="text" data-prop="url" name="people[url]" placeholder="Website URL (optional)">
+        <label>Website (Optional)</label>
+        <input type="text" data-prop="url" name="people[url]" placeholder="Website URL" pattern="^((http[s]?)?:\/\/)?((\/\w+)*\/)?([\w\-\.]+)(.*)?([\w]+)?">
       </li>
       <li>
         <label>Bio</label>
