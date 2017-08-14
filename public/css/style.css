@@ -579,6 +579,7 @@ h3 {
 }
 
 @supports (mix-blend-mode: lighten) {
+	
   .gradient-text {
     display: inline-block;
     position: relative;
@@ -586,6 +587,7 @@ h3 {
     background: #000;
     mix-blend-mode: lighten;
   }
+
  .gradient-text::before {
     content: '';
     display: block;
@@ -596,10 +598,8 @@ h3 {
     left: 0;
     background: -webkit-linear-gradient(120deg,#00e1ff, #ffeb50);
     background: linear-gradient(120deg,#00e1ff, #ffeb50);
-    pointer-events: none;
-  }
-  .gradient-text::before {
-    mix-blend-mode: multiply;
+	pointer-events: none;
+	mix-blend-mode: multiply;
   }
 }
 
