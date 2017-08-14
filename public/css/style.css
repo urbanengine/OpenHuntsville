@@ -581,7 +581,8 @@ h3 {
 @supports (mix-blend-mode: lighten) {
 	
   .gradient-text {
-    display: inline-block;
+	display: inline-block;
+	font-family: 'Montserrat', sans-serif;
     position: relative;
     color: #fff;
     background: #000;
