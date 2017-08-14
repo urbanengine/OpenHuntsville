@@ -203,11 +203,13 @@ Pakyow::App.routes(:people) do
         send success
       end
 
+      # Approve a user
       get 'approve/:id', :before => :is_admin_check do
         success = 'failure'
-        approve_me = People[params[:id]]
-        approve_me.approved = true
-        approve_me.save
+        user = People[params[:id]]
+        user.approved = true
+        user.approved_on = DateTime.now.utc
+        user.save
         if request.xhr?
           success = 'success'
         else
@@ -274,17 +276,13 @@ Pakyow::App.routes(:people) do
 
     # GET /people; same as Index
     action :list do
-      if session[:random].nil?
-        session[:random] = (rand(0...100)).to_s
-      end
       my_limit = 10
       unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
         if ENV['RACK_ENV']== "development"
-          my_limit = 2
+          my_limit = 10
         end
       end
-      ran = session[:random].to_i*100
-      total_people = People.where("approved = true AND opt_in = true").count
+      total_people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").count
       # If user is authenticated, don't show default
       page_no = 0
       unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
@@ -305,7 +303,18 @@ Pakyow::App.routes(:people) do
         if current_last_profile_shown < total_people
           next_link = {:class => 'previous-next-btns',:href=>"/people?page=#{page_no+1}"}
         end
-        more_links = {'previous_link'=>previous_link,'next_link'=>next_link}
+        number_of_pages = (total_people / my_limit.to_f).ceil
+        content_string = "<div class=\"pagination\">"
+        for page_number in 0..(number_of_pages-1)
+          if page_number == page_no
+            content_string = content_string + "<a href=\"" + "/people?page=" + page_number.to_s + "\" class=\"active\">"+(page_number+1).to_s+"</a>"
+          else
+            content_string = content_string + "<a href=\"" + "/people?page=" + page_number.to_s + "\">"+(page_number+1).to_s+"</a>"
+          end
+        end
+        content_string = content_string + "</div>"
+        pagination_links = {:content => content_string, :class=>"pagination-parent"}
+        more_links = {'previous_link'=>previous_link,'next_link'=>next_link, 'pagination_links'=>pagination_links}
         view.scope(:after_people).bind(more_links)
         view.scope(:after_people).use(:authenticated)
       else
@@ -336,7 +345,7 @@ Pakyow::App.routes(:people) do
       if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].opt_in == false
        redirect '/errors/404'
       end
-      unless people[0].approved || People[session[:people]].admin || people[0].id == session[:people].to_i
+      unless people[0].approved || People[cookies[:people]].admin || people[0].id == cookies[:people].to_i
         redirect '/errors/404'
       end
      view.scope(:people).apply(people)
@@ -371,8 +380,8 @@ Pakyow::App.routes(:people) do
       suspend_mail = false
       current_user = nil
       names_nil = false
-      unless session[:people].nil?
-        current_user = People[session[:people]]
+      unless cookies[:people].nil?
+        current_user = People[cookies[:people]]
       end
 
       if current_user.first_name.nil? || current_user.first_name.length == 0

@@ -59,7 +59,7 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
 				link = "/login"
@@ -89,7 +89,7 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
 				link = "/login"
@@ -119,7 +119,7 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 					show = "show"
 					title = "Log in to view " + bindable.first_name + "'s Website"
 					link = "/login"
@@ -441,7 +441,23 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:edit_profile_link) do
+			{
+				:href => "/people/" + bindable.custom_url.to_s + "/edit"
+			}
+		end
 
+		binding(:edit_user_btn) do
+			visible = "show"
+			people = People[cookies[:people]]
+			if people.nil? || people.admin.nil? || people.admin == false
+				visible = "hide"
+			end
+			{
+				class: lambda { |klass| klass << visible }
+			}
+		end
+
+		binding(:edit_user_btn_href) do
 			{
 				:href => "/people/" + bindable.custom_url.to_s + "/edit"
 			}

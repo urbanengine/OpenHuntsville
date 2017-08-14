@@ -43,7 +43,7 @@ Pakyow::App.routes(:groups) do
 
     # GET '/groups/new'
     action :new, :before => :is_admin_check do
-      people = People[session[:people]]
+      people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
       end
@@ -59,7 +59,7 @@ Pakyow::App.routes(:groups) do
 
     #POST '/groups/'
     action :create, :before => :is_admin_check  do
-      people = People[session[:people]]
+      people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
       end
@@ -86,16 +86,7 @@ Pakyow::App.routes(:groups) do
 
     # GET /groups; same as Index
     action :list, :before => :route_head do
-      if session[:random].nil?
-        session[:random] = (rand(0...100)).to_s
-      end
       my_limit = 10
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          my_limit = 2
-        end
-      end
-      ran = session[:random].to_i*100
       total_groups = Group.where("approved = true").count
       # If user is authenticated, don't show default
       page_no = 0
@@ -115,7 +106,18 @@ Pakyow::App.routes(:groups) do
         if current_last_profile_shown < total_groups
           next_link = {:class => 'previous-next-btns',:href=>"/groups?page=#{page_no+1}"}
         end
-        more_links = {'previous_link'=>previous_link,'next_link'=>next_link}
+        number_of_pages = (total_groups / my_limit.to_f).ceil
+        content_string = "<div class=\"pagination\">"
+        for page_number in 0..(number_of_pages-1)
+          if page_number == page_no
+            content_string = content_string + "<a href=\"" + "/groups?page=" + page_number.to_s + "\" class=\"active\">"+(page_number+1).to_s+"</a>"
+          else
+            content_string = content_string + "<a href=\"" + "/groups?page=" + page_number.to_s + "\">"+(page_number+1).to_s+"</a>"
+          end
+        end
+        content_string = content_string + "</div>"
+        pagination_links = {:content => content_string, :class=>"pagination-parent"}
+        more_links = {'previous_link'=>previous_link,'next_link'=>next_link, 'pagination_links'=>pagination_links}
         view.scope(:after_groups).bind(more_links)
         view.scope(:after_groups).use(:authenticated)
       else
@@ -124,7 +126,7 @@ Pakyow::App.routes(:groups) do
         view.scope(:after_groups).use(:normal)
       end
       #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
-      groups = Group.where("approved = true").limit(my_limit).offset(page_no*my_limit).order(:name).all
+      groups = Group.where("approved = true AND archived = ?", false).limit(my_limit).offset(page_no*my_limit).order(:name).all
       view.scope(:groups).apply(groups)
       current_user = People[cookies[:people]]
       view.scope(:admins).apply(current_user)
@@ -161,7 +163,7 @@ Pakyow::App.routes(:groups) do
 
     # GET /groups/:groups_id/edit
     action :edit do
-      people = People[session[:people]]
+      people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
       end
@@ -213,6 +215,29 @@ Pakyow::App.routes(:groups) do
           group.save
         end
         redirect '/groups/' + params[:groups][:id].to_s + '/edit'
+      end
+    end
+
+    member do
+      #TODO: DELETE '/groups/:group_id' route. This is a workaround
+      # GET ''/groups/:group_id/delete'
+      get 'delete' do
+        if params[:groups_id].is_number? == false
+          redirect "/errors/404"
+        end
+        group = Group.where("id = ?", params[:groups_id]).first
+        if group.nil?
+          redirect "/errors/404"
+        end
+        people = People[cookies[:people]]
+        isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
+        if group.approved && isNotSiteAdmin
+          redirect "/errors/403"
+        end
+
+        group.archived = true
+        group.save
+        redirect '/groups'
       end
     end
   end

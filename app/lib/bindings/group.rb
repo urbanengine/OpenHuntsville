@@ -46,7 +46,7 @@ Pakyow::App.bindings :groups do
 			title = ""
 			link = ""
 			content = ""
-			if session[:people].nil?
+			if cookies[:people].nil?
 					show = "show"
 					title = "Log in to view " + bindable.name + "'s Website"
 					link = "/login"
@@ -384,6 +384,33 @@ Pakyow::App.bindings :groups do
 
 		binding(:description) do
 			bindable.description
+		end
+
+		binding(:delete_group_link) do
+			cssclass = "delete-btn"
+			people = People[cookies[:people]]
+			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
+			
+			if bindable.approved && isSiteAdmin == false
+				cssclass = "hide"
+			else
+				splat = request.path.split("/")
+				# Either /events/new, or /events/:events_id/edit
+				unless splat[1].nil? || splat[1].length == 0
+					if splat[1] == "groups"
+						unless splat[2].nil? || splat[2].length == 0
+							if splat[2] == "new"
+								cssclass = "hide"
+							end
+						end
+					end
+				end
+			end
+			{
+			:content => "Delete",
+			:href => '/groups/' + bindable.id.to_s + '/delete',
+			:class => cssclass
+			}
 		end
 
 		binding(:group_edit_link) do

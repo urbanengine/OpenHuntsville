@@ -8,14 +8,14 @@ template: about
 		<p>This page features some of the groups on #openHSV. Browse through them by scrolling below or use the industry filters to further refine your search.</p>
 	</div>
 	<ul class="profiles-ul" style="margin-top:15px; margin-bottom:15px;">
-	  <li class="profile" data-scope="after_groups" data-version="authenticated">
-			<!-- TODO: Make custom arrow out of hashtag graphic -->
-			<!-- &#10096; &#10094; -->
-	    <a href="#" data-prop="previous_link" rel="prev"  data-ui="fastlink">< Previous</a>
-			<!-- &#10095; -->
-			<!-- &#10097;&#10097; -->
-			<!-- &#10093;&#10093; -->
-			<a href="#" data-prop="next_link" rel="next" data-ui="fastlink">Next ></a>
+	  <li class="profile profile-pagination" data-scope="after_groups" data-version="authenticated">
+	    <div style="width: 15%;">
+				<a href="#" data-prop="previous_link" rel="prev"  data-ui="fastlink">< Previous</a>
+			</div>
+			<div data-prop="pagination_links"></div>
+			<div style="width: 15%;">
+				<a href="#" data-prop="next_link" rel="next" data-ui="fastlink">Next ></a>
+			</div>
 	  </li>
 	  <li class="profile" data-scope="after_groups" data-version="normal" data-default>
 	    <h2>OpenHSV showcases over <span data-prop="full-count">100</span> groups who call Huntsville their home. <a href="/people/new">Register</a> or <a href="/login">Login</a> to see them all.</h2>
@@ -47,15 +47,15 @@ template: about
 			</div>
 		</li>
 	</ul>
-	<ul class="profiles-ul" style="margin-top:15px;">
-	  <li class="profile" data-scope="after_groups" data-version="authenticated">
-			<!-- TODO: Make custom arrow out of hashtag graphic -->
-			<!-- &#10096; &#10094; -->
-	    <a href="#" data-prop="previous_link" rel="prev"  data-ui="fastlink">< Previous</a>
-			<!-- &#10095; -->
-			<!-- &#10097;&#10097; -->
-			<!-- &#10093;&#10093; -->
-			<a href="#" data-prop="next_link" rel="next" data-ui="fastlink">Next ></a>
+	<ul class="profiles-ul" style="margin-top:15px; margin-bottom:15px;">
+	  <li class="profile profile-pagination" data-scope="after_groups" data-version="authenticated">
+	    <div style="width: 15%;">
+				<a href="#" data-prop="previous_link" rel="prev"  data-ui="fastlink">< Previous</a>
+			</div>
+			<div data-prop="pagination_links"></div>
+			<div style="width: 15%;">
+				<a href="#" data-prop="next_link" rel="next" data-ui="fastlink">Next ></a>
+			</div>
 	  </li>
 	  <li class="profile" data-scope="after_groups" data-version="normal" data-default>
 	    <h2>OpenHSV showcases over <span data-prop="full-count">100</span> groups who call Huntsville their home. <a href="/people/new">Register</a> or <a href="/login">Login</a> to see them all.</h2>

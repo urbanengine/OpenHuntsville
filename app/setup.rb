@@ -13,6 +13,7 @@ require 'httparty'
 require 'mailgun'
 require 'aws-sdk'
 require "mini_magick"
+require 'rack/ssl'
 
 Sequel::Model.plugin :timestamps, update_on_create: true
 

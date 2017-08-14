@@ -224,6 +224,9 @@ module Pakyow::Helpers
     classes
   end # def get_css_classes_for_category(category)
 
+  def get_css_classes_for_edit_user_btn()
+
+  end # def get_css_classes_for_edit_user_btn()
 
   ### ----------------------------
   ### EMAIL
@@ -311,8 +314,8 @@ module Pakyow::Helpers
     pp @session
     returnValue = false
     if people = People.auth(@session)
-      session[:people] = people.id
       cookies[:people] = people.id
+      # cookies[:people] = hash_and_salt_str(people.id)
       unless people.id.nil?
         returnValue = true
       end
@@ -327,6 +330,11 @@ module Pakyow::Helpers
     end
     printval
   end #print_me(val)
+
+  def hash_and_salt_str(str)
+    salt = ENV['salt']
+    return BCrypt::Password.create(salt + str)
+  end
 
   def get_nested_category_id_and_category_name()
     opts = [[]]
@@ -454,14 +462,14 @@ module Pakyow::Helpers
   def get_child_events_for_event(event)
     all_events = []
     unless event.nil? || event.id.nil?
-      child_events = Event.where("approved = true AND parent_id = ?", event.id).all
-      while child_events.length != 0
-        child_event = child_events.shift
-        child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
-        all_events << child_event
-      end
+      child_events = Event.where("approved = true AND parent_id = ? AND archived = ?", event.id, false).all
+      #while child_events.length != 0
+      #  child_event = child_events.shift
+      #  child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
+      #  all_events << child_event
+      #end
+      child_events
     end
-    all_events
   end
 
   def readjust_event_instance_number_for_group(start_datetime, group_id)
@@ -484,13 +492,47 @@ module Pakyow::Helpers
   def get_events_for_group_id(group_id)
     opts = [[]]
     unless group_id.nil?
-      group_events = Event.where("group_id = ? AND start_datetime > ?", group_id, DateTime.now.utc).all
+      nextThursday = Date.parse('Thursday')
+      delta = nextThursday > Date.today ? 0 : 7
+      nextThursday = nextThursday + delta
+
+      people = People[cookies[:people]]
+      if people.nil? == false && people.admin
+        time_limit = DateTime.now.utc
+      else      
+        time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+      end
+
+      group_events = Event.where("group_id = ? AND start_datetime > ?", group_id, time_limit).all
       parent_group = Group.where("id = ?", group_id).first
       unless parent_group.parent_id.nil?
-        group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, DateTime.now.utc).all)
+        group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, time_limit).all)
       end
       group_events.each { |event|
-        opts << [event.id, event.name]
+        opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
+      }
+    end
+    opts
+  end
+
+  def get_events_for_coworkingnight()
+    opts = [[]]
+    cwn = Group.where("name = 'CoWorking Night'").first
+    unless cwn.nil? || cwn.id.nil?
+      nextThursday = Date.parse('Thursday')
+      delta = nextThursday > Date.today ? 0 : 7
+      nextThursday = nextThursday + delta
+
+      people = People[cookies[:people]]
+      if people.nil? == false
+        time_limit = DateTime.now.utc
+      else      
+        time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+      end
+
+      group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+      group_events.each { |event|
+        opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
       }
     end
     opts

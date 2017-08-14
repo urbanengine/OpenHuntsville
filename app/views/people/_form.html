@@ -19,28 +19,31 @@
       </li>
       <li>
         <label>Email</label>
-        <input type="text" data-prop="email" name="people[email]">
+        <input type="email" data-prop="email" name="people[email]">
       </li>
       <li>
         <label>Profile URL</label>
-        <label class="sublabel">Customize your profile URL so that you can share your profile with your friends and colleagues, ie. "openhsv.com/people/<strong>chris</strong>"</label>
-        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" >
+        <label class="sublabel">Customize your profile URL so that you can share your profile with your friends and colleagues, ie. "openhsv.com/people/<strong>john</strong>".<br />Please use letters, numbers, and hyphens only. All other special characters are not allowed.</label>
+        <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" pattern="[a-zA-Z0-9-]+" >
       </li>
       <li>
         <label>Company</label>
         <input type="text" data-prop="company" name="people[company]" placeholder="Company">
       </li>
       <li>
-        <label>Twitter</label>
-        <input type="text" data-prop="twitter" name="people[twitter]" placeholder="Twitter URL (optional)">
+        <label>Twitter (Optional)</label>
+        <label class="sublabel">Example: https://twitter.com/myusername</label>
+        <input type="text" data-prop="twitter" name="people[twitter]" placeholder="Twitter URL" pattern="^((http[s]?)?:\/\/)?(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)">
       </li>
       <li>
-        <label>LinkedIn</label>
-        <input type="text" data-prop="linkedin" name="people[linkedin]" placeholder="LinkedIn URL (optional)">
+        <label>LinkedIn (Optional)</label>
+        <label class="sublabel">Example: https://www.linkedin.com/in/myusername</label>
+        <input type="text" data-prop="linkedin" name="people[linkedin]" placeholder="LinkedIn URL" pattern="^((http[s]?)?:\/\/)?(?:www\.)?linkedin\.com\/in\/([a-zA-Z0-9]+)">
       </li>
       <li>
-        <label>Website</label>
-        <input type="text" data-prop="url" name="people[url]" placeholder="Website URL (optional)">
+        <label>Website (Optional)</label>
+        <label class="sublabel">Example: http://www.example.com</label>
+        <input type="text" data-prop="url" name="people[url]" placeholder="Website URL" pattern="^((http[s]?)?:\/\/)?((\/\w+)*\/)?([\w\-\.]+)(.*)?([\w]+)?">
       </li>
       <li>
         <label>Bio</label>

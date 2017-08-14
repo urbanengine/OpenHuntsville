@@ -7,21 +7,25 @@
     <input type="hidden" data-prop="id" />
     <input type="hidden" id="should_restrict_event_starttime" data-prop="should_restrict_event_starttime" />
       <li>
-        <label>Event Name</label>
+        <label>Event Name (Shown as the title on the flyer)</label>
         <input type="text" id="name" data-prop="name" name="events[name]" placeholder="Name" maxlength="44" required />
         <p class="smalltext">You have <span id="name-character-count"></span> characters left.</p>
       </li>
       <li>
+        <label>Summary (Shown as the description on the flyer)</label>
+        <textarea data-prop="summary" id="summary" name="events[summary]" placeholder="Enter your event summary (140 characters or less)" maxlength="140" required></textarea>
+        <p class="smalltext">You have <span id="summary-character-count"></span> characters left.</p>
+      </li>
+      <li>
         <label>Description</label>
-        <textarea data-prop="description" id="desc" name="events[description]" placeholder="Enter your event description (140 characters or less)" maxlength="140" required></textarea>
-        <p class="smalltext">You have <span id="desc-character-count"></span> characters left.</p>
+        <textarea data-prop="description" name="events[description]" placeholder="Enter your event description" required></textarea>
       </li>
       <li style="width:100%;">
         <label>Please choose the group that is associated with your event.</label>
         <select id="group_selector" type="text" data-prop="parent_group" class="chosen" required></select>
       </li>
       <li data-prop="parent_event_li" class="hide" id="parent_event_li" style="width:100%;">
-        <label>Is you event being hosted under another event (i.e. CoWorking Night)? If so, please choose the Parent Event below.</label>
+        <label>Is you event being hosted as part of another event (i.e. CoWorking Night)? If so, please choose that event below.</label>
         <select id="parent_event_selector" type="text" data-prop="parent_event_selector"></select>
       </li>
       <li>
@@ -77,17 +81,17 @@ $("form").submit(function(e) {
 });
 
 var charCountforTitle = 44;
-var charCountForDesc = 140;
+var charCountForSummary = 140;
 
 document.getElementById("name-character-count").innerHTML = charCountforTitle;
-document.getElementById("desc-character-count").innerHTML = charCountForDesc;
+document.getElementById("summary-character-count").innerHTML = charCountForSummary;
 
 document.getElementById("name").onkeyup = function () {
   document.getElementById("name-character-count").innerHTML = (charCountforTitle - this.value.length);
 };
 
-document.getElementById("desc").onkeyup = function () {
-  document.getElementById("desc-character-count").innerHTML = (charCountForDesc - this.value.length);
+document.getElementById("summary").onkeyup = function () {
+  document.getElementById("summary-character-count").innerHTML = (charCountForSummary - this.value.length);
 };
 
 //http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1
@@ -132,7 +136,7 @@ if (shouldRestrictEventStartTime)
   {
   $('#datetimepicker').datetimepicker({
     disabledWeekDays: [0,1,2,4,5,6],
-    allowTimes:['18:00','19:00','20:00','21:00'],
+    allowTimes:['17:00','18:00','19:00','20:00','21:00'],
     formatTime:'g:i A',
     format: 'M j, Y g:i A',
     inline:true,
@@ -149,7 +153,7 @@ else
   {
   $('#datetimepicker').datetimepicker({
     disabledWeekDays: [0,1,2,4,5,6],
-    allowTimes:['18:00','19:00','20:00','21:00'],
+    allowTimes:['17:00','18:00','19:00','20:00','21:00'],
     formatTime:'g:i A',
     format: 'M j, Y g:i A',
     inline:true,
@@ -169,14 +173,15 @@ $("#group_selector")
       if (groupId) {
         $.ajax({
           dataType: "json",
-          url: "/api/v1/groups/" + groupId + "/events/",
+          //url: "/api/v1/groups/" + groupId + "/events/",
+          url: "/api/v1/cwn_events",
           success: function(events) {
             selector = $('#parent_event_selector');
             if (selector.val() == null || selector.val() == "") {
               selector.find('option').remove().end();
               selector.append('<option value="" selected="selected"></option>');
               $.each(events, function(index, event) {
-                  selector.append($("<option />").val(event.id).text(event.name));
+                  selector.append($("<option />").val(event.id).text(event.name + "   (" + new Date(Date.parse(event.start_datetime)).toLocaleDateString() + ")"));
               });
 
               if (events.length > 0) {

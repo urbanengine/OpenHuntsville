@@ -47,9 +47,15 @@ Pakyow::App.bindings :events do
       }
     end
 
-    binding(:description) do
+		binding(:description) do
+			{
+				:content => bindable.description
+			}
+		end
+
+    binding(:summary) do
       {
-        :content => bindable.description
+        :content => bindable.summary
       }
     end
 
@@ -84,7 +90,7 @@ Pakyow::App.bindings :events do
 		end
 
 		options(:parent_event_selector) do
-			get_events_for_group_id(bindable.group_id)
+			get_events_for_coworkingnight()
 		end
 
 		binding(:parent_event_selector) do
@@ -102,7 +108,7 @@ Pakyow::App.bindings :events do
 
 		binding(:approved) do
 			content = if bindable.approved then "Approved" else "Pending" end
-			people = People[session[:people]]
+			people = People[cookies[:people]]
 			if people.admin
 				if bindable.approved
 					content = "<p><a class='unapprove-btn' href='/events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
@@ -116,7 +122,7 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:edit_event_link) do
-			people = People[session[:people]]
+			people = People[cookies[:people]]
 			{
 			:content => "Edit Event",
 			:href => '/events/' + bindable.id.to_s + '/edit'
@@ -125,18 +131,23 @@ Pakyow::App.bindings :events do
 
 		binding(:delete_event_link) do
 			cssclass = "delete-btn"
-			splat = request.path.split("/")
-			# Either /events/new, or /events/:events_id/edit
-			unless splat[1].nil? || splat[1].length == 0
-				if splat[1] == "events"
-					unless splat[2].nil? || splat[2].length == 0
-						if splat[2] == "new"
-							cssclass = "hide"
+			people = People[cookies[:people]]
+			isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
+			if bindable.approved && isNotSiteAdmin
+				cssclass = "hide"
+			else
+				splat = request.path.split("/")
+				# Either /events/new, or /events/:events_id/edit
+				unless splat[1].nil? || splat[1].length == 0
+					if splat[1] == "events"
+						unless splat[2].nil? || splat[2].length == 0
+							if splat[2] == "new"
+								cssclass = "hide"
+							end
 						end
 					end
 				end
 			end
-			people = People[session[:people]]
 			{
 			:content => "Delete",
 			:href => '/events/' + bindable.id.to_s + '/delete',
@@ -145,7 +156,6 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:event_link) do
-			people = People[session[:people]]
 			{
 			:content => bindable.name,
 			:href => '/events/' + bindable.id.to_s
@@ -190,6 +200,18 @@ Pakyow::App.bindings :events do
 		binding(:flyer_fa_icon) do
 			{
 			:content => bindable.flyer_fa_icon
+			}
+		end
+
+		binding(:created_by_updated_by) do
+			creator = People.where("id = ?", bindable.created_by).first
+			updator = People.where("id = ?", bindable.updated_by).first
+			content = ""
+			unless creator.nil? || updator.nil?
+				content = "This event was created by " + creator.first_name + " " + creator.last_name + " on " + bindable.created_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') + " and updated by " + updator.first_name + " " + updator.last_name + " on " + bindable.updated_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p')
+			end
+			{
+				:content => content
 			}
 		end
   end

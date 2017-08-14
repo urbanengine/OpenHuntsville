@@ -24,5 +24,4 @@ class Group < Sequel::Model(:groups)
       JSON.parse(categories.to_json)[2]
     end
   end
-
 end
