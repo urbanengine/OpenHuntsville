@@ -576,6 +576,8 @@ body.about
 	background: -moz-linear-gradient(330deg, #00e1ff 0%, #ffeb50 100%);
 	/* Chrome 7+ & Safari 5.03+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #00e1ff), color-stop(1, #ffeb50));
+	/* IE10+ */
+	background: -ms-linear-gradient(330deg, #00e1ff 0%, #ffeb50 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	text-align: center;
