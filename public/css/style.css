@@ -127,7 +127,7 @@ header .overlay {
 	padding-bottom: 20px;
 	overflow: hidden;
 }
-.gradient, gradient-text {
+.gradient {
 	background: rgba(0,225,255,1);
 	/* Firefox 3.6+ */
 	background: -moz-linear-gradient(45deg, rgba(0,225,255,1) 0%, rgba(255,235,80,1) 100%);
@@ -564,11 +564,18 @@ body.about
 .originals .wrapper {
 	margin: 0 auto;
 }
-.originals h3 {
+.originals h3, .gradient-text {
 	color: #00A3B8;
 	font-size: 2em;
 	font-weight: 800;
+	/* Newer Browsers */
 	background: linear-gradient(330deg, #00e1ff 0%, #ffeb50 100%);
+	/* Opera 11.10+ */
+	background: -o-linear-gradient(330deg, #00e1ff 0%, #ffeb50 100%);
+	/* Firefox 3.6+ */
+	background: -moz-linear-gradient(330deg, #00e1ff 0%, #ffeb50 100%);
+	/* Chrome 7+ & Safari 5.03+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #00e1ff), color-stop(1, #ffeb50));
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	text-align: center;
