@@ -9,12 +9,16 @@ body {
 	font-size: 16px;
 	font-weight: 400;
 	font-family: "Lato", 'Open Sans', sans-serif;
-	text-align: center;
 	background-color: #091B1B;
 	padding-top:0px !important;
 	padding-bottom: 40px;
 	margin: 0;
 }
+
+.about {
+	padding-bottom: 0px;
+}
+
 a {
 	text-decoration: none;
 	color: #00A3B8;
@@ -575,7 +579,8 @@ h3 {
 }
 
 .gradient-text {
-  color: #00e1ff;
+	color: #00e1ff;
+	text-align: center;
 }
 
 @supports (mix-blend-mode: lighten) {
