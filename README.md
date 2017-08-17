@@ -20,4 +20,4 @@ The following resources might be handy:
 
 # License
 
-This repository (hntsvll)  is released free and open-source under the [MIT License](MIT License).
+This repository (hntsvll) is released free and open-source under the [MIT License](License).
