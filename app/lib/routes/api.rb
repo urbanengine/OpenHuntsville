@@ -187,6 +187,30 @@ Pakyow::App.routes(:api) do
               redirect '/errors/403'
             end
           end #get cwn_events
+
+          get 'cwn_future' do
+            group = Group.where("name = 'CoWorking Night'").first
+            time = DateTime.now.utc
+            events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false).order(:start_datetime).all
+            
+            response.write('[')
+            first_time = true
+            events.each { |event|
+             if first_time == true
+               first_time = false
+             else
+               response.write(',')
+             end
+             json =
+               {
+                 "title" => event.name,
+                 "date" => event.start_datetime.utc,
+                 "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+               }
+               response.write(json.to_json)
+            }
+            response.write(']')
+          end
         end # collection do
       end # expand :restful, :v1, '/v1' do
 
