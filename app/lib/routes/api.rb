@@ -14,23 +14,29 @@ Pakyow::App.routes(:api) do
 
               expand :restful, :events, '/events' do
                 action :list do
-                  nextThursday = Date.parse('Thursday')
-                  delta = nextThursday > Date.today ? 0 : 7
-                  nextThursday = nextThursday + delta
+                  if request.xhr?
+                    # respond to Ajax request
+                    nextThursday = Date.parse('Thursday')
+                    delta = nextThursday > Date.today ? 0 : 7
+                    nextThursday = nextThursday + delta
 
-                  people = People[cookies[:people]]
-                  if people.nil? == false && people.admin
-                    time_limit = DateTime.now.utc
-                  else      
-                    time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
-                  end
+                    people = People[cookies[:people]]
+                    if people.nil? == false && people.admin
+                      time_limit = DateTime.now.utc
+                    else      
+                      time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+                    end
 
-                  group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", params[:groups_id], time_limit, false).all
-                  parent_group = Group.where("id = ?", params[:groups_id]).first
-                  unless parent_group.parent_id.nil?
-                    group_events.concat(Event.where("group_id = ? AND start_datetime > ? AND archived = ?", parent_group.parent_id, time_limit, false).all)
+                    group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", params[:groups_id], time_limit, false).all
+                    parent_group = Group.where("id = ?", params[:groups_id]).first
+                    unless parent_group.parent_id.nil?
+                      group_events.concat(Event.where("group_id = ? AND start_datetime > ? AND archived = ?", parent_group.parent_id, time_limit, false).all)
+                    end
+                    response.write(group_events.to_json)
+                  else
+                    # respond to normal request
+                    redirect '/errors/403'
                   end
-                  response.write(group_events.to_json)
                 end
               end # expand :restful, :events, '/events' do
 
@@ -181,6 +187,30 @@ Pakyow::App.routes(:api) do
               redirect '/errors/403'
             end
           end #get cwn_events
+
+          get 'cwn_future' do
+            group = Group.where("name = 'CoWorking Night'").first
+            time = DateTime.now.utc
+            events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false).order(:start_datetime).all
+            
+            response.write('[')
+            first_time = true
+            events.each { |event|
+             if first_time == true
+               first_time = false
+             else
+               response.write(',')
+             end
+             json =
+               {
+                 "title" => event.name,
+                 "date" => event.start_datetime.utc,
+                 "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+               }
+               response.write(json.to_json)
+            }
+            response.write(']')
+          end
         end # collection do
       end # expand :restful, :v1, '/v1' do
 
