@@ -203,9 +203,9 @@ Pakyow::App.routes(:api) do
              end
              json =
                {
-                 "title" => event.name,
+                 "name" => event.name,
                  "date" => event.start_datetime.utc,
-                 "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                 "location" => Venue.where("id = ?", event.venue_id).first.name,
                }
                response.write(json.to_json)
             }
