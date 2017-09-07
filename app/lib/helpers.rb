@@ -311,7 +311,7 @@ module Pakyow::Helpers
 
   def create_session(parms)
     @session = Session.new(parms)
-    pp @session
+    
     returnValue = false
     if people = People.auth(@session)
       cookies[:people] = people.id
