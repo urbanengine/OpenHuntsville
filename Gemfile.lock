@@ -118,7 +118,7 @@ GEM
     ruby-ll (2.1.2)
       ansi
       ast
-    sequel (5.0.0)
+    sequel (4.49.0)
     thin (1.7.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
