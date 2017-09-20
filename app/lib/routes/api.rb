@@ -188,10 +188,10 @@ Pakyow::App.routes(:api) do
             end
           end #get cwn_events
 
-          get 'cwn_future' do
+          get 'all_cwn_events' do
             group = Group.where("name = 'CoWorking Night'").first
             time = DateTime.now.utc
-            events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false).order(:start_datetime).all
+            events = Event.where("group_id = ?", group.id).order(:start_datetime).all
             
             response.write('[')
             first_time = true
