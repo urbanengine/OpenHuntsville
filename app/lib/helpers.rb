@@ -116,6 +116,9 @@ module Pakyow::Helpers
   def get_people_from_people_id(id)
     people = Array.new
     unless id.nil?
+      # http://sequel.jeremyevans.net/rdoc/files/doc/cheat_sheet_rdoc.html#label-Filtering+-28see+also+Dataset+Filtering-29
+      # First attempt ad making this sequel 5.0.0 compatible
+      # people = People.where(Sequel.lit("lower(custom_url) = ?", id.downcase)).all
       people = People.where("lower(custom_url) = ?",id.downcase).all
     end
   end
