@@ -584,7 +584,7 @@ h3 {
 }
 
 @supports (mix-blend-mode: lighten) {
-	
+
   .gradient-text {
 	display: inline-block;
 	font-family: 'Montserrat', sans-serif;
@@ -930,7 +930,7 @@ fieldset label {
 	height: 39px;
 	background-color: #fff;
 }
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="email"], input[type="password"] {
 	height: 35px;
 	margin: 0;
 	padding: 0 0 0 6px;
