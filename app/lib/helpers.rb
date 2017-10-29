@@ -314,7 +314,7 @@ module Pakyow::Helpers
 
   def create_session(parms)
     @session = Session.new(parms)
-    
+
     returnValue = false
     if people = People.auth(@session)
       cookies[:people] = people.id
@@ -502,7 +502,7 @@ module Pakyow::Helpers
       people = People[cookies[:people]]
       if people.nil? == false && people.admin
         time_limit = DateTime.now.utc
-      else      
+      else
         time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
       end
 
@@ -529,7 +529,7 @@ module Pakyow::Helpers
       people = People[cookies[:people]]
       if people.nil? == false
         time_limit = DateTime.now.utc
-      else      
+      else
         time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
       end
 
@@ -539,6 +539,15 @@ module Pakyow::Helpers
       }
     end
     opts
+  end
+
+  def api_key_is_authenticated(apiKey)
+    apiKeys = ENV['APIKEYS'].split(',');
+    if apiKeys.include?(apiKey)
+      return true
+    else
+      return false
+    end
   end
 
 end # module Pakyow::Helpers

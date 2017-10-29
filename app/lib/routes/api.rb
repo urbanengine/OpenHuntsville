@@ -23,7 +23,7 @@ Pakyow::App.routes(:api) do
                     people = People[cookies[:people]]
                     if people.nil? == false && people.admin
                       time_limit = DateTime.now.utc
-                    else      
+                    else
                       time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
                     end
 
@@ -59,52 +59,55 @@ Pakyow::App.routes(:api) do
             # "end_time":"2017-01-12T03:00:00.000Z",
             # "category":"Programming",
             # "icon":"terminal"
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
 
-            #For now, we'll keep this only exposed for cwn
-            
-            cwn = Group.where("name = 'CoWorking Night'").first
-            if cwn.nil?
-             redirect '/errors/403'
+              #For now, we'll keep this only exposed for cwn
+              cwn = Group.where("name = 'CoWorking Night'").first
+              if cwn.nil?
+               redirect '/errors/403'
+              end
+
+              #Now lets get all the events for this group. This means all of this group's events and its event's children
+              next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+
+              #check is last cwn_event is still occurring. If it is, then use it
+              last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+              if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+                next_cwn_event = last_cwn_event
+              end
+
+              events = get_child_events_for_event(next_cwn_event)
+              response.write('[')
+              first_time = true
+              events.each { |event|
+               if first_time == true
+                 first_time = false
+               else
+                 response.write(',')
+               end
+               json =
+                 {
+                   "approved" => event.approved,
+                   "cwn" => next_cwn_event.instance_number,
+                   "timestamp" => event.created_at.utc,
+                   "group" => Group.where("id = ?", event.group_id).first.name,
+                   "title" => event.name,
+                   "description" => event.summary,
+                   "date" => event.start_datetime.utc,
+                   "time_req_form" => event.start_datetime.utc,
+                   "time_req" => event.start_datetime.utc,
+                   "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                   "start_time" => event.start_datetime.utc,
+                   "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
+                   "category" => event.flyer_category,
+                   "icon" => event.flyer_fa_icon
+                 }
+                 response.write(json.to_json)
+              }
+              response.write(']')
+            else
+              response.write('[]');
             end
-
-            #Now lets get all the events for this group. This means all of this group's events and its event's children
-            next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
-
-            #check is last cwn_event is still occurring. If it is, then use it
-            last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
-            if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
-              next_cwn_event = last_cwn_event
-            end
-
-            events = get_child_events_for_event(next_cwn_event)
-            response.write('[')
-            first_time = true
-            events.each { |event|
-             if first_time == true
-               first_time = false
-             else
-               response.write(',')
-             end
-             json =
-               {
-                 "approved" => event.approved,
-                 "cwn" => next_cwn_event.instance_number,
-                 "timestamp" => event.created_at.utc,
-                 "group" => Group.where("id = ?", event.group_id).first.name,
-                 "title" => event.name,
-                 "description" => event.summary,
-                 "date" => event.start_datetime.utc,
-                 "time_req_form" => event.start_datetime.utc,
-                 "time_req" => event.start_datetime.utc,
-                 "room_req" => Venue.where("id = ?", event.venue_id).first.name,
-                 "start_time" => event.start_datetime.utc,
-                 "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
-                 "category" => event.flyer_category,
-                 "icon" => event.flyer_fa_icon
-               }
-               response.write(json.to_json)
-            }
-            response.write(']')
           end # get 'cwn_flyer'
 
           get 'cwn_flyer/:cwn_instance_number' do
@@ -123,43 +126,47 @@ Pakyow::App.routes(:api) do
             # "category":"Programming",
             # "icon":"terminal"
 
-            #For now, we'll keep this only exposed for cwn
-            cwn = Group.where("name = 'CoWorking Night'").first
-            if cwn.nil?
-             redirect '/errors/403'
-            end
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              #For now, we'll keep this only exposed for cwn
+              cwn = Group.where("name = 'CoWorking Night'").first
+              if cwn.nil?
+               redirect '/errors/403'
+              end
 
-            #Now lets get all the events for this group. This means all of this group's events and its event's children
-            cwn_event = Event.where("approved = true AND group_id = ? AND instance_number = ? AND archived = ?", cwn.id, params[:cwn_instance_number], false).order(:start_datetime).first
-            events = get_child_events_for_event(cwn_event)
-            response.write('[')
-            first_time = true
-            events.each { |event|
-             if first_time == true
-               first_time = false
-             else
-               response.write(',')
-             end
-             json =
-               {
-                 "approved" => event.approved,
-                 "cwn" => cwn_event.instance_number,
-                 "timestamp" => event.created_at.utc,
-                 "group" => Group.where("id = ?", event.group_id).first.name,
-                 "title" => event.name,
-                 "description" => event.summary,
-                 "date" => event.start_datetime.utc,
-                 "time_req_form" => event.start_datetime.utc,
-                 "time_req" => event.start_datetime.utc,
-                 "room_req" => Venue.where("id = ?", event.venue_id).first.name,
-                 "start_time" => event.start_datetime.utc,
-                 "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
-                 "category" => event.flyer_category,
-                 "icon" => event.flyer_fa_icon
-               }
-               response.write(json.to_json)
-            }
-            response.write(']')
+              #Now lets get all the events for this group. This means all of this group's events and its event's children
+              cwn_event = Event.where("approved = true AND group_id = ? AND instance_number = ? AND archived = ?", cwn.id, params[:cwn_instance_number], false).order(:start_datetime).first
+              events = get_child_events_for_event(cwn_event)
+              response.write('[')
+              first_time = true
+              events.each { |event|
+               if first_time == true
+                 first_time = false
+               else
+                 response.write(',')
+               end
+               json =
+                 {
+                   "approved" => event.approved,
+                   "cwn" => cwn_event.instance_number,
+                   "timestamp" => event.created_at.utc,
+                   "group" => Group.where("id = ?", event.group_id).first.name,
+                   "title" => event.name,
+                   "description" => event.summary,
+                   "date" => event.start_datetime.utc,
+                   "time_req_form" => event.start_datetime.utc,
+                   "time_req" => event.start_datetime.utc,
+                   "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                   "start_time" => event.start_datetime.utc,
+                   "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
+                   "category" => event.flyer_category,
+                   "icon" => event.flyer_fa_icon
+                 }
+                 response.write(json.to_json)
+              }
+              response.write(']')
+            else
+              response.write('[]');
+            end
           end #get 'cwn_flyer/:cwn_instance_num'
 
           get 'cwn_events' do
@@ -177,7 +184,7 @@ Pakyow::App.routes(:api) do
               people = People[cookies[:people]]
               if people.nil? == false && people.admin
                 time_limit = DateTime.now.utc
-              else      
+              else
                 time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
               end
               group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false).order(:start_datetime).all
@@ -189,52 +196,60 @@ Pakyow::App.routes(:api) do
           end #get cwn_events
 
           get 'all_cwn_events' do
-            group = Group.where("name = 'CoWorking Night'").first
-            time = DateTime.now.utc
-            events = Event.where("group_id = ?", group.id).order(:start_datetime).all
-            
-            response.write('[')
-            first_time = true
-            events.each { |event|
-             if first_time == true
-               first_time = false
-             else
-               response.write(',')
-             end
-             json =
-               {
-                 "name" => event.name,
-                 "date" => event.start_datetime.utc,
-                 "location" => Venue.where("id = ?", event.venue_id).first.name,
-               }
-               response.write(json.to_json)
-            }
-            response.write(']')
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              group = Group.where("name = 'CoWorking Night'").first
+              time = DateTime.now.utc
+              events = Event.where("group_id = ?", group.id).order(:start_datetime).all
+
+              response.write('[')
+              first_time = true
+              events.each { |event|
+               if first_time == true
+                 first_time = false
+               else
+                 response.write(',')
+               end
+               json =
+                 {
+                   "name" => event.name,
+                   "date" => event.start_datetime.utc,
+                   "location" => Venue.where("id = ?", event.venue_id).first.name,
+                 }
+                 response.write(json.to_json)
+              }
+              response.write(']')
+            else
+              response.write('[]');
+            end
           end
-          
+
           # temporary until the new flyer is up
           get 'cwn_future' do
-            group = Group.where("name = 'CoWorking Night'").first
-            time = DateTime.now.utc
-            events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false).order(:start_datetime).all
-            
-            response.write('[')
-            first_time = true
-            events.each { |event|
-             if first_time == true
-               first_time = false
-             else
-               response.write(',')
-             end
-             json =
-               {
-                 "name" => event.name,
-                 "date" => event.start_datetime.utc,
-                 "location" => Venue.where("id = ?", event.venue_id).first.name,
-               }
-               response.write(json.to_json)
-            }
-            response.write(']')
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              group = Group.where("name = 'CoWorking Night'").first
+              time = DateTime.now.utc
+              events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false).order(:start_datetime).all
+
+              response.write('[')
+              first_time = true
+              events.each { |event|
+               if first_time == true
+                 first_time = false
+               else
+                 response.write(',')
+               end
+               json =
+                 {
+                   "name" => event.name,
+                   "date" => event.start_datetime.utc,
+                   "location" => Venue.where("id = ?", event.venue_id).first.name,
+                 }
+                 response.write(json.to_json)
+              }
+              response.write(']')
+            else
+              response.write('[]');
+            end
           end
         end # collection do
       end # expand :restful, :v1, '/v1' do
