@@ -274,8 +274,33 @@ Pakyow::App.routes(:api) do
                   next_cwn_event = last_cwn_event
                 end
 
-                response.write('{"cwnNumber":' + next_cwn_event.id + '}')
+                response.write('{"cwnNumber":' + next_cwn_event.id.to_s + '}')
               end
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+          get 'users' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              users = People.where("opt_in = TRUE AND approved = TRUE AND first_name IS NOT NULL AND last_name IS NOT NULL").all
+              response.write('[')
+              first_time = true
+              users.each { |user|
+               if first_time == true
+                 first_time = false
+               else
+                 response.write(',')
+               end
+               json =
+                 {
+                   "email" => user.email,
+                   "name" => user.first_name + " " + user.last_name
+                 }
+                 response.write(json.to_json)
+              }
+              response.write(']')
             else
               response.status = 400
               response.write('{"error":"User not authorized for API usage"}')
