@@ -106,7 +106,8 @@ Pakyow::App.routes(:api) do
               }
               response.write(']')
             else
-              response.write('[]');
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
             end
           end # get 'cwn_flyer'
 
@@ -165,7 +166,8 @@ Pakyow::App.routes(:api) do
               }
               response.write(']')
             else
-              response.write('[]');
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
             end
           end #get 'cwn_flyer/:cwn_instance_num'
 
@@ -219,7 +221,8 @@ Pakyow::App.routes(:api) do
               }
               response.write(']')
             else
-              response.write('[]');
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
             end
           end
 
@@ -248,7 +251,78 @@ Pakyow::App.routes(:api) do
               }
               response.write(']')
             else
-              response.write('[]');
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+          get 'next_cwn_number' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              #For now, we'll keep this only exposed for cwn
+              cwn = Group.where("name = 'CoWorking Night'").first
+              if cwn.nil?
+               response.status = 404
+               response.write('{"error":"No CoWorking events scheduled"}')
+              else
+                puts 'here'
+                #Now lets get all the events for this group. This means all of this group's events and its event's children
+                next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+
+                #check is last cwn_event is still occurring. If it is, then use it
+                last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+                if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+                  next_cwn_event = last_cwn_event
+                end
+
+                response.write('{"cwnNumber":' + next_cwn_event.id + '}')
+              end
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+          post 'checkin' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              body = request.body.read
+              json = JSON.parse(body)
+              event = Event.where("id = ?", json["event"]).first
+              person = People.where("email = ?", json["email"]).first
+              if event.nil? || person.nil?
+                response.status = 404
+                if event.nil?
+                  response.write('{"error":"Event not found"}')
+                else
+                  response.write('{"error":"User not found"}')
+                end
+              else
+                #check to make sure the event is active, and the user has not already checked in
+                current_time = DateTime.now.utc
+                event_start_time = (event.start_datetime.to_time - 1.hours).utc #Give hour leeway to checkin
+                event_end_time = (event.start_datetime.to_time + event.duration.hours).utc
+                event_is_active = event_start_time < current_time && event_end_time > current_time
+                existing_checkin = Checkin.where("people_id = ? AND event_id = ?", person.id, event.id).first
+                if event_is_active == false || existing_checkin.nil? == false
+                  response.status = 400
+                  if event_is_active == false
+                    response.write('{"error":"Event is not active"}')
+                  else
+                    response.write('{"error":"User has already checked in"}')
+                  end
+                else
+                  c_params =
+                    {
+                      "event_id" => event.id,
+                      "people_id" => person.id
+                    }
+                  checkin = Checkin.new(c_params)
+                  checkin.save
+                  response.status = 201
+                end
+              end
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
             end
           end
         end # collection do
