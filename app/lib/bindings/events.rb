@@ -34,7 +34,7 @@ Pakyow::App.bindings :events do
     end
 
     options(:venue) do
-      get_venues()
+      get_hsv_venues()
     end
 
     binding(:venue) do

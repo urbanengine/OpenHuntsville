@@ -363,10 +363,24 @@ module Pakyow::Helpers
     opts
   end
 
-  def get_venues()
+  def get_hsv_venues()
     opts = [[]]
+    group = Group.where("name = 'CoWorking Night'").first
     Venue.all.each do |venue|
-      opts << [venue.id, venue.name]
+      if venue.group_id == group.id && venue.deprecated == false
+        opts << [venue.id, venue.name]
+      end
+    end
+    opts
+  end
+
+  def get_bhm_venues()
+    opts = [[]]
+    group = Group.where("name = 'CoWorking Night: Birmingham'").first
+    Venue.all.each do |venue|
+      if venue.group_id == group.id && venue.deprecated == false
+        opts << [venue.id, venue.name]
+      end
     end
     opts
   end
