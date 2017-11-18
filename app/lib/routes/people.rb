@@ -274,6 +274,19 @@ Pakyow::App.routes(:people) do
       end
     end
 
+    member do
+      get 'delete' do
+        people_id = params[:people_id].to_i
+        user = People.where("id = ?", people_id).first
+        if user.admin == true
+          redirect "/errors/403"
+        end
+        user.archived = true
+        user.save
+        redirect '/logout'
+      end
+    end
+
     # GET /people; same as Index
     action :list do
       my_limit = 10
@@ -282,7 +295,7 @@ Pakyow::App.routes(:people) do
           my_limit = 10
         end
       end
-      total_people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").count
+      total_people = People.where("approved = true AND opt_in = true").count
       # If user is authenticated, don't show default
       page_no = 0
       unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
@@ -322,7 +335,7 @@ Pakyow::App.routes(:people) do
         view.scope(:after_people).bind(count)
         view.scope(:after_people).use(:normal)
       end
-      people = People.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png' AND opt_in = true").limit(my_limit).offset(page_no*my_limit).order(:first_name).all
+      people = People.where("approved = true AND opt_in = ? AND archived = ?", true, false).limit(my_limit).offset(page_no*my_limit).order(:first_name).all
       view.scope(:people).apply(people)
       all_cats = Category.order(:slug).all
       parent_cats = []
@@ -393,7 +406,7 @@ Pakyow::App.routes(:people) do
       end
 
       unless current_user.nil?
-        if current_user.admin.nil? || !(current_user.admin)
+        if isUserSiteAdmin() == false
           if people.approved.nil? || !(people.approved)
             # Current user is NOT admin
             # Person is not approved
@@ -456,7 +469,7 @@ Pakyow::App.routes(:people) do
         end
         # people.custom_url = params[:people][:custom_url].downcase.gsub(/[^0-9a-z]/i, '-')
       end
-      unless current_user.nil? || current_user.admin.nil? || current_user.admin == false
+      unless isUserSiteAdmin() == false
         people.admin = params[:people][:admin]
         update_group_admins_for_person(people)
         people.approved = params[:people][:approved]

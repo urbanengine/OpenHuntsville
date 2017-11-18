@@ -131,9 +131,7 @@ Pakyow::App.bindings :events do
 
 		binding(:delete_event_link) do
 			cssclass = "delete-btn"
-			people = People[cookies[:people]]
-			isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
-			if bindable.approved && isNotSiteAdmin
+			if bindable.approved && isUserSiteAdmin() == false
 				cssclass = "hide"
 			else
 				splat = request.path.split("/")
