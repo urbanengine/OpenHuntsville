@@ -277,10 +277,21 @@ Pakyow::App.routes(:people) do
     member do
       get 'delete' do
         people_id = params[:people_id].to_i
+        loggedInUser = People[cookies[:people]]
         user = People.where("id = ?", people_id).first
-        if user.admin == true
+
+        # Make sure we have at least one admin left at all times
+        number_of_admins = People.where("admin = ?", true).count
+        if number_of_admins < 2 && user.admin == true
           redirect "/errors/403"
         end
+
+        # if the user we're trying to delete is not the logged in user and the
+        # logged in user is not an admin then redirect the user to an error page
+        if loggedInUser.admin == false || loggedInUser != user
+          redirect "/errors/403"
+        end
+
         user.archived = true
         user.save
         redirect '/logout'
