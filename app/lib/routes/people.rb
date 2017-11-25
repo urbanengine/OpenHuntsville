@@ -352,6 +352,7 @@ Pakyow::App.routes(:people) do
      view.scope(:head).apply(request)
      current_user = People[cookies[:people]]
      view.scope(:optin).apply(current_user)
+     view.scope(:main_menu).apply(request)
     end
 
     action :edit, :before => :edit_profile_check do
