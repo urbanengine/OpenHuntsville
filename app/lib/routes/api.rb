@@ -264,7 +264,6 @@ Pakyow::App.routes(:api) do
                response.status = 404
                response.write('{"error":"No CoWorking events scheduled"}')
               else
-                puts 'here'
                 #Now lets get all the events for this group. This means all of this group's events and its event's children
                 next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
 
@@ -275,6 +274,86 @@ Pakyow::App.routes(:api) do
                 end
 
                 response.write('{"cwnNumber":' + next_cwn_event.id.to_s + '}')
+              end
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+
+          get 'thisweeks_cwn_event' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              #For now, we'll keep this only exposed for cwn
+              cwn = Group.where("name = 'CoWorking Night'").first
+              if cwn.nil?
+               response.status = 404
+               response.write('{"error":"No CoWorking events scheduled"}')
+              else
+                #Now lets get all the events for this group. This means all of this group's events and its event's children
+                next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+
+                #check is last cwn_event is still occurring. If it is, then use it
+                last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+                if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+                  next_cwn_event = last_cwn_event
+                end
+                json =
+                  {
+                    "id" => next_cwn_event.id,
+                    "approved" => next_cwn_event.approved,
+                    "cwn" => next_cwn_event.instance_number,
+                    "timestamp" => next_cwn_event.created_at.utc,
+                    "group" => Group.where("id = ?", next_cwn_event.group_id).first.name,
+                    "title" => next_cwn_event.name,
+                    "description" => next_cwn_event.summary,
+                    "date" => next_cwn_event.start_datetime.utc,
+                    "time_req_form" => next_cwn_event.start_datetime.utc,
+                    "time_req" => next_cwn_event.start_datetime.utc,
+                    "room_req" => Venue.where("id = ?", next_cwn_event.venue_id).first.name,
+                    "start_time" => next_cwn_event.start_datetime.utc,
+                    "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
+                    "category" => next_cwn_event.flyer_category,
+                    "icon" => next_cwn_event.flyer_fa_icon
+                  }
+                  response.write(json.to_json)
+              end
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+          get 'nextweeks_cwn_event' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              #For now, we'll keep this only exposed for cwn
+              cwn = Group.where("name = 'CoWorking Night'").first
+              if cwn.nil?
+               response.status = 404
+               response.write('{"error":"No CoWorking events scheduled"}')
+              else
+                #Now lets get all the events for this group. This means all of this group's events and its event's children
+                next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first(2)[1]
+
+                json =
+                  {
+                    "id" => next_cwn_event.id,
+                    "approved" => next_cwn_event.approved,
+                    "cwn" => next_cwn_event.instance_number,
+                    "timestamp" => next_cwn_event.created_at.utc,
+                    "group" => Group.where("id = ?", next_cwn_event.group_id).first.name,
+                    "title" => next_cwn_event.name,
+                    "description" => next_cwn_event.summary,
+                    "date" => next_cwn_event.start_datetime.utc,
+                    "time_req_form" => next_cwn_event.start_datetime.utc,
+                    "time_req" => next_cwn_event.start_datetime.utc,
+                    "room_req" => Venue.where("id = ?", next_cwn_event.venue_id).first.name,
+                    "start_time" => next_cwn_event.start_datetime.utc,
+                    "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
+                    "category" => next_cwn_event.flyer_category,
+                    "icon" => next_cwn_event.flyer_fa_icon
+                  }
+                  response.write(json.to_json)
               end
             else
               response.status = 400
