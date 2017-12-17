@@ -435,6 +435,21 @@ module Pakyow::Helpers
     end
   end
 
+  def isUserSiteAdmin()
+    loggedInUser = People[cookies[:people]]
+    if loggedInUser.nil?
+      return false
+    end
+    if loggedInUser.admin.nil?
+      return false;
+    end
+    if loggedInUser.admin == true
+      return true
+    else
+      return false
+    end
+  end
+
   def logged_in_user_is_group_admin_or_site_admin()
     people = People[cookies[:people]]
     if people.nil?

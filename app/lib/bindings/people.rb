@@ -517,6 +517,13 @@ Pakyow::App.bindings :people do
 			}
 		end
 
+		binding(:delete_user_link) do
+			{
+			:content => "Delete Account",
+			:href => '/people/' + bindable.id.to_s + '/delete',
+			:class => 'delete-btn'
+			}
+		end
 
     end
 end
