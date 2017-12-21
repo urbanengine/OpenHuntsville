@@ -1,0 +1,70 @@
+{
+  "name": "OpenHuntsville",
+  "scripts": {
+  },
+  "env": {
+    "APIKEYS": {
+      "required": true
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "required": true
+    },
+    "EMAIL_DOMAIN": {
+      "required": true
+    },
+    "EMAIL_FROM_ADDRESS": {
+      "required": true
+    },
+    "FULLCONTACT_API_KEY": {
+      "required": true
+    },
+    "HEROKU_POSTGRESQL_BRONZE_URL": {
+      "required": true
+    },
+    "HEROKU_POSTGRESQL_GREEN_URL": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "MAILGUN_PRIVATE": {
+      "required": true
+    },
+    "MAILGUN_PUBLIC": {
+      "required": true
+    },
+    "MANDRILL_API_KEY": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "sensible_defaults": {
+      "required": true
+    },
+    "SESSION_SECRET": {
+      "required": true
+    },
+    "WEB_CONCURRENCY": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "logentries",
+    "heroku-postgresql",
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}

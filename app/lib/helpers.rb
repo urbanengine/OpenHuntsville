@@ -277,7 +277,8 @@ module Pakyow::Helpers
       # text = <%=h Nokogiri::HTML(body).text %>
       # body = Rack::Utils.escape_html(body)
       # Define your message parameters
-      message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
+      fromAddress = ENV['EMAIL_FROM_ADDRESS']
+      message_params =  { from: fromAddress,
                           to:   recipient,
                           subject: subject,
                           text: Nokogiri::HTML(body).text,
@@ -288,7 +289,8 @@ module Pakyow::Helpers
                         }
 
       # Send your message through the client
-      mg_client.send_message 'sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org', message_params
+      domain = ENV['EMAIL_DOMAIN']
+      mg_client.send_message domain, message_params
     end # unless ENV['RACK_ENV'] == 'development'
   end # send_email(person, from_email, body, subject)
 
@@ -300,7 +302,8 @@ module Pakyow::Helpers
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
       # Define your message parameters
-      message_params =  { from: 'postmaster@sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org',
+      fromAddress = ENV['EMAIL_FROM_ADDRESS']
+      message_params =  { from: fromAddress,
                           to:   recipient,
                           subject: subject,
                           html: body,
@@ -308,7 +311,8 @@ module Pakyow::Helpers
                         }
 
       # Send your message through the client
-      mg_client.send_message 'sandboxa148f93a5c5f4813a81365d1b873ee8f.mailgun.org', message_params
+      domain = ENV['EMAIL_DOMAIN']
+      mg_client.send_message domain, message_params
     end # unless ENV['RACK_ENV'] == 'development'
   end # email_us(user, from_email, body, subject)
 
@@ -428,6 +432,21 @@ module Pakyow::Helpers
       retval = true
     elsif string.include? "\\"
       retval = true
+    end
+  end
+
+  def isUserSiteAdmin()
+    loggedInUser = People[cookies[:people]]
+    if loggedInUser.nil?
+      return false
+    end
+    if loggedInUser.admin.nil?
+      return false;
+    end
+    if loggedInUser.admin == true
+      return true
+    else
+      return false
     end
   end
 
