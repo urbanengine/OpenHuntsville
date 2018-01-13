@@ -260,6 +260,10 @@ module Pakyow::Helpers
       presenter.view = store.view('mail/account_creation')
       view.scope(:people).bind(person)
       subject = "Your #openHSV account is awaiting approval"
+    when :checkin
+      presenter.view = store.view('mail/account_creation')
+      view.scope(:people).bind(person)
+      subject = "Account created through checking in"
     end
 
     send_email(person, from_email, view.to_html, subject)
@@ -271,6 +275,7 @@ module Pakyow::Helpers
 
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
+
       # recipient = YAML.load(%Q(---\n"#{recipient}"\n))
       # subject = YAML.load(%Q(---\n"#{subject}"\n))
       # body = YAML.load(%Q(---\n"#{body}"\n))
@@ -312,9 +317,16 @@ module Pakyow::Helpers
 
       # Send your message through the client
       domain = ENV['EMAIL_DOMAIN']
+
       mg_client.send_message domain, message_params
     end # unless ENV['RACK_ENV'] == 'development'
   end # email_us(user, from_email, body, subject)
+
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+
+  def is_valid_email(email)
+    (email =~ VALID_EMAIL_REGEX)
+  end
 
   def create_session(parms)
     @session = Session.new(parms)
