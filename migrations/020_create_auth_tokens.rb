@@ -9,6 +9,6 @@ Sequel.migration do
     end
   
     down do
-      drop_table :auth_token
+      drop_table :auth_tokens
     end
 end
