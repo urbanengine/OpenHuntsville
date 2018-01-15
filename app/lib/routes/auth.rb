@@ -3,7 +3,7 @@ require 'securerandom'
 Pakyow::App.routes do
     include SharedRoutes
 
-    expand :restful, :auth_tokens, '/auth', :before => :route_head do
+    expand :restful, :auth, '/auth', :before => :route_head do
         collection do
             
             get '/' do
@@ -17,13 +17,15 @@ Pakyow::App.routes do
             get 'forgotpassword/' do
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
-                view.scope(:auth_tokens).apply(request)
+                view.scope(:auth).with do |view|
+                    view.bind(@auth || Auth.new({}))
+                    handle_errors(view)
+                  end
             end
 
-            post 'forgotpassword/reset/' do
-                email = params[:email]
+            post 'forgotpassword/' do
+                email = params[:auth][:email]
                 user = People.where(Sequel.lit('email = ? AND approved = true', email)).first
-
                 if user.nil? == false
                     data = {
                         "people_id" => user.id,
@@ -31,8 +33,8 @@ Pakyow::App.routes do
                         "expiration_date" => Time.now.utc
                     }
 
-                    token = AuthToken.new(data)
-                    token.save
+                    auth = Auth.new(data)
+                    auth.save
 
                     @errors = ['Please check your email for a link to reset your password.']
                     pp 'Email ready to be sent'
@@ -41,13 +43,13 @@ Pakyow::App.routes do
                 else
                     @errors = ['No account exists with that e-mail address.']
                     pp 'no account exists with given e-mail address'
-                    reroute 'auth/forgotpassword/'
+                    reroute 'auth/forgotpassword/', :get
                     #reroute router.group(:auth).path(:forgotpassword), :get
                 end
 
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
-                view.scope(:auth_tokens).apply(request)
+                view.scope(:auth).apply(request)
                 view.scope(:errors).apply(request)
             end
         end

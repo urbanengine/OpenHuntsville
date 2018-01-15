@@ -1,9 +1,8 @@
-Pakyow::App.bindings :auth_tokens do
-    scope :forgotpassword do
-       
-    end
-
-    scope :verifyemail do
-
+Pakyow::App.bindings :auth do
+    scope :auth do
+        binding(:email) do
+            {
+            }
+        end
     end
 end

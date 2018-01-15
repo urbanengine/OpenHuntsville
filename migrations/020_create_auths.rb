@@ -1,6 +1,6 @@
 Sequel.migration do
     up do
-      create_table :auth_tokens do
+      create_table :auths do
         primary_key :id
         foreign_key :people_id, :people
         String      :token
@@ -9,6 +9,6 @@ Sequel.migration do
     end
   
     down do
-      drop_table :auth_tokens
+      drop_table :auths
     end
 end

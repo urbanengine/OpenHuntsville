@@ -1,1 +1,1 @@
-class AuthToken < Sequel::Model; end
+class Auth < Sequel::Model; end
