@@ -1,6 +1,6 @@
 Sequel.migration do
     up do
-      create_table :auth_token do
+      create_table :auth_tokens do
         primary_key :id
         foreign_key :people_id, :people
         String      :token

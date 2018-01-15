@@ -1,4 +1,4 @@
-Pakyow::App.bindings :auth_token do
+Pakyow::App.bindings :auth_tokens do
     scope :forgotpassword do
        
     end
