@@ -15,9 +15,6 @@ Pakyow::App.routes do
             end
 
             get 'forgotpassword/' do
-                #token = params[:token]
-                #record = AuthToken.where('token = ? and expiration_date > ?', token, DateTime.now)
-
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
                 view.scope(:auth_tokens).apply(request)
@@ -36,15 +33,22 @@ Pakyow::App.routes do
 
                     token = AuthToken.new(data)
                     token.save
+
+                    @errors = ['Please check your email for a link to reset your password.']
+                    pp 'Email ready to be sent'
+                    reroute 'auth/forgotpassword/', :get
+                    # reroute router.group(:auth).path('forgotpassword'), :get
                 else
-                    pp 'hit no account exists error'
                     @errors = ['No account exists with that e-mail address.']
-
-                    #Tyler: I think you need a redirect here to display the proper page.
-                    # Also, not sure if the best user experience is to show an error page. Maybe just redirect back to the home screen and let it be?
-
+                    pp 'no account exists with given e-mail address'
+                    reroute 'auth/forgotpassword/'
                     #reroute router.group(:auth).path(:forgotpassword), :get
                 end
+
+                view.scope(:head).apply(request)
+                view.scope(:main_menu).apply(request)
+                view.scope(:auth_tokens).apply(request)
+                view.scope(:errors).apply(request)
             end
         end
     end
