@@ -26,6 +26,7 @@ Pakyow::App.routes do
             post 'forgotpassword/' do
                 email = params[:auth][:email]
                 user = People.where(Sequel.lit('email = ? AND approved = true', email)).first
+                
                 if user.nil? == false
                     data = {
                         "people_id" => user.id,
@@ -37,6 +38,15 @@ Pakyow::App.routes do
                     auth.save
 
                     @errors = ['Please check your email for a link to reset your password.']
+                    server = "http://localhost:3001/"
+                    #unless ENV['RACK_ENV']== "development"
+                    #    server = "https://www.openhuntsville.com/"
+                    #end
+                    options = {
+                        "passwordResetLink" => server + "people/passwordreset/" + auth.token
+                    }
+                    
+                    send_email_template(user, :auth, options)
                     reroute 'auth/forgotpassword/', :get
                 else
                     @errors = ['No account exists with that e-mail address.']

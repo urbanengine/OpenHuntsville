@@ -264,6 +264,20 @@ module Pakyow::Helpers
       presenter.view = store.view('mail/account_creation')
       view.scope(:people).bind(person)
       subject = "Account created through checking in"
+    when :auth
+      #pp options[:passwordResetLink]
+      if options[:passwordResetLink].nil? == false
+        pp options[:passwordResetLink]
+        # Somehow pass the line containing the password reset link to the template
+        presenter.view = store.view('mail/account_creation')
+      else
+        # Notify the user that their password has been reset successfully
+        presenter.view = store.view('mail/account_creation')
+      end
+
+      presenter.view = store.view('mail/account_creation')
+      view.scope(:people).bind(person)
+      subject = "openHuntsville Password Reset"
     end
 
     send_email(person, from_email, view.to_html, subject)
