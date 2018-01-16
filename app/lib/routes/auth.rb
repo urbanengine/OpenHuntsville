@@ -37,14 +37,10 @@ Pakyow::App.routes do
                     auth.save
 
                     @errors = ['Please check your email for a link to reset your password.']
-                    pp 'Email ready to be sent'
                     reroute 'auth/forgotpassword/', :get
-                    # reroute router.group(:auth).path('forgotpassword'), :get
                 else
                     @errors = ['No account exists with that e-mail address.']
-                    pp 'no account exists with given e-mail address'
                     reroute 'auth/forgotpassword/', :get
-                    #reroute router.group(:auth).path(:forgotpassword), :get
                 end
 
                 view.scope(:head).apply(request)
