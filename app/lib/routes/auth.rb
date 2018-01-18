@@ -1,6 +1,6 @@
 require 'securerandom'
 
-Pakyow::App.routes do
+Pakyow::App.routes(:auth) do
     include SharedRoutes
 
     expand :restful, :auth, '/auth', :before => :route_head do
@@ -10,8 +10,62 @@ Pakyow::App.routes do
                 redirect '/errors/403'
             end
 
-            get 'verifyemail/' do
-                # TODO: David here is your playground for your verify email work
+            get 'verifyemail/:token' do
+                auth = Auth.where(Sequel.lit('token = ?', params[:token])).first
+
+                #if auth.expiration_date < Time.now.utc
+                #    auth.delete
+                #end
+
+                if auth.nil?
+                    redirect "/errors/404"
+                end
+
+                view.scope(:head).apply(request)
+                view.scope(:main_menu).apply(request)
+                view.scope(:auth).with do |view|
+                    view.bind(auth)
+                    handle_errors(view)
+                  end
+            end
+
+            post 'verifyemail/:token' do
+                auth = Auth.where(Sequel.lit('token = ? AND expiration_date < ?', params[:token], Time.now.utc)).first
+                if auth.nil?
+                    redirect "/errors/404"
+                end
+
+                user = People.where(Sequel.lit('id = ?', auth.people_id)).first
+                if user.nil?
+                    redirect "/errors/404"
+                end
+
+                if user.approved
+                    @errors = ['Your account is already approved. Please Log In to continue.']
+                    reroute 'auth/verifyemail/' + params[:token], :get
+                end
+
+                password = params[:auth][:password]
+                passwordConfirmation = params[:auth][:confirmPassword]
+
+                puts password
+                puts passwordConfirmation
+
+                if password != passwordConfirmation
+                    @errors = ['Passwords do not match. Please enter the same password twice.']
+                    reroute 'auth/verifyemail/' + params[:token], :get
+                end
+
+                user.password = password
+                user.password_confirmation = passwordConfirmation
+                user.approved = true
+                user.save
+
+                view.scope(:head).apply(request)
+                view.scope(:main_menu).apply(request)
+
+                @errors = ['Account successfully approved.']
+                reroute 'auth/verifyemail/' + params[:token], :get
             end
 
             get 'forgotpassword/' do
