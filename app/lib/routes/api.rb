@@ -1,5 +1,6 @@
 require 'json'
 require 'date'
+require 'securerandom'
 
 Pakyow::App.routes(:api) do
   include SharedRoutes
@@ -412,7 +413,7 @@ Pakyow::App.routes(:api) do
                   response.status = 400
                   response.write('{"error":"Event is not active"}')
                 elsif person.nil?
-                  # user does not exist, create the user, check him in and send the user an email
+                  # user does not exist, create the user, check him in, create an auth token, and send the user an email
                   if is_valid_email(email)
                     first_name = json["first_name"]
                     last_name = json["last_name"]
@@ -432,7 +433,20 @@ Pakyow::App.routes(:api) do
                       }
                       person = People.new(p_params)
                       person.save
-                      send_email_template(person, :checkin)
+
+                      
+
+                      a_params = {
+                          "people_id" => person.id,
+                          "token" => SecureRandom.uuid,
+                          "expiration_date" => Time.now.utc
+                      }
+
+                      auth = Auth.new(a_params)
+                      auth.save
+
+                      send_auth_email(person, auth, :verifyemail)
+
                       c_params =
                       {
                         "event_id" => event.id,

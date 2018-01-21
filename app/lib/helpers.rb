@@ -235,8 +235,28 @@ module Pakyow::Helpers
   ### EMAIL
   ### ----------------------------
 
+  def send_auth_email(person, auth, template_name)
+    subject = ''
+
+    to_email = person.email
+    from_email = 'donotreply@openhsv.com'
+
+    case template_name
+      when :verifyemail
+        subject = "Email Verification"
+        presenter.view = store.view('mail/account_verifyemail')
+      when :passwordreset
+        subject = "Password Reset"
+        presenter.view = store.view('mail/account_passwordreset')
+    end
+
+    view.scope(:people).bind(person)
+    view.scope(:auth).bind(auth)
+
+    send_email(person, from_email, view.to_html, subject)
+  end
+
   def send_email_template(person, email_partial, options = {})
-    body = ''
     subject = ''
 
     to_email = person.email
@@ -284,17 +304,11 @@ module Pakyow::Helpers
   end # send_email_template(person, email_partial, options = {})
 
   def send_email(person, from_email, body, subject)
-    unless ENV['RACK_ENV'] == 'development'
+    unless ENV['RACK_ENV'] -= 'development'
       recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
-
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
-      # recipient = YAML.load(%Q(---\n"#{recipient}"\n))
-      # subject = YAML.load(%Q(---\n"#{subject}"\n))
-      # body = YAML.load(%Q(---\n"#{body}"\n))
-      # text = <%=h Nokogiri::HTML(body).text %>
-      # body = Rack::Utils.escape_html(body)
       # Define your message parameters
       fromAddress = ENV['EMAIL_FROM_ADDRESS']
       message_params =  { from: fromAddress,
@@ -302,9 +316,6 @@ module Pakyow::Helpers
                           subject: subject,
                           text: Nokogiri::HTML(body).text,
                           html: body
-                          # subject: subject,
-                          # html: body
-                          # text: text
                         }
 
       # Send your message through the client
