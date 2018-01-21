@@ -487,6 +487,8 @@ Pakyow::App.routes(:api) do
                     checkin = Checkin.new(c_params)
                     checkin.save
                     response.status = 201
+
+                    #TODO: If user is not approved send email verification again
                   end
                 end
               end
