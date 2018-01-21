@@ -304,7 +304,7 @@ module Pakyow::Helpers
   end # send_email_template(person, email_partial, options = {})
 
   def send_email(person, from_email, body, subject)
-    unless ENV['RACK_ENV'] -= 'development'
+    unless ENV['RACK_ENV'] == 'development'
       recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']

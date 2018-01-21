@@ -100,7 +100,8 @@ Pakyow::App.routes(:auth) do
                         "passwordResetLink" => server + "people/passwordreset/" + auth.token
                     }
                     
-                    send_email_template(user, :auth, options)
+                    #TODO: Tyler you need to use new send_auth_email func
+                    #send_email_template(user, :auth, options)
                     reroute 'auth/forgotpassword/', :get
                 else
                     @errors = ['No account exists with that e-mail address.']
