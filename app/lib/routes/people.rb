@@ -218,7 +218,16 @@ Pakyow::App.routes(:people) do
         send success
       end
 
+      get 'resetpassword/' do
+        #view.scope(:people).with do |view|
+            #view.bind(@people || People.new({}))
+            #handle_errors(view)
+        #end
+      end
 
+      post 'resetpassword/' do
+        pp params
+      end
     end
 
     action :new do

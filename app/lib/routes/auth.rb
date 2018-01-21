@@ -76,12 +76,10 @@ Pakyow::App.routes(:auth) do
             end
 
             get 'forgotpassword/' do
-                view.scope(:head).apply(request)
-                view.scope(:main_menu).apply(request)
                 view.scope(:auth).with do |view|
                     view.bind(@auth || Auth.new({}))
                     handle_errors(view)
-                  end
+                end
             end
 
             post 'forgotpassword/' do
@@ -98,25 +96,24 @@ Pakyow::App.routes(:auth) do
                     auth = Auth.new(data)
                     auth.save
 
-                    @errors = ['Please check your email for a link to reset your password.']
                     server = "http://localhost:3001/"
-                    #unless ENV['RACK_ENV']== "development"
-                    #    server = "https://www.openhuntsville.com/"
-                    #end
+                    unless ENV['RACK_ENV']== "development"
+                        server = "https://www.openhuntsville.com/"
+                    end
+
                     options = {
                         "passwordResetLink" => server + "people/passwordreset/" + auth.token
                     }
-                    
-                    #TODO: Tyler you need to use new send_auth_email func
-                    #send_email_template(user, :auth, options)
+
+                    @errors = ['Please check your email for a link to reset your password.']
+                    # TODO: Tyler you need to use new send_auth_email func
+                    # send_auth_email(user, :auth, options)
                     reroute 'auth/forgotpassword/', :get
                 else
                     @errors = ['No account exists with that e-mail address.']
                     reroute 'auth/forgotpassword/', :get
                 end
 
-                view.scope(:head).apply(request)
-                view.scope(:main_menu).apply(request)
                 view.scope(:auth).apply(request)
                 view.scope(:errors).apply(request)
             end
