@@ -429,12 +429,24 @@ Pakyow::App.routes(:api) do
                         "email" => email,
                         "first_name" => first_name,
                         "last_name" => last_name,
-                        "approved" => false
+                        "approved" => false,
+                        "opt_in" => true,
+                        "opt_in_time" => Time.now.utc
                       }
                       person = People.new(p_params)
                       person.save
 
-                      
+                      custom_url = first_name + "-" + last_name + "-" + person.id.to_s
+                      if unique_url(person.id, custom_url)
+                        if slug_contains_invalid(custom_url)
+                          person.custom_url = SecureRandom.uuid
+                        else
+                          person.custom_url = custom_url
+                        end
+                      else 
+                        person.custom_url = SecureRandom.uuid
+                      end
+                      person.save
 
                       a_params = {
                           "people_id" => person.id,

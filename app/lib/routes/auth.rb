@@ -48,9 +48,6 @@ Pakyow::App.routes(:auth) do
                 password = params[:auth][:password]
                 passwordConfirmation = params[:auth][:confirmPassword]
 
-                puts password
-                puts passwordConfirmation
-
                 if password != passwordConfirmation
                     @errors = ['Passwords do not match. Please enter the same password twice.']
                     reroute 'auth/verifyemail/' + params[:token], :get
@@ -61,11 +58,21 @@ Pakyow::App.routes(:auth) do
                 user.approved = true
                 user.save
 
+                auth.delete
+
+                session = {
+                    "email" => user.email,
+                    "password" => password
+                }
+
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
 
-                @errors = ['Account successfully approved.']
-                reroute 'auth/verifyemail/' + params[:token], :get
+                if (create_session(session))
+                    redirect "/people/" + user.custom_url + "/edit"
+                else
+                    reroute '/'
+                end
             end
 
             get 'forgotpassword/' do
