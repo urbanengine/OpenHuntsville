@@ -501,6 +501,22 @@ module Pakyow::Helpers
     return true
   end
 
+  def logged_in_user_is_bhm_admin_or_site_admin()
+    people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
+    if people.admin
+      return true
+    end
+    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    admin = cwn.people().select{ |person| person.id == people.id }
+    if admin.empty?
+      return false
+    end
+    return true
+  end
+
   def logged_in_user_is_manager_of_event(event)
     people = People[cookies[:people]]
     people.groups().each{ |group|
@@ -601,6 +617,29 @@ module Pakyow::Helpers
         time_limit = DateTime.now.utc
       else
         time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+      end
+
+      group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+      group_events.each { |event|
+        opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
+      }
+    end
+    opts
+  end
+
+  def get_events_for_bhm_coworkingnight()
+    opts = [[]]
+    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    unless cwn.nil? || cwn.id.nil?
+      nextWednesday = Date.parse('Wednesday')
+      delta = nextWednesday > Date.today ? 0 : 7
+      nextWednesday = nextWednesday + delta
+
+      people = People[cookies[:people]]
+      if people.nil? == false
+        time_limit = DateTime.now.utc
+      else
+        time_limit = if (nextWednesday - Date.today) < 4 then nextWednesday else DateTime.now.utc end
       end
 
       group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
