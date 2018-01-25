@@ -1,12 +1,21 @@
 require 'date'
 Pakyow::App.routes(:people) do
-
   include SharedRoutes
 
   expand :restful, :people, '/people', :before => :route_head do
 
     # '/people/*'
     collection do
+
+      get 'resetpassword/' do
+        view.scope(:auth).with do |view|
+            view.bind(Auth.new)
+        end
+      end
+
+      post 'resetpassword/' do
+        puts params
+      end
 
       patch 'upload' do
         if request.xhr?
@@ -217,19 +226,8 @@ Pakyow::App.routes(:people) do
         end
         send success
       end
-
-      get 'resetpassword/' do
-        #view.scope(:people).with do |view|
-            #view.bind(@people || People.new({}))
-            #handle_errors(view)
-        #end
-      end
-
-      post 'resetpassword/' do
-        pp params
-      end
     end
-
+    
     action :new do
       view.scope(:people).with do
         bind(People.new)
