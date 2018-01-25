@@ -487,7 +487,7 @@ module Pakyow::Helpers
     end
   end
 
-  def logged_in_user_is_group_admin_or_site_admin()
+  def logged_in_user_is_hsv_admin_or_site_admin()
     people = People[cookies[:people]]
     if people.nil?
       return false
@@ -495,7 +495,8 @@ module Pakyow::Helpers
     if people.admin
       return true
     end
-    if people.groups().length == 0
+    groups = people.groups().select{ |group| group.name != 'CoWorking Night: Birmingham' && group.name != 'CoWorking Night Events: Birmingham' }
+    if groups.empty?
       return false
     end
     return true
@@ -512,7 +513,11 @@ module Pakyow::Helpers
     cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
     admin = cwn.people().select{ |person| person.id == people.id }
     if admin.empty?
-      return false
+      cwn = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+      admin = cwn.people().select{ |person| person.id == people.id }
+      if admin.empty?
+        return false
+      end
     end
     return true
   end

@@ -15,7 +15,11 @@ Pakyow::App.routes(:bhm) do
                 if cwn.nil?
                   redirect '/errors/403'
                 end
-                events_all = Event.where('start_datetime > ? and group_id = ?', DateTime.now.utc, cwn.id).where('archived = ?', false).all
+                cwn_events = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+                if cwn_events.nil?
+                  redirect '/errors/403'
+                end
+                events_all = Event.where('start_datetime > ? and (group_id = ? or group_id = ?)', DateTime.now.utc, cwn.id, cwn_events.id).where('archived = ?', false).all
                 view.scope(:people).bind(people)
                 view.scope(:bhm_events).apply(events_all)
                 current_user = People[cookies[:people]]
@@ -35,12 +39,6 @@ Pakyow::App.routes(:bhm) do
                 end
                 event.approved = true
                 previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime).order(:start_datetime).last
-                instance_number = 1
-                unless previous_event.nil?
-                instance_number = previous_event.instance_number + 1
-                end
-                readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
-                event.instance_number = instance_number
                 event.save
                 if request.xhr?
                 success = 'success'
@@ -60,8 +58,6 @@ Pakyow::App.routes(:bhm) do
                 redirect "/errors/404"
                 end
                 event.approved = false
-                event.instance_number = nil
-                readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
                 event.save
                 if request.xhr?
                 success = 'success'
@@ -95,9 +91,6 @@ Pakyow::App.routes(:bhm) do
                 event_group_id = event.group_id
                 event_is_approved = event.approved
                 event.archived = true
-                if event_is_approved
-                readjust_event_instance_number_for_group(event_start_datetime, event_group_id)
-                end
                 event.save
                 redirect '/bhm_events/manage'
             end
@@ -166,12 +159,9 @@ Pakyow::App.routes(:bhm) do
             if people.nil?
                 redirect '/errors/404'
             end
+            puts "here"
             parsed_time = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0500", '%b %d, %Y %I:%M %p %Z')
             previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", params[:bhm_events][:parent_group].to_i, parsed_time.to_datetime.utc).order(:start_datetime).last
-            instance_number = 1
-            unless previous_event.nil?
-                instance_number = previous_event.instance_number + 1
-            end
             group = Group.where("id = ?", params[:bhm_events][:parent_group].to_i).first
             c_params =
                 {
@@ -183,7 +173,6 @@ Pakyow::App.routes(:bhm) do
                 "duration" => params[:bhm_events][:duration].to_i,
                 "venue_id" => params[:bhm_events][:venue].to_i,
                 "approved" => if people.admin then true else false end,
-                "instance_number" => instance_number,
                 "parent_id" => if params[:bhm_events][:parent_event_selector].blank? then "" else params[:bhm_events][:parent_event_selector].to_i end,
                 "flyer_category" => if params[:bhm_events][:flyer_category].nil? || params[:bhm_events][:flyer_category].empty? then group.flyer_category else params[:bhm_events][:flyer_category] end,
                 "flyer_fa_icon" => if params[:bhm_events][:flyer_fa_icon].nil? || params[:bhm_events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:bhm_events][:flyer_fa_icon] end,
@@ -192,9 +181,6 @@ Pakyow::App.routes(:bhm) do
                 }
             event = Event.new(c_params)
             event.save
-            if event.approved
-                readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
-            end
             redirect '/bhm_events/manage'
         end
 
@@ -217,15 +203,9 @@ Pakyow::App.routes(:bhm) do
             parsed_datetime = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0500", '%b %d, %Y %I:%M %p %Z')
             venue_id = params[:bhm_events][:venue].to_i
             minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
-            if event.approved && minutes_between_old_and_new_date > 0.99
-                readjust_event_instance_number_for_group(event.start_datetime, event.group_id)
-            end
 
             if people.admin == false && (minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id)
                 event.approved = false
-            end
-            unless event.approved
-                event.instance_number = nil
             end
             event.name = params[:bhm_events][:name]
             event.description = params[:bhm_events][:description]

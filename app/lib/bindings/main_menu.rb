@@ -105,9 +105,9 @@ Pakyow::App.bindings :main_menu do
 		unless cookies[:people].nil? || cookies[:people] == 0
 			person = People[cookies[:people]]
 			unless person.nil?
-        if logged_in_user_is_group_admin_or_site_admin()
-  				content = "Manage Events"
-  				href = "/events/manage"
+        if logged_in_user_is_hsv_admin_or_site_admin()
+			content = "Manage Events"
+			href = "/events/manage"
       		splat = request.path.split("/")
       		unless splat[1].nil? || splat[1].length == 0
       			if splat[1] == "events"

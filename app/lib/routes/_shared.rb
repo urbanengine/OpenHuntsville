@@ -44,8 +44,8 @@ module SharedRoutes
     end
   end
 
-  fn :is_event_manager do
-    if logged_in_user_is_group_admin_or_site_admin() == false
+  fn :is_hsv_event_manager do
+    if logged_in_user_is_hsv_admin_or_site_admin() == false
       redirect "/errors/403"
     end
   end
