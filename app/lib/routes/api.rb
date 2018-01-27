@@ -104,7 +104,7 @@ Pakyow::App.routes(:api) do
                   # respond to normal request
                   redirect '/errors/403'
                 end
-              end #get cwn_events    
+              end #get cwn_events  
             end
           end # expand :restful, :bhm, '/bhm' do
 
