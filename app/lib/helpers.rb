@@ -243,10 +243,10 @@ module Pakyow::Helpers
 
     case template_name
       when :verifyemail
-        subject = "Email Verification"
+        subject = "Lets verify your email"
         presenter.view = store.view('mail/account_verifyemail')
       when :passwordreset
-        subject = "Password Reset"
+        subject = "Lets reset your password"
         presenter.view = store.view('mail/account_passwordreset')
     end
 
