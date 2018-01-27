@@ -13,7 +13,10 @@ Pakyow::App.routes(:events) do
           redirect '/errors/404'
         end
         if people.admin
-          events_all = Event.where('start_datetime > ?', DateTime.now.utc).where('archived = ?', false).all
+          cwnbhm = Group.where("name = 'CoWorking Night: Birmingham'").first
+          cwnbhmevents = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+          events_all = Event.where('start_datetime > ?', DateTime.now.utc).where('archived = ?', false)
+                        .where('group_id != ? and group_id != ?', cwnbhm.id, cwnbhmevents.id).all
         else
           people.groups().each { |group|
             if group.name == 'CoWorking Night: Birmingham' || group.name == 'CoWorking Night Events: Birmingham'
