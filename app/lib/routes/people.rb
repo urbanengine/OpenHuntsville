@@ -6,17 +6,6 @@ Pakyow::App.routes(:people) do
 
     # '/people/*'
     collection do
-
-      get 'resetpassword/' do
-        view.scope(:auth).with do |view|
-            view.bind(Auth.new)
-        end
-      end
-
-      post 'resetpassword/' do
-        puts params
-      end
-
       patch 'upload' do
         if request.xhr?
           filename = params['files'].first[:filename]

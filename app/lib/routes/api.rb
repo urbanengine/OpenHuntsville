@@ -548,7 +548,7 @@ Pakyow::App.routes(:api) do
                       a_params = {
                           "people_id" => person.id,
                           "token" => SecureRandom.uuid,
-                          "expiration_date" => Time.now.utc
+                          "expiration_date" => (Time.now.utc + 1.month)
                       }
 
                       auth = Auth.new(a_params)

@@ -524,20 +524,5 @@ Pakyow::App.bindings :people do
 			:class => 'delete-btn'
 			}
 		end
-
-		binding(:password) do
-			puts "here password"
-			puts bindable.inspect
-			{
-			}
-		end
-
-		binding(:confirmPassword) do
-			puts "here confirm"
-			puts bindable.inspect
-			{
-			}
-		end
-
     end
 end

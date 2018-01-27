@@ -4,10 +4,10 @@ template: about
 <div>
   <div class="index-wrapper">
     <div class="content-body">
-        <h2>Password Reset</h2> <br />
+        <h2>Enter your new Password</h2> <br />
         <!-- Add content below -->
         <div class="form">
-            <form data-scope="auth" data-prop="action" method="post">
+            <form data-scope="auth" data-prop="forgotpassword_action" method="post">
               <fieldset class="margin-t">
                 <!-- Errors should bet populated using the lines below -->
                 <ul data-scope="errors" class="margin-t">
@@ -15,12 +15,12 @@ template: about
                 </ul>
                 <ul>
                   <li>
-                    <label>Enter your new password:</label>
-                    <input type="password" data-prop"password" placeholder="Password"/>
+                    <label>Enter your password:</label>
+                    <input type="password" data-prop="password" placeholder="Password"/>
                   </li>
                   <li>
-                    <label>Confirm your e-mail:</label>
-                    <input type="password" data-prop="confirmPassword" placeholder="Confirm Password" />
+                    <label>Confirm your password:</label>
+                    <input type="password" data-prop="confirmPassword" placeholder="Confirm Password">
                   </li>
                   <li>
                     <input type="submit" value="Submit">
