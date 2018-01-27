@@ -28,8 +28,6 @@ Pakyow::App.bindings :auth do
         end
 
         binding(:verifyemail_link) do
-            puts 'bindings'
-            puts bindable.inspect
             {
                 :content => 'https://www.openhuntsville.com/auth/verifyemail/' + bindable.token.to_s,
                 :href => 'https://www.openhuntsville.com/auth/verifyemail/' + bindable.token.to_s
@@ -37,8 +35,6 @@ Pakyow::App.bindings :auth do
         end
 
         binding(:forgotpassword_link) do
-            puts 'bindings'
-            puts bindable.inspect
             {
                 :content => 'https://www.openhuntsville.com/auth/forgotpassword/' + bindable.token.to_s,
                 :href => 'https://www.openhuntsville.com/auth/forgotpassword/' + bindable.token.to_s
