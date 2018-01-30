@@ -118,6 +118,9 @@ Pakyow::App.routes(:auth) do
 
             get 'forgotpassword/:token' do
                 auth = Auth.where(Sequel.lit('token = ?', params[:token])).first
+                if auth.nil?
+                    redirect "/errors/404"
+                end
 
                 if auth.expiration_date < Time.now.utc
                     auth.delete
@@ -125,9 +128,6 @@ Pakyow::App.routes(:auth) do
                     reroute 'auth/forgotpassword', :get
                 end
 
-                if auth.nil?
-                    redirect "/errors/404"
-                end
                 presenter.path = 'auth/forgotpassword/edit'
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
