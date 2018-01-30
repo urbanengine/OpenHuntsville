@@ -29,7 +29,7 @@ Pakyow::App.routes(:api) do
                 # "category":"Programming",
                 # "icon":"terminal"
                 if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-    
+                  
                   #For now, we'll keep this only exposed for cwn
                   cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
                   if cwn.nil?
@@ -41,8 +41,10 @@ Pakyow::App.routes(:api) do
     
                   #check is last cwn_event is still occurring. If it is, then use it
                   last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
-                  if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
-                    next_cwn_event = last_cwn_event
+                  unless last_cwn_event.nil?
+                    if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+                      next_cwn_event = last_cwn_event
+                    end
                   end
     
                   events = get_child_events_for_event(next_cwn_event)
