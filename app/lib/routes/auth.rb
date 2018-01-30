@@ -138,7 +138,7 @@ Pakyow::App.routes(:auth) do
             end
 
             post 'forgotpassword/:token' do
-                auth = Auth.where(Sequel.lit('token = ?', params[:token])).first
+                auth = Auth.where(Sequel.lit('token = ? AND expiration_date > ?', params[:token], Time.now.utc)).first
                 if auth.nil?
                     redirect "/errors/404"
                 end
