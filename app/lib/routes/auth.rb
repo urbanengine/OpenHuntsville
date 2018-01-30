@@ -168,19 +168,10 @@ Pakyow::App.routes(:auth) do
 
                 auth.delete
 
-                session = {
-                    "email" => user.email,
-                    "password" => password
-                }
-
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
 
-                if (create_session(session))
-                    redirect "/people/" + user.custom_url + "/edit"
-                else
-                    reroute '/'
-                end
+                redirect '/login'
             end
         end
     end
