@@ -235,8 +235,32 @@ module Pakyow::Helpers
   ### EMAIL
   ### ----------------------------
 
+  def send_auth_email(person, auth, template_name)
+    subject = ''
+
+    to_email = person.email
+    from_email = 'donotreply@openhsv.com'
+
+    case template_name
+      when :verifyemail
+        subject = "Urban Engine: Welcome"
+        auth.class.module_eval { attr_accessor :mail_description}
+        auth.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier we created you an Urban Engine account.'
+        presenter.view = store.view('mail/account_verifyemail')
+      when :passwordreset
+        subject = "Urban Engine Password Reset"
+        auth.class.module_eval { attr_accessor :mail_description}
+        auth.mail_description = 'Alert: 📬 You requested to reset the password for your Urban Engine account. Follow the instruction below to complete your password reset.'
+        presenter.view = store.view('mail/account_passwordreset')
+    end
+
+    view.scope(:people).bind(person)
+    view.scope(:auth).bind(auth)
+
+    send_email(person, from_email, view.to_html, subject)
+  end
+
   def send_email_template(person, email_partial, options = {})
-    body = ''
     subject = ''
 
     to_email = person.email
@@ -264,23 +288,31 @@ module Pakyow::Helpers
       presenter.view = store.view('mail/account_creation')
       view.scope(:people).bind(person)
       subject = "Account created through checking in"
+    when :auth
+      #pp options[:passwordResetLink]
+      if options[:passwordResetLink].nil? == false
+        pp options[:passwordResetLink]
+        # Somehow pass the line containing the password reset link to the template
+        presenter.view = store.view('mail/account_creation')
+      else
+        # Notify the user that their password has been reset successfully
+        presenter.view = store.view('mail/account_creation')
+      end
+
+      presenter.view = store.view('mail/account_creation')
+      view.scope(:people).bind(person)
+      subject = "openHuntsville Password Reset"
     end
 
     send_email(person, from_email, view.to_html, subject)
   end # send_email_template(person, email_partial, options = {})
 
   def send_email(person, from_email, body, subject)
-    unless ENV['RACK_ENV'] == 'development'
+    unless ENV['RACK_ENV'] != 'development'
       recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
-
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
-      # recipient = YAML.load(%Q(---\n"#{recipient}"\n))
-      # subject = YAML.load(%Q(---\n"#{subject}"\n))
-      # body = YAML.load(%Q(---\n"#{body}"\n))
-      # text = <%=h Nokogiri::HTML(body).text %>
-      # body = Rack::Utils.escape_html(body)
       # Define your message parameters
       fromAddress = ENV['EMAIL_FROM_ADDRESS']
       message_params =  { from: fromAddress,
@@ -288,9 +320,6 @@ module Pakyow::Helpers
                           subject: subject,
                           text: Nokogiri::HTML(body).text,
                           html: body
-                          # subject: subject,
-                          # html: body
-                          # text: text
                         }
 
       # Send your message through the client
@@ -462,7 +491,7 @@ module Pakyow::Helpers
     end
   end
 
-  def logged_in_user_is_group_admin_or_site_admin()
+  def logged_in_user_is_hsv_admin_or_site_admin()
     people = People[cookies[:people]]
     if people.nil?
       return false
@@ -470,8 +499,29 @@ module Pakyow::Helpers
     if people.admin
       return true
     end
-    if people.groups().length == 0
+    groups = people.groups().select{ |group| group.name != 'CoWorking Night: Birmingham' && group.name != 'CoWorking Night Events: Birmingham' }
+    if groups.empty?
       return false
+    end
+    return true
+  end
+
+  def logged_in_user_is_bhm_admin_or_site_admin()
+    people = People[cookies[:people]]
+    if people.nil?
+      return false
+    end
+    if people.admin
+      return true
+    end
+    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    admin = cwn.people().select{ |person| person.id == people.id }
+    if admin.empty?
+      cwn = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+      admin = cwn.people().select{ |person| person.id == people.id }
+      if admin.empty?
+        return false
+      end
     end
     return true
   end
@@ -576,6 +626,29 @@ module Pakyow::Helpers
         time_limit = DateTime.now.utc
       else
         time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
+      end
+
+      group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+      group_events.each { |event|
+        opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
+      }
+    end
+    opts
+  end
+
+  def get_events_for_bhm_coworkingnight()
+    opts = [[]]
+    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    unless cwn.nil? || cwn.id.nil?
+      nextWednesday = Date.parse('Wednesday')
+      delta = nextWednesday > Date.today ? 0 : 7
+      nextWednesday = nextWednesday + delta
+
+      people = People[cookies[:people]]
+      if people.nil? == false
+        time_limit = DateTime.now.utc
+      else
+        time_limit = if (nextWednesday - Date.today) < 4 then nextWednesday else DateTime.now.utc end
       end
 
       group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all

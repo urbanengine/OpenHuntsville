@@ -1,5 +1,6 @@
 require 'json'
 require 'date'
+require 'securerandom'
 
 Pakyow::App.routes(:api) do
   include SharedRoutes
@@ -9,6 +10,105 @@ Pakyow::App.routes(:api) do
 
       expand :restful, :v1, '/v1' do
         collection do
+
+          expand :restful, :bhm, '/bhm' do
+            collection do
+              get 'cwn_flyer' do
+                # "approved":true,
+                # "cwn":88,
+                # "timestamp":"2017-01-09T20:27:22.161Z",
+                # "group":"Designer's Corner",
+                # "title":"CoWorking Night Tshirt Competition",
+                # "description":"Come in to get some last minute ideas for your entry to the CoWorking Night Tshirt competition! ",
+                # "date":"2017-01-11T06:00:00.000Z",
+                # "time_req_form":"8:00 PM",
+                # "time_req":"1899-12-31T01:48:52.000Z",
+                # "room_req":"Milky Way Row",
+                # "start_time":"2017-01-12T02:00:00.000Z",
+                # "end_time":"2017-01-12T03:00:00.000Z",
+                # "category":"Programming",
+                # "icon":"terminal"
+                if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+                  
+                  #For now, we'll keep this only exposed for cwn
+                  cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+                  if cwn.nil?
+                   redirect '/errors/403'
+                  end
+    
+                  #Now lets get all the events for this group. This means all of this group's events and its event's children
+                  next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+    
+                  #check is last cwn_event is still occurring. If it is, then use it
+                  last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+                  unless last_cwn_event.nil?
+                    if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+                      next_cwn_event = last_cwn_event
+                    end
+                  end
+    
+                  events = get_child_events_for_event(next_cwn_event)
+                  response.write('[')
+                  first_time = true
+                  events.each { |event|
+                   if first_time == true
+                     first_time = false
+                   else
+                     response.write(',')
+                   end
+                   json =
+                     {
+                       "approved" => event.approved,
+                       "cwn" => next_cwn_event.instance_number,
+                       "timestamp" => event.created_at.utc,
+                       "group" => Group.where("id = ?", event.group_id).first.name,
+                       "title" => event.name,
+                       "description" => event.summary,
+                       "date" => event.start_datetime.utc,
+                       "time_req_form" => event.start_datetime.utc,
+                       "time_req" => event.start_datetime.utc,
+                       "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                       "start_time" => event.start_datetime.utc,
+                       "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
+                       "category" => event.flyer_category,
+                       "icon" => event.flyer_fa_icon
+                     }
+                     response.write(json.to_json)
+                  }
+                  response.write(']')
+                else
+                  response.status = 400
+                  response.write('{"error":"User not authorized for API usage"}')
+                end
+              end # get 'cwn_flyer'
+
+              get 'cwn_events' do
+                if request.xhr?
+                  # respond to Ajax request
+                  cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+                  if cwn.nil?
+                    redirect '/errors/403'
+                  end
+    
+                  nextWednesday = Date.parse('Wednesday')
+                  delta = nextWednesday > Date.today ? 0 : 7
+                  nextWednesday = nextWednesday + delta
+    
+                  people = People[cookies[:people]]
+                  if people.nil? == false && people.admin
+                    time_limit = DateTime.now.utc
+                  else
+                    time_limit = if (nextWednesday - Date.today) < 4 then nextWednesday else DateTime.now.utc end
+                  end
+                  group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false).order(:start_datetime).all
+                  response.write(group_events.to_json)
+                else
+                  # respond to normal request
+                  redirect '/errors/403'
+                end
+              end #get cwn_events  
+            end
+          end # expand :restful, :bhm, '/bhm' do
 
           expand :restful, :groups, '/groups' do
             member do
@@ -412,7 +512,7 @@ Pakyow::App.routes(:api) do
                   response.status = 400
                   response.write('{"error":"Event is not active"}')
                 elsif person.nil?
-                  # user does not exist, create the user, check him in and send the user an email
+                  # user does not exist, create the user, check him in, create an auth token, and send the user an email
                   if is_valid_email(email)
                     first_name = json["first_name"]
                     last_name = json["last_name"]
@@ -428,11 +528,36 @@ Pakyow::App.routes(:api) do
                         "email" => email,
                         "first_name" => first_name,
                         "last_name" => last_name,
-                        "approved" => false
+                        "approved" => false,
+                        "opt_in" => true,
+                        "opt_in_time" => Time.now.utc
                       }
                       person = People.new(p_params)
                       person.save
-                      send_email_template(person, :checkin)
+
+                      custom_url = first_name + "-" + last_name + "-" + person.id.to_s
+                      if unique_url(person.id, custom_url)
+                        if slug_contains_invalid(custom_url)
+                          person.custom_url = SecureRandom.uuid
+                        else
+                          person.custom_url = custom_url
+                        end
+                      else 
+                        person.custom_url = SecureRandom.uuid
+                      end
+                      person.save
+
+                      a_params = {
+                        "token" => SecureRandom.uuid,
+                        "people_id" => person.id,
+                        "expiration_date" => (Time.now.utc + 1.day)
+                      }
+
+                      auth = Auth.new(a_params)
+                      auth.save
+
+                      send_auth_email(person, auth, :verifyemail)
+
                       c_params =
                       {
                         "event_id" => event.id,
@@ -461,6 +586,8 @@ Pakyow::App.routes(:api) do
                     checkin = Checkin.new(c_params)
                     checkin.save
                     response.status = 201
+
+                    #TODO: If user is not approved send email verification again
                   end
                 end
               end

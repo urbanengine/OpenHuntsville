@@ -1,0 +1,48 @@
+<link rel="stylesheet" type="text/css" href="/css/datatables/jquery.dataTables.css"/>
+<link rel="stylesheet" type="text/css" href="/css/datatables/responsive.dataTables.min.css"/>
+
+<!-- TODO: Handle the view when no events are present; Can hide and show divs if events.size == 0 -->
+<table id="eventstable" class="display" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+      <th>Start Date/Time</th>
+      <th>Duration</th>
+      <th>Venue</th>
+      <th>Group</th>
+      <th>Parent Event</th>
+      <th>Approved</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-scope="bhm_events">
+      <td data-prop="name"> </td>
+      <td data-prop="summary"> </td>
+      <td data-prop="start_datetime"> </td>
+      <td data-prop="duration_text"> </td>
+      <td data-prop="venue_name"> </td>
+      <td data-prop="group_name"> </td>
+      <td data-prop="parent_event"> </td>
+      <td data-prop="approved"> </td>
+      <td><a href="#" class="btn" data-prop="edit_event_link"></a></td>
+    </tr>
+  </tbody>
+</table>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/datatables/jquery.dataTables.min.js"></script>
+<script src="/js/datatables/dataTables.responsive.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#eventstable').DataTable(
+    {
+      responsive: true,
+      "order": [ 2, "asc" ],
+      "columnDefs":
+      [
+        {"className": "dt-center", "targets": "_all"}
+      ]
+    });
+});
+</script>

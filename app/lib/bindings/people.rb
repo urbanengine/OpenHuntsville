@@ -62,7 +62,7 @@ Pakyow::App.bindings :people do
 			if cookies[:people].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-				link = "/login"
+				link = "/sessions/new"
 				content = "Log in to view"
 			else
 				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
@@ -92,7 +92,7 @@ Pakyow::App.bindings :people do
 			if cookies[:people].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-				link = "/login"
+				link = "/sessions/new"
 				content = "Log in to view"
 
 			else
@@ -122,7 +122,7 @@ Pakyow::App.bindings :people do
 			if cookies[:people].nil?
 					show = "show"
 					title = "Log in to view " + bindable.first_name + "'s Website"
-					link = "/login"
+					link = "/sessions/new"
 					content = "Log in to view"
 			else
 				content = "Website"
@@ -524,6 +524,5 @@ Pakyow::App.bindings :people do
 			:class => 'delete-btn'
 			}
 		end
-
     end
 end

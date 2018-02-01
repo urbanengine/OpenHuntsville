@@ -1,0 +1,45 @@
+---
+template: about
+---
+<div class="bread-search">
+	<ul class="breadcrumbs">
+    <content data-scope="people">
+  		<li>
+  			<a href="/">Home</a>
+  		</li>
+  		<li>&nbsp;/&nbsp;</li>
+  		<li>
+  			<a href="/people">People</a>
+  		</li>
+      <li>&nbsp;/&nbsp;</li>
+      <li>
+        <a href="#" data-prop="profile_link">#</a>
+      </li>
+  	</content>
+		<li>&nbsp;/&nbsp;</li>
+    <li>
+      <a href="/bhm_events/manage">Events</a>
+    </li>
+	  <content data-scope="bhm_events">
+			<li>&nbsp;/&nbsp;</li>
+			<li>
+				<a href="#" data-prop="event_link">#</a>
+			</li>
+	  </content>
+		<li>&nbsp;/&nbsp;</li>
+		<li>
+			<a href="/bhm_events/new">Schedule Event</a>
+		</li>
+	</ul>
+</div>
+<div class="clear"></div>
+<div class="content-body">
+	<div class="form">
+		<h2>Edit an Event</h2>
+		<p>Update your event information, then hit 'Save'</p>
+		<div data-scope="bhm_events">
+			<span><i data-prop="created_by_updated_by"></i></span>
+		</div>
+		<!-- @include form -->
+	</div>
+</div>

@@ -1,0 +1,34 @@
+---
+template: about
+---
+<div>
+  <div class="index-wrapper">
+    <div class="content-body">
+        <h2>Create a Password</h2> <br />
+        <!-- Add content below -->
+        <div class="form">
+            <form data-scope="auth" data-prop="verifyemail_action" method="post">
+              <fieldset class="margin-t">
+                <!-- Errors should bet populated using the lines below -->
+                <ul data-scope="errors" class="margin-t">
+                  <li data-prop="message"></li> <br />
+                </ul>
+                <ul>
+                  <li>
+                    <label>Enter your password:</label>
+                    <input type="password" data-prop="password" placeholder="Password"/>
+                  </li>
+                  <li>
+                    <label>Confirm your password:</label>
+                    <input type="password" data-prop="confirmPassword" placeholder="Confirm Password">
+                  </li>
+                  <li>
+                    <input type="submit" value="Submit">
+                  </li>
+                </ul>
+              </fieldset>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>

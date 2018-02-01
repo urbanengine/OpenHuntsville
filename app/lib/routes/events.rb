@@ -6,16 +6,22 @@ Pakyow::App.routes(:events) do
 
     collection do
       # GET /events/manage;
-      get 'manage', :before => :is_event_manager do
+      get 'manage', :before => :is_hsv_event_manager do
         events_all = []
-  		people = People[cookies[:people]]
+  		  people = People[cookies[:people]]
         if people.nil?
           redirect '/errors/404'
         end
         if people.admin
-          events_all = Event.where('start_datetime > ?', DateTime.now.utc).where('archived = ?', false).all
+          cwnbhm = Group.where("name = 'CoWorking Night: Birmingham'").first
+          cwnbhmevents = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+          events_all = Event.where('start_datetime > ?', DateTime.now.utc).where('archived = ?', false)
+                        .where('group_id != ? and group_id != ?', cwnbhm.id, cwnbhmevents.id).all
         else
           people.groups().each { |group|
+            if group.name == 'CoWorking Night: Birmingham' || group.name == 'CoWorking Night Events: Birmingham'
+              next
+            end
             events = Event.where('group_id = ?', group.id).where('start_datetime > ?', DateTime.now.utc).where('archived = ?', false).all
             events.each { |event|
               events_all.push(event)
@@ -151,7 +157,7 @@ Pakyow::App.routes(:events) do
     end
 
     # GET '/events/new'
-    action :new, :before => :is_event_manager do
+    action :new, :before => :is_hsv_event_manager do
       people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
@@ -167,7 +173,7 @@ Pakyow::App.routes(:events) do
     end
 
     #POST '/events/'
-    action :create, :before => :is_event_manager do
+    action :create, :before => :is_hsv_event_manager do
       people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
@@ -205,7 +211,7 @@ Pakyow::App.routes(:events) do
     end
 
     #PATCH '/events/:events_id'
-    action :update, :before => :is_event_manager do
+    action :update, :before => :is_hsv_event_manager do
       people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'
@@ -253,7 +259,7 @@ Pakyow::App.routes(:events) do
     end
 
     # GET '/events/:events_id/edit'
-    action :edit, :before => :is_event_manager do
+    action :edit, :before => :is_hsv_event_manager do
       people = People[cookies[:people]]
       if people.nil?
         redirect '/errors/404'

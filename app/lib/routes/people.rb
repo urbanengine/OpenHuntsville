@@ -1,13 +1,11 @@
 require 'date'
 Pakyow::App.routes(:people) do
-
   include SharedRoutes
 
   expand :restful, :people, '/people', :before => :route_head do
 
     # '/people/*'
     collection do
-
       patch 'upload' do
         if request.xhr?
           filename = params['files'].first[:filename]
@@ -217,10 +215,8 @@ Pakyow::App.routes(:people) do
         end
         send success
       end
-
-
     end
-
+    
     action :new do
       view.scope(:people).with do
         bind(People.new)

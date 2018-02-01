@@ -1,0 +1,198 @@
+<link rel="stylesheet" type="text/css" href="/css/datetimepicker/jquery.datetimepicker.css"/>
+
+<form data-scope="bhm_events" id="people-form" data-prop="action">
+  <ul class="errors"><li data-scope="error"></li></ul>
+  <fieldset class="margin-t">
+    <ul>
+    <input type="hidden" data-prop="id" />
+    <input type="hidden" id="should_restrict_event_starttime" data-prop="should_restrict_event_starttime" />
+      <li>
+        <label>Event Name (Shown as the title on the flyer)</label>
+        <input type="text" id="name" data-prop="name" name="bhm_events[name]" placeholder="Name" maxlength="44" required />
+        <p class="smalltext">You have <span id="name-character-count"></span> characters left.</p>
+      </li>
+      <li>
+        <label>Summary (Shown as the description on the flyer)</label>
+        <textarea data-prop="summary" id="summary" name="bhm_events[summary]" placeholder="Enter your event summary (140 characters or less)" maxlength="140" required></textarea>
+        <p class="smalltext">You have <span id="summary-character-count"></span> characters left.</p>
+      </li>
+      <li>
+        <label>Description</label>
+        <textarea data-prop="description" name="bhm_events[description]" placeholder="Enter your event description" required></textarea>
+      </li>
+      <li style="width:100%;">
+        <label>Please choose the group that is associated with your event.</label>
+        <select id="group_selector" type="text" data-prop="parent_group" class="chosen" required></select>
+      </li>
+      <li data-prop="parent_event_li" class="hide" id="parent_event_li" style="width:100%;">
+        <label>Is you event being hosted as part of another event (i.e. CoWorking Night)? If so, please choose that event below.</label>
+        <select id="parent_event_selector" type="text" data-prop="parent_event_selector"></select>
+      </li>
+      <li>
+        <label>When do you want your event to start?</label>
+        <input type="text" data-prop="start_datetime" id="datetimepicker" />
+      </li>
+      <li style="width:100%;">
+        <label>How long do you want your event to be?</label>
+        <select type="text" data-prop="duration" class="chosen" required></select>
+      </li>
+      <li style="width:100%;">
+        <label>Venue</label>
+        <select type="text" data-prop="venue" class="chosen" required></select>
+      </li>
+    </ul>
+    <input id="submit" type="submit" style="display: inline-block;" value="Save">
+    <a href="#" class="delete-btn" data-prop="delete_event_link"></a>
+  </fieldset>
+  <fieldset data-prop="websiteadmin_fieldset">
+      <legend>Webite-Administrator Section</legend>
+      <h3 style="margin-top: 0;">Flyer Configuration</h3>
+      <ul>
+        <li>
+          <label>Flyer Category</label>
+          <input type="text" data-prop="flyer_category" name="bhm_events[flyer_category]">
+        </li>
+        <li>
+          <label>Flyer FontAwesome Icon</label>
+          <input type="text" data-prop="flyer_fa_icon" name="bhm_events[flyer_fa_icon]">
+        </li>
+      </ul>
+      <input id="submit" type="submit" value="Save">
+  </fieldset>
+</form>
+<script src="/js/datetimepicker/jquery.datetimepicker.full.js"></script>
+<script>
+var shouldRestrictEventStartTime = $('#should_restrict_event_starttime').val() == "true";
+$("form").submit(function(e) {
+
+    var ref = $(this).find("[required]");
+
+    $(ref).each(function(){
+        if ( $(this).val() == '' )
+        {
+            alert("Required field should not be blank.");
+
+            $(this).focus();
+
+            e.preventDefault();
+            return false;
+        }
+    });  return true;
+});
+
+var charCountforTitle = 44;
+var charCountForSummary = 140;
+
+document.getElementById("name-character-count").innerHTML = charCountforTitle;
+document.getElementById("summary-character-count").innerHTML = charCountForSummary;
+
+document.getElementById("name").onkeyup = function () {
+  document.getElementById("name-character-count").innerHTML = (charCountforTitle - this.value.length);
+};
+
+document.getElementById("summary").onkeyup = function () {
+  document.getElementById("summary-character-count").innerHTML = (charCountForSummary - this.value.length);
+};
+
+//http://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html#fbid=bWo4m8u3pU1
+Date.daysBetween = function( date1, date2 ) {
+  //Get 1 day in milliseconds
+  var one_day= 1000 * 60 * 60 * 24;
+
+  // Convert both dates to milliseconds
+  var date1_ms = date1.getTime();
+  var date2_ms = date2.getTime();
+
+  // Calculate the difference in milliseconds
+  var difference_ms = date2_ms - date1_ms;
+
+  // Convert back to days and return
+  return Math.round(difference_ms/one_day);
+}
+
+$.datetimepicker.setLocale('en');
+
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+              "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+
+var nextTuesday = new Date();
+nextTuesday.setDate(nextTuesday.getDate() + (2 - 1 - nextTuesday.getDay() + 7) % 7 + 1);
+var daysBetweenNowAndNextTuesday = Date.daysBetween(new Date(), nextTuesday);
+if (daysBetweenNowAndNextTuesday <= 4)
+nextTuesday.setDate(nextTuesday.getDate() + 7);
+var seedValue = $('#datetimepicker').val();
+if (seedValue && seedValue != '')
+  var defaultValue = seedValue;
+else
+  var defaultValue = months[nextTuesday.getMonth()] + " "
+                      + nextTuesday.getDate().toString() + ", "
+                      + nextTuesday.getFullYear().toString() + " "
+                      + "18:00 PM";
+var defaultValueSplit = defaultValue.split(" ");
+var defaultTime = defaultValueSplit[defaultValueSplit.length - 2] + " " + defaultValueSplit[defaultValueSplit.length - 1];
+
+if (shouldRestrictEventStartTime)
+  {
+  $('#datetimepicker').datetimepicker({
+    disabledWeekDays: [0,1,3,4,5,6],
+    allowTimes:['17:00','18:00','19:00','20:00','21:00'],
+    formatTime:'g:i A',
+    format: 'M j, Y g:i A',
+    inline:true,
+    defaultDate: nextTuesday,
+    minDate: nextTuesday,
+    defaultTime: defaultTime,
+    value: defaultValue,
+    scrollMonth: false,
+    scrollTime: false,
+    scrollInput: false
+  });
+  }
+else
+  {
+  $('#datetimepicker').datetimepicker({
+    disabledWeekDays: [0,1,3,4,5,6],
+    allowTimes:['17:00','18:00','19:00','20:00','21:00'],
+    formatTime:'g:i A',
+    format: 'M j, Y g:i A',
+    inline:true,
+    defaultDate: nextTuesday,
+    defaultTime: defaultTime,
+    value: defaultValue,
+    scrollMonth: false,
+    scrollTime: false,
+    scrollInput: false
+  });
+  }
+
+$("#group_selector")
+  .change(function () {
+    $( "#group_selector option:selected" ).each(function() {
+      var groupId = $(this).val();
+      if (groupId) {
+        $.ajax({
+          dataType: "json",
+          url: "/api/v1/bhm/cwn_events",
+          success: function(events) {
+            selector = $('#parent_event_selector');
+            if (selector.val() == null || selector.val() == "") {
+              selector.find('option').remove().end();
+              selector.append('<option value="" selected="selected"></option>');
+              $.each(events, function(index, event) {
+                  selector.append($("<option />").val(event.id).text(event.name + "   (" + new Date(Date.parse(event.start_datetime)).toLocaleDateString() + ")"));
+              });
+
+              if (events.length > 0) {
+                if ($("#parent_event_li").hasClass('hide') == true) $("#parent_event_li").removeClass('hide');
+              } else {
+                if ($("#parent_event_li").hasClass('hide') == false) $("#parent_event_li").addClass('hide');
+              }
+            }
+          }
+        });
+      }
+    });
+  })
+  .change();
+</script>

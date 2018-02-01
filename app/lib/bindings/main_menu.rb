@@ -105,9 +105,9 @@ Pakyow::App.bindings :main_menu do
 		unless cookies[:people].nil? || cookies[:people] == 0
 			person = People[cookies[:people]]
 			unless person.nil?
-        if logged_in_user_is_group_admin_or_site_admin()
-  				content = "Manage Events"
-  				href = "/events/manage"
+        if logged_in_user_is_hsv_admin_or_site_admin()
+			content = "Manage Events"
+			href = "/events/manage"
       		splat = request.path.split("/")
       		unless splat[1].nil? || splat[1].length == 0
       			if splat[1] == "events"
@@ -128,10 +128,40 @@ Pakyow::App.bindings :main_menu do
   		}
   end
 
+  	binding(:manage_bhm_events_link) do
+		css_class = "hide"
+		content = ""
+		href = "#"
+		unless cookies[:people].nil? || cookies[:people] == 0
+			person = People[cookies[:people]]
+			unless person.nil?
+				if logged_in_user_is_bhm_admin_or_site_admin()
+					content = "Manage BHM Events"
+					href = "/bhm_events/manage"
+					splat = request.path.split("/")
+					unless splat[1].nil? || splat[1].length == 0
+						if splat[1] == "bhm_events"
+							css_class = "selected"
+						else
+							css_class = ""
+						end
+					else
+						css_class = ""
+					end
+				end
+				end
+			end
+		{
+			:class => css_class,
+			:content => content,
+			:href => href
+		}
+	end
+
 	binding(:login_link) do
   		css_class = ""
   		content = "Log In"
-  		href = "/login"
+  		href = "/sessions/new"
 		splat = request.path.split("/")
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "sessions" || splat[1] == "login"

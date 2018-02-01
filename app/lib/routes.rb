@@ -186,4 +186,8 @@ Pakyow::App.routes do
     view.scope(:head).apply(request)
     view.scope(:main_menu).apply(request)
   end
+
+  get 'login/' do
+    redirect '/session/new'
+  end
 end
