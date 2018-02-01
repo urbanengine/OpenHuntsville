@@ -29,15 +29,21 @@ Pakyow::App.bindings :auth do
 
         binding(:verifyemail_link) do
             {
-                :content => 'https://www.openhuntsville.com/auth/verifyemail/' + bindable.token.to_s,
+                :content => 'Verify now >',
                 :href => 'https://www.openhuntsville.com/auth/verifyemail/' + bindable.token.to_s
             }
         end
 
         binding(:forgotpassword_link) do
             {
-                :content => 'https://www.openhuntsville.com/auth/forgotpassword/' + bindable.token.to_s,
+                :content => 'Reset now >',
                 :href => 'https://www.openhuntsville.com/auth/forgotpassword/' + bindable.token.to_s
+            }
+        end
+
+        binding(:mail_description) do
+            {
+                :content => bindable.mail_description
             }
         end
     end

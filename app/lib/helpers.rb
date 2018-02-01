@@ -243,10 +243,14 @@ module Pakyow::Helpers
 
     case template_name
       when :verifyemail
-        subject = "Lets verify your email"
+        subject = "Urban Engine: Welcome"
+        auth.class.module_eval { attr_accessor :mail_description}
+        auth.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier we created you an Urban Engine account.'
         presenter.view = store.view('mail/account_verifyemail')
       when :passwordreset
-        subject = "Lets reset your password"
+        subject = "Urban Engine Password Reset"
+        auth.class.module_eval { attr_accessor :mail_description}
+        auth.mail_description = 'Alert: 📬 You requested to reset the password for your Urban Engine account. Follow the instruction below to complete your password reset.'
         presenter.view = store.view('mail/account_passwordreset')
     end
 
