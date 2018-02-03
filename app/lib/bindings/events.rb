@@ -66,14 +66,14 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:venue_name) do
-			venue = Venue.where("id = ?", bindable.venue_id).first
+			venue = Venue.where(Sequel.lit("id = ?", bindable.venue_id)).first
 			{
 				:content => venue.name
 			}
 		end
 
 		binding(:group_name) do
-			group = Group.where("id = ?", bindable.group_id).first
+			group = Group.where(Sequel.lit("id = ?", bindable.group_id)).first
 			{
 				:content => group.name
 			}
@@ -169,7 +169,7 @@ Pakyow::App.bindings :events do
 		binding(:parent_event) do
 			content = "(Empty)"
 			unless bindable.parent_id.nil?
-				parent_event = Event.where("id = ?", bindable.parent_id).first
+				parent_event = Event.where(Sequel.lit("id = ?", bindable.parent_id)).first
 				content = parent_event.name
 			end
 			{
@@ -202,8 +202,8 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:created_by_updated_by) do
-			creator = People.where("id = ?", bindable.created_by).first
-			updator = People.where("id = ?", bindable.updated_by).first
+			creator = People.where(Sequel.lit("id = ?", bindable.created_by)).first
+			updator = People.where(Sequel.lit("id = ?", bindable.updated_by)).first
 			content = ""
 			unless creator.nil? || updator.nil?
 				content = "This event was created by " + creator.first_name + " " + creator.last_name + " on " + bindable.created_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') + " and updated by " + updator.first_name + " " + updator.last_name + " on " + bindable.updated_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p')

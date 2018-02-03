@@ -11,15 +11,15 @@ Pakyow::App.routes(:bhm) do
                 if people.nil?
                 redirect '/errors/404'
                 end
-                cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+                cwn = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
                 if cwn.nil?
                   redirect '/errors/403'
                 end
-                cwn_events = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+                cwn_events = Group.where(Sequel.lit("name = 'CoWorking Night Events: Birmingham'")).first
                 if cwn_events.nil?
                   redirect '/errors/403'
                 end
-                events_all = Event.where('start_datetime > ? and (group_id = ? or group_id = ?)', DateTime.now.utc, cwn.id, cwn_events.id).where('archived = ?', false).all
+                events_all = Event.where(Sequel.lit('start_datetime > ? and (group_id = ? or group_id = ?)', DateTime.now.utc, cwn.id, cwn_events.id)).where(Sequel.lit('archived = ?', false)).all
                 view.scope(:people).bind(people)
                 view.scope(:bhm_events).apply(events_all)
                 current_user = People[cookies[:people]]
@@ -38,7 +38,7 @@ Pakyow::App.routes(:bhm) do
                 redirect "/errors/404"
                 end
                 event.approved = true
-                previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime).order(:start_datetime).last
+                previous_event = Event.where(Sequel.lit("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime)).order(:start_datetime).last
                 event.save
                 if request.xhr?
                 success = 'success'
@@ -75,7 +75,7 @@ Pakyow::App.routes(:bhm) do
                 if params[:bhm_events_id].is_number? == false
                 redirect "/errors/404"
                 end
-                event = Event.where("id = ?", params[:bhm_events_id]).first
+                event = Event.where(Sequel.lit("id = ?", params[:bhm_events_id])).first
                 if event.nil?
                 redirect "/errors/404"
                 end
@@ -124,7 +124,7 @@ Pakyow::App.routes(:bhm) do
             if params[:bhm_events_id].is_number? == false
                 redirect "/errors/404"
             end
-            event = Event.where("id = ?", params[:bhm_events_id]).first
+            event = Event.where(Sequel.lit("id = ?", params[:bhm_events_id])).first
             if event.nil?
                 redirect "/errors/404"
             end
@@ -160,8 +160,8 @@ Pakyow::App.routes(:bhm) do
             end
             puts "here"
             parsed_time = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
-            previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", params[:bhm_events][:parent_group].to_i, parsed_time.to_datetime.utc).order(:start_datetime).last
-            group = Group.where("id = ?", params[:bhm_events][:parent_group].to_i).first
+            previous_event = Event.where(Sequel.lit("approved = true AND group_id = ? AND start_datetime < ?", params[:bhm_events][:parent_group].to_i, parsed_time.to_datetime.utc)).order(:start_datetime).last
+            group = Group.where(Sequel.lit("id = ?", params[:bhm_events][:parent_group].to_i)).first
             c_params =
                 {
                 "name" => params[:bhm_events][:name],
@@ -192,7 +192,7 @@ Pakyow::App.routes(:bhm) do
             if params[:bhm_events][:id].is_number? == false
                 redirect "/errors/404"
             end
-            event = Event.where("id = ?", params[:bhm_events][:id]).first
+            event = Event.where(Sequel.lit("id = ?", params[:bhm_events][:id])).first
             if event.nil?
                 redirect "/errors/404"
             end
@@ -234,7 +234,7 @@ Pakyow::App.routes(:bhm) do
             if params[:bhm_events_id].is_number? == false
                 redirect "/errors/404"
             end
-            event = Event.where("id = ?", params[:bhm_events_id]).first
+            event = Event.where(Sequel.lit("id = ?", params[:bhm_events_id])).first
             if event.nil?
                 redirect "/errors/404"
             end

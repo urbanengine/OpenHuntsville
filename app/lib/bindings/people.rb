@@ -306,8 +306,6 @@ Pakyow::App.bindings :people do
 		end
 
 		binding(:image) do
-			puts 'binding(:image) do'
-
 			src = ""
 			name = ""
 			unless bindable.nil?
@@ -315,7 +313,6 @@ Pakyow::App.bindings :people do
 					name = bindable.first_name + " " + bindable.last_name
 
 					unless bindable.image_url.nil? || bindable.image_url.length == 0
-						pp 'bindable.image_url.nil? || bindable.image_url.length == 0'
 						src = bindable.image_url
 					else
 						needle = bindable.first_name + "-" + bindable.last_name
@@ -365,20 +362,17 @@ Pakyow::App.bindings :people do
 							'Vicki-Morris'
 						]
 						if haystack.include?(needle)
-							pp 'haystack includes needle'
 							src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + name + ".jpg"
 						else
 							src = "/img/profile-backup.png"
 						end
-						pp 'ELSE bindable.image_url.nil? || bindable.image_url.length == 0'
 					end
 				else
-					pp 'ELSE bindable.first_name.nil? || bindable.last_name.nil?'
+					
 				end
 			else
-				pp 'bindable NIL'
+				
 			end
-			pp src
 			{
 				:src => src,
 				:title =>  name,

@@ -14,8 +14,6 @@ Pakyow::App.routes(:people) do
 
           # Copy the uploaded file to /tmp.
           FileUtils.cp(uploaded_file, temp_image_file)
-          pp uploaded_file
-          pp temp_image_file
 
           # Resize the image.
           image = MiniMagick::Image.new(temp_image_file)
@@ -59,7 +57,7 @@ Pakyow::App.routes(:people) do
         search_terms = ""
         unless needle.nil? || needle.length == 0
           needles = needle.split
-          haystack = People.where("approved = true AND opt_in = true").all
+          haystack = People.where(Sequel.lit("approved = true AND opt_in = true")).all
           cats = Array.new
           all_cats = Category.all
           needles.each_with_index { |this_needle,index|
@@ -234,7 +232,7 @@ Pakyow::App.routes(:people) do
       stop_the_loop = false
       i = 2
       until stop_the_loop do
-        person = People.where("custom_url = ?",custom_url).first
+        person = People.where(Sequel.lit("custom_url = ?",custom_url)).first
         if person.nil?
           stop_the_loop = true
         else
@@ -258,7 +256,6 @@ Pakyow::App.routes(:people) do
         end
       else
         try_again = '/people/new'
-        pp try_again
         presenter.path = try_again
         view.scope(:people).with do |ctx|
           ctx.bind(people)
@@ -274,10 +271,10 @@ Pakyow::App.routes(:people) do
       get 'delete' do
         people_id = params[:people_id].to_i
         loggedInUser = People[cookies[:people]]
-        user = People.where("id = ?", people_id).first
+        user = People.where(Sequel.lit("id = ?", people_id)).first
 
         # Make sure we have at least one admin left at all times
-        number_of_admins = People.where("admin = ?", true).count
+        number_of_admins = People.where(Sequel.lit("admin = ?", true)).count
         if number_of_admins < 2 && user.admin == true
           redirect "/errors/403"
         end
@@ -302,7 +299,7 @@ Pakyow::App.routes(:people) do
           my_limit = 10
         end
       end
-      total_people = People.where("approved = true AND opt_in = true").count
+      total_people = People.where(Sequel.lit("approved = ? AND opt_in = ?", true, true)).count
       # If user is authenticated, don't show default
       page_no = 0
       unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
@@ -318,8 +315,7 @@ Pakyow::App.routes(:people) do
           end
         end
         current_last_profile_shown = (page_no + 1) * my_limit
-        pp 'current  ' + current_last_profile_shown.to_s
-        pp 'total_people  ' + total_people.to_s
+
         if current_last_profile_shown < total_people
           next_link = {:class => 'previous-next-btns',:href=>"/people?page=#{page_no+1}"}
         end
@@ -342,7 +338,7 @@ Pakyow::App.routes(:people) do
         view.scope(:after_people).bind(count)
         view.scope(:after_people).use(:normal)
       end
-      people = People.where("approved = true AND opt_in = ? AND archived = ?", true, false).limit(my_limit).offset(page_no*my_limit).order(:first_name).all
+      people = People.where(Sequel.lit("approved = true AND opt_in = ? AND archived = ?", true, false)).limit(my_limit).offset(page_no*my_limit).order(:first_name).all
       view.scope(:people).apply(people)
       all_cats = Category.order(:slug).all
       parent_cats = []
@@ -422,7 +418,6 @@ Pakyow::App.routes(:people) do
           end
         else
           # Current user is ADMIN
-          pp '# Current user is ADMIN'
           if params[:people][:approved] && !(people.approved)
             # Admin is approving user
             approve_mail = true
@@ -514,7 +509,7 @@ Pakyow::App.routes(:people) do
             FileUtils.rm(image_filename)
             people.image_url = 'https://s3.amazonaws.com/openhsv.com/website-uploads/' + image_basename
           else
-            pp "File does not exist"
+            puts "File does not exist"
           end
         else
           puts "TEMPIMAGE NIL"
@@ -525,8 +520,6 @@ Pakyow::App.routes(:people) do
       if people.valid?
         # Save
       elsif names_nil
-        pp "PEOPLE ERRORS"
-        pp people.errors
         # redirect '/people/create-profile'
       end
 
