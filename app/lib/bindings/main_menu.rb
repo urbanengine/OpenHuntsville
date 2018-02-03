@@ -135,7 +135,7 @@ Pakyow::App.bindings :main_menu do
 		unless cookies[:people].nil? || cookies[:people] == 0
 			person = People[cookies[:people]]
 			unless person.nil?
-				if logged_in_user_is_bhm_admin_or_site_admin()
+				if logged_in_user_is_bhm_manager_or_site_admin()
 					content = "Manage BHM Events"
 					href = "/bhm_events/manage"
 					splat = request.path.split("/")

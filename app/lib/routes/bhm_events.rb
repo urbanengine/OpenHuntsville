@@ -28,7 +28,7 @@ Pakyow::App.routes(:bhm) do
                 view.scope(:main_menu).apply(request)
             end
 
-            get 'approve/:bhm_events_id', :before => :is_admin_check do
+            get 'approve/:bhm_events_id', :before => :is_bhm_event_admin do
                 success = 'failure'
                 if params[:bhm_events_id].is_number? == false
                 redirect "/errors/404"
@@ -48,7 +48,7 @@ Pakyow::App.routes(:bhm) do
                 send success
             end
 
-            get 'unapprove/:bhm_events_id', :before => :is_admin_check do
+            get 'unapprove/:bhm_events_id', :before => :is_bhm_event_admin do
                 success = 'failure'
                 if params[:bhm_events_id].is_number? == false
                 redirect "/errors/404"
@@ -79,7 +79,7 @@ Pakyow::App.routes(:bhm) do
                 if event.nil?
                 redirect "/errors/404"
                 end
-                isNotSiteAdmin = !logged_in_user_is_bhm_site_admin_or_site_admin()
+                isNotSiteAdmin = !logged_in_user_is_bhm_admin_or_site_admin()
                 if event.approved && isNotSiteAdmin
                 redirect "/errors/404"
                 end
@@ -171,7 +171,7 @@ Pakyow::App.routes(:bhm) do
                 "start_datetime" => parsed_time.to_datetime.utc,
                 "duration" => params[:bhm_events][:duration].to_i,
                 "venue_id" => params[:bhm_events][:venue].to_i,
-                "approved" => if logged_in_user_is_bhm_site_admin_or_site_admin() then true else false end,
+                "approved" => if logged_in_user_is_bhm_admin_or_site_admin() then true else false end,
                 "parent_id" => if params[:bhm_events][:parent_event_selector].blank? then "" else params[:bhm_events][:parent_event_selector].to_i end,
                 "flyer_category" => if params[:bhm_events][:flyer_category].nil? || params[:bhm_events][:flyer_category].empty? then group.flyer_category else params[:bhm_events][:flyer_category] end,
                 "flyer_fa_icon" => if params[:bhm_events][:flyer_fa_icon].nil? || params[:bhm_events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:bhm_events][:flyer_fa_icon] end,
@@ -203,7 +203,7 @@ Pakyow::App.routes(:bhm) do
             venue_id = params[:bhm_events][:venue].to_i
             minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
 
-            if logged_in_user_is_bhm_site_admin_or_site_admin() == false && (minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id)
+            if logged_in_user_is_bhm_admin_or_site_admin() == false && (minutes_between_old_and_new_date > 0.99 || venue_id != event.venue_id)
                 event.approved = false
             end
             event.name = params[:bhm_events][:name]

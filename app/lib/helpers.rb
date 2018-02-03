@@ -504,7 +504,7 @@ module Pakyow::Helpers
     return true
   end
 
-  def logged_in_user_is_bhm_site_admin_or_site_admin()
+  def logged_in_user_is_bhm_admin_or_site_admin()
     people = People[cookies[:people]]
     if people.nil?
       return false
@@ -521,7 +521,7 @@ module Pakyow::Helpers
     end
   end
 
-  def logged_in_user_is_bhm_admin_or_site_admin()
+  def logged_in_user_is_bhm_manager_or_site_admin()
     people = People[cookies[:people]]
     if people.nil?
       return false
