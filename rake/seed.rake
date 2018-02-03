@@ -96,7 +96,7 @@ namespace :seed do
     CSV.foreach(CATS_PATH, { :headers => false, :skip_blanks => true }) do |row|
         if r == 1
             row.each_with_index { |item,index|
-                has_em = Category.where("category = ?",item).all
+                has_em = Category.where(Sequel.lit("category = ?",item)).all
                 if has_em.nil? || has_em.length == 0
                     category = Category.new
                     category.category = item
@@ -113,7 +113,7 @@ namespace :seed do
             row.each_with_index { |item,index|
                 unless item.nil?
 
-                    has_em = Category.where("category = ?",item).all
+                    has_em = Category.where(Sequel.lit("category = ?",item)).all
                     if has_em.nil? || has_em.length == 0
                         category = Category.new
                         category.category = item
@@ -199,7 +199,7 @@ namespace :seed do
 
   task :groups => ['pakyow:stage'] do
     group = Group.new
-    group.name = "New Leaf Digital"
+    group.name = "Urban Engine"
     group.description = "The parent 501c(3) organization for CoWorking Night, 32/10, and Huntsville Founders."
     #group.categories_string = "Multidisciplinary"
     #group.image_url = ""
@@ -208,7 +208,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "CoWorking Night"
-    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "Urban Engine")).first.id
     #group.categories_string = "Multidisciplinary"
     #group.image_url = ""
     group.approved = true
@@ -216,7 +216,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "32/10"
-    group.parent_id = Group.where("name = 'New Leaf Digital'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "Urban Engine")).first.id
     #group.categories_string = "Multidisciplinary"
     #group.image_url = ""
     group.approved = true
@@ -224,7 +224,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "4 Hours To Product"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Multidisciplinary"
     #group.image_url = "/img/groups/4HoursToProduct.jpg"
     group.approved = true
@@ -232,7 +232,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Adulting 101"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Multidisciplinary"
     #group.image_url = "/img/groups/Adulting101.jpg"
     group.approved = true
@@ -240,7 +240,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "After Hours Game Dev"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Game Development"
     #group.image_url = "/img/groups/AfterHoursGameDev.jpg"
     group.approved = true
@@ -248,7 +248,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "AngularJS"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Software"
     #group.image_url = ""
     group.approved = true
@@ -256,7 +256,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Babes Who Blog"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Writing"
     #group.image_url = "/img/groups/BabesWhoBlog.jpg"
     group.approved = true
@@ -264,7 +264,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Code the South"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Software"
     #group.image_url = "/img/groups/CodeTheSouth.jpg"
     group.approved = true
@@ -272,7 +272,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Coders GSD"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Software"
     #group.image_url = "/img/groups/CodersGSD.jpg"
     group.approved = true
@@ -280,7 +280,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Designer's Corner"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Design"
     #group.image_url = "/img/groups/DesignersCorner.jpg"
     group.approved = true
@@ -288,7 +288,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Hackster.io Hardware Hacking"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Hardware"
     #group.image_url = "/img/groups/Hackster.jpg"
     group.approved = true
@@ -296,7 +296,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Keyframe: Motion Graphics & Animation"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Animation"
     #group.image_url = "/img/groups/Keyframe.jpg"
     group.approved = true
@@ -304,7 +304,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Leadership Lounge"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Leadership"
     #group.image_url = "/img/groups/LeadershipLounge.jpg"
     group.approved = true
@@ -312,7 +312,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Lean In Circle for Women"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Leadership"
     #group.image_url = "/img/groups/LeanIn.jpg"
     group.approved = true
@@ -320,7 +320,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Mathletes of Huntsville"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Mathematics"
     #group.image_url = "/img/groups/Mathletes.jpg"
     group.approved = true
@@ -328,7 +328,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Mindfulness at Work"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Meditation"
     #group.image_url = "/img/groups/MindfulnessAtWork.jpg"
     group.approved = true
@@ -336,7 +336,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "On Target Marketing"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Marketing"
     #group.image_url = "/img/groups/OnTargetMarketing.jpg"
     group.approved = true
@@ -344,7 +344,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "OverEngineered"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Engineering"
     #group.image_url = "/img/groups/OverEngineered.jpg"
     group.approved = true
@@ -352,7 +352,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Photo-Synthesis"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Photography"
     #group.image_url = "/img/groups/Photo-Synthesis.jpg"
     group.approved = true
@@ -360,7 +360,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "ReactHSV"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Software"
     #group.image_url = "/img/groups/ReactHSV.jpg"
     group.approved = true
@@ -368,7 +368,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Responsive Web Design"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Software"
     #group.image_url = "/img/groups/ResponsiveWebDesign.jpg"
     group.approved = true
@@ -376,7 +376,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Sales Funnel"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Sales"
     #group.image_url = ""
     group.approved = true
@@ -384,7 +384,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Social Tribe"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Marketing"
     #group.image_url = "/img/groups/TheSocialTribe.jpg"
     group.approved = true
@@ -392,7 +392,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Startup Book Club"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Startups"
     #group.image_url = "/img/groups/StartupBookClub.jpg"
     group.approved = true
@@ -400,7 +400,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Untitled Film Group"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Film"
     #group.image_url = "/img/groups/UntitledFilmGroup.jpg"
     group.approved = true
@@ -408,7 +408,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "UXPA Tennessee Valley"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "User Experience"
     #group.image_url = "/img/groups/UXPA.png"
     group.approved = true
@@ -416,7 +416,7 @@ namespace :seed do
 
     group = Group.new
     group.name = "Women Who Code"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     #group.categories_string = "Software"
     #group.image_url = "/img/groups/WomenWhoCode.png"
     group.approved = true
@@ -425,12 +425,12 @@ namespace :seed do
     group = Group.new
     group.name = "Dumb not approved group"
     group.description = "Dont allow stupid groups that aren't approved"
-    group.parent_id = Group.where("name = 'CoWorking Night'").first.id
+    group.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
     group.save
   end
 
   task :group_admins => ['pakyow:stage'] do
-    admins = People.where("admin = true").all
+    admins = People.where(Sequel.lit("admin = true")).all
     groups = Group.all
     admins.each { |person|
       groups.each { |group|
@@ -440,7 +440,7 @@ namespace :seed do
   end
 
   task :events => ['pakyow:stage'] do
-    cwn = Group.where("name = 'CoWorking Night'").first
+    cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
     unless cwn.nil?
       event = Event.new
       event.name = "CoWorking Night #99"
@@ -467,13 +467,13 @@ namespace :seed do
       event.save
     end
 
-    dc = Group.where("name = 'Designer''s Corner'").first
+    dc = Group.where(Sequel.lit("name = 'Designer''s Corner'")).first
     unless dc.nil?
       event = Event.new
       event.name = "Designer's Corner #13"
       event.description = "The 13th meeting of Designer's Corner"
       event.group_id = dc.id
-      event.parent_id = Event.where("name = 'CoWorking Night #100'").first.id
+      event.parent_id = Event.where(Sequel.lit("name = 'CoWorking Night #100'")).first.id
       event.save
     end
   end
@@ -514,8 +514,8 @@ namespace :seed do
     date_format = "%m/%d/%Y %H:%M:%S"
     feb_22 = "2/22/2017 18:00:00"
     cwn_start_datetime = DateTime.strptime(feb_22, date_format).utc
-    cwn_group_id = Group.where("name = ?", "CoWorking Night").first.id
-    cwn_venue_id = Venue.where("name = ?", "Real Estate Row").first.id
+    cwn_group_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
+    cwn_venue_id = Venue.where(Sequel.lit("name = ?", "Real Estate Row")).first.id
 
     for cwn_instance_number in 94..99
       event = Event.new
@@ -556,13 +556,13 @@ namespace :seed do
         event.name = row["Event Title"]
         event.description = row["Event Description"]
 
-        group = Group.where("name = ?", row["Group Name"]).first
+        group = Group.where(Sequel.lit("name = ?", row["Group Name"])).first
 
         if group.nil?
           newGroup = Group.new
           newGroup.name = row["Group Name"]
           newGroup.description = row["Group Name"]
-          newGroup.parent_id = Group.where("name = 'CoWorking Night'").first.id
+          newgroup.parent_id = Group.where(Sequel.lit("name = ?", "CoWorking Night")).first.id
           newGroup.save
 
           event.group_id = newGroup.id
@@ -570,7 +570,7 @@ namespace :seed do
           event.group_id = group.id
         end
 
-        venue = Venue.where("name = ?", row["Room Requested"]).first
+        venue = Venue.where(Sequel.lit("name = ?", row["Room Requested"])).first
         event.venue_id = venue.id
 
         case row["Numerical Duration"]
@@ -585,7 +585,7 @@ namespace :seed do
         event.approved = row["Approved"]
         if event.approved
 
-          previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime).order(:start_datetime).last
+          previous_event = Event.where(Sequel.lit("approved = true AND group_id = ? AND start_datetime < ?", event.group_id, event.start_datetime)).order(:start_datetime).last
           instance_number = 1
           unless previous_event.nil?
             instance_number = previous_event.instance_number + 1
@@ -594,7 +594,7 @@ namespace :seed do
           event.instance_number = instance_number
         end
 
-        cwn_events = Event.where("approved = true AND group_id = ?", cwn_group_id).all
+        cwn_events = Event.where(Sequel.lit("approved = true AND group_id = ?", cwn_group_id)).all
         cwn_events.each { |cwn_event|
           hours_between_old_and_new_date = (((cwn_event.start_datetime - event.start_datetime)*24).to_i).abs
           if hours_between_old_and_new_date < 24
