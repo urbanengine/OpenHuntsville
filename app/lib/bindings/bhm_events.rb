@@ -109,7 +109,7 @@ Pakyow::App.bindings :bhm_events do
         binding(:approved) do
             content = if bindable.approved then "Approved" else "Pending" end
             people = People[cookies[:people]]
-            if people.admin
+            if logged_in_user_is_bhm_admin_or_site_admin()
                 if bindable.approved
                     content = "<p><a class='unapprove-btn' href='/bhm_events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
                 else
