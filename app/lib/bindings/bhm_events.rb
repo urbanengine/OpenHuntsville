@@ -5,9 +5,8 @@ Pakyow::App.bindings :bhm_events do
         restful :bhm_events
 
         binding(:should_restrict_event_starttime) do
-            people = People[cookies[:people]]
             {
-                :content => if (!people.nil? && !people.admin.nil? && people.admin) then "false" else "true" end
+                :content => if logged_in_user_is_bhm_admin_or_site_admin() then "false" else "true" end
             }
         end
 
@@ -181,8 +180,7 @@ Pakyow::App.bindings :bhm_events do
 
         binding(:websiteadmin_fieldset) do
             visible = "hide"
-            people = People[cookies[:people]]
-            isSiteAdmin = people != nil && people.admin != nil && people.admin == true
+            isSiteAdmin = logged_in_user_is_bhm_admin_or_site_admin()
             if isSiteAdmin
                 visible = "show"
             end

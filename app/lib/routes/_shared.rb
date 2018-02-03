@@ -51,6 +51,12 @@ module SharedRoutes
   end
 
   fn :is_bhm_event_manager do
+    if logged_in_user_is_bhm_manager_or_site_admin() == false
+      redirect "/errors/403"
+    end
+  end
+
+  fn :is_bhm_event_admin do
     if logged_in_user_is_bhm_admin_or_site_admin() == false
       redirect "/errors/403"
     end
