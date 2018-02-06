@@ -46,8 +46,7 @@ namespace :db do
 
   desc "Create the database"
   task :create => [:'pakyow:prepare'] do
-    $db = Sequel.connect(ENV['DATABASE_URL']) if $db.nil?
-    #database = $db.opts[:database]
+    database = $db.opts[:database]
     $db.disconnect
 
     `createdb #{database}`
