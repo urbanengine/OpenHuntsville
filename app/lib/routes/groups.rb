@@ -76,7 +76,7 @@ Pakyow::App.routes(:groups) do
       group = Group.new(c_params)
       group.save
 
-      admins = People.where("admin = true").all
+      admins = People.where(Sequel.lit("admin = ?", true)).all
       admins.each { |person|
         person.add_group(group)
       }
@@ -87,7 +87,7 @@ Pakyow::App.routes(:groups) do
     # GET /groups; same as Index
     action :list, :before => :route_head do
       my_limit = 10
-      total_groups = Group.where("approved = true").count
+      total_groups = Group.where(Sequel.lit("approved = true")).count
       # If user is authenticated, don't show default
       page_no = 0
       unless cookies[:people].nil? || cookies[:people] == 0
@@ -125,8 +125,8 @@ Pakyow::App.routes(:groups) do
         view.scope(:after_groups).bind(count)
         view.scope(:after_groups).use(:normal)
       end
-      #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
-      groups = Group.where("approved = true AND archived = ?", false).limit(my_limit).offset(page_no*my_limit).order(:name).all
+      #groups = Group.where(Sequel.lit("approved = ? AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'", true)).limit(my_limit).offset(page_no*my_limit).all
+      groups = Group.where(Sequel.lit("approved = true AND archived = ?", false)).limit(my_limit).offset(page_no*my_limit).order(:name).all
       view.scope(:groups).apply(groups)
       current_user = People[cookies[:people]]
       view.scope(:admins).apply(current_user)
@@ -139,7 +139,7 @@ Pakyow::App.routes(:groups) do
       if params[:groups_id].is_number? == false
         redirect "/errors/404"
       end
-      group = Group.where("id = ?", params[:groups_id]).first
+      group = Group.where(Sequel.lit("id = ?", params[:groups_id])).first
       if group.nil?
         redirect "/errors/404"
       end
@@ -170,7 +170,7 @@ Pakyow::App.routes(:groups) do
       if params[:groups_id].is_number? == false
         redirect "/errors/404"
       end
-      group = Group.where("id = ?", params[:groups_id]).first
+      group = Group.where(Sequel.lit("id = ?", params[:groups_id])).first
       if group.nil?
         redirect "/errors/404"
       end
@@ -225,7 +225,7 @@ Pakyow::App.routes(:groups) do
         if params[:groups_id].is_number? == false
           redirect "/errors/404"
         end
-        group = Group.where("id = ?", params[:groups_id]).first
+        group = Group.where(Sequel.lit("id = ?", params[:groups_id])).first
         if group.nil?
           redirect "/errors/404"
         end

@@ -5,10 +5,10 @@ Pakyow::App.routes(:categories) do
 
     collection do
       get '/:parent/:categories_id' do
-        parent = Category.where("slug = ?",params[:parent]).first
-        category = Category.where(:slug => params[:categories_id], :parent_id => parent.id).first
+        parent = Category.where(Sequel.lit("slug = ?",params[:parent])).first
+        category = Category.where(slug => params[:categories_id], :parent_id => parent.id).first
         subset = Array.new
-        all =  People.where("approved = true AND opt_in = true").all
+        all =  People.where(Sequel.lit("approved = ? AND opt_in = ?", true, true)).all
         all.each { |person|
           unless person.categories.nil?
             jsn = person.categories.to_s
@@ -36,8 +36,8 @@ Pakyow::App.routes(:categories) do
         parent_cats.unshift("everyone")
         view.scope(:categories_menu).apply(parent_cats)
 
-        current_cat = Category.where("url = ?",request.path).first
-        child_cats = Category.where("parent_id = ?",current_cat.parent_id).all
+        current_cat = Category.where(Sequel.lit("url = ?",request.path)).first
+        child_cats = Category.where(Sequel.lit("parent_id = ?",current_cat.parent_id)).all
         view.scope(:categories_submenu).apply(child_cats)
         view.scope(:head).apply(request)
         current_user = People[cookies[:people]]
@@ -48,7 +48,7 @@ Pakyow::App.routes(:categories) do
       get 'title_and_description_from_slug' do
         cat_title = ""
         cat_desc = ""
-        category = Category.where("slug = ?",params[:slug]).first
+        category = Category.where(Sequel.lit("slug = ?",params[:slug])).first
         unless category.nil?
           unless category.category.nil?
             cat_title = category.category
@@ -81,13 +81,13 @@ Pakyow::App.routes(:categories) do
 
     # GET /people/:id
     action :show do
-      category = Category.where("slug = ?",params[:categories_id]).first
+      category = Category.where(Sequel.lit("slug = ?",params[:categories_id])).first
       subset = Array.new
 
       if session[:random].nil?
         session[:random] = (rand(0...100)).to_s
       end
-      people = People.where("approved = true AND opt_in = true").order(:first_name).all
+      people = People.where(Sequel.lit("approved = ? AND opt_in = ?", true, true)).order(:first_name).all
       people.each { |person|
         unless person.categories.nil?
           jsn = person.categories.to_s
@@ -123,8 +123,8 @@ Pakyow::App.routes(:categories) do
       view.scope(:categories_menu).apply(parent_cats)
       url = request.path
       url = url.gsub(/\/$/, '')
-      current_cat = Category.where("url = ?",url).first
-      child_cats = Category.where("parent_id = ?",current_cat.id).all
+      current_cat = Category.where(Sequel.lit("url = ?",url)).first
+      child_cats = Category.where(Sequel.lit("parent_id = ?",current_cat.id)).all
       view.scope(:categories_submenu).apply(child_cats)
       view.scope(:head).apply(request)
       current_user = People[cookies[:people]]

@@ -31,16 +31,16 @@ Pakyow::App.routes(:api) do
                 if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
                   
                   #For now, we'll keep this only exposed for cwn
-                  cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+                  cwn = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
                   if cwn.nil?
                    redirect '/errors/403'
                   end
     
                   #Now lets get all the events for this group. This means all of this group's events and its event's children
-                  next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+                  next_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).first
     
                   #check is last cwn_event is still occurring. If it is, then use it
-                  last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+                  last_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).last
                   unless last_cwn_event.nil?
                     if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
                       next_cwn_event = last_cwn_event
@@ -61,13 +61,13 @@ Pakyow::App.routes(:api) do
                        "approved" => event.approved,
                        "cwn" => next_cwn_event.instance_number,
                        "timestamp" => event.created_at.utc,
-                       "group" => Group.where("id = ?", event.group_id).first.name,
+                       "group" => Group.where(Sequel.lit("id = ?", event.group_id)).first.name,
                        "title" => event.name,
                        "description" => event.summary,
                        "date" => event.start_datetime.utc,
                        "time_req_form" => event.start_datetime.utc,
                        "time_req" => event.start_datetime.utc,
-                       "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                       "room_req" => Venue.where(Sequel.lit("id = ?", event.venue_id)).first.name,
                        "start_time" => event.start_datetime.utc,
                        "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                        "category" => event.flyer_category,
@@ -85,7 +85,7 @@ Pakyow::App.routes(:api) do
               get 'cwn_events' do
                 if request.xhr?
                   # respond to Ajax request
-                  cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+                  cwn = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
                   if cwn.nil?
                     redirect '/errors/403'
                   end
@@ -100,7 +100,7 @@ Pakyow::App.routes(:api) do
                   else
                     time_limit = if (nextWednesday - Date.today) < 4 then nextWednesday else DateTime.now.utc end
                   end
-                  group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false).order(:start_datetime).all
+                  group_events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false)).order(:start_datetime).all
                   response.write(group_events.to_json)
                 else
                   # respond to normal request
@@ -128,10 +128,10 @@ Pakyow::App.routes(:api) do
                       time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
                     end
 
-                    group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", params[:groups_id], time_limit, false).all
-                    parent_group = Group.where("id = ?", params[:groups_id]).first
+                    group_events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ? AND archived = ?", params[:groups_id], time_limit, false)).all
+                    parent_group = Group.where(Sequel.lit("id = ?", params[:groups_id])).first
                     unless parent_group.parent_id.nil?
-                      group_events.concat(Event.where("group_id = ? AND start_datetime > ? AND archived = ?", parent_group.parent_id, time_limit, false).all)
+                      group_events.concat(Event.where(Sequel.lit("group_id = ? AND start_datetime > ? AND archived = ?", parent_group.parent_id, time_limit, false)).all)
                     end
                     response.write(group_events.to_json)
                   else
@@ -163,16 +163,16 @@ Pakyow::App.routes(:api) do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
 
               #For now, we'll keep this only exposed for cwn
-              cwn = Group.where("name = 'CoWorking Night'").first
+              cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               if cwn.nil?
                redirect '/errors/403'
               end
 
               #Now lets get all the events for this group. This means all of this group's events and its event's children
-              next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+              next_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).first
 
               #check is last cwn_event is still occurring. If it is, then use it
-              last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+              last_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).last
               if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
                 next_cwn_event = last_cwn_event
               end
@@ -191,13 +191,13 @@ Pakyow::App.routes(:api) do
                    "approved" => event.approved,
                    "cwn" => next_cwn_event.instance_number,
                    "timestamp" => event.created_at.utc,
-                   "group" => Group.where("id = ?", event.group_id).first.name,
+                   "group" => Group.where(Sequel.lit("id = ?", event.group_id)).first.name,
                    "title" => event.name,
                    "description" => event.summary,
                    "date" => event.start_datetime.utc,
                    "time_req_form" => event.start_datetime.utc,
                    "time_req" => event.start_datetime.utc,
-                   "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                   "room_req" => Venue.where(Sequel.lit("id = ?", event.venue_id)).first.name,
                    "start_time" => event.start_datetime.utc,
                    "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                    "category" => event.flyer_category,
@@ -230,13 +230,13 @@ Pakyow::App.routes(:api) do
 
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
               #For now, we'll keep this only exposed for cwn
-              cwn = Group.where("name = 'CoWorking Night'").first
+              cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               if cwn.nil?
                redirect '/errors/403'
               end
 
               #Now lets get all the events for this group. This means all of this group's events and its event's children
-              cwn_event = Event.where("approved = true AND group_id = ? AND instance_number = ? AND archived = ?", cwn.id, params[:cwn_instance_number], false).order(:start_datetime).first
+              cwn_event = Event.where(Sequel.lit("approved = true AND group_id = ? AND instance_number = ? AND archived = ?", cwn.id, params[:cwn_instance_number], false)).order(:start_datetime).first
               events = get_child_events_for_event(cwn_event)
               response.write('[')
               first_time = true
@@ -251,13 +251,13 @@ Pakyow::App.routes(:api) do
                    "approved" => event.approved,
                    "cwn" => cwn_event.instance_number,
                    "timestamp" => event.created_at.utc,
-                   "group" => Group.where("id = ?", event.group_id).first.name,
+                   "group" => Group.where(Sequel.lit("id = ?", event.group_id)).first.name,
                    "title" => event.name,
                    "description" => event.summary,
                    "date" => event.start_datetime.utc,
                    "time_req_form" => event.start_datetime.utc,
                    "time_req" => event.start_datetime.utc,
-                   "room_req" => Venue.where("id = ?", event.venue_id).first.name,
+                   "room_req" => Venue.where(Sequel.lit("id = ?", event.venue_id)).first.name,
                    "start_time" => event.start_datetime.utc,
                    "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                    "category" => event.flyer_category,
@@ -275,7 +275,7 @@ Pakyow::App.routes(:api) do
           get 'cwn_events' do
             if request.xhr?
               # respond to Ajax request
-              cwn = Group.where("name = 'CoWorking Night'").first
+              cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               if cwn.nil?
                 redirect '/errors/403'
               end
@@ -290,7 +290,7 @@ Pakyow::App.routes(:api) do
               else
                 time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
               end
-              group_events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false).order(:start_datetime).all
+              group_events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ? AND archived = ?", cwn.id, time_limit, false)).order(:start_datetime).all
               response.write(group_events.to_json)
             else
               # respond to normal request
@@ -300,9 +300,9 @@ Pakyow::App.routes(:api) do
 
           get 'all_cwn_events' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-              group = Group.where("name = 'CoWorking Night'").first
+              group = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               time = DateTime.now.utc
-              events = Event.where("group_id = ?", group.id).order(:start_datetime).all
+              events = Event.where(Sequel.lit("group_id = ?", group.id)).order(:start_datetime).all
 
               response.write('[')
               first_time = true
@@ -316,7 +316,7 @@ Pakyow::App.routes(:api) do
                  {
                    "name" => event.name,
                    "date" => event.start_datetime.utc,
-                   "location" => Venue.where("id = ?", event.venue_id).first.name,
+                   "location" => Venue.where(Sequel.lit("id = ?", event.venue_id)).first.name,
                  }
                  response.write(json.to_json)
               }
@@ -330,9 +330,9 @@ Pakyow::App.routes(:api) do
           # temporary until the new flyer is up
           get 'cwn_future' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-              group = Group.where("name = 'CoWorking Night'").first
+              group = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               time = DateTime.now.utc
-              events = Event.where("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false).order(:start_datetime).all
+              events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ? AND archived = ?", group.id, time, false)).order(:start_datetime).all
 
               response.write('[')
               first_time = true
@@ -346,7 +346,7 @@ Pakyow::App.routes(:api) do
                  {
                    "name" => event.name,
                    "date" => event.start_datetime.utc,
-                   "location" => Venue.where("id = ?", event.venue_id).first.name,
+                   "location" => Venue.where(Sequel.lit("id = ?", event.venue_id)).first.name,
                  }
                  response.write(json.to_json)
               }
@@ -360,16 +360,16 @@ Pakyow::App.routes(:api) do
           get 'next_cwn_number' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
               #For now, we'll keep this only exposed for cwn
-              cwn = Group.where("name = 'CoWorking Night'").first
+              cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               if cwn.nil?
                response.status = 404
                response.write('{"error":"No CoWorking events scheduled"}')
               else
                 #Now lets get all the events for this group. This means all of this group's events and its event's children
-                next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+                next_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).first
 
                 #check is last cwn_event is still occurring. If it is, then use it
-                last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+                last_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).last
                 if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
                   next_cwn_event = last_cwn_event
                 end
@@ -386,16 +386,16 @@ Pakyow::App.routes(:api) do
           get 'thisweeks_cwn_event' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
               #For now, we'll keep this only exposed for cwn
-              cwn = Group.where("name = 'CoWorking Night'").first
+              cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               if cwn.nil?
                response.status = 404
                response.write('{"error":"No CoWorking events scheduled"}')
               else
                 #Now lets get all the events for this group. This means all of this group's events and its event's children
-                next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
+                next_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).first
 
                 #check is last cwn_event is still occurring. If it is, then use it
-                last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
+                last_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).last
                 if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
                   next_cwn_event = last_cwn_event
                 end
@@ -405,13 +405,13 @@ Pakyow::App.routes(:api) do
                     "approved" => next_cwn_event.approved,
                     "cwn" => next_cwn_event.instance_number,
                     "timestamp" => next_cwn_event.created_at.utc,
-                    "group" => Group.where("id = ?", next_cwn_event.group_id).first.name,
+                    "group" => Group.where(Sequel.lit("id = ?", next_cwn_event.group_id)).first.name,
                     "title" => next_cwn_event.name,
                     "description" => next_cwn_event.summary,
                     "date" => next_cwn_event.start_datetime.utc,
                     "time_req_form" => next_cwn_event.start_datetime.utc,
                     "time_req" => next_cwn_event.start_datetime.utc,
-                    "room_req" => Venue.where("id = ?", next_cwn_event.venue_id).first.name,
+                    "room_req" => Venue.where(Sequel.lit("id = ?", next_cwn_event.venue_id)).first.name,
                     "start_time" => next_cwn_event.start_datetime.utc,
                     "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
                     "category" => next_cwn_event.flyer_category,
@@ -428,13 +428,13 @@ Pakyow::App.routes(:api) do
           get 'nextweeks_cwn_event' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
               #For now, we'll keep this only exposed for cwn
-              cwn = Group.where("name = 'CoWorking Night'").first
+              cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
               if cwn.nil?
                response.status = 404
                response.write('{"error":"No CoWorking events scheduled"}')
               else
                 #Now lets get all the events for this group. This means all of this group's events and its event's children
-                next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first(2)[1]
+                next_cwn_event = Event.where(Sequel.lit("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false)).order(:start_datetime).first(2)[1]
 
                 json =
                   {
@@ -442,13 +442,13 @@ Pakyow::App.routes(:api) do
                     "approved" => next_cwn_event.approved,
                     "cwn" => next_cwn_event.instance_number,
                     "timestamp" => next_cwn_event.created_at.utc,
-                    "group" => Group.where("id = ?", next_cwn_event.group_id).first.name,
+                    "group" => Group.where(Sequel.lit("id = ?", next_cwn_event.group_id)).first.name,
                     "title" => next_cwn_event.name,
                     "description" => next_cwn_event.summary,
                     "date" => next_cwn_event.start_datetime.utc,
                     "time_req_form" => next_cwn_event.start_datetime.utc,
                     "time_req" => next_cwn_event.start_datetime.utc,
-                    "room_req" => Venue.where("id = ?", next_cwn_event.venue_id).first.name,
+                    "room_req" => Venue.where(Sequel.lit("id = ?", next_cwn_event.venue_id)).first.name,
                     "start_time" => next_cwn_event.start_datetime.utc,
                     "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
                     "category" => next_cwn_event.flyer_category,
@@ -464,7 +464,7 @@ Pakyow::App.routes(:api) do
 
           get 'users' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-              users = People.where("opt_in = TRUE AND approved = TRUE AND first_name IS NOT NULL AND last_name IS NOT NULL").all
+              users = People.where(Sequel.lit("opt_in = TRUE AND approved = TRUE AND first_name IS NOT NULL AND last_name IS NOT NULL")).all
               response.write('[')
               first_time = true
               users.each { |user|
@@ -492,8 +492,8 @@ Pakyow::App.routes(:api) do
               body = request.body.read
               json = JSON.parse(body)
               email = json["email"]
-              event = Event.where("id = ?", json["event"]).first
-              person = People.where("email = ?", email).first
+              event = Event.where(Sequel.lit("id = ?", json["event"])).first
+              person = People.where(Sequel.lit("email = ?", email)).first
               if event.nil?
                   response.status = 404
                   response.write('{"error":"Event not found"}')
@@ -573,7 +573,7 @@ Pakyow::App.routes(:api) do
                   end
                 else
                   # event is active and user already exists; make sure this isn't a duplicate checkin
-                  existing_checkin = Checkin.where("people_id = ? AND event_id = ?", person.id, event.id).first
+                  existing_checkin = Checkin.where(Sequel.lit("people_id = ? AND event_id = ?", person.id, event.id)).first
                   if existing_checkin.nil? == false
                     response.status = 400
                     response.write('{"error":"User has already checked in"}')

@@ -42,7 +42,7 @@ Pakyow::App.routes(:clicks) do
           when "url"
             redirect_url = person.url
           else
-            pp link
+
           end
           
           unless redirect_url.nil?
@@ -54,7 +54,7 @@ Pakyow::App.routes(:clicks) do
       # get 'title_and_description_from_slug' do
       #   cat_title = ""
       #   cat_desc = ""
-      #   category = Category.where("slug = ?",params[:slug]).first
+      #   category = CategorySequel.lit(slug = ?",params[:slug])).first
       #   unless category.nil?
       #     unless category.category.nil?
       #       cat_title = category.category

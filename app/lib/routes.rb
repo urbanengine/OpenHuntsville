@@ -70,7 +70,7 @@ Pakyow::App.routes do
   end
 
   get :dashboard, '/dashboard', :before => :is_admin_check do
-    unapproved = People.where(:approved=>true).invert.all
+    unapproved = People.where(Sequel.lit("approved = ?", true)).invert.all
     subset = Array.new
     unapproved.each{|person|
       unless person.spam

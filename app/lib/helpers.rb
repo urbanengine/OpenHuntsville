@@ -119,7 +119,7 @@ module Pakyow::Helpers
       # http://sequel.jeremyevans.net/rdoc/files/doc/cheat_sheet_rdoc.html#label-Filtering+-28see+also+Dataset+Filtering-29
       # First attempt ad making this sequel 5.0.0 compatible
       # people = People.where(Sequel.lit("lower(custom_url) = ?", id.downcase)).all
-      people = People.where("lower(custom_url) = ?",id.downcase).all
+      people = People.where(Sequel.lit("lower(custom_url) = ?",id.downcase)).all
     end
   end
 
@@ -136,7 +136,7 @@ module Pakyow::Helpers
     retval = true
     id = id.to_s
     url = url.to_s
-    people = People.where("custom_url = ?",url).all
+    people = People.where(Sequel.lit("custom_url = ?",url)).all
     if people.size > 1
       retval = false
     else
@@ -190,10 +190,10 @@ module Pakyow::Helpers
   #       unless photo.to_s.start_with?("404")
   #         return_url = fullcontact_url
   #       else
-  #         # pp "Unable to find photo for " + email
+  #         
   #       end
   #     else
-  #       # pp "Unable to find photo for " + email
+  #       
   #     end
   #   end
   #   return_url
@@ -289,9 +289,7 @@ module Pakyow::Helpers
       view.scope(:people).bind(person)
       subject = "Account created through checking in"
     when :auth
-      #pp options[:passwordResetLink]
       if options[:passwordResetLink].nil? == false
-        pp options[:passwordResetLink]
         # Somehow pass the line containing the password reset link to the template
         presenter.view = store.view('mail/account_creation')
       else
@@ -389,7 +387,7 @@ module Pakyow::Helpers
     Category.all.each do |category|
       if category.parent_id.nil?
         opts << [category.id, category.category]
-        Category.where("parent_id = ?",category.id).each { |item|
+        Category.where(Sequel.lit("parent_id = ?",category.id)).each { |item|
           opts << [item.id, category.category + " :: " + item.category]
         }
       end
@@ -410,7 +408,7 @@ module Pakyow::Helpers
 
   def get_hsv_venues()
     opts = [[]]
-    group = Group.where("name = 'CoWorking Night'").first
+    group = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
     Venue.all.each do |venue|
       if venue.group_id == group.id && venue.deprecated == false
         opts << [venue.id, venue.name]
@@ -421,7 +419,7 @@ module Pakyow::Helpers
 
   def get_bhm_venues()
     opts = [[]]
-    group = Group.where("name = 'CoWorking Night: Birmingham'").first
+    group = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
     Venue.all.each do |venue|
       if venue.group_id == group.id && venue.deprecated == false
         opts << [venue.id, venue.name]
@@ -432,7 +430,7 @@ module Pakyow::Helpers
 
   def get_people_to_add_as_group_admin(group_id)
     opts = [[]]
-    group = Group.where("id = ?", group_id).first
+    group = Group.where(Sequel.lit("id = ?", group_id)).first
     group_admins = group.people()
     People.order(:first_name).each do |people|
       if group_admins.all? { |group_admin| group_admin.id != people.id }
@@ -514,7 +512,7 @@ module Pakyow::Helpers
     if people.admin
       return true
     end
-    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    cwn = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
     admin = cwn.people().select{ |person| person.id == people.id }
     if admin.empty?
       return false
@@ -531,10 +529,10 @@ module Pakyow::Helpers
     if people.admin
       return true
     end
-    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    cwn = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
     admin = cwn.people().select{ |person| person.id == people.id }
     if admin.empty?
-      cwn = Group.where("name = 'CoWorking Night Events: Birmingham'").first
+      cwn = Group.where(Sequel.lit("name = 'CoWorking Night Events: Birmingham'")).first
       admin = cwn.people().select{ |person| person.id == people.id }
       if admin.empty?
         return false
@@ -546,7 +544,7 @@ module Pakyow::Helpers
   def logged_in_user_is_manager_of_event(event)
     people = People[cookies[:people]]
     people.groups().each{ |group|
-      logged_in_users_events = Event.where("group_id = ?", group.id).all
+      logged_in_users_events = Event.where(Sequel.lit("group_id = ?", group.id)).all
       logged_in_users_events.each { |logged_in_user_event|
         if logged_in_user_event.id == event.id
           return true
@@ -577,10 +575,10 @@ module Pakyow::Helpers
   def get_child_events_for_event(event)
     all_events = []
     unless event.nil? || event.id.nil?
-      child_events = Event.where("approved = true AND parent_id = ? AND archived = ?", event.id, false).all
+      child_events = Event.where(Sequel.lit("approved = true AND parent_id = ? AND archived = ?", event.id, false)).all
       #while child_events.length != 0
       #  child_event = child_events.shift
-      #  child_events += Event.where("approved = true AND parent_id = ?", child_event.id).all
+      #  child_events += Event.where(Sequel.lit("approved = true AND parent_id = ?", child_event.id)).all
       #  all_events << child_event
       #end
       child_events
@@ -589,13 +587,13 @@ module Pakyow::Helpers
 
   def readjust_event_instance_number_for_group(start_datetime, group_id)
     #an event has been created, edited, or deleted. Therefore we adjust all the future events
-    previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", group_id, start_datetime).order(:start_datetime).last
+    previous_event = Event.where(Sequel.lit("approved = true AND group_id = ? AND start_datetime < ?", group_id, start_datetime)).order(:start_datetime).last
     unless previous_event.nil?
       previous_event_instance_number = previous_event.instance_number
-      future_events = Event.where("approved = true AND group_id = ? AND start_datetime > ?", group_id, previous_event.start_datetime).order(:start_datetime).all
+      future_events = Event.where(Sequel.lit("approved = true AND group_id = ? AND start_datetime > ?", group_id, previous_event.start_datetime)).order(:start_datetime).all
     else
       previous_event_instance_number = 1
-      future_events = Event.where("approved = true AND group_id = ? AND start_datetime > ?", group_id, start_datetime).order(:start_datetime).all
+      future_events = Event.where(Sequel.lit("approved = true AND group_id = ? AND start_datetime > ?", group_id, start_datetime)).order(:start_datetime).all
     end
     future_events.each { |event|
       previous_event_instance_number = previous_event_instance_number + 1
@@ -618,10 +616,10 @@ module Pakyow::Helpers
         time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
       end
 
-      group_events = Event.where("group_id = ? AND start_datetime > ?", group_id, time_limit).all
-      parent_group = Group.where("id = ?", group_id).first
+      group_events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ?", group_id, time_limit)).all
+      parent_group = Group.where(Sequel.lit("id = ?", group_id)).first
       unless parent_group.parent_id.nil?
-        group_events.concat(Event.where("group_id = ? AND start_datetime > ?", parent_group.parent_id, time_limit).all)
+        group_events.concat(Event.where(Sequel.lit("group_id = ? AND start_datetime > ?", parent_group.parent_id, time_limit)).all)
       end
       group_events.each { |event|
         opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
@@ -632,7 +630,7 @@ module Pakyow::Helpers
 
   def get_events_for_coworkingnight()
     opts = [[]]
-    cwn = Group.where("name = 'CoWorking Night'").first
+    cwn = Group.where(Sequel.lit("name = 'CoWorking Night'")).first
     unless cwn.nil? || cwn.id.nil?
       nextThursday = Date.parse('Thursday')
       delta = nextThursday > Date.today ? 0 : 7
@@ -645,7 +643,7 @@ module Pakyow::Helpers
         time_limit = if (nextThursday - Date.today) < 4 then nextThursday else DateTime.now.utc end
       end
 
-      group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+      group_events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime)).all
       group_events.each { |event|
         opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
       }
@@ -655,7 +653,7 @@ module Pakyow::Helpers
 
   def get_events_for_bhm_coworkingnight()
     opts = [[]]
-    cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
+    cwn = Group.where(Sequel.lit("name = 'CoWorking Night: Birmingham'")).first
     unless cwn.nil? || cwn.id.nil?
       nextWednesday = Date.parse('Wednesday')
       delta = nextWednesday > Date.today ? 0 : 7
@@ -668,7 +666,7 @@ module Pakyow::Helpers
         time_limit = if (nextWednesday - Date.today) < 4 then nextWednesday else DateTime.now.utc end
       end
 
-      group_events = Event.where("group_id = ? AND start_datetime > ?", cwn.id, time_limit).order(:start_datetime).all
+      group_events = Event.where(Sequel.lit("group_id = ? AND start_datetime > ?", cwn.id, time_limit)).order(:start_datetime).all
       group_events.each { |event|
         opts << [event.id, event.name + "   (" + event.start_datetime.in_time_zone("Central Time (US & Canada)").strftime('%m/%d/%Y') + ")"]
       }

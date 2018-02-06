@@ -17,7 +17,7 @@ Pakyow::App.bindings :categories_menu do
         if url == bindable.url
           css_class = "selected-link active-link"
         else
-          child_categories = Category.where("parent_id = ?",bindable.id).all
+          child_categories = Category.where(Sequel.lit("parent_id = ?",bindable.id)).all
           child_categories.each {|item|
             if item.url == url
               css_class = "active-link"
@@ -43,7 +43,7 @@ Pakyow::App.bindings :categories_menu do
       if url == bindable.url
         css_class = "selected active"
       else
-        child_categories = Category.where("parent_id = ?",bindable.id).all
+        child_categories = Category.where(Sequel.lit("parent_id = ?",bindable.id)).all
         child_categories.each {|item|
           if item.url == url
             css_class = "active"
