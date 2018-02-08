@@ -17,8 +17,14 @@ Pakyow::App.routes(:auth) do
                     redirect "/errors/404"
                 end
 
+                if auth.used == true
+                    @errors = ['You have already verified your account. Please login to proceed.']
+                    reroute '/login', :get
+                end
+
                 if auth.expiration_date < Time.now.utc
-                    auth.delete
+                    auth.used = true
+                    auth.save
                     @errors = ['The time to verify your email has expired. Please contact davidhjones89@gmail.com']
                     reroute 'auth/verifyemail/' + params[:token], :get
                 end
@@ -37,8 +43,14 @@ Pakyow::App.routes(:auth) do
                     redirect "/errors/404"
                 end
 
+                if auth.used == true
+                    @errors = ['You have already verified your account. Please login to proceed.']
+                    reroute '/login', :get
+                end
+
                 if auth.expiration_date < Time.now.utc
-                    auth.delete
+                    auth.used = true
+                    auth.save
                     @errors = ['The time to verify your email has expired. Please contact davidhjones89@gmail.com']
                     reroute 'auth/verifyemail/' + params[:token], :get
                 end
@@ -66,7 +78,8 @@ Pakyow::App.routes(:auth) do
                 user.approved = true
                 user.save
 
-                auth.delete
+                auth.used = true
+                auth.save
 
                 session = {
                     "email" => user.email,
@@ -76,11 +89,8 @@ Pakyow::App.routes(:auth) do
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
 
-                if (create_session(session))
-                    redirect "/people/" + user.custom_url + "/edit"
-                else
-                    reroute '/'
-                end
+                @errors = ['Thank you for verifying your account. Please login to proceed.']
+                reroute '/login', :get
             end
 
             get 'forgotpassword/' do
@@ -98,7 +108,8 @@ Pakyow::App.routes(:auth) do
                     data = {
                         "people_id" => user.id,
                         "token" => SecureRandom.uuid,
-                        "expiration_date" => (Time.now.utc + 1.day)
+                        "expiration_date" => (Time.now.utc + 1.day),
+                        "used" => false
                     }
 
                     auth = Auth.new(data)
@@ -123,7 +134,8 @@ Pakyow::App.routes(:auth) do
                 end
 
                 if auth.expiration_date < Time.now.utc
-                    auth.delete
+                    auth.used = true
+                    auth.save
                     @errors = ['The time to reset your password has expired. Please try again.']
                     reroute 'auth/forgotpassword', :get
                 end
@@ -144,7 +156,8 @@ Pakyow::App.routes(:auth) do
                 end
 
                 if auth.expiration_date < Time.now.utc
-                    auth.delete
+                    auth.used = true
+                    auth.save
                     @errors = ['The time to reset your password has expired. Please try again.']
                     reroute 'auth/forgotpassword', :get
                 end
@@ -166,12 +179,14 @@ Pakyow::App.routes(:auth) do
                 user.password_confirmation = passwordConfirmation
                 user.save
 
-                auth.delete
+                auth.used = true
+                auth.save
 
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
 
-                redirect '/login'
+                @errors = ['You have successfully reset your passowrd. Please login to proceed.']
+                reroute '/login', :get
             end
         end
     end
