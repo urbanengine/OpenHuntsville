@@ -550,7 +550,7 @@ Pakyow::App.routes(:api) do
                       a_params = {
                         "token" => SecureRandom.uuid,
                         "people_id" => person.id,
-                        "expiration_date" => (Time.now.utc + 1.day),
+                        "expiration_date" => (Time.now.utc + 1.month),
                         "used" => false
                       }
 
@@ -588,7 +588,19 @@ Pakyow::App.routes(:api) do
                     checkin.save
                     response.status = 201
 
-                    #TODO: If user is not approved send email verification again
+                    if person.approved == false
+                      a_params = {
+                        "token" => SecureRandom.uuid,
+                        "people_id" => person.id,
+                        "expiration_date" => (Time.now.utc + 1.month),
+                        "used" => false
+                      }
+
+                      auth = Auth.new(a_params)
+                      auth.save
+
+                      send_auth_email(person, auth, :verifyemail)
+                    end
                   end
                 end
               end
