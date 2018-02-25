@@ -566,6 +566,16 @@ Pakyow::App.routes(:api) do
                       }
                       checkin = Checkin.new(c_params)
                       checkin.save
+
+                      gibbon = Gibbon::Request.new
+                      #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
+                      #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
+                      begin
+                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+                      rescue Gibbon::MailChimpError => exception
+                        puts exception.inspect
+                      end
+
                       response.status = 201
                     end
                   else
@@ -600,6 +610,15 @@ Pakyow::App.routes(:api) do
                       auth.save
 
                       send_auth_email(person, auth, :verifyemail)
+
+                      gibbon = Gibbon::Request.new
+                      #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
+                      #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
+                      begin
+                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+                      rescue Gibbon::MailChimpError => exception
+                        puts exception.inspect
+                      end
                     end
                   end
                 end

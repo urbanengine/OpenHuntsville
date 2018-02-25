@@ -15,13 +15,19 @@ require 'aws-sdk'
 require "mini_magick"
 require 'rack/ssl'
 
+# Mailchimp
+require 'gibbon'
+
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 Pakyow::App.define do
   configure :global do
     # put global config here and they'll be available across environments
     app.name = 'OpenHSV'
-
+    
+    Gibbon::Request.timeout = 15
+    Gibbon::Request.open_timeout = 15
+    Gibbon::Request.throws_exceptions = false
     # $db = Sequel.connect(ENV['DATABASE_URL'])
   end
 

@@ -29,6 +29,11 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.2.1)
     eventmachine (1.2.5)
+    faraday (0.14.0)
+      multipart-post (>= 1.2, < 3)
+    gibbon (3.2.0)
+      faraday (>= 0.9.1)
+      multi_json (>= 1.11.0)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -46,7 +51,9 @@ GEM
     mini_magick (4.8.0)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
+    multi_json (1.13.1)
     multi_xml (0.6.0)
+    multipart-post (2.0.0)
     netrc (0.11.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
@@ -140,6 +147,7 @@ DEPENDENCIES
   aws-sdk (~> 2)
   bcrypt-ruby (= 3.1.5)
   dotenv
+  gibbon (= 3.2.0)
   httparty
   mailgun-ruby
   mini_magick
@@ -156,4 +164,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.14.6
+   1.16.0.pre.2
