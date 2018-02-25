@@ -481,6 +481,7 @@ Pakyow::App.routes(:people) do
         people.admin = params[:people][:admin]
         update_group_admins_for_person(people)
         people.approved = params[:people][:approved]
+        people.is_elite = params[:people][:is_elite]
       end
       if params[:people][:bio].length < 161
         people.bio = params[:people][:bio]
@@ -566,6 +567,7 @@ Pakyow::App.routes(:people) do
         <li>:image_url => " + printme(people.image_url) + ",</li>
         <li>:custom_url => " + printme(people.custom_url) + ",</li>
         <li>:admin => " + printme(people.admin) + ",</li>
+        <li>:is_elite => " + printme(people.is_elite) + ",</li>
         <li>:bio => " + printme(people.bio) + ",</li>
         <li>:approved => " + printme(people.approved) + "</li></ul>"
 

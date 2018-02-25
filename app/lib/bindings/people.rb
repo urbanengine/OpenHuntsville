@@ -424,6 +424,12 @@ Pakyow::App.bindings :people do
 			}
 		end
 
+		binding(:is_elite) do
+			{
+				:checked => bindable[:is_elite]
+			}
+		end
+
 		binding(:profile_link) do
 
 			first_name = ""
