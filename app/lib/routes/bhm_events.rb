@@ -159,7 +159,7 @@ Pakyow::App.routes(:bhm) do
                 redirect '/errors/404'
             end
             puts "here"
-            parsed_time = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
+            parsed_time = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0500", '%b %d, %Y %I:%M %p %Z')
             previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", params[:bhm_events][:parent_group].to_i, parsed_time.to_datetime.utc).order(:start_datetime).last
             group = Group.where("id = ?", params[:bhm_events][:parent_group].to_i).first
             c_params =
@@ -199,7 +199,7 @@ Pakyow::App.routes(:bhm) do
             if logged_in_user_is_manager_of_event(event) == false
                 redirect "/errors/403"
             end
-            parsed_datetime = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
+            parsed_datetime = DateTime.strptime(params[:bhm_events][:start_datetime] + "-0500", '%b %d, %Y %I:%M %p %Z')
             venue_id = params[:bhm_events][:venue].to_i
             minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
 
