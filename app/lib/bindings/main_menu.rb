@@ -161,7 +161,7 @@ Pakyow::App.bindings :main_menu do
 	binding(:login_link) do
   		css_class = ""
   		content = "Log In"
-  		href = "/sessions/new"
+  		href = "/auth/auth0"
 		splat = request.path.split("/")
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "sessions" || splat[1] == "login"

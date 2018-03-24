@@ -5,7 +5,8 @@ Pakyow::App.routes do
     log_debug("/app/lib/routes.rb :: require_auth :: cookies[:people] :: ", cookies[:people])
     current_user = People[cookies[:people]]
     view.scope(:optin).apply(current_user)
-    redirect(router.group(:session).path(:new)) unless cookies[:people]
+    redirect '/auth/auth0'
+    #redirect(router.group(:session).path(:new)) unless cookies[:people]
   end
 
   get '/' do
@@ -37,7 +38,8 @@ Pakyow::App.routes do
     unless current_user.nil?
       view.scope(:optin).apply(current_user)
     end
-    reroute router.group(:session).path(:new)
+    reroute '/auth/auth0'
+    #reroute router.group(:session).path(:new)
   end
 
   get :logout, '/logout' do

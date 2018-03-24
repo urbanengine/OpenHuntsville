@@ -18,6 +18,9 @@ require 'rack/ssl'
 # Mailchimp
 require 'gibbon'
 
+require 'omniauth'
+require 'omniauth-auth0'
+
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 Pakyow::App.define do
@@ -32,7 +35,7 @@ Pakyow::App.define do
   end
 
   configure :development do
-    server.port = 3001
+    server.port = 3000
     require 'dotenv'
       Dotenv.load
       $db = Sequel.connect(ENV['DATABASE_URL'])
@@ -57,5 +60,19 @@ Pakyow::App.define do
     builder.use Rack::Session::Cookie,
       :key => 'ws.session',
       :secret => 'ae3fe3aacd5e45ffb0865db10522ee6be33c9cb9951547ec90bc6480015141e3'
+
+    builder.use OmniAuth::Builder do
+      provider(
+        :auth0,
+        'PhhE0E_Mk0G_K6ezui57741qracK-sI9',
+        'w9eSwbQvEjCbaIfaeEZSwxvOemAA4nkMNVR0FODFaMpyMpQYQhifzp2HaeY-qFHQ',
+        'urbanengine.auth0.com',
+        callback_path: "/auth/auth0/callback",
+        authorize_params: {
+          scope: 'openid profile',
+          audience: 'https://urbanengine.auth0.com/userinfo'
+        }
+      )
+    end
   end
 end

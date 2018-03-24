@@ -188,6 +188,25 @@ Pakyow::App.routes(:auth) do
                 @errors = ['You have successfully reset your passowrd. Please login to proceed.']
                 reroute '/login', :get
             end
+
+            expand :restful, :auth0, '/auth0' do
+                collection do
+                    get 'callback' do
+                        #setup: https://github.com/crypto-rb/rbnacl
+                        #TODO: encrypt going in using https://github.com/crypto-rb/rbnacl/wiki/SimpleBox
+                        cookies[:userinfo] = request.env['omniauth.auth']
+
+                        #TODO: decrypt going out using https://github.com/crypto-rb/rbnacl/wiki/SimpleBox
+                        token = cookies[:userinfo]
+                        user = People.where(Sequel.lit('email = ?', token.info.name)).first
+                        if user.nil?
+                            redirect "/errors/404"
+                        end
+                        puts user.inspect
+                        redirect '/'
+                    end
+                end
+            end
         end
     end
 end
