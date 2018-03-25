@@ -65,7 +65,7 @@ Pakyow::App.define do
       provider(
         :auth0,
         'PhhE0E_Mk0G_K6ezui57741qracK-sI9',
-        'w9eSwbQvEjCbaIfaeEZSwxvOemAA4nkMNVR0FODFaMpyMpQYQhifzp2HaeY-qFHQ',
+        ENV['AUTH0_SECRET'],
         'urbanengine.auth0.com',
         callback_path: "/auth/auth0/callback",
         authorize_params: {
