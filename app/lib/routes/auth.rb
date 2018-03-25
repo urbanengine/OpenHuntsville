@@ -192,17 +192,12 @@ Pakyow::App.routes(:auth) do
             expand :restful, :auth0, '/auth0' do
                 collection do
                     get 'callback' do
-                        #setup: https://github.com/crypto-rb/rbnacl
-                        #TODO: encrypt going in using https://github.com/crypto-rb/rbnacl/wiki/SimpleBox
-                        cookies[:userinfo] = request.env['omniauth.auth']
+                        put_token_in_cookies(request.env['omniauth.auth'])
 
-                        #TODO: decrypt going out using https://github.com/crypto-rb/rbnacl/wiki/SimpleBox
-                        token = cookies[:userinfo]
-                        user = People.where(Sequel.lit('email = ?', token.info.name)).first
+                        user = get_user_from_cookies()
                         if user.nil?
                             redirect "/errors/404"
                         end
-                        puts user.inspect
                         redirect '/'
                     end
                 end

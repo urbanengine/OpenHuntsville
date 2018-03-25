@@ -31,6 +31,7 @@ GEM
     eventmachine (1.2.5)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
+    ffi (1.9.23)
     gibbon (3.2.0)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
@@ -135,6 +136,10 @@ GEM
     rack-ssl (1.4.1)
       rack
     rake (11.3.0)
+    rbnacl (5.0.0)
+      ffi
+    rbnacl-libsodium (1.0.16)
+      rbnacl (>= 3.0.1)
     redis (3.3.5)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
@@ -177,6 +182,8 @@ DEPENDENCIES
   puma
   rack-ssl
   rake
+  rbnacl
+  rbnacl-libsodium
   sequel
   thin
 

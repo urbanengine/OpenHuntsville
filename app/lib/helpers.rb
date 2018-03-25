@@ -685,6 +685,40 @@ module Pakyow::Helpers
     end
   end
 
+  def get_token_from_cookies()
+    box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
+    cookie = cookies[:userinfo]
+    if cookie.nil?
+      return nil
+    end
+    token = Marshal.load(box.decrypt(cookies[:userinfo]))
+    return token
+  end
+
+  def get_user_from_token(token)
+    if token.nil?
+      return nil
+    end
+    user = People.where(Sequel.lit('email = ?', token.info.name)).first
+    return user
+  end
+
+  def get_user_from_cookies()
+    token = get_token_from_cookies()
+    if token.nil?
+      return nil
+    end
+    return get_user_from_token(token)
+  end
+
+  def put_token_in_cookies(token)
+    if token.nil?
+      return
+    end
+    box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
+    cookies[:userinfo] = box.encrypt(Marshal.dump(token))
+  end
+
 end # module Pakyow::Helpers
 
 class String

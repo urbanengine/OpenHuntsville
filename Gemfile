@@ -42,3 +42,7 @@ gem 'gibbon', '3.2.0'
 #singlesignon
 gem 'omniauth', '~> 1.6.1'
 gem 'omniauth-auth0', '~> 2.0.0'
+
+#rbnacl encryption
+gem 'rbnacl-libsodium'
+gem 'rbnacl'

@@ -18,8 +18,13 @@ require 'rack/ssl'
 # Mailchimp
 require 'gibbon'
 
+#sso
 require 'omniauth'
 require 'omniauth-auth0'
+
+#rbnacl encryption
+require 'rbnacl/libsodium'
+require 'rbnacl'
 
 Sequel::Model.plugin :timestamps, update_on_create: true
 
