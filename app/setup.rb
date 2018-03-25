@@ -64,9 +64,9 @@ Pakyow::App.define do
     builder.use OmniAuth::Builder do
       provider(
         :auth0,
-        'PhhE0E_Mk0G_K6ezui57741qracK-sI9',
-        ENV['AUTH0_SECRET'],
-        'urbanengine.auth0.com',
+        ENV['AUTH0_CLIENT_ID']'PhhE0E_Mk0G_K6ezui57741qracK-sI9',
+        ENV['AUTH0_CLIENT_SECRET'],
+        ENV['AUTH0_DOMAIN']'urbanengine.auth0.com',
         callback_path: "/auth/auth0/callback",
         authorize_params: {
           scope: 'openid profile',
