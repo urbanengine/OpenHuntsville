@@ -90,7 +90,7 @@ Pakyow::App.routes(:auth) do
                 view.scope(:main_menu).apply(request)
 
                 @errors = ['Thank you for verifying your account. Please login to proceed.']
-                reroute '/login', :get
+                redirect '/auth/auth0'
             end
 
             get 'forgotpassword/' do
@@ -192,6 +192,7 @@ Pakyow::App.routes(:auth) do
             expand :restful, :auth0, '/auth0' do
                 collection do
                     get 'callback' do
+                        puts request.env['omniauth.auth']
                         put_token_in_cookies(request.env['omniauth.auth'])
 
                         user = get_user_from_cookies()

@@ -6,7 +6,7 @@ Pakyow::App.routes(:clicks) do
     collection do
       get '/people/:person/:link' do
         # visitor_id = nil
-        # visitor = People[cookies[:people]]
+        # visitor = get_user_from_cookies()
         # unless visitor.nil?
         #   visitor_id = visitor.id
         # end

@@ -107,7 +107,7 @@ Pakyow::App.bindings :bhm_events do
 
         binding(:approved) do
             content = if bindable.approved then "Approved" else "Pending" end
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if logged_in_user_is_bhm_admin_or_site_admin()
                 if bindable.approved
                     content = "<p><a class='unapprove-btn' href='/bhm_events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
@@ -121,7 +121,7 @@ Pakyow::App.bindings :bhm_events do
         end
 
         binding(:edit_event_link) do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             {
             :content => "Edit Event",
             :href => '/bhm_events/' + bindable.id.to_s + '/edit'
@@ -130,7 +130,7 @@ Pakyow::App.bindings :bhm_events do
 
         binding(:delete_event_link) do
             cssclass = "delete-btn"
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
             if bindable.approved && isNotSiteAdmin
                 cssclass = "hide"

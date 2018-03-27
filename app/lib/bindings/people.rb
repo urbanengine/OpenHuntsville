@@ -59,10 +59,10 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if cookies[:people].nil?
+			if cookies[:userinfo].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-				link = "/sessions/new"
+				link = "/auth/auth0"
 				content = "Log in to view"
 			else
 				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
@@ -89,10 +89,10 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if cookies[:people].nil?
+			if cookies[:userinfo].nil?
 				show = "show"
 				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
-				link = "/sessions/new"
+				link = "/auth/auth0"
 				content = "Log in to view"
 
 			else
@@ -119,10 +119,10 @@ Pakyow::App.bindings :people do
 			title = ""
 			link = ""
 			content = ""
-			if cookies[:people].nil?
+			if cookies[:userinfo].nil?
 					show = "show"
 					title = "Log in to view " + bindable.first_name + "'s Website"
-					link = "/sessions/new"
+					link = "/auth/auth0"
 					content = "Log in to view"
 			else
 				content = "Website"
@@ -454,7 +454,7 @@ Pakyow::App.bindings :people do
 
 		binding(:edit_user_btn) do
 			visible = "show"
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			if people.nil? || people.admin.nil? || people.admin == false
 				visible = "hide"
 			end
@@ -471,7 +471,7 @@ Pakyow::App.bindings :people do
 
 		binding(:admin_fieldset) do
 			visible = "show"
-		  	people = People[cookies[:people]]
+		  	people = get_user_from_cookies()
 			if people.nil? || people.admin.nil? || people.admin == false
 			 	visible = "hide"
 			end

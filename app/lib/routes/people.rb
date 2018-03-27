@@ -33,10 +33,10 @@ Pakyow::App.routes(:people) do
       end
 
       get 'unapproved' do
-        if cookies[:people].nil? || cookies[:people] == 0
+        if cookies[:userinfo].nil?
           redirect '/errors/401'
         else
-          person = People[cookies[:people]]
+          person = get_user_from_cookies()
           unless person.admin
             redirect '/errors/403'
           end
@@ -137,39 +137,23 @@ Pakyow::App.routes(:people) do
         parent_cats.unshift("everyone")
         view.scope(:categories_menu).apply(parent_cats)
         view.scope(:head).apply(request)
-        current_user = People[cookies[:people]]
+        current_user = get_user_from_cookies()
         view.scope(:optin).apply(current_user)
         view.scope(:main_menu).apply(request)
       end
 
       get 'profile-created' do
-        if cookies[:people].nil? || cookies[:people] == 0
-          redirect '/people/new'
-        else
-          view.scope(:people).bind(People[cookies[:people]])
-          view.scope(:head).apply(request)
-
-          view.scope(:main_menu).apply(request)
-        end
-      end
-
-      get 'create-profile' do
-        if cookies[:people].nil? || cookies[:people] == 0
-          redirect '/people/new'
-        else
-          view.scope(:people).bind(People[cookies[:people]])
-          view.scope(:head).apply(request)
-          view.scope(:main_menu).apply(request)
-        end
+        view.scope(:head).apply(request)
+        view.scope(:main_menu).apply(request)
       end
 
       get 'account-registered' do
-        if cookies[:people].nil? || cookies[:people] == 0
+        if cookies[:userinfo].nil?
           redirect '/people/new'
         else
           view.scope(:head).apply(request)
           view.scope(:main_menu).apply(request)
-          view.scope(:people).bind(People[cookies[:people]])
+          view.scope(:people).bind(get_user_from_cookies())
         end
       end
 
@@ -223,12 +207,12 @@ Pakyow::App.routes(:people) do
       end
       view.scope(:people).prop(:type).remove
       view.scope(:people).prop(:type_label).remove
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
     end
 
     action :create do
-      c_params = { "email" => params[:people][:email].downcase, "password" => params[:people][:password], "password_confirmation" => params[:people][:password_confirmation]}
+      c_params = { "email" => params[:people][:email].downcase, "first_name" => params[:people][:first_name], "last_name" => params[:people][:last_name]}
       people = People.new(c_params)
       custom_url = params[:people][:email].gsub(/[^0-9a-z]/i, '-')
       stop_the_loop = false
@@ -250,12 +234,18 @@ Pakyow::App.routes(:people) do
       # TODO: If valid, save; if invalid, redirect
       if people.valid?
         people.save
-        # TODO
-        if create_session(c_params)
-          redirect '/people/create-profile'
-        else
-          redirect '/'
-        end
+        a_params = {
+          "token" => SecureRandom.uuid,
+          "people_id" => people.id,
+          "expiration_date" => (Time.now.utc + 1.month),
+          "used" => false
+        }
+
+        auth = Auth.new(a_params)
+        auth.save
+
+        send_auth_email(people, auth, :accountcreation)
+        redirect '/people/profile-created'
       else
         try_again = '/people/new'
         pp try_again
@@ -273,7 +263,7 @@ Pakyow::App.routes(:people) do
     member do
       get 'delete' do
         people_id = params[:people_id].to_i
-        loggedInUser = People[cookies[:people]]
+        loggedInUser = get_user_from_cookies()
         user = People.where("id = ?", people_id).first
 
         # Make sure we have at least one admin left at all times
@@ -305,7 +295,7 @@ Pakyow::App.routes(:people) do
       total_people = People.where("approved = true AND opt_in = true").count
       # If user is authenticated, don't show default
       page_no = 0
-      unless cookies[:people].nil? || cookies[:people] == "" || cookies[:people].size == 0
+      unless cookies[:userinfo].nil? || cookies[:userinfo] == "" || cookies[:userinfo].size == 0
         previous_link = {:class => 'hide',:value => 'hidden'}
         unless params[:page].nil? || params[:page].size == 0
           page_no = params[:page].to_i
@@ -354,7 +344,7 @@ Pakyow::App.routes(:people) do
       parent_cats.unshift("everyone")
       view.scope(:categories_menu).apply(parent_cats)
       view.scope(:head).apply(request)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
     end
 
@@ -365,12 +355,12 @@ Pakyow::App.routes(:people) do
       if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].opt_in == false
        redirect '/errors/404'
       end
-      unless people[0].approved || People[cookies[:people]].admin || people[0].id == cookies[:people].to_i
+      unless people[0].approved || get_user_from_cookies().admin || people[0].id == get_user_from_cookies().id
         redirect '/errors/404'
       end
      view.scope(:people).apply(people)
      view.scope(:head).apply(request)
-     current_user = People[cookies[:people]]
+     current_user = get_user_from_cookies()
      view.scope(:optin).apply(current_user)
      view.scope(:main_menu).apply(request)
     end
@@ -387,7 +377,7 @@ Pakyow::App.routes(:people) do
         view.scope(:people)[0].bind(people[0])
         view.scope(:people)[1].bind(people[0])
       end
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
     end
 
@@ -401,8 +391,8 @@ Pakyow::App.routes(:people) do
       suspend_mail = false
       current_user = nil
       names_nil = false
-      unless cookies[:people].nil?
-        current_user = People[cookies[:people]]
+      unless cookies[:userinfo].nil?
+        current_user = get_user_from_cookies()
       end
 
       if current_user.first_name.nil? || current_user.first_name.length == 0
@@ -528,7 +518,6 @@ Pakyow::App.routes(:people) do
       elsif names_nil
         pp "PEOPLE ERRORS"
         pp people.errors
-        # redirect '/people/create-profile'
       end
 
       cat1 = ""
@@ -553,38 +542,7 @@ Pakyow::App.routes(:people) do
         end
       end
 
-      if first_edit_email
-        body = "<ul><li>:email => " + printme(people.email) + ",</li>
-        <li>:first_name => " + printme(people.first_name) + ",</li>
-        <li>:last_name => " + printme(people.last_name) + ",</li>
-        <li>:company => " + printme(people.company) + ",</li>
-        <li>:twitter => " + printme(people.twitter) + ",</li>
-        <li>:linkedin => " + printme(people.linkedin) + ",</li>
-        <li>:url => " + printme(people.url) + ",</li>
-        <li>:categories => " + printme(cat1) + ", " + printme(cat2) + ", " + printme(cat3) + ",</li>
-        <li>:created_at => " + printme(people.created_at) + ",</li>
-        <li>:updated_at => " + printme(people.updated_at) + ",</li>
-        <li>:image_url => " + printme(people.image_url) + ",</li>
-        <li>:custom_url => " + printme(people.custom_url) + ",</li>
-        <li>:admin => " + printme(people.admin) + ",</li>
-        <li>:is_elite => " + printme(people.is_elite) + ",</li>
-        <li>:bio => " + printme(people.bio) + ",</li>
-        <li>:approved => " + printme(people.approved) + "</li></ul>"
-
-        person = ""
-        unless people.first_name.nil?
-          person = people.first_name + " "
-          unless people.last_name.nil?
-            person = person + people.last_name + " - "
-          end
-        end
-        person = person + people.email
-
-        email_us("Profile created by " + person,body)
-        send_email_template(people,:account_creation)
-        # http://www.rubydoc.info/gems/slack-api
-        redirect '/people/profile-created'
-      elsif suspend_mail
+      if suspend_mail
         send_email_template(people,:account_suspension)
       elsif approve_mail
         send_email_template(people,:account_approval)

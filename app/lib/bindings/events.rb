@@ -5,7 +5,7 @@ Pakyow::App.bindings :events do
 		restful :events
 
 		binding(:should_restrict_event_starttime) do
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			{
 				:content => if (!people.nil? && !people.admin.nil? && people.admin) then "false" else "true" end
 			}
@@ -108,7 +108,7 @@ Pakyow::App.bindings :events do
 
 		binding(:approved) do
 			content = if bindable.approved then "Approved" else "Pending" end
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			if people.admin
 				if bindable.approved
 					content = "<p><a class='unapprove-btn' href='/events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
@@ -122,7 +122,7 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:edit_event_link) do
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			{
 			:content => "Edit Event",
 			:href => '/events/' + bindable.id.to_s + '/edit'
@@ -179,7 +179,7 @@ Pakyow::App.bindings :events do
 
 		binding(:websiteadmin_fieldset) do
 			visible = "hide"
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
 			if isSiteAdmin
 				visible = "show"

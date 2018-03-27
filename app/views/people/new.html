@@ -36,16 +36,16 @@ template: about
       <fieldset class="margin-t">
         <ul>
           <li>
+            <label>First Name</label>
+            <input type="first_name" name="people[first_name]" value="" placeholder="First Name" required>
+          </li>
+          <li>
+            <label>Last Name</label>
+            <input type="last_name" name="people[last_name]" value="" placeholder="Last Name" required>
+          </li>
+          <li>
             <label>Email</label>
             <input type="email" name="people[email]" value="" placeholder="Enter Your Email Address" required>
-          </li>
-          <li>
-            <label>Password</label>
-            <input type="password" data-prop="password" name="people[password]" value="" placeholder="Enter Your Password" required>
-          </li>
-          <li>
-            <label>Confirm Password</label>
-            <input type="password" data-prop="password_confirmation" name="people[password_confirmation]" value="" placeholder="Confirm Your Password" required>
           </li>
           <li>
             <input type="submit" value="Get Started!">

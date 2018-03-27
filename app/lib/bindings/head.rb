@@ -101,7 +101,7 @@ Pakyow::App.bindings :head do
       p = bindable.path.split("/")
       src = "/js/page/no.js"
       if p[1] == "people"
-        if p[3] == "edit" || p[2] == "create-profile"
+        if p[3] == "edit"
           src = "/js/page/people-edit.js"
         end
       elsif p[1] == "find"

@@ -94,7 +94,7 @@ Pakyow::App.routes(:api) do
                   delta = nextWednesday > Date.today ? 0 : 7
                   nextWednesday = nextWednesday + delta
     
-                  people = People[cookies[:people]]
+                  people = get_user_from_cookies()
                   if people.nil? == false && people.admin
                     time_limit = DateTime.now.utc
                   else
@@ -121,7 +121,7 @@ Pakyow::App.routes(:api) do
                     delta = nextThursday > Date.today ? 0 : 7
                     nextThursday = nextThursday + delta
 
-                    people = People[cookies[:people]]
+                    people = get_user_from_cookies()
                     if people.nil? == false && people.admin
                       time_limit = DateTime.now.utc
                     else
@@ -284,7 +284,7 @@ Pakyow::App.routes(:api) do
               delta = nextThursday > Date.today ? 0 : 7
               nextThursday = nextThursday + delta
 
-              people = People[cookies[:people]]
+              people = get_user_from_cookies()
               if people.nil? == false && people.admin
                 time_limit = DateTime.now.utc
               else

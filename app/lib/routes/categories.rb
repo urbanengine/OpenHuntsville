@@ -40,7 +40,7 @@ Pakyow::App.routes(:categories) do
         child_cats = Category.where("parent_id = ?",current_cat.parent_id).all
         view.scope(:categories_submenu).apply(child_cats)
         view.scope(:head).apply(request)
-        current_user = People[cookies[:people]]
+        current_user = get_user_from_cookies()
         view.scope(:optin).apply(current_user)
         view.scope(:main_menu).apply(request)
       end # '/:parent/:categories_id'
@@ -73,7 +73,7 @@ Pakyow::App.routes(:categories) do
 
     # GET /people; same as Index
     action :list, :before => :route_head do
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       categories = Category.all
       view.scope(:categories).apply(categories)
@@ -127,7 +127,7 @@ Pakyow::App.routes(:categories) do
       child_cats = Category.where("parent_id = ?",current_cat.id).all
       view.scope(:categories_submenu).apply(child_cats)
       view.scope(:head).apply(request)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:main_menu).apply(request)
     end

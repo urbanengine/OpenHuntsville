@@ -247,6 +247,11 @@ module Pakyow::Helpers
         auth.class.module_eval { attr_accessor :mail_description}
         auth.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier we created you an Urban Engine account.'
         presenter.view = store.view('mail/account_verifyemail')
+      when :accountcreation
+        subject = "Urban Engine: Welcome"
+        auth.class.module_eval { attr_accessor :mail_description}
+        auth.mail_description = 'Urban Engine: 📬 Thank you for creating an account! Please verify your email to complete the account creation process.'
+        presenter.view = store.view('mail/mail_accountcreation')
       when :passwordreset
         subject = "Urban Engine: Password Reset"
         auth.class.module_eval { attr_accessor :mail_description}
@@ -399,7 +404,7 @@ module Pakyow::Helpers
 
   def get_groups_for_logged_in_person()
     opts = [[]]
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     people.groups().each do |group|
       if group.approved
         opts << [group.id, group.name]
@@ -477,7 +482,7 @@ module Pakyow::Helpers
   end
 
   def isUserSiteAdmin()
-    loggedInUser = People[cookies[:people]]
+    loggedInUser = get_user_from_cookies()
     if loggedInUser.nil?
       return false
     end
@@ -492,7 +497,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_hsv_admin_or_site_admin()
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -507,7 +512,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_bhm_admin_or_site_admin()
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -524,7 +529,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_bhm_manager_or_site_admin()
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -544,7 +549,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_manager_of_event(event)
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     people.groups().each{ |group|
       logged_in_users_events = Event.where("group_id = ?", group.id).all
       logged_in_users_events.each { |logged_in_user_event|
@@ -557,7 +562,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_manager_of_group(group)
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -611,7 +616,7 @@ module Pakyow::Helpers
       delta = nextThursday > Date.today ? 0 : 7
       nextThursday = nextThursday + delta
 
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil? == false && people.admin
         time_limit = DateTime.now.utc
       else
@@ -638,7 +643,7 @@ module Pakyow::Helpers
       delta = nextThursday > Date.today ? 0 : 7
       nextThursday = nextThursday + delta
 
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil? == false
         time_limit = DateTime.now.utc
       else
@@ -661,7 +666,7 @@ module Pakyow::Helpers
       delta = nextWednesday > Date.today ? 0 : 7
       nextWednesday = nextWednesday + delta
 
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil? == false
         time_limit = DateTime.now.utc
       else
@@ -686,21 +691,25 @@ module Pakyow::Helpers
   end
 
   def get_token_from_cookies()
-    box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
+    #box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
     cookie = cookies[:userinfo]
-    if cookie.nil?
+    if cookie.to_s.empty?
       return nil
     end
-    token = Marshal.load(box.decrypt(cookies[:userinfo]))
-    return token
+    #token = Marshal.load(box.decrypt(cookies[:userinfo]))
+    cookie
   end
 
-  def get_user_from_token(token)
-    if token.nil?
+  def get_user_from_token(tokenStr)
+    if tokenStr.to_s.empty?
+      return nil
+    end
+    token = YAML.load(tokenStr)
+    if token.to_s.empty?
       return nil
     end
     user = People.where(Sequel.lit('email = ?', token.info.name)).first
-    return user
+    user
   end
 
   def get_user_from_cookies()
@@ -708,15 +717,18 @@ module Pakyow::Helpers
     if token.nil?
       return nil
     end
-    return get_user_from_token(token)
+    user = get_user_from_token(token)
+    user
   end
 
   def put_token_in_cookies(token)
     if token.nil?
       return
     end
-    box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
-    cookies[:userinfo] = box.encrypt(Marshal.dump(token))
+    #box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
+    #puts box.encrypt(Marshal.dump(token))
+    #session[:userinfo] = box.encrypt(Marshal.dump(token))
+    cookies[:userinfo] = token.to_yaml
   end
 
 end # module Pakyow::Helpers

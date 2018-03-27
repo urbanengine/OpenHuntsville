@@ -7,7 +7,7 @@ Pakyow::App.routes(:bhm) do
             # GET /bhm_events/manage;
             get 'manage', :before => :is_bhm_event_manager do
                 events_all = []
-                people = People[cookies[:people]]
+                people = get_user_from_cookies()
                 if people.nil?
                 redirect '/errors/404'
                 end
@@ -22,7 +22,7 @@ Pakyow::App.routes(:bhm) do
                 events_all = Event.where('start_datetime > ? and (group_id = ? or group_id = ?)', DateTime.now.utc, cwn.id, cwn_events.id).where('archived = ?', false).all
                 view.scope(:people).bind(people)
                 view.scope(:bhm_events).apply(events_all)
-                current_user = People[cookies[:people]]
+                current_user = get_user_from_cookies()
                 view.scope(:optin).apply(current_user)
                 view.scope(:head).apply(request)
                 view.scope(:main_menu).apply(request)
@@ -97,7 +97,7 @@ Pakyow::App.routes(:bhm) do
 
         # GET /bhm_events; same as Index
         action :list do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if people.nil?
                 redirect '/errors/404'
             end
@@ -109,7 +109,7 @@ Pakyow::App.routes(:bhm) do
                 }
             }
             view.scope(:bhm_events).apply(events_all)
-            current_user = People[cookies[:people]]
+            current_user = get_user_from_cookies()
             view.scope(:optin).apply(current_user)
             view.scope(:head).apply(request)
             view.scope(:main_menu).apply(request)
@@ -117,7 +117,7 @@ Pakyow::App.routes(:bhm) do
 
         # GET /bhm_events/:bhm_events_id
         action :show do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if people.nil?
                 redirect '/errors/404'
             end
@@ -130,7 +130,7 @@ Pakyow::App.routes(:bhm) do
             end
             view.scope(:people).bind(people)
             view.scope(:bhm_events).apply([event, event])
-            current_user = People[cookies[:people]]
+            current_user = get_user_from_cookies()
             view.scope(:optin).apply(current_user)
             view.scope(:head).apply(request)
             view.scope(:main_menu).apply(request)
@@ -138,7 +138,7 @@ Pakyow::App.routes(:bhm) do
 
         # GET '/bhm_events/new'
         action :new, :before => :is_bhm_event_manager do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if people.nil?
                 redirect '/errors/404'
             end
@@ -146,7 +146,7 @@ Pakyow::App.routes(:bhm) do
                 bind(Event.new)
             end
             view.scope(:people).bind(people)
-            current_user = People[cookies[:people]]
+            current_user = get_user_from_cookies()
             view.scope(:optin).apply(current_user)
             view.scope(:head).apply(request)
             view.scope(:main_menu).apply(request)
@@ -154,7 +154,7 @@ Pakyow::App.routes(:bhm) do
 
         #POST '/bhm_events/'
         action :create, :before => :is_bhm_event_manager do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if people.nil?
                 redirect '/errors/404'
             end
@@ -185,7 +185,7 @@ Pakyow::App.routes(:bhm) do
 
         #PATCH '/bhm_events/:bhm_events_id'
         action :update, :before => :is_bhm_event_manager do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if people.nil?
                 redirect '/errors/404'
             end
@@ -227,7 +227,7 @@ Pakyow::App.routes(:bhm) do
 
         # GET '/bhm_events/:bhm_events_id/edit'
         action :edit, :before => :is_bhm_event_manager do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if people.nil?
                 redirect '/errors/404'
             end
@@ -243,7 +243,7 @@ Pakyow::App.routes(:bhm) do
             end
             view.scope(:bhm_events).bind([event, event, event])
             view.scope(:people).bind(people)
-            current_user = People[cookies[:people]]
+            current_user = get_user_from_cookies()
             view.scope(:optin).apply(current_user)
             view.scope(:head).apply(request)
             view.scope(:main_menu).apply(request)
