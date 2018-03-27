@@ -26,8 +26,8 @@ template: about
 <div class="clear"></div>
 <div class="content-body">
   <div class="form">
-    <h2>Step #1: Enter Your Email and Password</h2>
-    <p>Get started with creating your free #openHSV account by entering your email and password. Not sure if you qualify for an account? #openHSV is free and accessible to everyone in the Tennessee Valley.</p>
+    <h2>Enter Your Name and Email</h2>
+    <p>Get started with creating your free #openHSV account by entering your name and email. After clicking Get Started, we'll send you an email to verify you email address.</p>
     <form data-scope="people" data-prop="action" action="/people" method="post">
 <!--       <ul data-scope="errors" class="errors">
         <li data-prop="message">Error message goes here.</li>
@@ -37,11 +37,11 @@ template: about
         <ul>
           <li>
             <label>First Name</label>
-            <input type="first_name" name="people[first_name]" value="" placeholder="First Name" required>
+            <input name="people[first_name]" value="" placeholder="First Name" required>
           </li>
           <li>
             <label>Last Name</label>
-            <input type="last_name" name="people[last_name]" value="" placeholder="Last Name" required>
+            <input name="people[last_name]" value="" placeholder="Last Name" required>
           </li>
           <li>
             <label>Email</label>
