@@ -44,7 +44,7 @@ Pakyow::App.routes do
     domain = ENV['AUTH0_DOMAIN']
     client_id = ENV['AUTH0_CLIENT_ID']
     request_params = {
-      returnTo: 'http://localhost:3000',
+      returnTo: ENV['AUTH0_LOGOUT_REDIRECT_URL'],
       client_id: client_id
     }
     cookies[:userinfo] = nil
