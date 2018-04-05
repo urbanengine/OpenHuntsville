@@ -192,7 +192,6 @@ Pakyow::App.routes(:auth) do
             expand :restful, :auth0, '/auth0' do
                 collection do
                     get 'callback' do
-                        puts request.env['omniauth.auth']
                         put_token_in_cookies(request.env['omniauth.auth'])
 
                         user = get_user_from_cookies()

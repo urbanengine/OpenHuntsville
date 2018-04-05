@@ -272,42 +272,6 @@ Pakyow::App.bindings :groups do
 			}
 		end
 
-		# binding(:image_unveil) do
-		# 	src = ""
-		# 	name = ""
-		# 	unless bindable.nil?
-		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
-		# 			name = bindable.first_name + " " + bindable.last_name
-    #
-		# 			unless bindable.image_url.nil?
-		# 				src = bindable.image_url
-		# 			else
-		# 				src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
-		# 			end
-		# 		end
-		# 	end
-		# 	{
-    #
-		# 		:'data-src' => src,
-		# 		:title =>  name,
-		# 		:alt => name
-		# 	}
-		# end
-		#binding(:custom_url) do
-		#	bindable.custom_url
-		#end
-		# binding(:admin) do
-		# 	{
-		# 		:checked => bindable[:admin]
-		# 	}
-		# end
-    #
-		# binding(:approved) do
-		# 	{
-		# 		:checked => bindable[:approved]
-		# 	}
-		# end
-
 		binding(:group_link) do
 			name = ""
 		 	unless bindable.name.nil?
@@ -458,7 +422,7 @@ Pakyow::App.bindings :group_admins do
 
 		binding(:admin_name) do
 			{
-			:content => bindable.first_name + " " + bindable.last_name
+			:content => bindable.email
 			}
 		end
 

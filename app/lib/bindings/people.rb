@@ -35,18 +35,6 @@ Pakyow::App.bindings :people do
 			}
 		end
 
-		binding(:first_name) do
-			{
-				:content => bindable.first_name
-			}
-		end
-
-		binding(:last_name) do
-			{
-				:content => bindable.last_name
-			}
-		end
-
 		binding(:company) do
 			{
 				:content => bindable.company
@@ -61,15 +49,15 @@ Pakyow::App.bindings :people do
 			content = ""
 			if cookies[:userinfo].nil?
 				show = "show"
-				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+				title = "Log in to view " + bindable.email + "'s Twitter profile"
 				link = "/auth/auth0"
 				content = "Log in to view"
 			else
 				unless bindable.nil? || bindable.twitter.nil? || bindable.twitter.length ==	 0
 					show = "show"
 				end
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					title = bindable.first_name + " " + bindable.last_name + "'s profile on Twitter"
+				unless bindable.email.nil?
+					title = bindable.email + "'s profile on Twitter"
 				end
 				link = "/clicks/people/" + bindable.custom_url + "/twitter"
 				content = "Twitter"
@@ -91,7 +79,7 @@ Pakyow::App.bindings :people do
 			content = ""
 			if cookies[:userinfo].nil?
 				show = "show"
-				title = "Log in to view " + bindable.first_name + "'s Twitter profile"
+				title = "Log in to view " + bindable.email + "'s Twitter profile"
 				link = "/auth/auth0"
 				content = "Log in to view"
 
@@ -101,8 +89,8 @@ Pakyow::App.bindings :people do
 					show = "show"
 					link = "/clicks/people/" + bindable.custom_url + "/linkedin"
 				end
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					title = bindable.first_name + " " + bindable.last_name + "'s profile on LinkedIn"
+				unless bindable.email.nil?
+					title = bindable.email + "'s profile on LinkedIn"
 				end
 			end
 			{
@@ -121,7 +109,7 @@ Pakyow::App.bindings :people do
 			content = ""
 			if cookies[:userinfo].nil?
 					show = "show"
-					title = "Log in to view " + bindable.first_name + "'s Website"
+					title = "Log in to view " + bindable.email + "'s Website"
 					link = "/auth/auth0"
 					content = "Log in to view"
 			else
@@ -133,8 +121,8 @@ Pakyow::App.bindings :people do
 					link = "/clicks/people/" + bindable.custom_url + "/url"
 				end
 
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					title = bindable.first_name + " " + bindable.last_name + "'s URL"
+				unless bindable.email.nil?
+					title = bindable.email + "'s URL"
 				end
 			end
 			{
@@ -311,14 +299,14 @@ Pakyow::App.bindings :people do
 			src = ""
 			name = ""
 			unless bindable.nil?
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					name = bindable.first_name + " " + bindable.last_name
+				unless bindable.email.nil?
+					name = bindable.email
 
 					unless bindable.image_url.nil? || bindable.image_url.length == 0
 						pp 'bindable.image_url.nil? || bindable.image_url.length == 0'
 						src = bindable.image_url
 					else
-						needle = bindable.first_name + "-" + bindable.last_name
+						needle = bindable.email
 						haystack = [
 							'Abbie-Cataldo',
 							'Adam-Whipple',
@@ -373,7 +361,7 @@ Pakyow::App.bindings :people do
 						pp 'ELSE bindable.image_url.nil? || bindable.image_url.length == 0'
 					end
 				else
-					pp 'ELSE bindable.first_name.nil? || bindable.last_name.nil?'
+					pp 'ELSE bindable.email.nil?'
 				end
 			else
 				pp 'bindable NIL'
@@ -390,13 +378,11 @@ Pakyow::App.bindings :people do
 			src = ""
 			name = ""
 			unless bindable.nil?
-				unless bindable.first_name.nil? || bindable.last_name.nil?
-					name = bindable.first_name + " " + bindable.last_name
-
+				unless bindable.email.nil?
 					unless bindable.image_url.nil?
 						src = bindable.image_url
 					else
-						src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
+						src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.auth0_id + ".jpg"
 					end
 				end
 			end
@@ -432,17 +418,13 @@ Pakyow::App.bindings :people do
 
 		binding(:profile_link) do
 
-			first_name = ""
-			last_name = ""
-			unless bindable.first_name.nil?
-				first_name = bindable.first_name
-			end
-			unless bindable.last_name.nil?
-				last_name = bindable.last_name
+			email = ""
+			unless bindable.email.nil?
+				email = bindable.email
 			end
 			{
 				:href => "/people/" + bindable.custom_url,
-				:content => first_name + " " + last_name
+				:content => email
 			}
 		end
 

@@ -314,7 +314,7 @@ module Pakyow::Helpers
 
   def send_email(person, from_email, body, subject)
     unless ENV['RACK_ENV'] == 'development'
-      recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
+      recipient = "#{person.email} <#{person.email}>"
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
@@ -439,15 +439,9 @@ module Pakyow::Helpers
     opts = [[]]
     group = Group.where("id = ?", group_id).first
     group_admins = group.people()
-    People.order(:first_name).each do |people|
+    People.order(:email).each do |people|
       if group_admins.all? { |group_admin| group_admin.id != people.id }
-        person_has_first_name = people.first_name.nil? == false && people.first_name.empty? == false
-        person_has_last_name = people.last_name.nil? == false && people.last_name.empty? == false
-        if person_has_first_name && person_has_last_name
-          person_to_add_string = people.first_name + " " + people.last_name
-        else
-          person_to_add_string = people.email
-        end
+        person_to_add_string = people.email
         opts << [people.id, person_to_add_string]
       end
     end
@@ -700,6 +694,42 @@ module Pakyow::Helpers
     cookie
   end
 
+  def find_or_create_user_from_auth0_id(token)
+    tokensplit = token.uid.split('|')
+    if tokensplit.length != 2
+      return nil
+    end
+    if tokensplit[0] != 'auth0'
+      return nil
+    end
+    auth0id = tokensplit[1]
+    user = People.where(Sequel.lit('auth0_id = ?', auth0id)).first
+
+    if user.nil?
+      #we don't have a user with the auth0_id.
+      #either find the user from their email, or if that doesn't exist, create a new one
+      user = People.where(Sequel.lit('email = ?', token.info.name)).first
+      if user.nil?
+        #create a new user
+        c_params = { "auth0_id" => auth0id, "email" => token.info.name, "custom_url" => auth0id, "admin" => false, "approved" => true, "opt_in" => true, "opt_in_time" => Time.now.utc, "is_elite" => false }
+        user = People.new(c_params)
+        user.save
+      else
+        #update to store auth0_id
+        user.auth0_id = auth0id
+        user.save
+      end
+
+
+    else
+      #if we have user with auth0_id, keep their email up to date
+      user.email = token.info.name
+      user.save
+    end
+    
+    user
+  end
+
   def get_user_from_token(tokenStr)
     if tokenStr.to_s.empty?
       return nil
@@ -708,7 +738,8 @@ module Pakyow::Helpers
     if token.to_s.empty?
       return nil
     end
-    user = People.where(Sequel.lit('email = ?', token.info.name)).first
+
+    user = find_or_create_user_from_auth0_id(token)
     user
   end
 

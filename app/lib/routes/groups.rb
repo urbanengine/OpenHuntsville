@@ -178,7 +178,7 @@ Pakyow::App.routes(:groups) do
         redirect "/errors/403"
       end
       view.scope(:groups).apply([group, group])
-      group_admins = group.people().sort_by(&:first_name)
+      group_admins = group.people().sort_by(&:email)
       view.scope(:groups).scope(:group_admins).apply(group_admins)
       current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)

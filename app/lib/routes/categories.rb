@@ -87,7 +87,7 @@ Pakyow::App.routes(:categories) do
       if session[:random].nil?
         session[:random] = (rand(0...100)).to_s
       end
-      people = People.where("approved = true AND opt_in = true").order(:first_name).all
+      people = People.where("approved = true AND opt_in = true").order(:email).all
       people.each { |person|
         unless person.categories.nil?
           jsn = person.categories.to_s

@@ -462,172 +462,172 @@ Pakyow::App.routes(:api) do
             end
           end
 
-          get 'users' do
-            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-              users = People.where("opt_in = TRUE AND approved = TRUE AND first_name IS NOT NULL AND last_name IS NOT NULL").all
-              response.write('[')
-              first_time = true
-              users.each { |user|
-               if first_time == true
-                 first_time = false
-               else
-                 response.write(',')
-               end
-               json =
-                 {
-                   "email" => user.email,
-                   "name" => user.first_name + " " + user.last_name
-                 }
-                 response.write(json.to_json)
-              }
-              response.write(']')
-            else
-              response.status = 400
-              response.write('{"error":"User not authorized for API usage"}')
-            end
-          end
+          # get 'users' do
+          #   if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+          #     users = People.where("opt_in = TRUE AND approved = TRUE AND email IS NOT NULL AND last_name IS NOT NULL").all
+          #     response.write('[')
+          #     first_time = true
+          #     users.each { |user|
+          #      if first_time == true
+          #        first_time = false
+          #      else
+          #        response.write(',')
+          #      end
+          #      json =
+          #        {
+          #          "email" => user.email,
+          #          "name" => user.first_name + " " + user.last_name
+          #        }
+          #        response.write(json.to_json)
+          #     }
+          #     response.write(']')
+          #   else
+          #     response.status = 400
+          #     response.write('{"error":"User not authorized for API usage"}')
+          #   end
+          # end
 
-          post 'checkin' do
-            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-              body = request.body.read
-              json = JSON.parse(body)
-              email = json["email"]
-              event = Event.where("id = ?", json["event"]).first
-              person = People.where("email = ?", email).first
-              if event.nil?
-                  response.status = 404
-                  response.write('{"error":"Event not found"}')
-              else
-                # check to make sure the event is active
-                # if the event is active, check if the user exists
-                #   if the user does not exist, try to create the user
-                #   if the user does exist, make sure the has not already checked in
-                current_time = DateTime.now.utc
-                event_start_time = (event.start_datetime.to_time - 1.hours).utc #Give hour leeway to checkin
-                event_end_time = (event.start_datetime.to_time + event.duration.hours).utc
-                event_is_active = event_start_time < current_time && event_end_time > current_time
+          # post 'checkin' do
+          #   if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+          #     body = request.body.read
+          #     json = JSON.parse(body)
+          #     email = json["email"]
+          #     event = Event.where("id = ?", json["event"]).first
+          #     person = People.where("email = ?", email).first
+          #     if event.nil?
+          #         response.status = 404
+          #         response.write('{"error":"Event not found"}')
+          #     else
+          #       # check to make sure the event is active
+          #       # if the event is active, check if the user exists
+          #       #   if the user does not exist, try to create the user
+          #       #   if the user does exist, make sure the has not already checked in
+          #       current_time = DateTime.now.utc
+          #       event_start_time = (event.start_datetime.to_time - 1.hours).utc #Give hour leeway to checkin
+          #       event_end_time = (event.start_datetime.to_time + event.duration.hours).utc
+          #       event_is_active = event_start_time < current_time && event_end_time > current_time
 
-                if event_is_active == false
-                  #event is not active
-                  response.status = 400
-                  response.write('{"error":"Event is not active"}')
-                elsif person.nil?
-                  # user does not exist, create the user, check him in, create an auth token, and send the user an email
-                  if is_valid_email(email)
-                    first_name = json["first_name"]
-                    last_name = json["last_name"]
-                    if first_name.nil? || first_name.empty?
-                      response.status = 400
-                      response.write('{"error":"Invalid first name"}')
-                    elsif last_name.nil? || last_name.empty?
-                      response.status = 400
-                      response.write('{"error":"Invalid last name"}')
-                    else
-                      p_params =
-                      {
-                        "email" => email,
-                        "first_name" => first_name,
-                        "last_name" => last_name,
-                        "approved" => false,
-                        "opt_in" => true,
-                        "opt_in_time" => Time.now.utc
-                      }
-                      person = People.new(p_params)
-                      person.save
+          #       if event_is_active == false
+          #         #event is not active
+          #         response.status = 400
+          #         response.write('{"error":"Event is not active"}')
+          #       elsif person.nil?
+          #         # user does not exist, create the user, check him in, create an auth token, and send the user an email
+          #         if is_valid_email(email)
+          #           first_name = json["first_name"]
+          #           last_name = json["last_name"]
+          #           if first_name.nil? || first_name.empty?
+          #             response.status = 400
+          #             response.write('{"error":"Invalid first name"}')
+          #           elsif last_name.nil? || last_name.empty?
+          #             response.status = 400
+          #             response.write('{"error":"Invalid last name"}')
+          #           else
+          #             p_params =
+          #             {
+          #               "email" => email,
+          #               "first_name" => first_name,
+          #               "last_name" => last_name,
+          #               "approved" => false,
+          #               "opt_in" => true,
+          #               "opt_in_time" => Time.now.utc
+          #             }
+          #             person = People.new(p_params)
+          #             person.save
 
-                      custom_url = first_name + "-" + last_name + "-" + person.id.to_s
-                      if unique_url(person.id, custom_url)
-                        if slug_contains_invalid(custom_url)
-                          person.custom_url = SecureRandom.uuid
-                        else
-                          person.custom_url = custom_url
-                        end
-                      else 
-                        person.custom_url = SecureRandom.uuid
-                      end
-                      person.save
+          #             custom_url = first_name + "-" + last_name + "-" + person.id.to_s
+          #             if unique_url(person.id, custom_url)
+          #               if slug_contains_invalid(custom_url)
+          #                 person.custom_url = SecureRandom.uuid
+          #               else
+          #                 person.custom_url = custom_url
+          #               end
+          #             else 
+          #               person.custom_url = SecureRandom.uuid
+          #             end
+          #             person.save
 
-                      a_params = {
-                        "token" => SecureRandom.uuid,
-                        "people_id" => person.id,
-                        "expiration_date" => (Time.now.utc + 1.month),
-                        "used" => false
-                      }
+          #             a_params = {
+          #               "token" => SecureRandom.uuid,
+          #               "people_id" => person.id,
+          #               "expiration_date" => (Time.now.utc + 1.month),
+          #               "used" => false
+          #             }
 
-                      auth = Auth.new(a_params)
-                      auth.save
+          #             auth = Auth.new(a_params)
+          #             auth.save
 
-                      send_auth_email(person, auth, :verifyemail)
+          #             send_auth_email(person, auth, :verifyemail)
 
-                      c_params =
-                      {
-                        "event_id" => event.id,
-                        "people_id" => person.id
-                      }
-                      checkin = Checkin.new(c_params)
-                      checkin.save
+          #             c_params =
+          #             {
+          #               "event_id" => event.id,
+          #               "people_id" => person.id
+          #             }
+          #             checkin = Checkin.new(c_params)
+          #             checkin.save
 
-                      gibbon = Gibbon::Request.new
-                      #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
-                      #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
-                      begin
-                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
-                      rescue Gibbon::MailChimpError => exception
-                        puts exception.inspect
-                      end
+          #             gibbon = Gibbon::Request.new
+          #             #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
+          #             #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
+          #             begin
+          #               gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+          #             rescue Gibbon::MailChimpError => exception
+          #               puts exception.inspect
+          #             end
 
-                      response.status = 201
-                    end
-                  else
-                    response.status = 400
-                    response.write('{"error":"Invalid email address"}')
-                  end
-                else
-                  # event is active and user already exists; make sure this isn't a duplicate checkin
-                  existing_checkin = Checkin.where("people_id = ? AND event_id = ?", person.id, event.id).first
-                  if existing_checkin.nil? == false
-                    response.status = 400
-                    response.write('{"error":"User has already checked in"}')
-                  else
-                    c_params =
-                      {
-                        "event_id" => event.id,
-                        "people_id" => person.id
-                      }
-                    checkin = Checkin.new(c_params)
-                    checkin.save
-                    response.status = 201
+          #             response.status = 201
+          #           end
+          #         else
+          #           response.status = 400
+          #           response.write('{"error":"Invalid email address"}')
+          #         end
+          #       else
+          #         # event is active and user already exists; make sure this isn't a duplicate checkin
+          #         existing_checkin = Checkin.where("people_id = ? AND event_id = ?", person.id, event.id).first
+          #         if existing_checkin.nil? == false
+          #           response.status = 400
+          #           response.write('{"error":"User has already checked in"}')
+          #         else
+          #           c_params =
+          #             {
+          #               "event_id" => event.id,
+          #               "people_id" => person.id
+          #             }
+          #           checkin = Checkin.new(c_params)
+          #           checkin.save
+          #           response.status = 201
 
-                    if person.approved == false
-                      a_params = {
-                        "token" => SecureRandom.uuid,
-                        "people_id" => person.id,
-                        "expiration_date" => (Time.now.utc + 1.month),
-                        "used" => false
-                      }
+          #           if person.approved == false
+          #             a_params = {
+          #               "token" => SecureRandom.uuid,
+          #               "people_id" => person.id,
+          #               "expiration_date" => (Time.now.utc + 1.month),
+          #               "used" => false
+          #             }
 
-                      auth = Auth.new(a_params)
-                      auth.save
+          #             auth = Auth.new(a_params)
+          #             auth.save
 
-                      send_auth_email(person, auth, :verifyemail)
+          #             send_auth_email(person, auth, :verifyemail)
 
-                      gibbon = Gibbon::Request.new
-                      #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
-                      #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
-                      begin
-                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
-                      rescue Gibbon::MailChimpError => exception
-                        puts exception.inspect
-                      end
-                    end
-                  end
-                end
-              end
-            else
-              response.status = 400
-              response.write('{"error":"User not authorized for API usage"}')
-            end
-          end
+          #             gibbon = Gibbon::Request.new
+          #             #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
+          #             #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
+          #             begin
+          #               gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+          #             rescue Gibbon::MailChimpError => exception
+          #               puts exception.inspect
+          #             end
+          #           end
+          #         end
+          #       end
+          #     end
+          #   else
+          #     response.status = 400
+          #     response.write('{"error":"User not authorized for API usage"}')
+          #   end
+          # end
         end # collection do
       end # expand :restful, :v1, '/v1' do
 
