@@ -765,6 +765,7 @@ module Pakyow::Helpers
   end
 
   def put_token_in_cookies(token)
+    puts token
     if token.nil?
       return
     end
