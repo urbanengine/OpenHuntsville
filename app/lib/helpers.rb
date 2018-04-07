@@ -235,6 +235,21 @@ module Pakyow::Helpers
   ### EMAIL
   ### ----------------------------
 
+  def send_checkin_acct_creation_email(person)
+    subject = ''
+
+    to_email = person.email
+    from_email = 'donotreply@openhsv.com'
+    subject = "Urban Engine: Welcome"
+    auth.class.module_eval { attr_accessor :mail_description}
+    auth.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier please create an Urban Engine account.'
+    presenter.view = store.view('mail/account_checkinacctcreation')
+
+    view.scope(:people).bind(person)
+
+    send_email(person, from_email, view.to_html, subject)
+  end
+
   def send_auth_email(person, auth, template_name)
     subject = ''
 
@@ -699,10 +714,7 @@ module Pakyow::Helpers
     if tokensplit.length != 2
       return nil
     end
-    if tokensplit[0] != 'auth0'
-      return nil
-    end
-    auth0id = tokensplit[1]
+    auth0id = token.uid
     user = People.where(Sequel.lit('auth0_id = ?', auth0id)).first
 
     if user.nil?
@@ -711,19 +723,19 @@ module Pakyow::Helpers
       user = People.where(Sequel.lit('email = ?', token.info.name)).first
       if user.nil?
         #create a new user
-        c_params = { "auth0_id" => auth0id, "email" => token.info.name, "custom_url" => auth0id, "admin" => false, "approved" => true, "opt_in" => true, "opt_in_time" => Time.now.utc, "is_elite" => false }
+        c_params = { "auth0_id" => auth0id, "email" => token.info.name, "custom_url" => tokensplit[1], "admin" => false, "approved" => false, "opt_in" => true, "opt_in_time" => Time.now.utc, "is_elite" => false }
         user = People.new(c_params)
         user.save
       else
         #update to store auth0_id
         user.auth0_id = auth0id
+        user.approved = true
         user.save
       end
-
-
     else
       #if we have user with auth0_id, keep their email up to date
       user.email = token.info.name
+      user.approved = true
       user.save
     end
     
