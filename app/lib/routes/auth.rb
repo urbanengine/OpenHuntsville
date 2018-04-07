@@ -192,9 +192,7 @@ Pakyow::App.routes(:auth) do
             expand :restful, :auth0, '/auth0' do
                 collection do
                     get 'callback' do
-                        puts 'callback'
                         put_token_in_cookies(request.env['omniauth.auth'])
-                        puts 'put token in cookies'
                         user = get_user_from_cookies()
                         if user.nil?
                             redirect "/errors/404"
