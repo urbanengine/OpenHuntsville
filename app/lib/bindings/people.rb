@@ -177,6 +177,24 @@ Pakyow::App.bindings :people do
 			}
 		end
 
+		binding(:people_card_title) do
+			puts bindable.inspect
+			title = bindable.first_name.to_s + " " + bindable.last_name.to_s
+			if bindable.last_name.to_s.empty?
+				title = bindable.first_name
+			end
+			if bindable.first_name.to_s.empty?
+				title = bindable.email
+			end
+
+			if title.to_s.empty?
+				title = "Anonymous"
+			end
+			{
+				:content => title
+			}
+		end
+
 		binding(:categories_string) do
 			{
 				:content => bindable.categories_string

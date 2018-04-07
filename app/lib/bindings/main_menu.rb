@@ -7,27 +7,27 @@ Pakyow::App.bindings :main_menu do
   		}
   	end
 
-	# binding(:people_link) do
-	# 	css_class = ""
-	# 	splat = request.path.split("/")
-	# 	unless splat[1].nil? || splat[1].length == 0
-	# 		if splat[1] == "categories"
-	# 			css_class = "selected"
-	# 		elsif splat[1] == "people"
-	# 			if splat[2].nil?
-	# 				css_class = "selected"
-	# 			end
-	# 			unless splat[2] == "new"
-	# 				if splat[3].nil? || splat[3] != "edit"
-	# 					css_class = "selected"
-	# 				end
-	# 			end
-	# 		end
-	# 	end
-  	# 	{
-  	# 		:class => css_class
-  	# 	}
-  	# end
+	binding(:people_link) do
+		css_class = ""
+		splat = request.path.split("/")
+		unless splat[1].nil? || splat[1].length == 0
+			if splat[1] == "categories"
+				css_class = "selected"
+			elsif splat[1] == "people"
+				if splat[2].nil?
+					css_class = "selected"
+				end
+				unless splat[2] == "new"
+					if splat[3].nil? || splat[3] != "edit"
+						css_class = "selected"
+					end
+				end
+			end
+		end
+  		{
+  			:class => css_class
+  		}
+  	end
 
   	binding(:groups_link) do
   		css_class = ""
