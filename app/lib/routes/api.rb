@@ -554,7 +554,7 @@ Pakyow::App.routes(:api) do
                       end
                       person.save
 
-                      #send_checkin_acct_creation_email(person)
+                      send_checkin_acct_creation_email(person)
 
                       c_params =
                       {
@@ -596,7 +596,7 @@ Pakyow::App.routes(:api) do
                     response.status = 201
 
                     if person.approved == false
-                      #send_checkin_acct_creation_email(person)
+                      send_checkin_acct_creation_email(person)
 
                       gibbon = Gibbon::Request.new
                       #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
