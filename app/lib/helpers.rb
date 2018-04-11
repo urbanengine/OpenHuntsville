@@ -241,8 +241,7 @@ module Pakyow::Helpers
     to_email = person.email
     from_email = 'donotreply@openhsv.com'
     subject = "Urban Engine: Welcome"
-    auth.class.module_eval { attr_accessor :mail_description}
-    auth.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier please create an Urban Engine account.'
+    #person.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier please create an Urban Engine account.'
     presenter.view = store.view('mail/account_checkinacctcreation')
 
     view.scope(:people).bind(person)
