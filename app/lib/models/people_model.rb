@@ -24,7 +24,7 @@ class People < Sequel::Model(:people)
     super
 
     # require a value for auth0_id address
-    validates_presence  :auth0_id
+    #validates_presence  :auth0_id
 
     # make sure the auth0_id address is unique
     validates_unique    :auth0_id
