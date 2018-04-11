@@ -541,17 +541,18 @@ Pakyow::App.routes(:api) do
                       }
                       person = People.new(p_params)
                       person.save
-
-                      custom_url = first_name + "-" + last_name + "-" + person.id.to_s
-                      if unique_url(person.id, custom_url)
-                        if slug_contains_invalid(custom_url)
-                          person.custom_url = SecureRandom.uuid
-                        else
-                          person.custom_url = custom_url
-                        end
-                      else 
-                        person.custom_url = SecureRandom.uuid
-                      end
+              
+                      person.custom_url = SecureRandom.uuid
+                      #custom_url = first_name + "-" + last_name + "-" + person.id.to_s
+                      #if unique_url(person.id, custom_url)
+                      #  if slug_contains_invalid(custom_url)
+                      #    person.custom_url = SecureRandom.uuid
+                      #  else
+                      #    person.custom_url = custom_url
+                      #  end
+                      #else 
+                      #  person.custom_url = SecureRandom.uuid
+                      #end
                       person.save
 
                       #send_checkin_acct_creation_email(person)
@@ -564,14 +565,14 @@ Pakyow::App.routes(:api) do
                       checkin = Checkin.new(c_params)
                       checkin.save
 
-                      gibbon = Gibbon::Request.new
+                      #gibbon = Gibbon::Request.new
                       #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
                       #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
-                      begin
-                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
-                      rescue Gibbon::MailChimpError => exception
-                        puts exception.inspect
-                      end
+                      #begin
+                      #  gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+                      #rescue Gibbon::MailChimpError => exception
+                      #  puts exception.inspect
+                      #end
 
                       response.status = 201
                     end
