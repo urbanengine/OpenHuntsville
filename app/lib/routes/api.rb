@@ -554,7 +554,7 @@ Pakyow::App.routes(:api) do
                       end
                       person.save
 
-                      send_checkin_acct_creation_email(person)
+                      #send_checkin_acct_creation_email(person)
 
                       c_params =
                       {
