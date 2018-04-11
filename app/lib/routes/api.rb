@@ -596,17 +596,7 @@ Pakyow::App.routes(:api) do
                     response.status = 201
 
                     if person.approved == false
-                      a_params = {
-                        "token" => SecureRandom.uuid,
-                        "people_id" => person.id,
-                        "expiration_date" => (Time.now.utc + 1.month),
-                        "used" => false
-                      }
-
-                      auth = Auth.new(a_params)
-                      auth.save
-
-                      send_auth_email(person, auth, :verifyemail)
+                      send_checkin_acct_creation_email(person)
 
                       gibbon = Gibbon::Request.new
                       #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
