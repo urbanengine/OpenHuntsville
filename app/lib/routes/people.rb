@@ -78,19 +78,32 @@ Pakyow::App.routes(:people) do
           }
           needles.each { |this_needle|
             haystack.each { |person|
-              unless fffound.include? person || person.email.nil? || person.email.length == 0
-                if person.email.downcase.include? this_needle.downcase
-                  fffound.push(person)
+              unless person.email.to_s.empty?
+                unless fffound.include? person || person.email.length == 0
+                  if person.email.downcase.include? this_needle.downcase
+                    fffound.push(person)
+                  end
                 end
               end
-              unless fffound.include? person || person.last_name.nil? || person.last_name.length == 0
-                if person.last_name.downcase.include? this_needle.downcase
-                  fffound.push(person)
+              unless person.first_name.to_s.empty?
+                unless fffound.include? person || person.first_name.length == 0
+                  if person.first_name.downcase.include? this_needle.downcase
+                    fffound.push(person)
+                  end
                 end
               end
-              unless fffound.include? person || person.bio.nil? || person.bio.length == 0
-                if person.bio.downcase.include? this_needle.downcase
-                  fffound.push(person)
+              unless person.last_name.to_s.empty?
+                unless fffound.include? person || person.last_name.length == 0
+                  if person.last_name.downcase.include? this_needle.downcase
+                    fffound.push(person)
+                  end
+                end
+              end
+              unless person.bio.to_s.empty?
+                unless fffound.include? person || person.bio.length == 0
+                  if person.bio.downcase.include? this_needle.downcase
+                    fffound.push(person)
+                  end
                 end
               end
 
@@ -332,7 +345,7 @@ Pakyow::App.routes(:people) do
         view.scope(:after_people).bind(count)
         view.scope(:after_people).use(:normal)
       end
-      people = People.where("approved = true AND opt_in = ? AND archived = ?", true, false).limit(my_limit).offset(page_no*my_limit).order(:email).all
+      people = People.where("approved = true AND opt_in = ? AND archived = ?", true, false).limit(my_limit).offset(page_no*my_limit).order(:first_name, :email).all
       view.scope(:people).apply(people)
       all_cats = Category.order(:slug).all
       parent_cats = []
