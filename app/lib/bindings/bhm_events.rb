@@ -107,7 +107,7 @@ Pakyow::App.bindings :bhm_events do
 
         binding(:approved) do
             content = if bindable.approved then "Approved" else "Pending" end
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             if logged_in_user_is_bhm_admin_or_site_admin()
                 if bindable.approved
                     content = "<p><a class='unapprove-btn' href='/bhm_events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
@@ -121,7 +121,7 @@ Pakyow::App.bindings :bhm_events do
         end
 
         binding(:edit_event_link) do
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             {
             :content => "Edit Event",
             :href => '/bhm_events/' + bindable.id.to_s + '/edit'
@@ -130,7 +130,7 @@ Pakyow::App.bindings :bhm_events do
 
         binding(:delete_event_link) do
             cssclass = "delete-btn"
-            people = People[cookies[:people]]
+            people = get_user_from_cookies()
             isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
             if bindable.approved && isNotSiteAdmin
                 cssclass = "hide"
@@ -206,7 +206,7 @@ Pakyow::App.bindings :bhm_events do
             updator = People.where("id = ?", bindable.updated_by).first
             content = ""
             unless creator.nil? || updator.nil?
-                content = "This event was created by " + creator.first_name + " " + creator.last_name + " on " + bindable.created_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') + " and updated by " + updator.first_name + " " + updator.last_name + " on " + bindable.updated_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p')
+                content = "This event was created by " + creator.email + " on " + bindable.created_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') + " and updated by " + updator.email + " on " + bindable.updated_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p')
             end
             {
                 :content => content

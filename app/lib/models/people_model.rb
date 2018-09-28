@@ -23,20 +23,11 @@ class People < Sequel::Model(:people)
   def validate
     super
 
-    # require a value for email address
-    validates_presence  :email
+    # require a value for auth0_id address
+    #validates_presence  :auth0_id
 
-    # require a valid email address
-    validates_format    EMAIL_REGEX, :email if email && !email.empty?
-
-    # make sure the email address is unique
-    validates_unique    :email
-
-    # require a value for password
-    # validates_presence  :password
-
-    # make sure the password matches the confirmation
-    errors.add(:password, "and confirmation must match") if password && password != password_confirmation
+    # make sure the auth0_id address is unique
+    validates_unique    :auth0_id
   end
 
   def self.auth(session)

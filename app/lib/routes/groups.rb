@@ -4,10 +4,10 @@ Pakyow::App.routes(:groups) do
   expand :restful, :groups, '/groups', :before => :route_head do
     collection do
       get 'unapproved' do
-        if cookies[:people].nil? || cookies[:people] == 0
+        if cookies[:userinfo].nil?
           redirect '/errors/401'
         else
-          person = People[cookies[:people]]
+          person = get_user_from_cookies()
           unless person.admin
             redirect '/errors/403'
           end
@@ -43,7 +43,7 @@ Pakyow::App.routes(:groups) do
 
     # GET '/groups/new'
     action :new, :before => :is_admin_check do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -51,7 +51,7 @@ Pakyow::App.routes(:groups) do
         bind(Group.new)
       end
       view.scope(:people).bind(people)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
@@ -59,7 +59,7 @@ Pakyow::App.routes(:groups) do
 
     #POST '/groups/'
     action :create, :before => :is_admin_check  do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -90,7 +90,7 @@ Pakyow::App.routes(:groups) do
       total_groups = Group.where("approved = true").count
       # If user is authenticated, don't show default
       page_no = 0
-      unless cookies[:people].nil? || cookies[:people] == 0
+      unless cookies[:userinfo].nil?
         previous_link = {:class => 'hide',:value => 'hidden'}
         unless params[:page].nil? || params[:page].size == 0
           page_no = params[:page].to_i
@@ -128,7 +128,7 @@ Pakyow::App.routes(:groups) do
       #groups = Group.where("approved = true AND image_url IS NOT NULL AND image_url != '/img/profile-backup.png'").limit(my_limit).offset(page_no*my_limit).all
       groups = Group.where("approved = true AND archived = ?", false).limit(my_limit).offset(page_no*my_limit).order(:name).all
       view.scope(:groups).apply(groups)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:admins).apply(current_user)
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
@@ -155,7 +155,7 @@ Pakyow::App.routes(:groups) do
       parent_cats.unshift("everyone")
       view.scope(:categories_menu).apply(parent_cats)
 
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
@@ -163,7 +163,7 @@ Pakyow::App.routes(:groups) do
 
     # GET /groups/:groups_id/edit
     action :edit do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -178,9 +178,9 @@ Pakyow::App.routes(:groups) do
         redirect "/errors/403"
       end
       view.scope(:groups).apply([group, group])
-      group_admins = group.people().sort_by(&:first_name)
+      group_admins = group.people().sort_by(&:email)
       view.scope(:groups).scope(:group_admins).apply(group_admins)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
@@ -229,7 +229,7 @@ Pakyow::App.routes(:groups) do
         if group.nil?
           redirect "/errors/404"
         end
-        people = People[cookies[:people]]
+        people = get_user_from_cookies()
         isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
         if group.approved && isNotSiteAdmin
           redirect "/errors/403"

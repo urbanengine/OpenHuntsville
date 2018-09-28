@@ -235,6 +235,20 @@ module Pakyow::Helpers
   ### EMAIL
   ### ----------------------------
 
+  def send_checkin_acct_creation_email(person)
+    subject = ''
+
+    to_email = person.email
+    from_email = 'donotreply@openhsv.com'
+    subject = "Urban Engine: Welcome"
+    #person.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier please create an Urban Engine account.'
+    presenter.view = store.view('mail/account_checkinacctcreation')
+
+    view.scope(:people).bind(person)
+
+    send_email(person, from_email, view.to_html, subject)
+  end
+
   def send_auth_email(person, auth, template_name)
     subject = ''
 
@@ -247,6 +261,11 @@ module Pakyow::Helpers
         auth.class.module_eval { attr_accessor :mail_description}
         auth.mail_description = 'Urban Engine: 📬 Welcome to your first Urban Engine event! To make arriving at our Events easier we created you an Urban Engine account.'
         presenter.view = store.view('mail/account_verifyemail')
+      when :accountcreation
+        subject = "Urban Engine: Welcome"
+        auth.class.module_eval { attr_accessor :mail_description}
+        auth.mail_description = 'Urban Engine: 📬 Thank you for creating an account! Please verify your email to complete the account creation process.'
+        presenter.view = store.view('mail/mail_accountcreation')
       when :passwordreset
         subject = "Urban Engine: Password Reset"
         auth.class.module_eval { attr_accessor :mail_description}
@@ -309,7 +328,7 @@ module Pakyow::Helpers
 
   def send_email(person, from_email, body, subject)
     unless ENV['RACK_ENV'] == 'development'
-      recipient = "#{person.first_name} #{person.last_name} <#{person.email}>"
+      recipient = "#{person.email} <#{person.email}>"
       # First, instantiate the Mailgun Client with your API key
       mg_client = Mailgun::Client.new ENV['MAILGUN_PRIVATE']
 
@@ -399,7 +418,7 @@ module Pakyow::Helpers
 
   def get_groups_for_logged_in_person()
     opts = [[]]
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     people.groups().each do |group|
       if group.approved
         opts << [group.id, group.name]
@@ -434,15 +453,9 @@ module Pakyow::Helpers
     opts = [[]]
     group = Group.where("id = ?", group_id).first
     group_admins = group.people()
-    People.order(:first_name).each do |people|
+    People.order(:email).each do |people|
       if group_admins.all? { |group_admin| group_admin.id != people.id }
-        person_has_first_name = people.first_name.nil? == false && people.first_name.empty? == false
-        person_has_last_name = people.last_name.nil? == false && people.last_name.empty? == false
-        if person_has_first_name && person_has_last_name
-          person_to_add_string = people.first_name + " " + people.last_name
-        else
-          person_to_add_string = people.email
-        end
+        person_to_add_string = people.email
         opts << [people.id, person_to_add_string]
       end
     end
@@ -477,7 +490,7 @@ module Pakyow::Helpers
   end
 
   def isUserSiteAdmin()
-    loggedInUser = People[cookies[:people]]
+    loggedInUser = get_user_from_cookies()
     if loggedInUser.nil?
       return false
     end
@@ -492,7 +505,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_hsv_admin_or_site_admin()
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -507,7 +520,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_bhm_admin_or_site_admin()
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -524,7 +537,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_bhm_manager_or_site_admin()
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -544,7 +557,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_manager_of_event(event)
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     people.groups().each{ |group|
       logged_in_users_events = Event.where("group_id = ?", group.id).all
       logged_in_users_events.each { |logged_in_user_event|
@@ -557,7 +570,7 @@ module Pakyow::Helpers
   end
 
   def logged_in_user_is_manager_of_group(group)
-    people = People[cookies[:people]]
+    people = get_user_from_cookies()
     if people.nil?
       return false
     end
@@ -611,7 +624,7 @@ module Pakyow::Helpers
       delta = nextThursday > Date.today ? 0 : 7
       nextThursday = nextThursday + delta
 
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil? == false && people.admin
         time_limit = DateTime.now.utc
       else
@@ -638,7 +651,7 @@ module Pakyow::Helpers
       delta = nextThursday > Date.today ? 0 : 7
       nextThursday = nextThursday + delta
 
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil? == false
         time_limit = DateTime.now.utc
       else
@@ -661,7 +674,7 @@ module Pakyow::Helpers
       delta = nextWednesday > Date.today ? 0 : 7
       nextWednesday = nextWednesday + delta
 
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil? == false
         time_limit = DateTime.now.utc
       else
@@ -686,21 +699,59 @@ module Pakyow::Helpers
   end
 
   def get_token_from_cookies()
-    box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
+    #box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
     cookie = cookies[:userinfo]
-    if cookie.nil?
+    if cookie.to_s.empty?
       return nil
     end
-    token = Marshal.load(box.decrypt(cookies[:userinfo]))
-    return token
+    #token = Marshal.load(box.decrypt(cookies[:userinfo]))
+    cookie
   end
 
-  def get_user_from_token(token)
-    if token.nil?
+  def find_or_create_user_from_auth0_id(token)
+    tokensplit = token.uid.split('|')
+    if tokensplit.length != 2
       return nil
     end
-    user = People.where(Sequel.lit('email = ?', token.info.name)).first
-    return user
+    auth0id = token.uid
+    user = People.where(Sequel.lit('auth0_id = ?', auth0id)).first
+
+    if user.nil?
+      #we don't have a user with the auth0_id.
+      #either find the user from their email, or if that doesn't exist, create a new one
+      user = People.where(Sequel.lit('email = ?', token.info.name)).first
+      if user.nil?
+        #create a new user
+        c_params = { "auth0_id" => auth0id, "email" => token.info.name, "custom_url" => tokensplit[1], "admin" => false, "approved" => false, "opt_in" => true, "opt_in_time" => Time.now.utc, "is_elite" => false }
+        user = People.new(c_params)
+        user.save
+      else
+        #update to store auth0_id
+        user.auth0_id = auth0id
+        user.approved = true
+        user.save
+      end
+    else
+      #if we have user with auth0_id, keep their email up to date
+      user.email = token.info.name
+      user.approved = true
+      user.save
+    end
+    
+    user
+  end
+
+  def get_user_from_token(tokenStr)
+    if tokenStr.to_s.empty?
+      return nil
+    end
+    token = YAML.load(tokenStr)
+    if token.to_s.empty?
+      return nil
+    end
+
+    user = find_or_create_user_from_auth0_id(token)
+    user
   end
 
   def get_user_from_cookies()
@@ -708,15 +759,18 @@ module Pakyow::Helpers
     if token.nil?
       return nil
     end
-    return get_user_from_token(token)
+    user = get_user_from_token(token)
+    user
   end
 
   def put_token_in_cookies(token)
     if token.nil?
       return
     end
-    box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
-    cookies[:userinfo] = box.encrypt(Marshal.dump(token))
+    #box = RbNaCl::SimpleBox.from_secret_key(Base64.decode64(ENV['RBNACL_KEY']))
+    #puts box.encrypt(Marshal.dump(token))
+    #session[:userinfo] = box.encrypt(Marshal.dump(token))
+    cookies[:userinfo] = token.to_yaml
   end
 
 end # module Pakyow::Helpers

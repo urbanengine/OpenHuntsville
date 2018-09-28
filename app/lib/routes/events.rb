@@ -8,7 +8,7 @@ Pakyow::App.routes(:events) do
       # GET /events/manage;
       get 'manage', :before => :is_hsv_event_manager do
         events_all = []
-  		  people = People[cookies[:people]]
+  		  people = get_user_from_cookies()
         if people.nil?
           redirect '/errors/404'
         end
@@ -30,7 +30,7 @@ Pakyow::App.routes(:events) do
         end
         view.scope(:people).bind(people)
         view.scope(:events).apply(events_all)
-        current_user = People[cookies[:people]]
+        current_user = get_user_from_cookies()
         view.scope(:optin).apply(current_user)
         view.scope(:head).apply(request)
         view.scope(:main_menu).apply(request)
@@ -95,7 +95,7 @@ Pakyow::App.routes(:events) do
         if event.nil?
           redirect "/errors/404"
         end
-        people = People[cookies[:people]]
+        people = get_user_from_cookies()
         isNotSiteAdmin = people != nil && people.admin != nil && people.admin == false
         if event.approved && isNotSiteAdmin
           redirect "/errors/404"
@@ -117,7 +117,7 @@ Pakyow::App.routes(:events) do
 
     # GET /events; same as Index
     action :list do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -129,7 +129,7 @@ Pakyow::App.routes(:events) do
         }
       }
       view.scope(:events).apply(events_all)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
@@ -137,7 +137,7 @@ Pakyow::App.routes(:events) do
 
     # GET /events/:events_id
     action :show do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -150,7 +150,7 @@ Pakyow::App.routes(:events) do
       end
       view.scope(:people).bind(people)
       view.scope(:events).apply([event, event])
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
@@ -158,7 +158,7 @@ Pakyow::App.routes(:events) do
 
     # GET '/events/new'
     action :new, :before => :is_hsv_event_manager do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -166,7 +166,7 @@ Pakyow::App.routes(:events) do
         bind(Event.new)
       end
       view.scope(:people).bind(people)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)
@@ -174,7 +174,7 @@ Pakyow::App.routes(:events) do
 
     #POST '/events/'
     action :create, :before => :is_hsv_event_manager do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -212,7 +212,7 @@ Pakyow::App.routes(:events) do
 
     #PATCH '/events/:events_id'
     action :update, :before => :is_hsv_event_manager do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -260,7 +260,7 @@ Pakyow::App.routes(:events) do
 
     # GET '/events/:events_id/edit'
     action :edit, :before => :is_hsv_event_manager do
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       if people.nil?
         redirect '/errors/404'
       end
@@ -276,7 +276,7 @@ Pakyow::App.routes(:events) do
       end
       view.scope(:events).bind([event, event, event])
       view.scope(:people).bind(people)
-      current_user = People[cookies[:people]]
+      current_user = get_user_from_cookies()
       view.scope(:optin).apply(current_user)
       view.scope(:head).apply(request)
       view.scope(:main_menu).apply(request)

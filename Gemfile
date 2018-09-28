@@ -14,7 +14,7 @@ group :development do
 end
 
 ## Sequel: The Database Toolkit for Ruby - http://sequel.jeremyevans.net
-gem "sequel"
+gem "sequel", '4.49.0'
 
 ## ???
 gem "httparty"

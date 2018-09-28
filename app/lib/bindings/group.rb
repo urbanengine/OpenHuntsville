@@ -46,10 +46,10 @@ Pakyow::App.bindings :groups do
 			title = ""
 			link = ""
 			content = ""
-			if cookies[:people].nil?
+			if cookies[:userinfo].nil?
 					show = "show"
 					title = "Log in to view " + bindable.name + "'s Website"
-					link = "/sessions/new"
+					link = "/auth/auth0"
 					content = "Log in to view"
 			else
 				content = "Website"
@@ -272,42 +272,6 @@ Pakyow::App.bindings :groups do
 			}
 		end
 
-		# binding(:image_unveil) do
-		# 	src = ""
-		# 	name = ""
-		# 	unless bindable.nil?
-		# 		unless bindable.first_name.nil? || bindable.last_name.nil?
-		# 			name = bindable.first_name + " " + bindable.last_name
-    #
-		# 			unless bindable.image_url.nil?
-		# 				src = bindable.image_url
-		# 			else
-		# 				src = "https://s3.amazonaws.com/openhsv.com/manual-uploads/" + bindable.first_name + "-" + bindable.last_name + ".jpg"
-		# 			end
-		# 		end
-		# 	end
-		# 	{
-    #
-		# 		:'data-src' => src,
-		# 		:title =>  name,
-		# 		:alt => name
-		# 	}
-		# end
-		#binding(:custom_url) do
-		#	bindable.custom_url
-		#end
-		# binding(:admin) do
-		# 	{
-		# 		:checked => bindable[:admin]
-		# 	}
-		# end
-    #
-		# binding(:approved) do
-		# 	{
-		# 		:checked => bindable[:approved]
-		# 	}
-		# end
-
 		binding(:group_link) do
 			name = ""
 		 	unless bindable.name.nil?
@@ -345,7 +309,7 @@ Pakyow::App.bindings :groups do
 
 			if isEditPage
 				# 2. We are editting, but check if we're site admin and/or group admin to expose admin_fieldset
-				people = People[cookies[:people]]
+				people = get_user_from_cookies()
 						isSiteAdmin = people != nil && people.admin != nil && people.admin == true
 
 						group = Group[bindable.id]
@@ -388,7 +352,7 @@ Pakyow::App.bindings :groups do
 
 		binding(:delete_group_link) do
 			cssclass = "delete-btn"
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
 			
 			if bindable.approved && isSiteAdmin == false
@@ -428,7 +392,7 @@ Pakyow::App.bindings :groups do
 
 		binding(:websiteadmin_fieldset) do
       		visible = "hide"
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
 			if isSiteAdmin
 				visible = "show"
@@ -458,7 +422,7 @@ Pakyow::App.bindings :group_admins do
 
 		binding(:admin_name) do
 			{
-			:content => bindable.first_name + " " + bindable.last_name
+			:content => bindable.email
 			}
 		end
 
@@ -478,7 +442,7 @@ Pakyow::App.bindings :group_admins do
 			end
 			href = "#"
 			#Note: we are not allowing a user to remove themselves as admin
-      people = People[cookies[:people]]
+      people = get_user_from_cookies()
       unless people.nil?
 				if people.id == bindable.id || bindable.admin == true
 					content = ""

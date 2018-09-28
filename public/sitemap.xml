@@ -21,11 +21,11 @@
   <changefreq>daily</changefreq>
 </url>
 <url>
-  <loc>http://www.openhsv.com/people/new</loc>
+  <loc>http://www.openhsv.com/auth/auth0</loc>
   <changefreq>daily</changefreq>
 </url>
 <url>
-  <loc>http://www.openhsv.com/sessions/new</loc>
+  <loc>http://www.openhsv.com/auth/auth0</loc>
   <changefreq>never</changefreq>
 </url>
 <url>

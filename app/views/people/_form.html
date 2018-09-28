@@ -10,18 +10,6 @@
     <ul>
     <input type="hidden" data-prop="id" />
       <li>
-        <label>First Name</label>
-        <input type="text" data-prop="first_name" name="people[first_name]" placeholder="First Name">
-      </li>
-      <li>
-        <label>Last Name</label>
-        <input type="text" data-prop="last_name" name="people[last_name]" placeholder="Last Name">
-      </li>
-      <li>
-        <label>Email</label>
-        <input type="email" data-prop="email" name="people[email]">
-      </li>
-      <li>
         <label>Profile URL</label>
         <label class="sublabel">Customize your profile URL so that you can share your profile with your friends and colleagues, ie. "openhsv.com/people/<strong>john</strong>".<br />Please use letters, numbers, and hyphens only. All other special characters are not allowed.</label>
         <input type="text" data-prop="custom_url" name="people[custom_url]" id="custom_url" pattern="[a-zA-Z0-9-]+" >
@@ -78,20 +66,6 @@
     </ul>
     <input id="submit" type="submit" style="display: inline-block;" value="Save">
     <a href="#" class="delete-btn" data-prop="delete_user_link"></a>
-  </fieldset>
-
-  <fieldset>
-    <legend>Password Reset</legend>
-    <ul>
-      <li>
-        <label>Enter New Password</label>
-        <input type="password" data-prop="password" name="people[password]" value="" placeholder="Enter Your Password">
-      </li>
-      <li>
-        <label>Re-Enter New Password</label>
-        <input type="password" data-prop="password_confirmation" name="people[password_confirmation]" value="" placeholder="Confirm Your Password">
-      </li>
-    </ul>
   </fieldset>
 
   <fieldset data-prop="admin_fieldset">

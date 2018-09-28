@@ -17,7 +17,7 @@ Pakyow::App.bindings :main_menu do
 				if splat[2].nil?
 					css_class = "selected"
 				end
-				unless splat[2] == "new" || splat[2] == "create-profile"
+				unless splat[2] == "new"
 					if splat[3].nil? || splat[3] != "edit"
 						css_class = "selected"
 					end
@@ -65,18 +65,13 @@ Pakyow::App.bindings :main_menu do
   		}
   	end
 
-	binding(:create_profile_link) do
-  		css_class = ""
-  		content = "Create Profile"
-  		href = "/people/new"
+	binding(:edit_profile_link) do
+  		css_class = "hide"
+  		content = ""
+  		href = "#"
 		splat = request.path.split("/")
 		unless splat[1].nil? || splat[1].length == 0
 			if splat[1] == "people"
-				unless splat[2].nil? || splat[2].length == 0
-					if splat[2] == "new" || splat[2] == "create-profile"
-						css_class = "selected"
-					end
-				end
 				unless splat[3].nil? || splat[3].length == 0
 					if splat[3] == "edit"
 						css_class = "selected"
@@ -84,11 +79,14 @@ Pakyow::App.bindings :main_menu do
 				end
 			end
 		end
-		unless cookies[:people].nil? || cookies[:people] == 0
-			person = People[cookies[:people]]
+		unless cookies[:userinfo].nil?
+			person = get_user_from_cookies()
 			unless person.nil?
 				content = "Edit Profile"
 				href = "/people/" + person.custom_url + "/edit"
+				if css_class == "hide"
+					css_class = ""
+				end
 			end
 		end
   		{
@@ -102,8 +100,8 @@ Pakyow::App.bindings :main_menu do
 		css_class = "hide"
 		content = ""
 		href = "#"
-		unless cookies[:people].nil? || cookies[:people] == 0
-			person = People[cookies[:people]]
+		unless cookies[:userinfo].nil?
+			person = get_user_from_cookies()
 			unless person.nil?
         if logged_in_user_is_hsv_admin_or_site_admin()
 			content = "Manage Events"
@@ -132,8 +130,8 @@ Pakyow::App.bindings :main_menu do
 		css_class = "hide"
 		content = ""
 		href = "#"
-		unless cookies[:people].nil? || cookies[:people] == 0
-			person = People[cookies[:people]]
+		unless cookies[:userinfo].nil?
+			person = get_user_from_cookies()
 			unless person.nil?
 				if logged_in_user_is_bhm_manager_or_site_admin()
 					content = "Manage BHM Events"
@@ -168,8 +166,8 @@ Pakyow::App.bindings :main_menu do
 				css_class = "selected"
 			end
 		end
-		unless cookies[:people].nil? || cookies[:people] == 0
-			person = People[cookies[:people]]
+		unless cookies[:userinfo].nil?
+			person = get_user_from_cookies()
 			unless person.nil?
 				content = "Log Out"
 				href = "/logout"
@@ -183,8 +181,8 @@ Pakyow::App.bindings :main_menu do
   	end
 	binding(:uid) do
 		val = ""
-		unless cookies[:people].nil? || cookies[:people] == 0
-			person = People[cookies[:people]]
+		unless cookies[:useirnfo].nil?
+			person = get_user_from_cookies()
 		    unless person.nil?
 		    	val = person.id
 			end

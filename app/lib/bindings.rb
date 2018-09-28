@@ -1,16 +1,4 @@
 Pakyow::App.bindings do
-
-    scope :session do
-      restful :session
-      
-      binding(:forgotPasswordLink) do
-        {
-          :content => 'Forgot Password?',
-          :href => '/auth/forgotpassword/'
-        }
-      end
-    end
-
     scope :search_results do
     	restful :search_results
 

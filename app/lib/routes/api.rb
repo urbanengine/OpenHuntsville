@@ -96,7 +96,7 @@ Pakyow::App.routes(:api) do
                   delta = nextWednesday > Date.today ? 0 : 7
                   nextWednesday = nextWednesday + delta
     
-                  people = People[cookies[:people]]
+                  people = get_user_from_cookies()
                   if people.nil? == false && people.admin
                     time_limit = DateTime.now.utc
                   else
@@ -123,7 +123,7 @@ Pakyow::App.routes(:api) do
                     delta = nextThursday > Date.today ? 0 : 7
                     nextThursday = nextThursday + delta
 
-                    people = People[cookies[:people]]
+                    people = get_user_from_cookies()
                     if people.nil? == false && people.admin
                       time_limit = DateTime.now.utc
                     else
@@ -290,7 +290,7 @@ Pakyow::App.routes(:api) do
               delta = nextThursday > Date.today ? 0 : 7
               nextThursday = nextThursday + delta
 
-              people = People[cookies[:people]]
+              people = get_user_from_cookies()
               if people.nil? == false && people.admin
                 time_limit = DateTime.now.utc
               else
@@ -470,7 +470,7 @@ Pakyow::App.routes(:api) do
 
           get 'users' do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-              users = People.where("opt_in = TRUE AND approved = TRUE AND first_name IS NOT NULL AND last_name IS NOT NULL").all
+              users = People.where("opt_in = TRUE AND approved = TRUE AND email IS NOT NULL").all
               response.write('[')
               first_time = true
               users.each { |user|
@@ -479,12 +479,19 @@ Pakyow::App.routes(:api) do
                else
                  response.write(',')
                end
-               json =
-                 {
-                   "email" => user.email,
-                   "name" => user.first_name + " " + user.last_name
-                 }
-                 response.write(json.to_json)
+               if user.first_name.to_s.empty? || user.last_name.to_s.empty?
+                json = {
+                  "email" => user.email,
+                  "name" => user.email
+                }
+               else
+                json =
+                  {
+                    "email" => user.email,
+                    "name" => user.first_name + " " + user.last_name
+                  }
+                end
+                response.write(json.to_json)
               }
               response.write(']')
             else
@@ -540,7 +547,7 @@ Pakyow::App.routes(:api) do
                       }
                       person = People.new(p_params)
                       person.save
-
+              
                       custom_url = first_name + "-" + last_name + "-" + person.id.to_s
                       if unique_url(person.id, custom_url)
                         if slug_contains_invalid(custom_url)
@@ -553,17 +560,7 @@ Pakyow::App.routes(:api) do
                       end
                       person.save
 
-                      a_params = {
-                        "token" => SecureRandom.uuid,
-                        "people_id" => person.id,
-                        "expiration_date" => (Time.now.utc + 1.month),
-                        "used" => false
-                      }
-
-                      auth = Auth.new(a_params)
-                      auth.save
-
-                      send_auth_email(person, auth, :verifyemail)
+                      send_checkin_acct_creation_email(person)
 
                       c_params =
                       {
@@ -574,8 +571,8 @@ Pakyow::App.routes(:api) do
                       checkin.save
 
                       gibbon = Gibbon::Request.new
-                      #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
-                      #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
+                      puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
+                      puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
                       begin
                         gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
                       rescue Gibbon::MailChimpError => exception
@@ -605,17 +602,7 @@ Pakyow::App.routes(:api) do
                     response.status = 201
 
                     if person.approved == false
-                      a_params = {
-                        "token" => SecureRandom.uuid,
-                        "people_id" => person.id,
-                        "expiration_date" => (Time.now.utc + 1.month),
-                        "used" => false
-                      }
-
-                      auth = Auth.new(a_params)
-                      auth.save
-
-                      send_auth_email(person, auth, :verifyemail)
+                      send_checkin_acct_creation_email(person)
 
                       gibbon = Gibbon::Request.new
                       #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect

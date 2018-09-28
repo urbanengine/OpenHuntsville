@@ -5,7 +5,7 @@ Pakyow::App.bindings :events do
 		restful :events
 
 		binding(:should_restrict_event_starttime) do
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			{
 				:content => if (!people.nil? && !people.admin.nil? && people.admin) then "false" else "true" end
 			}
@@ -108,7 +108,7 @@ Pakyow::App.bindings :events do
 
 		binding(:approved) do
 			content = if bindable.approved then "Approved" else "Pending" end
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			if people.admin
 				if bindable.approved
 					content = "<p><a class='unapprove-btn' href='/events/unapprove/" + bindable.id.to_s + "'>Unapprove</a></p>"
@@ -122,7 +122,7 @@ Pakyow::App.bindings :events do
 		end
 
 		binding(:edit_event_link) do
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			{
 			:content => "Edit Event",
 			:href => '/events/' + bindable.id.to_s + '/edit'
@@ -179,7 +179,7 @@ Pakyow::App.bindings :events do
 
 		binding(:websiteadmin_fieldset) do
 			visible = "hide"
-			people = People[cookies[:people]]
+			people = get_user_from_cookies()
 			isSiteAdmin = people != nil && people.admin != nil && people.admin == true
 			if isSiteAdmin
 				visible = "show"
@@ -206,7 +206,7 @@ Pakyow::App.bindings :events do
 			updator = People.where("id = ?", bindable.updated_by).first
 			content = ""
 			unless creator.nil? || updator.nil?
-				content = "This event was created by " + creator.first_name + " " + creator.last_name + " on " + bindable.created_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') + " and updated by " + updator.first_name + " " + updator.last_name + " on " + bindable.updated_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p')
+				content = "This event was created by " + creator.email + " on " + bindable.created_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p') + " and updated by " + updator.email + " on " + bindable.updated_at.in_time_zone("Central Time (US & Canada)").strftime('%b %d, %Y %I:%M %p')
 			end
 			{
 				:content => content
