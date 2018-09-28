@@ -160,6 +160,7 @@ Pakyow::App.routes(:api) do
             # "room_req":"Milky Way Row",
             # "start_time":"2017-01-12T02:00:00.000Z",
             # "end_time":"2017-01-12T03:00:00.000Z",
+            # "isCancelled": "false"
             # "category":"Programming",
             # "icon":"terminal"
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
@@ -202,6 +203,7 @@ Pakyow::App.routes(:api) do
                    "room_req" => Venue.where("id = ?", event.venue_id).first.name,
                    "start_time" => event.start_datetime.utc,
                    "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
+                   "isCancelled" => event.archived,
                    "category" => event.flyer_category,
                    "icon" => event.flyer_fa_icon
                  }
@@ -227,6 +229,7 @@ Pakyow::App.routes(:api) do
             # "room_req":"Milky Way Row",
             # "start_time":"2017-01-12T02:00:00.000Z",
             # "end_time":"2017-01-12T03:00:00.000Z",
+            # "isCancelled": "false"
             # "category":"Programming",
             # "icon":"terminal"
 
@@ -262,6 +265,7 @@ Pakyow::App.routes(:api) do
                    "room_req" => Venue.where("id = ?", event.venue_id).first.name,
                    "start_time" => event.start_datetime.utc,
                    "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
+                   "isCancelled" => event.archived,
                    "category" => event.flyer_category,
                    "icon" => event.flyer_fa_icon
                  }
