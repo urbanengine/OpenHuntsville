@@ -624,6 +624,80 @@ Pakyow::App.routes(:api) do
         end # collection do
       end # expand :restful, :v1, '/v1' do
 
+      expand :restful, :v2, '/v2' do
+        collection do
+          expand :restful, :flyer, '/flyer' do
+            expand :restful, :group '/group' do
+              # {
+              #   "cwn: {
+              #     "approved": true,
+              #     "isCancelled": "false",
+              #     "instance_number": 88,
+              #     "start_time":"2017-01-12T02:00:00.000Z",
+              #     "end_time":"2017-01-12T03:00:00.000Z",
+              #     "workshops": [
+              #       {
+              #         "approved": true,
+              #         "isCancelled": "false",
+              #         "group":"Designer's Corner",
+              #         "title":"CoWorking Night Tshirt Competition",
+              #         "description":"Come in to get some last minute ideas for your entry to the CoWorking Night Tshirt competition! ",
+              #         "date":"2017-01-11T06:00:00.000Z",
+              #         "room":"Milky Way Row",
+              #         "start_time":"2017-01-12T02:00:00.000Z",
+              #         "end_time":"2017-01-12T03:00:00.000Z",
+              #         "category":"Programming",
+              #         "icon":"terminal"
+              #       }
+              #     ]
+              #   }
+              # }
+              action :list do
+                if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+                  # Get all CoWorking Night events
+                  next_cwn_event = Event.where("group_id = ? AND archived = ?", params[:id], false).first
+                  next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first(2)[1]
+                  json = {}
+                  for event in next_cwn_event do
+                    child_events = Event.where("parent_id = ? AND archived = ?", event.id, false).all
+                    workshops = []
+                    for child_event in child_events do
+                      workshop = {
+                        "approved" => child_event.approved
+                        "isCancelled" => child_event.archived
+                        "group" => Group.where("id = ?", child_event.group_id).first.name,
+                        "title" => child_event.name,
+                        "description" => child_event.summary,
+                        "date" => child_event.start_datetime.utc,
+                        "room" => Venue.where("id = ?", child_event.venue_id).first.name,
+                        "start_time" => child_event.start_datetime.utc,
+                        "end_time" => (child_event.start_datetime.to_time + child_event.duration.hours).utc,
+                        "category" => child_event.flyer_category,
+                        "icon" => child_event.flyer_fa_icon
+                      }
+                      workshops.push( workshop )
+                    end
+                    json["cwn"] = {
+                      "approved" => event.approved,
+                      "isCancelled" => event.archived,
+                      "instance_number" => event.instance_number,
+                      "start_time" => event.start_datetime.utc,
+                      "end_time" => (event.start_datetime.to_time + event.duration.hours).utc
+                      "workshops" => workshops
+                    }
+
+                    response.status = 200
+                    response.write( json.to_json ) 
+                  end # for in
+                else
+                  # respond to normal request
+                  redirect '/errors/403'
+                end # if else
+              end # action list
+            end # expand :restful :group, '/group' do
+          end # expand :restful, :flyer, '/flyer' do
+        end # collection do
+      end # expand :restful :v2 '/v2' do
     end # collection do
   end # expand :restful, :api, '/api' do
 
