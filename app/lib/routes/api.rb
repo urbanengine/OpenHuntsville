@@ -627,7 +627,7 @@ Pakyow::App.routes(:api) do
       expand :restful, :v2, '/v2' do
         collection do
           expand :restful, :flyer, '/flyer' do
-            expand :restful, :group '/group' do
+            expand :restful, :group, '/group' do
               # {
               #   "cwn: {
               #     "approved": true,
@@ -663,8 +663,8 @@ Pakyow::App.routes(:api) do
                     workshops = []
                     for child_event in child_events do
                       workshop = {
-                        "approved" => child_event.approved
-                        "isCancelled" => child_event.archived
+                        "approved" => child_event.approved,
+                        "isCancelled" => child_event.archived,
                         "group" => Group.where("id = ?", child_event.group_id).first.name,
                         "title" => child_event.name,
                         "description" => child_event.summary,
@@ -676,13 +676,14 @@ Pakyow::App.routes(:api) do
                         "icon" => child_event.flyer_fa_icon
                       }
                       workshops.push( workshop )
-                    end
+                    end # for in
+
                     json["cwn"] = {
                       "approved" => event.approved,
                       "isCancelled" => event.archived,
                       "instance_number" => event.instance_number,
                       "start_time" => event.start_datetime.utc,
-                      "end_time" => (event.start_datetime.to_time + event.duration.hours).utc
+                      "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                       "workshops" => workshops
                     }
 
