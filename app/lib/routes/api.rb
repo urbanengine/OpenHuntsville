@@ -627,7 +627,7 @@ Pakyow::App.routes(:api) do
       expand :restful, :v2, '/v2' do
         collection do
           expand :restful, :flyer, '/flyer' do
-            expand :restful, :group, '/group' do
+            get '/group/:id' do
               # {
               #   "cwn: {
               #     "approved": true,
@@ -652,11 +652,18 @@ Pakyow::App.routes(:api) do
               #     ]
               #   }
               # }
-              action :list do
-                if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-                  # Get all CoWorking Night events
-                  next_cwn_event = Event.where("group_id = ? AND archived = ?", params[:id], false).first
-                  next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first(2)[1]
+              if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+                # Get all CoWorking Night events
+                pp "id=#{params[:id]}"
+                next_cwn_event = Event.where(Sequel.lit("approved = ? AND start_datetime > ? AND group_id = ? AND archived = ?", true, DateTime.now.utc, params[:id], false)).order(:start_datetime).first
+                if next_cwn_event.nil?
+                  json = {
+                    "message": "No CoWorking Night events exist at this time."
+                  }
+                  response.status = 200
+                  response.write( json.to_json ) 
+                else 
+                  pp next_cwn_event
                   json = {}
                   for event in next_cwn_event do
                     child_events = Event.where("parent_id = ? AND archived = ?", event.id, false).all
@@ -690,16 +697,15 @@ Pakyow::App.routes(:api) do
                     response.status = 200
                     response.write( json.to_json ) 
                   end # for in
-                else
-                  # respond to normal request
-                  redirect '/errors/403'
-                end # if else
-              end # action list
+                end # else 
+              else
+                # respond to normal request
+                redirect '/errors/403'
+              end # if else
             end # expand :restful :group, '/group' do
           end # expand :restful, :flyer, '/flyer' do
         end # collection do
       end # expand :restful :v2 '/v2' do
     end # collection do
   end # expand :restful, :api, '/api' do
-
 end # Pakyow::App.routes(:api) do
