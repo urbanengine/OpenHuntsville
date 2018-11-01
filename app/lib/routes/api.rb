@@ -669,6 +669,7 @@ Pakyow::App.routes(:api) do
                     "message": "No CoWorking Night events exist at this time."
                   }
                   response.status = 200
+                  response.headers['Content-Type'] = 'application/json'
                   response.write( json.to_json ) 
                 else 
                   json = {}
@@ -679,9 +680,9 @@ Pakyow::App.routes(:api) do
                       "message": "No workshops have been schedule at this time. Please check back at a later time."
                     }
                     response.status = 200
+                    response.headers['Content-Type'] = 'application/json'
                     response.write( json.to_json ) 
                   else
-                    pp "child_events = #{child_events}"
                     workshops = []
                     for child_event in child_events do            
                       workshop = {
@@ -710,6 +711,7 @@ Pakyow::App.routes(:api) do
                     }
 
                     response.status = 200
+                    response.headers['Content-Type'] = 'application/json'
                     response.write( json.to_json ) 
                 end # if else
                 end # else 
