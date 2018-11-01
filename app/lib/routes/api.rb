@@ -624,7 +624,103 @@ Pakyow::App.routes(:api) do
         end # collection do
       end # expand :restful, :v1, '/v1' do
 
+      expand :restful, :v2, '/v2' do
+        collection do
+          expand :restful, :flyer, '/flyer' do
+            get '/group/:id' do
+              # {
+              #   "cwn: {
+              #     "approved": true,
+              #     "isCancelled": "false",
+              #     "instance_number": 88,
+              #     "start_time":"2017-01-12T02:00:00.000Z",
+              #     "end_time":"2017-01-12T03:00:00.000Z",
+              #     "workshops": [
+              #       {
+              #         "approved": true,
+              #         "isCancelled": "false",
+              #         "group":"Designer's Corner",
+              #         "title":"CoWorking Night Tshirt Competition",
+              #         "description":"Come in to get some last minute ideas for your entry to the CoWorking Night Tshirt competition! ",
+              #         "date":"2017-01-11T06:00:00.000Z",
+              #         "room":"Milky Way Row",
+              #         "start_time":"2017-01-12T02:00:00.000Z",
+              #         "end_time":"2017-01-12T03:00:00.000Z",
+              #         "category":"Programming",
+              #         "icon":"terminal"
+              #       }
+              #     ]
+              #   }
+              # }
+              if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+                # Get all CoWorking Night events
+                next_cwn_event = Event.where(Sequel.lit("approved = ? AND start_datetime > ? AND group_id = ? AND archived = ?", true, DateTime.now.utc, params[:id], false)).order(:start_datetime).first
+
+                # Check if last cwn_event is still occurring. If it is, then use it
+                last_cwn_event = Event.where(Sequel.lit("approved = ? AND start_datetime < ? AND group_id = ? AND archived = ?", true, DateTime.now.utc, params[:id], false)).order(:start_datetime).last
+                unless last_cwn_event.nil?
+                  if (((DateTime.now.utc.to_time - last_cwn_event.start_datetime) / 1.hours) < last_cwn_event.duration)
+                    next_cwn_event = last_cwn_event
+                  end
+                end
+
+                if next_cwn_event.nil?
+                  json = {
+                    "message": "No CoWorking Night events exist at this time."
+                  }
+                  response.status = 200
+                  response.write( json.to_json ) 
+                else 
+                  json = {}
+                  child_events = Event.where(Sequel.lit("parent_id = ? AND archived = ?", next_cwn_event.id, false)).all
+                  if child_events.nil?
+                    # no events have been scheduled (approved) at this time
+                    json = {
+                      "message": "No workshops have been schedule at this time. Please check back at a later time."
+                    }
+                    response.status = 200
+                    response.write( json.to_json ) 
+                  else
+                    pp "child_events = #{child_events}"
+                    workshops = []
+                    for child_event in child_events do            
+                      workshop = {
+                        "approved" => child_event.approved,
+                        "isCancelled" => child_event.archived,
+                        "group" => Group.where(Sequel.lit("id = ?", child_event.group_id)).first.name,
+                        "title" => child_event.name,
+                        "description" => child_event.summary,
+                        "date" => child_event.start_datetime.utc,
+                        "room" => Venue.where(Sequel.lit("id = ?", child_event.venue_id)).first.name,
+                        "start_time" => child_event.start_datetime.utc,
+                        "end_time" => (child_event.start_datetime.to_time + child_event.duration.hours).utc,
+                        "category" => child_event.flyer_category,
+                        "icon" => child_event.flyer_fa_icon
+                      }
+                      workshops.push( workshop )
+                    end # for in
+  
+                    json["cwn"] = {
+                      "approved" => next_cwn_event.approved,
+                      "isCancelled" => next_cwn_event.archived,
+                      "instance_number" => next_cwn_event.instance_number,
+                      "start_time" => next_cwn_event.start_datetime.utc,
+                      "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
+                      "workshops" => workshops
+                    }
+
+                    response.status = 200
+                    response.write( json.to_json ) 
+                end # if else
+                end # else 
+              else
+                # respond to normal request
+                redirect '/errors/403'
+              end # if else
+            end # expand :restful :group, '/group' do
+          end # expand :restful, :flyer, '/flyer' do
+        end # collection do
+      end # expand :restful :v2 '/v2' do
     end # collection do
   end # expand :restful, :api, '/api' do
-
 end # Pakyow::App.routes(:api) do
