@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "~> 2.4.0"
+ruby "> 2.4.0"
 
 gem "pakyow", '~> 0.11.3'
 
