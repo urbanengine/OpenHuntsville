@@ -666,7 +666,8 @@ Pakyow::App.routes(:api) do
 
                 if next_cwn_event.nil?
                   json = {
-                    "message": "No CoWorking Night events exist at this time."
+                    "message": "No CoWorking Night events exist at this time.",
+                    "cwn": {}
                   }
                   response.status = 200
                   response.headers['Content-Type'] = 'application/json'
