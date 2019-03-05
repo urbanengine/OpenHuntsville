@@ -674,12 +674,13 @@ Pakyow::App.routes(:api) do
                   response.write( json.to_json ) 
                 else 
                   json = {}
-                  message = ""
                   child_events = Event.where(Sequel.lit("parent_id = ? AND archived = ?", next_cwn_event.id, false)).all
                  
                   if child_events.empty?
                     # no events have been scheduled (approved) at this time
-                    message = "No workshops have been schedule at this time. Please check back at a later time."
+                    json = {
+                      "message": "No workshops have been schedule at this time. Please check back at a later time."
+                    }
                   else
                     workshops = []
                     for child_event in child_events do            
@@ -699,16 +700,13 @@ Pakyow::App.routes(:api) do
                       workshops.push( workshop )
                     end # for in
                     
-                    json = {
-                      "message": message,
-                      "cwn": {
-                        "approved" => next_cwn_event.approved,
-                        "isCancelled" => next_cwn_event.archived,
-                        "instance_number" => next_cwn_event.instance_number,
-                        "start_time" => next_cwn_event.start_datetime.utc,
-                        "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
-                        "workshops" => workshops
-                      }
+                    json["cwn"] = {
+                      "approved" => next_cwn_event.approved,
+                      "isCancelled" => next_cwn_event.archived,
+                      "instance_number" => next_cwn_event.instance_number,
+                      "start_time" => next_cwn_event.start_datetime.utc,
+                      "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
+                      "workshops" => workshops
                     }
 
                     response.status = 200
