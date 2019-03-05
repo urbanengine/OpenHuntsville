@@ -681,6 +681,7 @@ Pakyow::App.routes(:api) do
                     json = {
                       "message": "No workshops have been schedule at this time. Please check back at a later time."
                     }
+                    response.write( json.to_json )
                   else
                     workshops = []
                     for child_event in child_events do            
