@@ -677,8 +677,7 @@ Pakyow::App.routes(:api) do
                   message = ""
                   child_events = Event.where(Sequel.lit("parent_id = ? AND archived = ?", next_cwn_event.id, false)).all
                  
-                  print child_events # for testing purposes removed when done
-                  if child_events.nil?
+                  if child_events.empty?
                     # no events have been scheduled (approved) at this time
                     message = "No workshops have been schedule at this time. Please check back at a later time."
                   else
