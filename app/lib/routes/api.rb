@@ -666,7 +666,7 @@ Pakyow::App.routes(:api) do
 
                 if next_cwn_event.nil?
                   json = {
-                    "message": "No CoWorking Night events exist at this time.",
+                    "message": "This event has not yet been scheduled. Please check back soon or visit the CoWorking Night Facebook page (https://www.facebook.com/urbanenginecoworkingnight/) for updates.",
                     "cwn": {}
                   }
                   response.status = 200
@@ -679,7 +679,7 @@ Pakyow::App.routes(:api) do
                   if child_events.empty?
                     # no events have been scheduled (approved) at this time
                     json = {
-                      "message": "No workshops have been schedule at this time. Please check back at a later time.",
+                      "message": "The schedule is not yet available. Please check back soon.",
                       "cwn": {
                         "approved" => next_cwn_event.approved,
                         "isCancelled" => next_cwn_event.archived,
