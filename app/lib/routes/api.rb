@@ -677,9 +677,7 @@ Pakyow::App.routes(:api) do
                   child_events = Event.where(Sequel.lit("parent_id = ? AND archived = ?", next_cwn_event.id, false)).all
                   if child_events.nil?
                     # no events have been scheduled (approved) at this time
-                    json = {
-                      "message": "No workshops have been schedule at this time. Please check back at a later time."
-                    }
+                    json["message"] = "No workshops have been schedule at this time. Please check back at a later time."
                   else
                     workshops = []
                     for child_event in child_events do            
