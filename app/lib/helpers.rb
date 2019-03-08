@@ -1,6 +1,7 @@
 require 'digest/md5'
 require 'nokogiri'
 require 'rack/utils'
+require 'net/http'
 
 module Pakyow::Helpers
   def handle_errors(view)
@@ -737,7 +738,7 @@ module Pakyow::Helpers
       user.approved = true
       user.save
     end
-    
+
     user
   end
 
@@ -771,6 +772,46 @@ module Pakyow::Helpers
     #puts box.encrypt(Marshal.dump(token))
     #session[:userinfo] = box.encrypt(Marshal.dump(token))
     cookies[:userinfo] = token.to_yaml
+  end
+
+  def execute_webhooks(body)
+    current_time = DateTime.now.utc
+    one_day_ago = (DateTime.now.utc - 1.hours).utc
+
+    #get webhooks more than 1 day old, and delete them
+    webhooks_to_delete = Webhook.where(Sequel.lit("created_at < ?", one_day_ago))
+    webhooks_to_delete.each do |webhook|
+    webhook.delete
+    end
+
+    webhooks_to_execute = Webhook.where(Sequel.lit("created_at > ?", one_day_ago))
+    webhooks_to_execute.each do |webhook|
+      pp webhook.url
+      uri = URI.parse(webhook.url)
+      header = {'Content-Type': 'application/json', 'Authorization': 'DAVIDSAPIKEY'}
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Post.new(uri.request_uri, header)
+      request.body = body
+
+      # Send the request
+      response = http.request(request)
+    end
+  end
+
+  def execute_webhooks_with_person(person)
+    # build JSON
+    # name
+    # title
+    # number of CWN attempts
+    # rank
+    cwnAttendences = Checkin.where(Sequel.lit("people_id = ?", person.id)).count
+    json = {
+      "first_name" => person.first_name,
+      "last_name" => person.last_name,
+      "number" => cwnAttendences > 1 ? cwnAttendences : 0,
+      "rank" => "Newbie"
+    }
+    execute_webhooks(json.to_json)
   end
 
 end # module Pakyow::Helpers

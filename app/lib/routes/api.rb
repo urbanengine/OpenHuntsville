@@ -30,16 +30,16 @@ Pakyow::App.routes(:api) do
                 # "category":"Programming",
                 # "icon":"terminal"
                 if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-                  
+
                   #For now, we'll keep this only exposed for cwn
                   cwn = Group.where("name = 'CoWorking Night: Birmingham'").first
                   if cwn.nil?
                    redirect '/errors/403'
                   end
-    
+
                   #Now lets get all the events for this group. This means all of this group's events and its event's children
                   next_cwn_event = Event.where("approved = true AND start_datetime > ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).first
-    
+
                   #check is last cwn_event is still occurring. If it is, then use it
                   last_cwn_event = Event.where("approved = true AND start_datetime < ? AND group_id = ? AND archived = ?", DateTime.now.utc, cwn.id, false).order(:start_datetime).last
                   unless last_cwn_event.nil?
@@ -47,7 +47,7 @@ Pakyow::App.routes(:api) do
                       next_cwn_event = last_cwn_event
                     end
                   end
-    
+
                   events = get_child_events_for_event(next_cwn_event)
                   response.write('[')
                   first_time = true
@@ -91,11 +91,11 @@ Pakyow::App.routes(:api) do
                   if cwn.nil?
                     redirect '/errors/403'
                   end
-    
+
                   nextWednesday = Date.parse('Wednesday')
                   delta = nextWednesday > Date.today ? 0 : 7
                   nextWednesday = nextWednesday + delta
-    
+
                   people = get_user_from_cookies()
                   if people.nil? == false && people.admin
                     time_limit = DateTime.now.utc
@@ -108,7 +108,7 @@ Pakyow::App.routes(:api) do
                   # respond to normal request
                   redirect '/errors/403'
                 end
-              end #get cwn_events  
+              end #get cwn_events
             end
           end # expand :restful, :bhm, '/bhm' do
 
@@ -547,7 +547,7 @@ Pakyow::App.routes(:api) do
                       }
                       person = People.new(p_params)
                       person.save
-              
+
                       custom_url = first_name + "-" + last_name + "-" + person.id.to_s
                       if unique_url(person.id, custom_url)
                         if slug_contains_invalid(custom_url)
@@ -555,7 +555,7 @@ Pakyow::App.routes(:api) do
                         else
                           person.custom_url = custom_url
                         end
-                      else 
+                      else
                         person.custom_url = SecureRandom.uuid
                       end
                       person.save
@@ -574,12 +574,12 @@ Pakyow::App.routes(:api) do
                       puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
                       puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
                       begin
-                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})
                       rescue Gibbon::MailChimpError => exception
                         puts exception.inspect
                       end
-
                       response.status = 201
+                      execute_webhooks_with_person(person)
                     end
                   else
                     response.status = 400
@@ -600,6 +600,7 @@ Pakyow::App.routes(:api) do
                     checkin = Checkin.new(c_params)
                     checkin.save
                     response.status = 201
+                    execute_webhooks_with_person(person)
 
                     if person.approved == false
                       send_checkin_acct_creation_email(person)
@@ -608,7 +609,7 @@ Pakyow::App.routes(:api) do
                       #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
                       #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
                       begin
-                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})
                       rescue Gibbon::MailChimpError => exception
                         puts exception.inspect
                       end
@@ -616,6 +617,63 @@ Pakyow::App.routes(:api) do
                   end
                 end
               end
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+          # envoke the webooks with some json
+          post 'webhooks/execute' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              response.status = 200
+              response.headers['Content-Type'] = 'application/json'
+              body = request.body.read
+              json = JSON.parse(body)
+
+              me = People.where(Sequel.lit("id = ?", 2)).first
+              execute_webhooks_with_person(me)
+
+              #execute_webhooks(json.to_json)
+              response.write(json.to_json)
+            else
+              response.status = 400
+              response.write('{"error":"User not authorized for API usage"}')
+            end
+          end
+
+          # post 'checkin/test' do
+          #   if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+          #     response.status = 200
+          #     response.headers['Content-Type'] = 'application/json'
+          #     body = request.body.read
+          #     json = JSON.parse(body)
+          #
+          #     pp json.to_json
+          #
+          #     #execute_webhooks(json.to_json)
+          #     response.write(json.to_json)
+          #   else
+          #     response.status = 400
+          #     response.write('{"error":"User not authorized for API usage"}')
+          #   end
+          # end
+
+          # create the webhook for checkins
+          post 'checkin/webhook' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              response.status = 200
+              response.headers['Content-Type'] = 'application/json'
+              body = request.body.read
+              json = JSON.parse(body)
+              params =
+                {
+                  "url" => json["url"],
+                  "created_at" => DateTime.now.utc
+                }
+              webhook = Webhook.new(params)
+              webhook.save
+              response.write( json.to_json )
             else
               response.status = 400
               response.write('{"error":"User not authorized for API usage"}')
@@ -671,11 +729,11 @@ Pakyow::App.routes(:api) do
                   }
                   response.status = 200
                   response.headers['Content-Type'] = 'application/json'
-                  response.write( json.to_json ) 
-                else 
+                  response.write( json.to_json )
+                else
                   json = {}
                   child_events = Event.where(Sequel.lit("parent_id = ? AND archived = ?", next_cwn_event.id, false)).all
-                 
+
                   if child_events.empty?
                     # no events have been scheduled (approved) at this time
                     json = {
@@ -689,13 +747,13 @@ Pakyow::App.routes(:api) do
                         "workshops" => []
                       }
                     }
-                    
+
                     response.status = 200
                     response.headers['Content-Type'] = 'application/json'
                     response.write( json.to_json )
                   else
                     workshops = []
-                    for child_event in child_events do            
+                    for child_event in child_events do
                       workshop = {
                         "approved" => child_event.approved,
                         "isCancelled" => child_event.archived,
@@ -711,7 +769,7 @@ Pakyow::App.routes(:api) do
                       }
                       workshops.push( workshop )
                     end # for in
-                    
+
                     json = {
                       "message": "",
                       "cwn": {
@@ -726,9 +784,9 @@ Pakyow::App.routes(:api) do
 
                     response.status = 200
                     response.headers['Content-Type'] = 'application/json'
-                    response.write( json.to_json ) 
+                    response.write( json.to_json )
                 end # if else
-                end # else 
+                end # else
               else
                 # respond to normal request
                 redirect '/errors/403'
