@@ -690,6 +690,15 @@ module Pakyow::Helpers
     opts
   end
 
+  def email_is_dev(email)
+    emails = ENV['DEVEMAILS'].split(',');
+    if emails.include?(email)
+      return true
+    else
+      return false
+    end
+  end
+
   def api_key_is_authenticated(apiKey)
     apiKeys = ENV['APIKEYS'].split(',');
     if apiKeys.include?(apiKey)
@@ -775,27 +784,15 @@ module Pakyow::Helpers
   end
 
   def execute_webhooks(body)
-    current_time = DateTime.now.utc
-    one_day_ago = (DateTime.now.utc - 1.hours).utc
+    uri = URI.parse(ENV["UE_LABELPRINTER_URI"])
+    header = {'Content-Type': 'application/json', 'Authorization': ENV["UE_LABELPRINTER_KEY"]}
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = body
 
-    #get webhooks more than 1 day old, and delete them
-    webhooks_to_delete = Webhook.where(Sequel.lit("created_at < ?", one_day_ago))
-    webhooks_to_delete.each do |webhook|
-    webhook.delete
-    end
-
-    webhooks_to_execute = Webhook.where(Sequel.lit("created_at > ?", one_day_ago))
-    webhooks_to_execute.each do |webhook|
-      pp webhook.url
-      uri = URI.parse(webhook.url)
-      header = {'Content-Type': 'application/json', 'Authorization': 'DAVIDSAPIKEY'}
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Post.new(uri.request_uri, header)
-      request.body = body
-
-      # Send the request
-      response = http.request(request)
-    end
+    # Send the request
+    response = http.request(request)
   end
 
   def execute_webhooks_with_person(person)
@@ -805,11 +802,30 @@ module Pakyow::Helpers
     # number of CWN attempts
     # rank
     cwnAttendences = Checkin.where(Sequel.lit("people_id = ?", person.id)).count
+    if cwnAttendences.nil? || cwnAttendences == 0
+      cwnAttendences = 1
+    end
+
+    tier = "First-Timer"
+    if cwnAttendences > 1 and cwnAttendences < 5
+      tier = "Newbie"
+    elsif cwnAttendences >= 5 and cwnAttendences < 20
+      tier = "Regular"
+    elsif cwnAttendences >= 20 and cwnAttendences < 50
+      tier = "Veteran"
+    elsif cwnAttendences >= 50
+      tier = "OG"
+    end
+
+    if email_is_dev(person.email)
+      tier = ENV['DEVTIER']
+    end
+
     json = {
-      "first_name" => person.first_name,
-      "last_name" => person.last_name,
-      "number" => cwnAttendences > 1 ? cwnAttendences : 0,
-      "rank" => "Newbie"
+      "firstName": person.first_name,
+    	"lastName": person.last_name,
+      "tier": tier,
+    	"visitCount": cwnAttendences
     }
     execute_webhooks(json.to_json)
   end

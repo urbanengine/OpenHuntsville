@@ -631,33 +631,19 @@ Pakyow::App.routes(:api) do
               body = request.body.read
               json = JSON.parse(body)
 
-              me = People.where(Sequel.lit("id = ?", 2)).first
-              execute_webhooks_with_person(me)
-
-              #execute_webhooks(json.to_json)
-              response.write(json.to_json)
+              person = People.where(Sequel.lit("id = ?", json["id"])).first
+              if person.nil?
+                response.status = 404
+                response.write('{"error":"User not found"}')
+              else
+                execute_webhooks_with_person(person)
+                response.write(json.to_json)
+              end
             else
               response.status = 400
               response.write('{"error":"User not authorized for API usage"}')
             end
           end
-
-          # post 'checkin/test' do
-          #   if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
-          #     response.status = 200
-          #     response.headers['Content-Type'] = 'application/json'
-          #     body = request.body.read
-          #     json = JSON.parse(body)
-          #
-          #     pp json.to_json
-          #
-          #     #execute_webhooks(json.to_json)
-          #     response.write(json.to_json)
-          #   else
-          #     response.status = 400
-          #     response.write('{"error":"User not authorized for API usage"}')
-          #   end
-          # end
 
           # create the webhook for checkins
           post 'checkin/webhook' do
