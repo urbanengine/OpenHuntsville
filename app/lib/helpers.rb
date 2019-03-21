@@ -1,6 +1,7 @@
 require 'digest/md5'
 require 'nokogiri'
 require 'rack/utils'
+require 'net/http'
 
 module Pakyow::Helpers
   def handle_errors(view)
@@ -689,6 +690,15 @@ module Pakyow::Helpers
     opts
   end
 
+  def email_is_dev(email)
+    emails = ENV['DEVEMAILS'].split(',');
+    if emails.include?(email)
+      return true
+    else
+      return false
+    end
+  end
+
   def api_key_is_authenticated(apiKey)
     apiKeys = ENV['APIKEYS'].split(',');
     if apiKeys.include?(apiKey)
@@ -737,7 +747,7 @@ module Pakyow::Helpers
       user.approved = true
       user.save
     end
-    
+
     user
   end
 
@@ -771,6 +781,53 @@ module Pakyow::Helpers
     #puts box.encrypt(Marshal.dump(token))
     #session[:userinfo] = box.encrypt(Marshal.dump(token))
     cookies[:userinfo] = token.to_yaml
+  end
+
+  def execute_webhooks(body)
+    uri = URI.parse(ENV["UE_LABELPRINTER_URI"])
+    header = {'Content-Type': 'application/json', 'Authorization': ENV["UE_LABELPRINTER_KEY"]}
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = body
+
+    # Send the request
+    response = http.request(request)
+  end
+
+  def execute_webhooks_with_person(person)
+    # build JSON
+    # name
+    # title
+    # number of CWN attempts
+    # rank
+    cwnAttendences = Checkin.where(Sequel.lit("people_id = ?", person.id)).count
+    if cwnAttendences.nil? || cwnAttendences == 0
+      cwnAttendences = 1
+    end
+
+    tier = "First-Timer"
+    if cwnAttendences > 1 and cwnAttendences < 5
+      tier = "Newbie"
+    elsif cwnAttendences >= 5 and cwnAttendences < 20
+      tier = "Regular"
+    elsif cwnAttendences >= 20 and cwnAttendences < 50
+      tier = "Veteran"
+    elsif cwnAttendences >= 50
+      tier = "OG"
+    end
+
+    if email_is_dev(person.email)
+      tier = ENV['DEVTIER']
+    end
+
+    json = {
+      "firstName": person.first_name,
+      "lastName": person.last_name,
+      "tier": tier,
+      "visitCount": cwnAttendences
+    }
+    execute_webhooks(json.to_json)
   end
 
 end # module Pakyow::Helpers
