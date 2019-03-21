@@ -823,9 +823,9 @@ module Pakyow::Helpers
 
     json = {
       "firstName": person.first_name,
-    	"lastName": person.last_name,
+      "lastName": person.last_name,
       "tier": tier,
-    	"visitCount": cwnAttendences
+      "visitCount": cwnAttendences
     }
     execute_webhooks(json.to_json)
   end
