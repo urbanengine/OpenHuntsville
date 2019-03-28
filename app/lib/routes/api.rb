@@ -516,7 +516,7 @@ Pakyow::App.routes(:api) do
                 #   if the user does not exist, try to create the user
                 #   if the user does exist, make sure the has not already checked in
                 current_time = DateTime.now.utc
-                event_start_time = (event.start_datetime.to_time - 1.hours).utc #Give hour leeway to checkin
+                event_start_time = (event.start_datetime.to_time - 12.hours).utc #Give 12 hour leeway to checkin
                 event_end_time = (event.start_datetime.to_time + event.duration.hours).utc
                 event_is_active = event_start_time < current_time && event_end_time > current_time
 
