@@ -730,6 +730,7 @@ Pakyow::App.routes(:api) do
                         "instance_number" => next_cwn_event.instance_number,
                         "start_time" => next_cwn_event.start_datetime.utc,
                         "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
+                        "location" => Venue.where( Sequel.lit( "id = ?", next_cwn_event.venue_id ) ).first.name,
                         "workshops" => []
                       }
                     }
@@ -764,6 +765,7 @@ Pakyow::App.routes(:api) do
                         "instance_number" => next_cwn_event.instance_number,
                         "start_time" => next_cwn_event.start_datetime.utc,
                         "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
+                        "location" => Venue.where( Sequel.lit( "id = ?", next_cwn_event.venue_id ) ).first.name,
                         "workshops" => workshops
                       }
                     }
