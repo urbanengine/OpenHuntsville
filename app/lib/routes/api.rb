@@ -781,6 +781,78 @@ Pakyow::App.routes(:api) do
               end # if else
             end # expand :restful :group, '/group' do
           end # expand :restful, :flyer, '/flyer' do
+
+          post 'checkin' do
+            if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
+              json = JSON.parse( request.body.read )
+              auth0Id = json["auth0Id"]
+              eventId = json["event"]
+              event = Event.where( Sequel.lit( "id = ?", eventId ) ).first
+              person = People.where( Sequel.lit( "auth0_id = ?", auth0Id ) ).first
+
+              if event.nil?
+                  response.status = 400
+                  response.write( '{"message":"Event does not exist", "success":false}' )
+                  response.headers['Content-Type'] = 'application/json'
+              else
+                # check to make sure the event is active
+                # if the event is active, check if the user exists
+                #   if the user does not exist, try to create the user
+                #   if the user does exist, make sure the has not already checked in
+                current_time = DateTime.now.utc
+                event_start_time = (event.start_datetime.to_time - 1.hours).utc #Give hour leeway to checkin
+                event_end_time = (event.start_datetime.to_time + event.duration.hours).utc
+                event_is_active = event_start_time < current_time && event_end_time > current_time
+
+                if event_is_active == false
+                  #event is not active
+                  response.status = 400
+                  response.write('{"message":"Event is not active", "success":false}')
+                  response.headers['Content-Type'] = 'application/json'
+                elsif person.nil?
+                    response.status = 400
+                    response.write( '{"message":"User does not exist", "success":false}' )
+                    response.headers['Content-Type'] = 'application/json'
+                else
+                  # event is active and user already exists; make sure this isn't a duplicate checkin
+                  existing_checkin = Checkin.where( Sequel.lit( "people_id = ? AND event_id = ?", person.id, event.id ) ).first
+                  if existing_checkin.nil? == false
+                    response.status = 400
+                    response.write('{"message":"User has already checked in", "success":false}')
+                    response.headers['Content-Type'] = 'application/json'
+                  else
+                    c_params =
+                      {
+                        "event_id" => event.id,
+                        "people_id" => person.id
+                      }
+                    checkin = Checkin.new(c_params)
+                    checkin.save
+                    response.status = 200
+                    response.write('{"message":"Checkin successful", "success":true}')
+                    response.headers['Content-Type'] = 'application/json'
+
+                    if person.approved == false
+                      send_checkin_acct_creation_email(person)
+
+                      gibbon = Gibbon::Request.new
+                      #puts gibbon.lists('4e8bac9c1c').members.retrieve.inspect
+                      #puts gibbon.lists('4e8bac9c1c').interest_categories.retrieve.inspect
+                      begin
+                        gibbon.lists('4e8bac9c1c').members.create(body: {email_address: person.email, status: "subscribed", merge_fields: {FNAME: person.first_name, LNAME: person.last_name}})  
+                      rescue Gibbon::MailChimpError => exception
+                        puts exception.inspect
+                      end
+                    end
+                  end
+                end
+              end
+            else
+              response.status = 401
+              response.write('{"message":"User not authorized for API usage", "success":false}')
+              response.headers['Content-Type'] = 'application/json'
+            end
+          end # /checkin
         end # collection do
       end # expand :restful :v2 '/v2' do
     end # collection do
