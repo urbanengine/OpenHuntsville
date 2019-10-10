@@ -786,7 +786,7 @@ Pakyow::App.routes(:api) do
             if (request.env["HTTP_AUTHORIZATION"] && api_key_is_authenticated(request.env["HTTP_AUTHORIZATION"]))
               json = JSON.parse( request.body.read )
               auth0Id = json["auth0Id"]
-              eventId = json["event"]
+              eventId = json["eventId"]
               event = Event.where( Sequel.lit( "id = ?", eventId ) ).first
               person = People.where( Sequel.lit( "auth0_id = ?", auth0Id ) ).first
 
