@@ -828,6 +828,7 @@ Pakyow::App.routes(:api) do
                       }
                     checkin = Checkin.new(c_params)
                     checkin.save
+                    execute_webhooks_with_person(person)
                     response.status = 200
                     response.write('{"message":"Checkin successful", "success":true}')
                     response.headers['Content-Type'] = 'application/json'
