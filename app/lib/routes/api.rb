@@ -718,7 +718,7 @@ Pakyow::App.routes(:api) do
                   response.write( json.to_json )
                 else
                   json = {}
-                  child_events = Event.where(Sequel.lit("parent_id = ? AND archived = ?", next_cwn_event.id, false)).all
+                  child_events = Event.where(Sequel.lit("parent_id = ?", next_cwn_event.id)).all
 
                   if child_events.empty?
                     # no events have been scheduled (approved) at this time
