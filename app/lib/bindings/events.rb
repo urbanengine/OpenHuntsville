@@ -147,7 +147,7 @@ Pakyow::App.bindings :events do
 				end
 			end
 			{
-			:content => "Delete",
+			:content => "Cancel",
 			:href => '/events/' + bindable.id.to_s + '/delete',
 			:class => cssclass
 			}
