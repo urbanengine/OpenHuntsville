@@ -299,83 +299,85 @@ Pakyow::App.routes(:people) do
 
     # GET /people; same as Index
     action :list do
-      my_limit = 10
-      unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
-        if ENV['RACK_ENV']== "development"
-          my_limit = 10
-        end
-      end
-      total_people = People.where("approved = true AND opt_in = true").count
-      # If user is authenticated, don't show default
-      page_no = 0
-      unless cookies[:userinfo].nil? || cookies[:userinfo] == "" || cookies[:userinfo].size == 0
-        previous_link = {:class => 'hide',:value => 'hidden'}
-        unless params[:page].nil? || params[:page].size == 0
-          page_no = params[:page].to_i
-          unless page_no == 0
-            unless page_no == 1
-              previous_link = {:class => 'previous-next-btns', :href => "/people?page=#{page_no-1}"}
-            else
-              previous_link = {:class => 'previous-next-btns', :href => "/people"}
-            end
-          end
-        end
-        current_last_profile_shown = (page_no + 1) * my_limit
-        pp 'current  ' + current_last_profile_shown.to_s
-        pp 'total_people  ' + total_people.to_s
-        if current_last_profile_shown < total_people
-          next_link = {:class => 'previous-next-btns',:href=>"/people?page=#{page_no+1}"}
-        end
-        number_of_pages = (total_people / my_limit.to_f).ceil
-        content_string = "<div class=\"pagination\">"
-        for page_number in 0..(number_of_pages-1)
-          if page_number == page_no
-            content_string = content_string + "<a href=\"" + "/people?page=" + page_number.to_s + "\" class=\"active\">"+(page_number+1).to_s+"</a>"
-          else
-            content_string = content_string + "<a href=\"" + "/people?page=" + page_number.to_s + "\">"+(page_number+1).to_s+"</a>"
-          end
-        end
-        content_string = content_string + "</div>"
-        pagination_links = {:content => content_string, :class=>"pagination-parent"}
-        more_links = {'previous_link'=>previous_link,'next_link'=>next_link, 'pagination_links'=>pagination_links}
-        view.scope(:after_people).bind(more_links)
-        view.scope(:after_people).use(:authenticated)
-      else
-        count = {'full-count' => total_people.to_s}
-        view.scope(:after_people).bind(count)
-        view.scope(:after_people).use(:normal)
-      end
-      people = People.where("approved = true AND opt_in = ? AND archived = ?", true, false).limit(my_limit).offset(page_no*my_limit).order(:first_name, :email).all
-      view.scope(:people).apply(people)
-      all_cats = Category.order(:slug).all
-      parent_cats = []
-      all_cats.each { |item|
-        if item.parent_id.nil?
-          parent_cats.push(item)
-        end
-      }
-      parent_cats.unshift("everyone")
-      view.scope(:categories_menu).apply(parent_cats)
-      view.scope(:head).apply(request)
-      current_user = get_user_from_cookies()
-      view.scope(:optin).apply(current_user)
+      redirect '/errors/404'
+    #  my_limit = 10
+    #  unless ENV['RACK_ENV'].nil? || ENV['RACK_ENV'].length == 0
+    #    if ENV['RACK_ENV']== "development"
+    #      my_limit = 10
+    #    end
+    #  end
+    #  total_people = People.where("approved = true AND opt_in = true").count
+    #  # If user is authenticated, don't show default
+    #  page_no = 0
+    #  unless cookies[:userinfo].nil? || cookies[:userinfo] == "" || cookies[:userinfo].size == 0
+    #    previous_link = {:class => 'hide',:value => 'hidden'}
+    #    unless params[:page].nil? || params[:page].size == 0
+    #      page_no = params[:page].to_i
+    #      unless page_no == 0
+    #        unless page_no == 1
+    #          previous_link = {:class => 'previous-next-btns', :href => "/people?page=#{page_no-1}"}
+    #        else
+    #          previous_link = {:class => 'previous-next-btns', :href => "/people"}
+    #        end
+    #      end
+    #    end
+    #    current_last_profile_shown = (page_no + 1) * my_limit
+    #    pp 'current  ' + current_last_profile_shown.to_s
+    #    pp 'total_people  ' + total_people.to_s
+    #    if current_last_profile_shown < total_people
+    #      next_link = {:class => 'previous-next-btns',:href=>"/people?page=#{page_no+1}"}
+    #    end
+    #    number_of_pages = (total_people / my_limit.to_f).ceil
+    #    content_string = "<div class=\"pagination\">"
+    #    for page_number in 0..(number_of_pages-1)
+    #      if page_number == page_no
+    #        content_string = content_string + "<a href=\"" + "/people?page=" + page_number.to_s + "\" class=\"active\">"+(page_number+1).to_s+"</a>"
+    #      else
+    #        content_string = content_string + "<a href=\"" + "/people?page=" + page_number.to_s + "\">"+(page_number+1).to_s+"</a>"
+    #      end
+    #    end
+    #    content_string = content_string + "</div>"
+    #    pagination_links = {:content => content_string, :class=>"pagination-parent"}
+    #    more_links = {'previous_link'=>previous_link,'next_link'=>next_link, 'pagination_links'=>pagination_links}
+    #    view.scope(:after_people).bind(more_links)
+    #    view.scope(:after_people).use(:authenticated)
+    #  else
+    #    count = {'full-count' => total_people.to_s}
+    #    view.scope(:after_people).bind(count)
+    #    view.scope(:after_people).use(:normal)
+    #  end
+    #  people = People.where("approved = true AND opt_in = ? AND archived = ?", true, false).limit(my_limit).offset(page_no*my_limit).order(:first_name, :email).all
+    #  view.scope(:people).apply(people)
+    #  all_cats = Category.order(:slug).all
+    #  parent_cats = []
+    #  all_cats.each { |item|
+    #    if item.parent_id.nil?
+    #      parent_cats.push(item)
+    #    end
+    #  }
+    #  parent_cats.unshift("everyone")
+    #  view.scope(:categories_menu).apply(parent_cats)
+    #  view.scope(:head).apply(request)
+    #  current_user = get_user_from_cookies()
+    #  view.scope(:optin).apply(current_user)
     end
 
     # GET /people/:id
     action :show do
-      people = get_people_from_people_id(params[:people_id])
-      p people
-      if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].opt_in == false
-       redirect '/errors/404'
-      end
-      unless people[0].approved || get_user_from_cookies().admin || people[0].id == get_user_from_cookies().id
-        redirect '/errors/404'
-      end
-     view.scope(:people).apply(people)
-     view.scope(:head).apply(request)
-     current_user = get_user_from_cookies()
-     view.scope(:optin).apply(current_user)
-     view.scope(:main_menu).apply(request)
+      redirect '/errors/404'
+    #  people = get_people_from_people_id(params[:people_id])
+    #  p people
+    #  if people.nil? || people.length == 0 || people[0].nil? || people[0].to_s.length == 0 || people[0].opt_in == false
+    #   redirect '/errors/404'
+    #  end
+    #  unless people[0].approved || get_user_from_cookies().admin || people[0].id == get_user_from_cookies().id
+    #    redirect '/errors/404'
+    #  end
+    # view.scope(:people).apply(people)
+    # view.scope(:head).apply(request)
+    # current_user = get_user_from_cookies()
+    # view.scope(:optin).apply(current_user)
+    # view.scope(:main_menu).apply(request)
     end
 
     action :edit, :before => :edit_profile_check do
