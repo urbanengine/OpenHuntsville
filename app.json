@@ -4,7 +4,8 @@
   },
   "env": {
     "APIKEYS": {
-      "required": true
+      "required": false,
+      "value": ""
     },
     "AWS_ACCESS_KEY_ID": {
       "required": false
@@ -22,11 +23,11 @@
       "required": false
     },
     "HEROKU_POSTGRESQL_BRONZE_URL": {
-      "required": true,
+      "required": false,
       "value": ""
     },
     "HEROKU_POSTGRESQL_GREEN_URL": {
-      "required": true,
+      "required": false,
       "value": ""
     },
     "LANG": {
