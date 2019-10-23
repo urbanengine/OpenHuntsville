@@ -22,13 +22,16 @@
       "required": false
     },
     "HEROKU_POSTGRESQL_BRONZE_URL": {
-      "required": true
+      "required": true,
+      "value": ""
     },
     "HEROKU_POSTGRESQL_GREEN_URL": {
-      "required": true
+      "required": true,
+      "value": ""
     },
     "LANG": {
-      "required": true
+      "required": true,
+      "value": "en_US.UTF-8"
     },
     "MAILGUN_PRIVATE": {
       "required": false
@@ -40,7 +43,8 @@
       "required": false
     },
     "RACK_ENV": {
-      "required": true
+      "required": true,
+      "value": "production"
     },
     "sensible_defaults": {
       "required": false
