@@ -5,94 +5,23 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
-  <loc>http://www.openhsv.com/</loc>
+  <loc>http://www.openhuntsville.com/</loc>
   <changefreq>daily</changefreq>
 </url>
 <url>
-  <loc>http://www.openhsv.com/people</loc>
+  <loc>http://www.openhuntsville.com/feedback-form.html</loc>
   <changefreq>daily</changefreq>
 </url>
 <url>
-  <loc>http://www.openhsv.com/about</loc>
+  <loc>http://www.openhuntsville.com/auth/auth0</loc>
   <changefreq>daily</changefreq>
 </url>
 <url>
-  <loc>http://www.openhsv.com/feedback-form.html</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/auth/auth0</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/auth/auth0</loc>
+  <loc>http://www.openhuntsville.com/auth/auth0</loc>
   <changefreq>never</changefreq>
 </url>
 <url>
-  <loc>http://www.openhsv.com/terms</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/accounting</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/business</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/legal</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/music</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/defense</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/architecture</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/art-and-design</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/contract-management</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/it-and-software</loc>
-  <changefreq>daily</changefreq>
-</url>
-
-<url>
-  <loc>http://www.openhsv.com/categories/engineering</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/finance</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/human-resources</loc>
-  <changefreq>daily</changefreq>
-</url>
-
-<url>
-  <loc>http://www.openhsv.com/categories/marketing</loc>
-  <changefreq>daily</changefreq>
-</url>
-
-<url>
-  <loc>http://www.openhsv.com/categories/real-estate</loc>
-  <changefreq>daily</changefreq>
-</url>
-<url>
-  <loc>http://www.openhsv.com/categories/photography-and-video</loc>
+  <loc>http://www.openhuntsville.com/terms</loc>
   <changefreq>daily</changefreq>
 </url>
 </urlset>

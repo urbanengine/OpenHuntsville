@@ -77,7 +77,7 @@ Pakyow::App.bindings :head do
 
     binding(:canonical) do
       path = bindable.path.split("/")
-      link = "http://www.openhsv.com/"
+      link = "http://www.openhuntsville.com/"
       slug = ""
       if path.length > 1
         if path[1] == "people"
