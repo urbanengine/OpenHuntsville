@@ -77,7 +77,7 @@ Pakyow::App.bindings :head do
 
     binding(:canonical) do
       path = bindable.path.split("/")
-      link = "http://www.openhsv.com/"
+      link = "http://www.openhuntsville.com/"
       slug = ""
       if path.length > 1
         if path[1] == "people"
@@ -113,7 +113,7 @@ Pakyow::App.bindings :head do
     end # page_js
 
     binding(:title) do
-      ret = "#openHSV - Freelancers, Moonlighters, and Consultants in Huntsville, Alabama"
+      ret = "#openHSV - Urban Engine's Premier Event Management System"
       path = bindable.path.split("/")
       if path.length > 1
         if path[1] == "people"
@@ -132,14 +132,10 @@ Pakyow::App.bindings :head do
 
 # TODO: Fix this
     binding(:description) do
-      ret = "A directory of Huntsville's freelancers, moonlighters, and consultants."
+      ret = "Urban Engine's Premier Event Management System"
       path = bindable.path.split("/")
       if path.length > 1
-        if path[1] == "people"
-          ret = "All of the professionals on #openHSV, sortable by industry."
-        elsif path[1] == "about"
-          ret = "#openHSV was built to provide resources to Huntsville's small businesses and startup communities."
-        elsif path[1] == "terms"
+        if path[1] == "terms"
           ret = "Terms of Service governing the use of #openHSV"
         end
       end

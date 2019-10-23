@@ -286,7 +286,7 @@ module Pakyow::Helpers
     to_email = person.email
 
     if options[:from_email].nil?
-      from_email = 'donotreply@openhsv.com'
+      from_email = 'donotreply@openhuntsville.com'
     else
       from_email = options[:from_email]
     end
