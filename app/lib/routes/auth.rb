@@ -102,7 +102,7 @@ Pakyow::App.routes(:auth) do
 
             post 'forgotpassword/' do
                 email = params[:auth][:email]
-                user = People.where(Sequel.lit('email = ? AND approved = true', email)).first
+                user = People.where(Sequel.lit('lower( email ) = ? AND approved = true', email.downcase )).first
                 
                 if user.nil? == false
                     data = {

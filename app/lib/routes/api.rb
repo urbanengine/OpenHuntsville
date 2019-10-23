@@ -505,8 +505,8 @@ Pakyow::App.routes(:api) do
               body = request.body.read
               json = JSON.parse(body)
               email = json["email"]
-              event = Event.where("id = ?", json["event"]).first
-              person = People.where("email = ?", email).first
+              event = Event.where( "id = ?", json["event"] ).first
+              person = People.where( "lower(email) = ?", email.downcase ).first
               if event.nil?
                   response.status = 404
                   response.write('{"error":"Event not found"}')
@@ -800,26 +800,26 @@ Pakyow::App.routes(:api) do
                 #   if the user does not exist, try to create the user
                 #   if the user does exist, make sure the has not already checked in
                 current_time = DateTime.now.utc
-                event_start_time = (event.start_datetime.to_time - 1.hours).utc #Give hour leeway to checkin
+                event_start_time = (event.start_datetime.to_time - 3.hours).utc # Give hour leeway to checkin
                 event_end_time = (event.start_datetime.to_time + event.duration.hours).utc
                 event_is_active = event_start_time < current_time && event_end_time > current_time
 
                 if event_is_active == false
-                  #event is not active
+                  # event is not active
                   response.status = 400
-                  response.write('{"message":"Event is not active", "success":false}')
-                  response.headers['Content-Type'] = 'application/json'
+                  response.write('{"message": "Event is not active", "success": false}')
+                  response.headers[ 'Content-Type' ] = 'application/json'
                 elsif person.nil?
                     response.status = 400
-                    response.write( '{"message":"User does not exist", "success":false}' )
-                    response.headers['Content-Type'] = 'application/json'
+                    response.write( '{"message": "User does not exist", "success": false}' )
+                    response.headers[ 'Content-Type' ] = 'application/json'
                 else
                   # event is active and user already exists; make sure this isn't a duplicate checkin
                   existing_checkin = Checkin.where( Sequel.lit( "people_id = ? AND event_id = ?", person.id, event.id ) ).first
                   if existing_checkin.nil? == false
                     response.status = 400
-                    response.write('{"message":"User has already checked in", "success":false}')
-                    response.headers['Content-Type'] = 'application/json'
+                    response.write( '{"message": "User has already checked in", "success": false}' )
+                    response.headers[ 'Content-Type' ] = 'application/json'
                   else
                     c_params =
                       {
