@@ -7,19 +7,19 @@
       "required": true
     },
     "AWS_ACCESS_KEY_ID": {
-      "required": true
+      "required": false
     },
     "AWS_SECRET_ACCESS_KEY": {
-      "required": true
+      "required": false
     },
     "EMAIL_DOMAIN": {
-      "required": true
+      "required": false
     },
     "EMAIL_FROM_ADDRESS": {
-      "required": true
+      "required": false
     },
     "FULLCONTACT_API_KEY": {
-      "required": true
+      "required": false
     },
     "HEROKU_POSTGRESQL_BRONZE_URL": {
       "required": true
@@ -31,25 +31,25 @@
       "required": true
     },
     "MAILGUN_PRIVATE": {
-      "required": true
+      "required": false
     },
     "MAILGUN_PUBLIC": {
-      "required": true
+      "required": false
     },
     "MANDRILL_API_KEY": {
-      "required": true
+      "required": false
     },
     "RACK_ENV": {
       "required": true
     },
     "sensible_defaults": {
-      "required": true
+      "required": false
     },
     "SESSION_SECRET": {
-      "required": true
+      "required": false
     },
     "WEB_CONCURRENCY": {
-      "required": true
+      "required": false
     }
   },
   "formation": {
