@@ -14,10 +14,6 @@ The following resources might be handy:
 - [Pakyow Code](http://github.com/pakyow/pakyow)
 - [Tech256 Slack (team chat)](http://www.tech256.com)
 
-# Contributing
-
-[![Stories in Ready](https://badge.waffle.io/OpenHuntsville/hntsvll.png?label=ready&title=Ready)](https://waffle.io/OpenHuntsville/hntsvll)
-
 # License
 
 This repository (hntsvll) is released free and open-source under the [MIT License](LICENSE).
