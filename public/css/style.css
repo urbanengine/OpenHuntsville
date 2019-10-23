@@ -170,7 +170,7 @@ h1 img {
 }
 nav {
 	float: right;
-	padding-top: 30px;
+	padding-top: 10px;
 }
 nav ul {
 	float: left;
@@ -564,7 +564,7 @@ body.about
 
 .originals {
 	background: #0C2322;
-  	min-height: 50vh;
+  	min-height: 25vh;
   	padding: 2em;
 }
 .originals .wrapper {
