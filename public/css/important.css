@@ -43,7 +43,6 @@ h1, h2 {
 /*================ HEADER =================
 =========================================*/
 header {
-	background: url('../img/computerfilledtable.jpg') no-repeat right top !important;
 	background-size: 100% !important;
 }
 header .overlay {

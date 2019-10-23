@@ -112,7 +112,6 @@ h1, h2 {
 /*================ HEADER =================
 =========================================*/
 header {
-	background: url('../img/computerfilledtable.jpg') no-repeat right top;
 	background-size: 100%;
 }
 header .overlay {
