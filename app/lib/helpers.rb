@@ -729,10 +729,10 @@ module Pakyow::Helpers
     if user.nil?
       #we don't have a user with the auth0_id.
       #either find the user from their email, or if that doesn't exist, create a new one
-      user = People.where(Sequel.lit('email = ?', token.info.name)).first
+      user = People.where(Sequel.lit('lower( email ) = ?', token.info.name.downcase)).first
       if user.nil?
         #create a new user
-        c_params = { "auth0_id" => auth0id, "email" => token.info.name, "custom_url" => tokensplit[1], "admin" => false, "approved" => false, "opt_in" => true, "opt_in_time" => Time.now.utc, "is_elite" => false }
+        c_params = { "auth0_id" => auth0id, "email" => token.info.name.downcase, "custom_url" => tokensplit[1], "admin" => false, "approved" => false, "opt_in" => true, "opt_in_time" => Time.now.utc, "is_elite" => false }
         user = People.new(c_params)
         user.save
       else
