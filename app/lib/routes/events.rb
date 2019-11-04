@@ -178,7 +178,7 @@ Pakyow::App.routes(:events) do
       if people.nil?
         redirect '/errors/404'
       end
-      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "-0500", '%b %d, %Y %I:%M %p %Z')
+      parsed_time = DateTime.strptime(params[:events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
       previous_event = Event.where("approved = true AND group_id = ? AND start_datetime < ?", params[:events][:parent_group].to_i, parsed_time.to_datetime.utc).order(:start_datetime).last
       instance_number = 1
       unless previous_event.nil?
@@ -226,7 +226,7 @@ Pakyow::App.routes(:events) do
       if logged_in_user_is_manager_of_event(event) == false
         redirect "/errors/403"
       end
-      parsed_datetime = DateTime.strptime(params[:events][:start_datetime] + "-0500", '%b %d, %Y %I:%M %p %Z')
+      parsed_datetime = DateTime.strptime(params[:events][:start_datetime] + "-0600", '%b %d, %Y %I:%M %p %Z')
       venue_id = params[:events][:venue].to_i
       minutes_between_old_and_new_date = (((parsed_datetime - event.start_datetime.to_datetime)*24*60).to_i).abs
       if event.approved && minutes_between_old_and_new_date > 0.99
