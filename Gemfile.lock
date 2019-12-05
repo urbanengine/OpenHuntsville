@@ -181,7 +181,7 @@ DEPENDENCIES
   pg
   puma
   rack-ssl
-  rake
+  rake (~> 11.1)
   rbnacl
   rbnacl-libsodium
   sequel (= 4.49.0)
