@@ -107,7 +107,7 @@ GEM
       pakyow-core (= 0.11.3)
       pakyow-presenter (= 0.11.3)
       pakyow-support (= 0.11.3)
-      rake (~> 11.1)
+      rake (>= 11.1)
     pakyow-realtime (0.11.3)
       concurrent-ruby (~> 1.0)
       pakyow-core (= 0.11.3)
