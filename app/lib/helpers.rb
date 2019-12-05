@@ -784,6 +784,7 @@ module Pakyow::Helpers
   end
 
   def execute_webhooks(body)
+    pp "entered execute_webhooks"
     uri = URI.parse(ENV["UE_LABELPRINTER_URI"])
     header = {'Content-Type': 'application/json', 'Authorization': ENV["UE_LABELPRINTER_KEY"]}
     http = Net::HTTP.new(uri.host, uri.port)
@@ -792,6 +793,7 @@ module Pakyow::Helpers
     request.body = body
 
     # Send the request
+    pp "execute_webhooks time to send the request"
     response = http.request(request)
   end
 
@@ -801,7 +803,8 @@ module Pakyow::Helpers
     # title
     # number of CWN attempts
     # rank
-    cwnAttendences = Checkin.where(Sequel.lit("people_id = ?", person.id)).count
+    pp "entered execute_webhooks_with_person"
+    cwnAttendences = Checkin.where( Sequel.lit( "people_id = ?", person.id ) ).count
     if cwnAttendences.nil? || cwnAttendences == 0
       cwnAttendences = 1
     end
@@ -817,6 +820,8 @@ module Pakyow::Helpers
       tier = "OG"
     end
 
+    pp "CWN attendance" + cwnAttendences
+
     if email_is_dev(person.email)
       tier = ENV['DEVTIER']
     end
@@ -827,6 +832,8 @@ module Pakyow::Helpers
       "tier": tier,
       "visitCount": cwnAttendences
     }
+
+    pp "before entering execute_webhooks"
     execute_webhooks(json.to_json)
   end
 

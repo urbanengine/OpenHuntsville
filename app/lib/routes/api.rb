@@ -587,7 +587,7 @@ Pakyow::App.routes(:api) do
                   end
                 else
                   # event is active and user already exists; make sure this isn't a duplicate checkin
-                  existing_checkin = Checkin.where("people_id = ? AND event_id = ?", person.id, event.id).first
+                  existing_checkin = Checkin.where( Sequel.lit( "people_id = ? AND event_id = ?", person.id, event.id ) ).first
                   if existing_checkin.nil? == false
                     response.status = 400
                     response.write('{"error":"User has already checked in"}')
