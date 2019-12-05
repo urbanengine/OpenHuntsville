@@ -23,7 +23,7 @@ gem "httparty"
 gem "pg"
 
 ## A make-like build utility for Ruby. - http://docs.seattlerb.org/rake
-gem "rake"
+gem "rake", '~> 11.1'
 
 ## Integrate with Mailgun to send transactional emails
 gem 'mailgun-ruby'
