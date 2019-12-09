@@ -784,15 +784,22 @@ module Pakyow::Helpers
   end
 
   def execute_webhooks(body)
-    uri = URI.parse(ENV["UE_LABELPRINTER_URI"])
-    header = {'Content-Type': 'application/json', 'Authorization': ENV["UE_LABELPRINTER_KEY"]}
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.request_uri, header)
-    request.body = body
+    Thread.new do
+      begin
+        uri = URI.parse(ENV["UE_LABELPRINTER_URI"])
+        header = {'Content-Type': 'application/json', 'Authorization': ENV["UE_LABELPRINTER_KEY"]}
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.request_uri, header)
+        request.body = body
 
-    # Send the request
-    response = http.request(request)
+        # Send the request
+        response = http.request(request)
+      rescue
+        # catch: Ideally would keep this print job in a queue, and send it again later. 
+        #        For now, just eating the exception
+      end
+    end
   end
 
   def execute_webhooks_with_person(person)
