@@ -199,6 +199,7 @@ Pakyow::App.routes(:events) do
           "parent_id" => if params[:events][:parent_event_selector].blank? then "" else params[:events][:parent_event_selector].to_i end,
           "flyer_category" => if params[:events][:flyer_category].nil? || params[:events][:flyer_category].empty? then group.flyer_category else params[:events][:flyer_category] end,
           "flyer_fa_icon" => if params[:events][:flyer_fa_icon].nil? || params[:events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:events][:flyer_fa_icon] end,
+          "flyer_virtual_meeting_url" => params[:events][:flyer_virtual_meeting_url],
           "created_by" => people.id,
           "updated_by" => people.id
         }
@@ -253,6 +254,7 @@ Pakyow::App.routes(:events) do
       event.venue_id = venue_id
       event.flyer_category = params[:events][:flyer_category]
       event.flyer_fa_icon = params[:events][:flyer_fa_icon]
+      event.flyer_virtual_meeting_url = params[:events][:flyer_virtual_meeting_url]
       event.updated_by = people.id
       event.save
       redirect '/events/manage'

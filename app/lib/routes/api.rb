@@ -73,7 +73,8 @@ Pakyow::App.routes(:api) do
                        "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                        "isCancelled" => event.archived,
                        "category" => event.flyer_category,
-                       "icon" => event.flyer_fa_icon
+                       "icon" => event.flyer_fa_icon,
+                       "virtual_meetup_url" => event.flyer_virtual_meetup_url
                      }
                      response.write(json.to_json)
                   }
@@ -205,7 +206,8 @@ Pakyow::App.routes(:api) do
                    "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                    "isCancelled" => event.archived,
                    "category" => event.flyer_category,
-                   "icon" => event.flyer_fa_icon
+                   "icon" => event.flyer_fa_icon,
+                   "virtual_meetup_url" => event.flyer_virtual_meetup_url
                  }
                  response.write(json.to_json)
               }
@@ -267,7 +269,8 @@ Pakyow::App.routes(:api) do
                    "end_time" => (event.start_datetime.to_time + event.duration.hours).utc,
                    "isCancelled" => event.archived,
                    "category" => event.flyer_category,
-                   "icon" => event.flyer_fa_icon
+                   "icon" => event.flyer_fa_icon,
+                   "virtual_meetup_url" => event.flyer_virtual_meetup_url
                  }
                  response.write(json.to_json)
               }
@@ -421,7 +424,8 @@ Pakyow::App.routes(:api) do
                     "start_time" => next_cwn_event.start_datetime.utc,
                     "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
                     "category" => next_cwn_event.flyer_category,
-                    "icon" => next_cwn_event.flyer_fa_icon
+                    "icon" => next_cwn_event.flyer_fa_icon,
+                    "virtual_meetup_url" => event.flyer_virtual_meetup_url
                   }
                   response.write(json.to_json)
               end
@@ -458,7 +462,8 @@ Pakyow::App.routes(:api) do
                     "start_time" => next_cwn_event.start_datetime.utc,
                     "end_time" => (next_cwn_event.start_datetime.to_time + next_cwn_event.duration.hours).utc,
                     "category" => next_cwn_event.flyer_category,
-                    "icon" => next_cwn_event.flyer_fa_icon
+                    "icon" => next_cwn_event.flyer_fa_icon,
+                    "virtual_meetup_url" => event.flyer_virtual_meetup_url
                   }
                   response.write(json.to_json)
               end
@@ -752,7 +757,8 @@ Pakyow::App.routes(:api) do
                         "start_time" => child_event.start_datetime.utc,
                         "end_time" => (child_event.start_datetime.to_time + child_event.duration.hours).utc,
                         "category" => child_event.flyer_category,
-                        "icon" => child_event.flyer_fa_icon
+                        "icon" => child_event.flyer_fa_icon,
+                        "virtual_meetup_url" => event.flyer_virtual_meetup_url
                       }
                       workshops.push( workshop )
                     end # for in

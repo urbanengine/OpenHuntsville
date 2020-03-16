@@ -57,7 +57,7 @@ Pakyow::App.bindings :events do
       {
         :content => bindable.summary
       }
-    end
+	end
 
     binding(:start_datetime) do
       {
@@ -198,6 +198,12 @@ Pakyow::App.bindings :events do
 		binding(:flyer_fa_icon) do
 			{
 			:content => bindable.flyer_fa_icon
+			}
+		end
+
+		binding(:flyer_virtual_meeting_url) do
+			{
+			:content => bindable.flyer_virtual_meeting_url
 			}
 		end
 
