@@ -201,6 +201,12 @@ Pakyow::App.bindings :bhm_events do
             }
         end
 
+        binding(:flyer_virtual_meeting_url) do
+            {
+            :content => bindable.flyer_virtual_meeting_url
+            }
+        end
+
         binding(:created_by_updated_by) do
             creator = People.where("id = ?", bindable.created_by).first
             updator = People.where("id = ?", bindable.updated_by).first

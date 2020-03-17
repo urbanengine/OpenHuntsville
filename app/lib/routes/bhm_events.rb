@@ -175,6 +175,7 @@ Pakyow::App.routes(:bhm) do
                 "parent_id" => if params[:bhm_events][:parent_event_selector].blank? then "" else params[:bhm_events][:parent_event_selector].to_i end,
                 "flyer_category" => if params[:bhm_events][:flyer_category].nil? || params[:bhm_events][:flyer_category].empty? then group.flyer_category else params[:bhm_events][:flyer_category] end,
                 "flyer_fa_icon" => if params[:bhm_events][:flyer_fa_icon].nil? || params[:bhm_events][:flyer_fa_icon].empty? then group.flyer_fa_icon else params[:bhm_events][:flyer_fa_icon] end,
+                "flyer_virtual_meeting_url" => params[:bhm_events][:flyer_virtual_meeting_url],
                 "created_by" => people.id,
                 "updated_by" => people.id
                 }
@@ -220,6 +221,7 @@ Pakyow::App.routes(:bhm) do
             event.venue_id = venue_id
             event.flyer_category = params[:bhm_events][:flyer_category]
             event.flyer_fa_icon = params[:bhm_events][:flyer_fa_icon]
+            event.flyer_virtual_meeting_url = params[:bhm_events][:flyer_virtual_meeting_url]
             event.updated_by = people.id
             event.save
             redirect '/bhm_events/manage'
